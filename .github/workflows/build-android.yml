@@ -1,0 +1,56 @@
+name: 'Build Android app'
+
+on:
+  workflow_dispatch:
+    branches: [main]
+    # can add push and pull_request here
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '15'
+          distribution: 'adopt'
+          cache: 'gradle'
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Run Yarn Install
+        run: |
+          cd ./packages/mobile/
+          npm i -g corepack
+          yarn install
+
+      - name: clean build folder
+        run: |
+          cd ./packages/mobile/android
+          ./gradlew clean
+
+      - name: Build application
+        run: |
+          cd ./packages/mobile/android
+          ./gradlew bundleRelease
+
+      - name: Rebuild
+        run: |
+          cd ./packages/mobile/android
+          ./gradlew bundleRelease
+
+      - name: Upload application
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: ./packages/mobile/android/app/build/outputs/bundle/release/app-release.aab
+          retention-days: 3
