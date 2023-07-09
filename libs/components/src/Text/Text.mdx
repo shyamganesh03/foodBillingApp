@@ -1,0 +1,30 @@
+---
+name: Text
+route: /Text
+menu: Components
+---
+
+import { Playground, Props } from 'docz'
+import Text from './Text'
+import { DarkTheme } from '@edvnz/theme'
+
+# Text
+
+<Props of={Text} table />
+
+<Playground>
+  <Text variant="display1" color={DarkTheme.colors.secondary2}>
+    Incresco
+  </Text>
+</Playground>
+
+### Usage
+
+```
+import { Text } from '@edvnz/components`
+
+<Text variant="display1" color={DarkTheme.colors.secondary2}>
+  Incresco
+</Text>
+
+```
