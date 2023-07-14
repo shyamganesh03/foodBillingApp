@@ -1,1 +1,0 @@
-## IncrescoApp - Web Application

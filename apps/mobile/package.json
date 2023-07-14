@@ -15,7 +15,7 @@
   "dependencies": {
     "react": "18.2.0",
     "react-native": "0.71.3",
-    "shared": "1.0.0"
+    "@incresco/shared": "1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

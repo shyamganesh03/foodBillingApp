@@ -23,7 +23,7 @@
     "prettier": "prettier --write \"**/*.{js,json,md,yml}\"",
     "start": "yarn workspace mobile start  --reset-cache",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "web": "yarn workspace web start",
+    "web": "yarn workspace web dev",
     "xcode": "yarn workspace mobile xcode"
   },
   "dependencies": {
