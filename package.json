@@ -14,7 +14,7 @@
     "android:bundle": "yarn workspace mobile android:bundle",
     "android:clean": "yarn workspace mobile android:clean",
     "android": "yarn workspace mobile android",
-    "clean": "node ./scripts/clean",
+    "clean": "node ./scripts/clean.ts",
     "commit": "git-cz",
     "desktop": "yarn workspace desktop start",
     "format": "prettier --write .",
