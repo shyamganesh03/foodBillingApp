@@ -1,7 +1,7 @@
 {
   "name": "@libs/utils",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "private": true,
   "peerDependencies": {
     "react": "*",
