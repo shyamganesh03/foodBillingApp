@@ -4,11 +4,10 @@ import { Stacks } from './Stacks'
 
 const Stack = createNativeStackNavigator()
 
-const createNavigators = (initialRouteName: string): JSX.Element => (
+const createNavigators = (initialRouteName) => (
   <Stack.Navigator initialRouteName={initialRouteName}>
     {(() => Stacks(Stack))()}
   </Stack.Navigator>
 )
 
-export const HomeStackNavigator: React.FC = (): JSX.Element =>
-  createNavigators('home')
+export const HomeStackNavigator = () => createNavigators('home')

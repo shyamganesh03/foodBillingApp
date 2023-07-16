@@ -11,12 +11,7 @@ export const getScreenTypeLayout = ({
   desktopComponent: Desktop,
   tabletComponent: Tablet,
   mobileComponent: Mobile,
-}: {
-  width: number
-  desktopComponent: React.ComponentType<any>
-  tabletComponent: React.ComponentType<any>
-  mobileComponent: React.ComponentType<any>
-}): React.ComponentType<any> | null => {
+}) => {
   if (width >= desktopWidth) {
     return Desktop
   } else if (width >= tabletWidth) {
@@ -31,10 +26,10 @@ export const ScreenTypes = {
   desktop: 'desktop',
   tablet: 'tablet',
   mobile: 'mobile',
-} as const
+}
 
 // Returns the screen type for the given screen width
-export const getScreenType = (width: number): keyof typeof ScreenTypes => {
+export const getScreenType = (width) => {
   if (width >= desktopWidth) {
     return ScreenTypes.desktop
   } else if (width >= tabletWidth) {
@@ -45,17 +40,17 @@ export const getScreenType = (width: number): keyof typeof ScreenTypes => {
 }
 
 // Returns true if the screen type is desktop, false otherwise
-export const isWeb = (width: number): boolean => {
+export const isWeb = (width) => {
   return getScreenType(width) === ScreenTypes.desktop
 }
 
 // Higher-order component that renders different components based on screen width
-export const withLayoutView = <P,>(
-  DesktopComponent: React.ComponentType<P>,
-  TabletComponent: React.ComponentType<P>,
-  MobileComponent: React.ComponentType<P>,
-): React.ComponentType<P> => {
-  const LayoutView: React.FC<P> = (props) => {
+export const withLayoutView = (
+  DesktopComponent,
+  TabletComponent,
+  MobileComponent,
+) => {
+  const LayoutView = (props) => {
     const { width } = useWindowDimensions()
     const ScreenComponent = getScreenTypeLayout({
       width,

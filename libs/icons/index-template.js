@@ -1,7 +1,7 @@
-import path from 'path'
+const path = require('path')
 
-function defaultIndexTemplate(filePaths: string[]): string {
-  const importEntries: string[] = [
+function defaultIndexTemplate(filePaths) {
+  const importEntries = [
     "import React from 'react'",
     ...filePaths.map((filePath) => {
       const basename = path.basename(filePath, path.extname(filePath))
@@ -35,4 +35,4 @@ function defaultIndexTemplate(filePaths: string[]): string {
   )
 }
 
-export default defaultIndexTemplate
+module.exports = defaultIndexTemplate

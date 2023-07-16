@@ -1,17 +1,11 @@
-export const uploadFileToS3 = async ({
-  url,
-  file,
-}: {
-  url: string
-  file: File
-}): Promise<any> => {
+export const uploadFileToS3 = async ({ url, file }) => {
   const formData = new FormData()
   formData.append('file', file)
   try {
     const response = await fetch(url, {
       method: 'PUT',
       body: formData,
-      headers: {
+      header: {
         'Content-Type': 'image/png',
       },
     }).then((res) => res.json())

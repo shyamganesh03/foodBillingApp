@@ -1,11 +1,11 @@
 import React from 'react'
 import DashBoard from '../screens/dashboard'
 
-export const Stacks = (Stack: any): JSX.Element => {
+export const Stacks = (Stack) => {
   return (
     <Stack.Group initialRouteName="home">
       <Stack.Screen name="home">
-        {(screenProps: any) => <DashBoard {...screenProps} />}
+        {(screenProps) => <DashBoard {...screenProps} />}
       </Stack.Screen>
     </Stack.Group>
   )
