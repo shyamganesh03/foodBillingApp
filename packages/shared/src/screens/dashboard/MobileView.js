@@ -1,5 +1,4 @@
-import { View } from 'react-native'
-import { Text } from '@libs/components'
+import { View, Text } from 'react-native'
 import React from 'react'
 
 const MobileView = () => {
