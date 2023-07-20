@@ -1,0 +1,12 @@
+{
+  "name": "@incresco/web-e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cypress.config.js",
+  "scripts": {
+    "cypress:open": "npx cypress open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
