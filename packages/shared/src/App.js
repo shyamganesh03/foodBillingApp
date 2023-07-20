@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+import * as Sentry from '@sentry/react-native'
 import AppNavigator from './navigation'
 import { NavigationContainer } from '@react-navigation/native'
 import { navigationRef } from './navigation/RootNavigator'
@@ -7,9 +8,19 @@ import {
   SafeAreaProvider,
   initialWindowMetrics,
 } from 'react-native-safe-area-context'
-import { View, useWindowDimensions } from 'react-native'
+import { Platform, View, useWindowDimensions } from 'react-native'
 import awsConfig from '../awsConfig'
 import DashBoard from './screens/dashboard'
+import { sentryUrl } from './config'
+
+Sentry.init({
+  dsn: sentryUrl,
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+})
 
 const App = () => {
   const routeNameRef = useRef()
@@ -38,4 +49,6 @@ const App = () => {
   return <DashBoard />
 }
 
-export default App
+Sentry.setTag('Platform:', Platform.OS)
+
+export default Sentry.wrap(App)

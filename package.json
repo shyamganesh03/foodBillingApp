@@ -36,6 +36,7 @@
     "@react-native-community/netinfo": "^9.4.1",
     "@react-navigation/native": "6.0.13",
     "@react-navigation/native-stack": "6.9.1",
+    "@sentry/react-native": "^5.7.1",
     "aws-amplify": "5.3.3",
     "color": "4.2.3",
     "commitizen": "4.3.0",
