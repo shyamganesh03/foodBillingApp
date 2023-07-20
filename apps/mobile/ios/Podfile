@@ -1,3 +1,6 @@
+require_relative '../../../node_modules/react-native/scripts/react_native_pods'
+require_relative '../../../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
@@ -44,6 +47,11 @@ target 'incresco' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+  pod 'RNCAsyncStorage', :path => '../../../node_modules/@react-native-community/async-storage/RNCAsyncStorage.podspec'
+  pod 'react-native-safe-area-context', :path => '../../../node_modules/react-native-safe-area-context'
+  pod 'RNGestureHandler', :podspec => '../../../node_modules/react-native-gesture-handler/RNGestureHandler.podspec'
+  pod 'RNScreens', :path => '../../../node_modules/react-native-screens/RNScreens.podspec'
+  pod 'rn-fetch-blob', :path => '../../../node_modules/rn-fetch-blob'
 
   target 'increscoTests' do
     inherit! :complete

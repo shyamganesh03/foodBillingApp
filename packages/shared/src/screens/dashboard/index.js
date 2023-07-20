@@ -2,6 +2,7 @@ import React, { useCallback, Suspense } from 'react'
 import DesktopView from './DesktopView'
 import MobileView from './MobileView'
 import { ScreenLayout } from '@libs/utils'
+import { Text } from 'react-native'
 
 const DashBoard = () => {
   const viewProps = {}
