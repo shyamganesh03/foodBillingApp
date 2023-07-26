@@ -27,28 +27,27 @@ const App = () => {
   Amplify.configure(awsConfig)
   const height = useWindowDimensions().height
 
-  // return (
-  //   <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-  //     <NavigationContainer
-  //       ref={navigationRef}
-  //       onReady={() =>
-  //         (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
-  //       }
-  //       onStateChange={async () => {
-  //         const currentRouteName = navigationRef.current.getCurrentRoute().name
-  //         routeNameRef.current = currentRouteName
-  //       }}
-  //       linking={{ enabled: true }}
-  //     >
-  //       <View style={{ minHeight: height }}>
-  //         <AppNavigator />
-  //       </View>
-  //     </NavigationContainer>
-  //   </SafeAreaProvider>
-  // )
-  return <DashBoard />
+  return (
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() =>
+          (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
+        }
+        onStateChange={async () => {
+          const currentRouteName = navigationRef.current.getCurrentRoute().name
+          routeNameRef.current = currentRouteName
+        }}
+        linking={{ enabled: true }}
+      >
+        <View style={{ minHeight: height }}>
+          <AppNavigator />
+        </View>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  )
 }
 
 Sentry.setTag('Platform:', Platform.OS)
 
-export default Sentry.wrap(App)
+export default Sentry.withProfiler(App)
