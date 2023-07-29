@@ -24,7 +24,8 @@
     "start": "yarn workspace mobile start  --reset-cache",
     "test": "echo \"Error: no test specified\" && exit 1",
     "web": "yarn workspace web start",
-    "xcode": "yarn workspace mobile xcode"
+    "xcode": "yarn workspace mobile xcode",
+    "web-e2e:open": "yarn workspace @incresco/web-e2e cypress:open"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "7.18.6",
@@ -79,6 +80,7 @@
     "babel-plugin-react-native-web": "0.18.12",
     "concurrently": "7.5.0",
     "cross-env": "7.0.3",
+    "cypress": "^12.17.1",
     "dotenv": "16.0.3",
     "electron": "21.2.0",
     "electronmon": "2.0.2",
