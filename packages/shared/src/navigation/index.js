@@ -5,7 +5,7 @@ import { View } from 'react-native'
 const AppNavigator = () => {
   return (
     <Suspense>
-      <View style={{ width: '100%', backgroundColor: 'red', flex: 1 }}>
+      <View style={{ width: '100%', flex: 1 }}>
         <HomeStackNavigator />
       </View>
     </Suspense>
