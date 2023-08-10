@@ -2,7 +2,7 @@ import { Text as TextElement, StyleSheet } from 'react-native'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-const Text = (props) => {
+function Text(props) {
   const {
     children,
     color = '',
@@ -14,7 +14,7 @@ const Text = (props) => {
 
   return (
     <TextElement
-      style={StyleSheet.flatten([{ textAlign, color: color }, style])}
+      style={StyleSheet.flatten([{ textAlign, color }, style])}
       numberOfLines={numberOfLines}
     >
       {children}

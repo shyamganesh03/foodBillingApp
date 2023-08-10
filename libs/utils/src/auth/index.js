@@ -9,9 +9,9 @@ export const forgotPasswordAsync = async (userName) => {
   }
 }
 
-export const resetPasswordAsync = async (username, code, new_password) => {
+export const resetPasswordAsync = async (username, code, newPassword) => {
   try {
-    const res = await Auth.forgotPasswordSubmit(username, code, new_password)
+    const res = await Auth.forgotPasswordSubmit(username, code, newPassword)
     console.log({ res })
   } catch (error) {
     return error

@@ -1,5 +1,5 @@
-const { exec } = require('shell-utils')
 const path = require('os').tmpdir()
+const { exec } = require('shell-utils')
 
 run()
 

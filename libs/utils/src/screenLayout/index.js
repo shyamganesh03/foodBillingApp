@@ -14,11 +14,11 @@ export const getScreenTypeLayout = ({
 }) => {
   if (width >= desktopWidth) {
     return Desktop
-  } else if (width >= tabletWidth) {
-    return Tablet
-  } else {
-    return Mobile
   }
+  if (width >= tabletWidth) {
+    return Tablet
+  }
+  return Mobile
 }
 
 // Constants for screen types
@@ -32,17 +32,15 @@ export const ScreenTypes = {
 export const getScreenType = (width) => {
   if (width >= desktopWidth) {
     return ScreenTypes.desktop
-  } else if (width >= tabletWidth) {
-    return ScreenTypes.tablet
-  } else {
-    return ScreenTypes.mobile
   }
+  if (width >= tabletWidth) {
+    return ScreenTypes.tablet
+  }
+  return ScreenTypes.mobile
 }
 
 // Returns true if the screen type is desktop, false otherwise
-export const isWeb = (width) => {
-  return getScreenType(width) === ScreenTypes.desktop
-}
+export const isWeb = (width) => getScreenType(width) === ScreenTypes.desktop
 
 // Higher-order component that renders different components based on screen width
 export const withLayoutView = (
@@ -50,7 +48,7 @@ export const withLayoutView = (
   TabletComponent,
   MobileComponent,
 ) => {
-  const LayoutView = (props) => {
+  function LayoutView(props) {
     const { width } = useWindowDimensions()
     const ScreenComponent = getScreenTypeLayout({
       width,

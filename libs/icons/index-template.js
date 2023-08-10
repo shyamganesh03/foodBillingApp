@@ -30,9 +30,7 @@ function defaultIndexTemplate(filePaths) {
     )}]
   `
 
-  return (
-    importEntries.join('\n') + '\n' + exportEntries + '\n' + exportPropTypes
-  )
+  return `${importEntries.join('\n')}\n${exportEntries}\n${exportPropTypes}`
 }
 
 module.exports = defaultIndexTemplate

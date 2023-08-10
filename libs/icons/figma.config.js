@@ -1,5 +1,4 @@
 import dotenv from 'dotenv'
-import { FigmaExportRC } from '@figma-export/types'
 
 dotenv.config()
 
@@ -11,7 +10,7 @@ const outputs = [
   require('@figma-export/output-components-as-svg')({ output: './dist' }),
 ]
 
-const config: FigmaExportRC = {
+const config = {
   figmaToken,
   commands: [
     [
