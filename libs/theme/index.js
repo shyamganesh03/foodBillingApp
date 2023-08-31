@@ -5,8 +5,8 @@ import { typography } from './src/typography'
 import { spacing } from './src/spacing'
 
 const ThemeContext = React.createContext({
-  theme: DarkTheme,
+  theme: LightTheme,
   setTheme: () => {},
 })
 
-export default { ThemeContext, LightTheme, DarkTheme, typography, spacing }
+export { ThemeContext, LightTheme, DarkTheme, typography, spacing }

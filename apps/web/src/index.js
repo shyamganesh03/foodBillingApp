@@ -1,8 +1,8 @@
 import { AppRegistry } from 'react-native'
 
-import App from 'shared/src/App'
+import App from '@oap/shared/src/App'
 
-AppRegistry.registerComponent('IncrescoApp', () => App)
-AppRegistry.runApplication('IncrescoApp', {
+AppRegistry.registerComponent('OAP-Form', () => App)
+AppRegistry.runApplication('OAP-Form', {
   rootTag: document.getElementById('root'),
 })

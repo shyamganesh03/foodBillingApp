@@ -1,10 +1,11 @@
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import React from 'react'
+import { Text } from '../../components'
 
 const MobileView = () => {
   return (
     <View>
-      <Text>Mobile DashBoard</Text>
+      <Text>MobileView</Text>
     </View>
   )
 }

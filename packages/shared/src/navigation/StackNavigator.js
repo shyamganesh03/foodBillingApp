@@ -1,18 +1,10 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Stacks } from './Stacks'
-import ThemeSwitcher from '../components/themeSwitcher'
 
 const Stack = createNativeStackNavigator()
 
-const ScreenOptions = {
-  headerRight: () => <ThemeSwitcher />,
-  headerStyle: {
-    borderBottomWidth: 1,
-    shadowColor: 'transparent',
-    height: 76,
-  },
-}
+const ScreenOptions = {}
 
 const createNavigators = (initialRouteName) => (
   <Stack.Navigator
@@ -23,4 +15,4 @@ const createNavigators = (initialRouteName) => (
   </Stack.Navigator>
 )
 
-export const HomeStackNavigator = () => createNavigators('home')
+export const HomeStackNavigator = () => createNavigators('login')

@@ -1,0 +1,77 @@
+@font-face {
+  font-family: 'Mukta';
+  src: url(/fonts/EK-Mukta.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body,
+#root,
+#root > div {
+  font-family: 'Mukta', sans-serif;
+  width: 100%;
+  height: 100%;
+}
+html {
+  overflow: hidden;
+}
+body {
+  font-family: 'Mukta', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.highlightedArea {
+  pointer-events: none !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  box-shadow: 0 0 0 30px #303b54 inset !important;
+  -webkit-box-shadow: 0 0 0 30px #303b54 inset !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+input {
+  outline: none !important;
+}
+
+@media (max-width: 400px) {
+  .embedded-service .fab {
+    bottom: 90px !important;
+  }
+}
+
+@supports not (-ms-high-contrast: none) {
+  .embedded-service .fab {
+    bottom: 90px !important;
+  }
+}
+
+.quill > .ql-container > .ql-editor.ql-blank::before {
+  /* font-size: 20px; */
+  color: white;
+  font-style: normal;
+  font-family: 'Mukta', sans-serif;
+}
+
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+  border: none !important;
+  color: #fff;
+}
+.ql-container.ql-snow {
+  max-height: 60%;
+}
+.ql-toolbar.ql-snow {
+  background-color: #e3f1fd;
+}
+
+body {
+  /* Disables pull-to-refresh but allows overscroll glow effects. */
+  overscroll-behavior-y: contain;
+}

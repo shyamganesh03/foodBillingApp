@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
-import { HomeStackNavigator } from './StackNavigator'
 import { View } from 'react-native'
+import { HomeStackNavigator } from './StackNavigator'
 
 const AppNavigator = () => {
   return (

@@ -1,0 +1,39 @@
+---
+name: Icon
+route: /Icon
+menu: Icon
+---
+
+import { Icon } from '@r3-oaf/native-icons'
+import { Playground, Props } from 'docz'
+import IconTable from './iconTable'
+
+# Icon
+
+<Props of={Icon} table />
+
+---
+
+<Playground>
+  <Icon name="EdvanzaLogo" color="#fff" width={140} height={40} />
+</Playground>
+
+<Playground>
+  <Icon name="LockIcon" color="#fff" width={40} height={40} />
+</Playground>
+
+---
+
+# Usage
+
+```
+import { Icon } from '@edvnz/native-icons'
+
+<Icon name="LockIcon" color="#fff" width={40} height={40} />
+```
+
+---
+
+# List of all Icons
+
+<IconTable />

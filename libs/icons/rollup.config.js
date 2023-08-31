@@ -2,9 +2,9 @@ import { babel } from '@rollup/plugin-babel'
 import fileSize from 'rollup-plugin-filesize'
 
 const config = {
-  input: 'dist/output/index.js',
+  input: 'dist/index.js',
   output: {
-    dir: 'output',
+    dir: 'output/index.esm.js',
     format: 'esm',
   },
   external: [/@babel\/runtime/, 'react'],

@@ -1,12 +1,15 @@
 import React from 'react'
-import DashBoard from '../screens/dashboard'
+import Registration from '../screens/registrationScreen'
 
-export const Stacks = (Stack) => {
-  return (
-    <Stack.Group initialRouteName="home">
-      <Stack.Screen name="home">
-        {(screenProps) => <DashBoard {...screenProps} />}
-      </Stack.Screen>
-    </Stack.Group>
-  )
-}
+export const Stacks = (Stack) => (
+  <Stack.Group
+    initialRouteName="registration"
+    screenOptions={{
+      title: '',
+    }}
+  >
+    <Stack.Screen name="registration" options={{ headerShown: false }}>
+      {(screenProps) => <Registration {...screenProps} />}
+    </Stack.Screen>
+  </Stack.Group>
+)

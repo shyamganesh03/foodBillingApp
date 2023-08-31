@@ -5,6 +5,7 @@ const {
   override,
   addExternalBabelPlugin,
   addWebpackAlias,
+  addBabelPlugins,
 } = require('customize-cra')
 
 const appDirectory = fs.realpathSync(process.cwd())
@@ -12,6 +13,11 @@ const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
 
 // our packages that will now be included in the CRA build step
 const appIncludes = [resolveApp('src'), resolveApp('../shared/src')]
+
+const removeConsoles = (config, env) => {
+  if (env === 'Production') addBabelPlugins('transform-remove-console')
+  return config
+}
 
 const addConfig = (config, env) => {
   // allow importing from outside of src folder
@@ -35,17 +41,20 @@ const addConfig = (config, env) => {
   return config
 }
 
-module.exports = override(
-  addConfig,
-
-  addExternalBabelPlugin('@babel/plugin-proposal-class-properties', {
+const customConfig = (config, env) => {
+  config = addConfig(config, env);
+  config = addExternalBabelPlugin('@babel/plugin-proposal-class-properties', {
     loose: true,
-  }),
-  addExternalBabelPlugin('@babel/plugin-transform-react-jsx'),
-  addExternalBabelPlugin('@babel/plugin-transform-flow-strip-types'),
-  addWebpackAlias({
+  })(config, env);
+  config = addExternalBabelPlugin('@babel/plugin-transform-react-jsx')(config, env);
+  config = addExternalBabelPlugin('@babel/plugin-transform-flow-strip-types')(config, env);
+  config = addWebpackAlias({
     'react-native': 'react-native-web',
     'react-native-linear-gradient': 'react-native-web-linear-gradient',
     '@sentry/react-native': '@sentry/react',
-  }),
-)
+  })(config, env);
+  config = removeConsoles(config, env);
+  return config;
+};
+
+module.exports = override(customConfig)
