@@ -11,6 +11,8 @@ import Button from '../Button'
 const ModelComponent = ({
   data,
   handleCloseModel = () => {},
+  handleValueChanged,
+  getDropdownData,
   dropdownLeft,
   dropdownTop,
   dropdownWidth,
@@ -81,10 +83,18 @@ const ModelComponent = ({
                     <DropDown
                       toggleDropdown={toggleDropdown}
                       dropdownWidth={dropdownWidth}
-                      items={
-                        fieldItem.pickListValues || fieldItem.dropdownValues
-                      }
+                      items={getDropdownData(fieldItem)}
                       position={{ top: dropdownTop, left: dropdownLeft }}
+                      onPress={(selectedValue) =>
+                        handleValueChanged({
+                          selectedValue: selectedValue,
+                          type: fieldItem.type,
+                          fieldName: 'modelFields',
+                          step,
+                          fieldIndex,
+                          sectionIndex,
+                        })
+                      }
                     />
                   </View>
                 )
@@ -96,6 +106,16 @@ const ModelComponent = ({
                     isMandatory={fieldItem.mandatory}
                     hasFullWidth={data?.direction !== 'row'}
                     style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
+                    onChangeText={(value) => {
+                      handleValueChanged({
+                        selectedValue: value,
+                        type: fieldItem.type,
+                        fieldName: 'modelFields',
+                        step,
+                        fieldIndex,
+                        sectionIndex,
+                      })
+                    }}
                   />
                 )
               }
@@ -105,6 +125,16 @@ const ModelComponent = ({
                     title={fieldItem.label}
                     style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                     isMandatory={fieldItem.mandatory}
+                    onChangeText={(selectedDate) =>
+                      handleValueChanged({
+                        selectedValue: selectedDate,
+                        type: fieldItem.type,
+                        fieldName: 'modelFields',
+                        step,
+                        fieldIndex,
+                        sectionIndex,
+                      })
+                    }
                   />
                 )
               }

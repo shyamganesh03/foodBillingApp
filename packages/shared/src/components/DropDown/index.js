@@ -75,7 +75,7 @@ const DropDown = (props) => {
       (filterItem) => filterItem.isSelected === true,
     )
     if (selectedItem?.length === 0)
-      setSelectedOption({ label: 'Select an option' })
+      setSelectedOption({ name: 'Select an option' })
     // else if (label) {
     //   setSelectedOption({ label: label, isPlaceholder: true })
     // }
@@ -130,11 +130,7 @@ const DropDown = (props) => {
         {!hideLabel && (
           <Text
             variant={'body2'}
-            color={
-              selectedOption?.isPlaceholder
-                ? colors.placeHolder
-                : colors.onNeutral
-            }
+            color={colors.onNeutral}
             style={{ marginRight: 6, marginLeft: isCountryCode ? 0 : 6 }}
           >
             {selectedOption?.name}

@@ -105,6 +105,7 @@ const DesktopView = ({
               direction: 'row',
             })
           }
+          getDropdownData={getDropdownData}
           dropdownLeft={dropdownLeft}
           dropdownTop={dropdownTop}
           dropdownWidth={dropdownWidth}
