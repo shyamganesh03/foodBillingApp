@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'Mukta';
+  font-family: 'EK-Mukta';
   src: url(/fonts/EK-Mukta.ttf) format('opentype');
   font-weight: normal;
   font-style: normal;
@@ -10,7 +10,7 @@ html,
 body,
 #root,
 #root > div {
-  font-family: 'Mukta', sans-serif;
+  font-family: 'EK-Mukta', sans-serif;
   width: 100%;
   height: 100%;
 }
@@ -18,7 +18,7 @@ html {
   overflow: hidden;
 }
 body {
-  font-family: 'Mukta', sans-serif;
+  font-family: 'EK-Mukta', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -56,7 +56,7 @@ input {
   /* font-size: 20px; */
   color: white;
   font-style: normal;
-  font-family: 'Mukta', sans-serif;
+  font-family: 'EK-Mukta', sans-serif;
 }
 
 .ql-toolbar.ql-snow,

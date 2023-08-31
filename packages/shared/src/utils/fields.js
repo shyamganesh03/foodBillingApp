@@ -62,23 +62,6 @@ export const fieldData = {
         ],
       },
     ],
-    buttons: [
-      {
-        label: 'Save',
-        action: 'save',
-        width: 339,
-      },
-      {
-        label: 'Save and Close',
-        action: 'save-navigation-back',
-        width: 394,
-      },
-      {
-        label: 'Save and Next',
-        action: 'save-navigation-next',
-        width: 391,
-      },
-    ],
   },
   step1: {
     title: 'Start Your Application',
@@ -488,10 +471,123 @@ export const fieldData = {
   },
   step4: {
     title: 'Background Information and Technical Standards',
-    sections: [],
+    sections: [
+      {
+        title: 'Background Information and Technical Standards',
+        direction: 'column',
+        fields: [
+          {
+            label:
+              'All candidates for admission must meet the school’s Technical Standards, which describe the essential abilities and characteristics for the study and practice of medicine, including the abilities which relate to observation; communication; motor function; intellectual-conceptual (integrative and quantitative) abilities; and behavioral and social skills. By submitting this application, the candidate affirms that he or she has read the Technical Standards, which are available at www.saba.edu.',
+            type: 'description',
+          },
+          {
+            label:
+              'Have you withdrawn, been dismissed, suspended, or placed on probation from an academic institution for academic reasons?',
+            name: 'isUsCitizen',
+            type: 'PickList',
+            pickListValues: [{ name: 'Yes' }, { name: 'No' }],
+            mandatory: true,
+            hasFullWidth: true,
+          },
+          {
+            label: 'If yes, then please explain',
+            name: 'Previous Research Experience',
+            type: 'textField',
+            inputType: 'string',
+          },
+          {
+            label:
+              'Have you been arrested, charged or convicted of a felony, misdemeanor or other crime?',
+            name: 'isUsCitizen',
+            type: 'PickList',
+            pickListValues: [{ name: 'Yes' }, { name: 'No' }],
+            mandatory: true,
+            hasFullWidth: true,
+          },
+          {
+            label: 'If yes, then please explain',
+            name: 'Previous Research Experience',
+            type: 'textField',
+            inputType: 'string',
+          },
+          {
+            label:
+              'Do you require any accommodation relating to a medical, mental, emotional, or other condition in order to meet the Technical Standards?',
+            name: 'isUsCitizen',
+            type: 'PickList',
+            pickListValues: [{ name: 'Yes' }, { name: 'No' }],
+            mandatory: true,
+            hasFullWidth: true,
+          },
+          {
+            label: 'If yes, then please explain',
+            name: 'Previous Research Experience',
+            type: 'textField',
+            inputType: 'string',
+          },
+          {
+            label:
+              'Do you have any medical, mental, emotional, or other condition that may prevent you from meeting the Technical Standards?',
+            name: 'isUsCitizen',
+            type: 'PickList',
+            pickListValues: [{ name: 'Yes' }, { name: 'No' }],
+            mandatory: true,
+            hasFullWidth: true,
+          },
+          {
+            label: 'If yes, then please explain',
+            name: 'Previous Research Experience',
+            type: 'textField',
+            inputType: 'string',
+          },
+          {
+            label:
+              'Have you withdrawn, been dismissed, suspended, or placed on probation from an academic institution for non-academic reasons?',
+            name: 'isUsCitizen',
+            type: 'PickList',
+            pickListValues: [{ name: 'Yes' }, { name: 'No' }],
+            mandatory: true,
+            hasFullWidth: true,
+          },
+          {
+            label: 'If yes, then please explain',
+            name: 'Previous Research Experience',
+            type: 'textField',
+            inputType: 'string',
+          },
+        ],
+      },
+      {
+        title: 'Additional Information',
+        direction: 'column',
+        fields: [
+          {
+            label: 'How did you hear about SABA',
+            name: 'isUsCitizen',
+            type: 'PickList',
+            pickListValues: [
+              { name: 'Alumni' },
+              { name: 'Current Student' },
+              { name: 'Adviser' },
+              { name: 'Internet Search' },
+            ],
+            mandatory: true,
+            hasFullWidth: true,
+          },
+          {
+            label: 'Other Schools Applying To',
+            name: 'Previous Research Experience',
+            type: 'textField',
+            inputType: 'string',
+          },
+        ],
+      },
+    ],
   },
   step5: {
     title: 'Application Document Requirements',
+
     sections: [],
   },
   step6: {

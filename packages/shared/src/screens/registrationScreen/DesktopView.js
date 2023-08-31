@@ -172,7 +172,10 @@ const renderFields = ({
         >
           <Text
             variant={stepValue === 0 ? 'heading3' : 'heading4'}
-            style={{ textDecoration: stepValue === 0 ? 'underline' : 'none' }}
+            style={{
+              textDecoration: stepValue === 0 ? 'underline' : 'none',
+              marginBottom: 10,
+            }}
           >
             {item?.title}
           </Text>
@@ -187,13 +190,14 @@ const renderFields = ({
           ) : (
             <View
               style={{
-                flexDirection: item?.fields?.length > 1 ? 'row' : 'column',
+                flexDirection: item?.direction || 'row',
                 flex: 1,
                 flexWrap: 'wrap',
               }}
             >
               {item?.fields?.map((fieldItem, fieldIndex) => {
-                const isCenter = (fieldIndex + 2) % 3
+                const isCenter =
+                  item?.direction === 'row' ? (fieldIndex + 2) % 3 : -1
                 if (
                   fieldItem.type === 'PickList' ||
                   fieldItem.type === 'dropdown'
@@ -219,6 +223,7 @@ const renderFields = ({
                         items={
                           fieldItem.pickListValues || fieldItem.dropdownValues
                         }
+                        hasFullWidth={fieldItem.hasFullWidth}
                         position={{ top: dropdownTop, left: dropdownLeft }}
                       />
                     </View>
@@ -230,6 +235,7 @@ const renderFields = ({
                       label={fieldItem.label}
                       isMandatory={fieldItem.mandatory}
                       style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
+                      textInputWidth={isCenter === -1 ? '100%' : ''}
                     />
                   )
                 }
@@ -246,6 +252,16 @@ const renderFields = ({
                   return <CheckBox label={fieldItem.label} />
                 }
                 if (fieldItem?.type === 'attachFile') {
+                }
+                if (fieldItem?.type === 'description') {
+                  return (
+                    <Text
+                      variant="body2"
+                      style={{ maxWidth: '80%', marginBottom: 10 }}
+                    >
+                      {fieldItem?.label}
+                    </Text>
+                  )
                 }
               })}
             </View>
@@ -346,7 +362,7 @@ const Tab = ({ item, index, activeTab, setActiveTab }) => {
       key={index}
       style={isActive ? styles.activeTab : styles.unActiveTab}
       onPress={() => setActiveTab(index)}
-      disabled={index > 3}
+      disabled={index > 4}
     >
       <Text
         variant="body2"

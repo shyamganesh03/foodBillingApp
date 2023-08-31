@@ -1,4 +1,4 @@
-const MUKTA = 'Mukta'
+const MUKTA = 'EK-Mukta'
 
 export const typography = {
   heading1: {
