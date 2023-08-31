@@ -4,6 +4,7 @@ import { Text } from '../../components'
 import DesktopView from './DesktopView'
 import { useIsFocused } from '@react-navigation/native'
 import { fieldData } from '../../utils/fields'
+import { useDropDownData } from '../../hooks/useDropDownData'
 
 const Registration = () => {
   const [dropdownTop, setDropdownTop] = useState(0)
@@ -17,6 +18,7 @@ const Registration = () => {
   })
   const [activeTab, setActiveTab] = useState(0)
   const [tabItems, setTabItems] = useState([])
+  const [formData, setFormData] = useState(fieldData)
   const isFocused = useIsFocused()
 
   const toggleDropdown = (visible, ref) => {
@@ -43,18 +45,57 @@ const Registration = () => {
     })()
   }, [isFocused])
 
-  // const getButtonProperty = () => {
-  //   if()
-  // }
+  const getDropdownData = (fieldValue) => {
+    const values = fieldValue?.pickListValues || fieldValue?.dropdownValues
+    if (values.length > 0) {
+      return values
+    } else {
+      const { dropdownValue } = useDropDownData({
+        dropDownName: fieldValue?.name,
+      })
+      return dropdownValue
+    }
+  }
+
+  const handleValueChanged = ({
+    type,
+    selectedValue,
+    step,
+    fieldIndex,
+    sectionIndex,
+    fieldName = 'fields',
+  }) => {
+    const value =
+      type === 'PickList' || type === 'dropdown'
+        ? selectedValue.name
+        : selectedValue
+    const copyFormData = formData
+    const currentField =
+      copyFormData[step]?.sections[sectionIndex]?.[fieldName]?.[fieldIndex]
+    const newCurrentField = { ...currentField, selectedValue: value }
+    const newFieldsArray =
+      copyFormData[step]?.sections[sectionIndex]?.[fieldName]
+    newFieldsArray[fieldIndex] = newCurrentField
+    const newSections = copyFormData[step]?.sections
+    newSections[sectionIndex] = {
+      ...newSections[sectionIndex],
+      [fieldName]: newFieldsArray,
+    }
+    const newStepData = { ...copyFormData[step], sections: newSections }
+    const updatedFieldData = { ...copyFormData, [step]: newStepData }
+    setFormData(updatedFieldData)
+  }
 
   const viewProps = {
     activeTab,
     dropdownLeft,
     dropdownTop,
     dropdownWidth,
-    fieldData,
+    formData,
     modalFields,
     tabItems,
+    handleValueChanged,
+    getDropdownData,
     setActiveTab,
     setModalFields,
     toggleDropdown,

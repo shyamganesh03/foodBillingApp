@@ -26,14 +26,16 @@ const DateInput = (props) => {
   const [yearVisible, setYearVisible] = useState(false)
   const { colors } = useTheme()
   const minYear = new Date().getFullYear() - 100
-  const currentYear = dob
+  const maxYear = dob
     ? new Date().getFullYear() - 15
     : new Date().getFullYear() + 100
+  const currentYear = new Date().getFullYear()
   const defaultValue =
     value || `${currentYear}-${new Date().toISOString().slice(5, 10)}`
   const [selectedYear, setSelectedYear] = useState(defaultValue.slice(0, 4))
   const [selectedMonth, setSelectedMonth] = useState(defaultValue.slice(5, 7))
   const [selectedDay, setSelectedDay] = useState(defaultValue.slice(8, 10))
+  const [selectedDate, setSelectedDate] = useState()
 
   const yearScrollViewRef = useRef(null)
   const month = [
@@ -55,7 +57,7 @@ const DateInput = (props) => {
     setSelectedMonth(month.month)
   }
   const yearItems = []
-  for (let year = minYear; year <= currentYear; year++) {
+  for (let year = minYear; year <= maxYear; year++) {
     yearItems.push(year)
   }
   useEffect(() => {
@@ -76,18 +78,17 @@ const DateInput = (props) => {
   }, [selectedYear, yearItems, yearVisible])
 
   const handleCurrentDate = () => {
-    const currentYear = new Date().getFullYear()
     const currentDate = new Date().getDate()
     const currentMonth = new Date().getMonth()
-    onChangeText(
-      `${currentYear}-${
-        currentMonth.toString().length > 1 ? currentMonth : '0' + currentMonth
-      }-${currentDate.toString().length > 1 ? currentDate : '0' + currentDate}`,
-    ),
-      setSelectedYear(currentYear),
-      setSelectedMonth(currentMonth),
-      setSelectedDay(currentDate),
-      setIsVisible(false)
+    const fullDate = `${currentYear}-${
+      currentMonth.toString().length > 1 ? currentMonth : '0' + currentMonth
+    }-${currentDate.toString().length > 1 ? currentDate : '0' + currentDate}`
+    setSelectedDate(fullDate)
+    onChangeText(fullDate)
+    setSelectedYear(currentYear)
+    setSelectedMonth(currentMonth)
+    setSelectedDay(currentDate)
+    setIsVisible(false)
   }
 
   const renderHeader = () => {
@@ -228,7 +229,7 @@ const DateInput = (props) => {
                     color={colors.placeHolder}
                   />
                 }
-                value={value || null}
+                value={value || selectedDate}
                 maxLength={data?.maxLength}
                 error={error}
                 onFocus={() => {
@@ -245,18 +246,18 @@ const DateInput = (props) => {
           enableSwipeMonths={true}
           current={`${selectedYear}-${selectedMonth}-${selectedDay}`}
           minDate={`${minYear}-01-01`}
-          maxDate={`${currentYear}-12-31`}
+          maxDate={`${maxYear}-12-31`}
           disableAllTouchEventsForDisabledDays={true}
           onDayPress={(day) => {
-            onChangeText(
-              `${day.year}-${
-                day.month.toString().length > 1 ? day.month : '0' + day.month
-              }-${day.day.toString().length > 1 ? day.day : '0' + day.day}`,
-            ),
-              setSelectedYear(day.year),
-              setSelectedMonth(day.month),
-              setSelectedDay(day.day),
-              setIsVisible(false)
+            const fullDate = `${day.year}-${
+              day.month.toString().length > 1 ? day.month : '0' + day.month
+            }-${day.day.toString().length > 1 ? day.day : '0' + day.day}`
+            onChangeText(fullDate)
+            setSelectedDate(fullDate)
+            setSelectedYear(day.year)
+            setSelectedMonth(day.month)
+            setSelectedDay(day.day)
+            setIsVisible(false)
           }}
           renderHeader={renderHeader}
           onMonthChange={(month) => handleMonthChange(month)}

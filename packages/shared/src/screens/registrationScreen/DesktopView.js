@@ -18,7 +18,7 @@ import {
 import { useTheme } from '@react-navigation/native'
 import { universityLogo } from '@oap/assets'
 import { FilePicker } from '@libs/components'
-import { Icon } from '@r3-oaf/native-icons'
+import { getDropdownData } from '../../api'
 
 const DesktopView = ({
   activeTab,
@@ -26,7 +26,9 @@ const DesktopView = ({
   dropdownTop,
   dropdownWidth,
   modalFields,
-  fieldData,
+  formData,
+  handleValueChanged,
+  getDropdownData,
   setActiveTab,
   setModalFields,
   toggleDropdown,
@@ -55,11 +57,13 @@ const DesktopView = ({
           <View style={{ flex: 1 }}>
             <FormFields
               activeTab={activeTab}
-              fieldData={fieldData}
+              fieldData={formData}
               dropdownLeft={dropdownLeft}
               dropdownTop={dropdownTop}
               dropdownWidth={dropdownWidth}
+              handleValueChanged={handleValueChanged}
               setModalFields={setModalFields}
+              getDropdownData={getDropdownData}
               toggleDropdown={toggleDropdown}
               colors={colors}
             />
@@ -105,6 +109,7 @@ const DesktopView = ({
           dropdownTop={dropdownTop}
           dropdownWidth={dropdownWidth}
           toggleDropdown={toggleDropdown}
+          handleValueChanged={handleValueChanged}
         />
       </View>
     </ScrollView>
@@ -118,6 +123,8 @@ const FormFields = ({
   dropdownLeft,
   dropdownTop,
   dropdownWidth,
+  handleValueChanged,
+  getDropdownData,
   setModalFields,
   toggleDropdown,
 }) => {
@@ -132,6 +139,8 @@ const FormFields = ({
           dropdownLeft,
           dropdownTop,
           dropdownWidth,
+          handleValueChanged,
+          getDropdownData,
           setModalFields,
           toggleDropdown,
         })
@@ -148,17 +157,19 @@ const renderFields = ({
   dropdownLeft,
   dropdownTop,
   dropdownWidth,
+  handleValueChanged,
+  getDropdownData,
   setModalFields,
   toggleDropdown,
 }) => {
   const stepValue = parseInt(step.replace('step', ''))
 
   if (stepValue === activeTab) {
-    return session?.sections?.map((item, index) => {
+    return session?.sections?.map((item, sectionIndex) => {
       return item?.type === 'model' ? (
         <ModelContainer
           data={item}
-          index={index}
+          index={sectionIndex}
           setModalFields={setModalFields}
         />
       ) : (
@@ -192,8 +203,12 @@ const renderFields = ({
               item={item}
               dropdownLeft={dropdownLeft}
               dropdownTop={dropdownTop}
+              getDropdownData={getDropdownData}
               dropdownWidth={dropdownWidth}
               toggleDropdown={toggleDropdown}
+              handleValueChanged={handleValueChanged}
+              step={step}
+              sectionIndex={sectionIndex}
             />
           ) : (
             <View
@@ -227,11 +242,18 @@ const renderFields = ({
                       <DropDown
                         toggleDropdown={toggleDropdown}
                         dropdownWidth={dropdownWidth}
-                        items={
-                          fieldItem.pickListValues || fieldItem.dropdownValues
-                        }
+                        items={getDropdownData(fieldItem)}
                         hasFullWidth={fieldItem.hasFullWidth}
                         position={{ top: dropdownTop, left: dropdownLeft }}
+                        onPress={(selectedValue) =>
+                          handleValueChanged({
+                            selectedValue: selectedValue,
+                            type: fieldItem.type,
+                            step,
+                            fieldIndex,
+                            sectionIndex,
+                          })
+                        }
                       />
                     </View>
                   )
@@ -243,6 +265,16 @@ const renderFields = ({
                       isMandatory={fieldItem.mandatory}
                       style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                       textInputWidth={isCenter === -1 ? '100%' : ''}
+                      value={fieldItem.selectedValue}
+                      onChangeText={(value) => {
+                        handleValueChanged({
+                          selectedValue: value,
+                          type: fieldItem.type,
+                          step,
+                          fieldIndex,
+                          sectionIndex,
+                        })
+                      }}
                     />
                   )
                 }
@@ -252,11 +284,33 @@ const renderFields = ({
                       title={fieldItem.label}
                       style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                       isMandatory={fieldItem.mandatory}
+                      onChangeText={(selectedDate) =>
+                        handleValueChanged({
+                          selectedValue: selectedDate,
+                          type: fieldItem.type,
+                          step,
+                          fieldIndex,
+                          sectionIndex,
+                        })
+                      }
                     />
                   )
                 }
                 if (fieldItem?.type === 'checkbox') {
-                  return <CheckBox label={fieldItem.label} />
+                  return (
+                    <CheckBox
+                      label={fieldItem.label}
+                      handleCheck={(isChecked) =>
+                        handleValueChanged({
+                          selectedValue: isChecked,
+                          type: fieldItem.type,
+                          step,
+                          fieldIndex,
+                          sectionIndex,
+                        })
+                      }
+                    />
+                  )
                 }
                 if (fieldItem?.type === 'description') {
                   return (
@@ -327,49 +381,78 @@ const CommonFromContainer = ({
   dropdownLeft,
   dropdownTop,
   dropdownWidth,
+  handleValueChanged,
+  getDropdownData,
+  step,
+  sectionIndex,
   toggleDropdown,
 }) => {
   const { colors } = useTheme()
-  return item.fields?.map((field, fieldIndex) => {
-    if (field?.type === 'description') {
-      return <Text variant="body2">{field?.label}</Text>
-    } else if (field?.type === 'image') {
-      return (
-        <Image
-          source={universityLogo}
-          style={{ height: 102, width: 302 }}
-          resizeMode="contain"
-        />
-      )
-    } else if (field?.type === 'checkbox') {
-      return <CheckBox label={field.label} />
-    } else {
-      return (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          {field.dropdown.map((dropdownField, dropdownIndex) => {
-            return (
-              <View>
-                <View style={{ flexDirection: 'row' }}>
-                  {dropdownField.mandatory ? (
-                    <Text variant="display5" color={colors.onAlert}>
-                      *{' '}
-                    </Text>
-                  ) : null}
-                  <Text variant="display4">{dropdownField.label}</Text>
-                </View>
-                <DropDown
-                  toggleDropdown={toggleDropdown}
-                  dropdownWidth={dropdownWidth}
-                  items={dropdownField.pickListValues}
-                  position={{ top: dropdownTop, left: dropdownLeft }}
-                />
+  return (
+    <View
+      style={{
+        flexDirection: item.direction || 'column',
+        justifyContent: 'space-between',
+      }}
+    >
+      {item.fields?.map((field, fieldIndex) => {
+        if (field?.type === 'description') {
+          return <Text variant="body2">{field?.label}</Text>
+        } else if (field?.type === 'image') {
+          return (
+            <Image
+              source={universityLogo}
+              style={{ height: 102, width: 352, marginBottom: 30 }}
+              resizeMode="contain"
+            />
+          )
+        } else if (field?.type === 'checkbox') {
+          return (
+            <CheckBox
+              label={field.label}
+              handleCheck={(isChecked) =>
+                handleValueChanged({
+                  selectedValue: isChecked,
+                  type: field.type,
+                  step,
+                  fieldIndex,
+                  sectionIndex,
+                })
+              }
+            />
+          )
+        } else if (field?.type === 'PickList' || field?.type === 'dropdown') {
+          return (
+            <View>
+              <View style={{ flexDirection: 'row' }}>
+                {field.mandatory ? (
+                  <Text variant="display5" color={colors.onAlert}>
+                    *{' '}
+                  </Text>
+                ) : null}
+                <Text variant="display4">{field.label}</Text>
               </View>
-            )
-          })}
-        </View>
-      )
-    }
-  })
+              <DropDown
+                toggleDropdown={toggleDropdown}
+                dropdownWidth={dropdownWidth}
+                items={getDropdownData(field)}
+                position={{ top: dropdownTop, left: dropdownLeft }}
+                onPress={(selectedValue) =>
+                  handleValueChanged({
+                    selectedValue: selectedValue,
+                    type: field.type,
+                    step,
+                    fieldIndex: fieldIndex,
+                    sectionIndex,
+                  })
+                }
+              />
+            </View>
+          )
+        }
+      })}
+    </View>
+  )
 }
 
 const TabSection = ({ tabItems, activeTab, setActiveTab }) => {
@@ -394,7 +477,7 @@ const Tab = ({ item, index, activeTab, setActiveTab }) => {
       key={index}
       style={isActive ? styles.activeTab : styles.unActiveTab}
       onPress={() => setActiveTab(index)}
-      // disabled={index > 4}
+      disabled={index > 5}
     >
       <Text
         variant="body2"

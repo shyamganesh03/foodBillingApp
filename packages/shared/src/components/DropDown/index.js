@@ -32,7 +32,6 @@ const DropDown = (props) => {
 
   const DropdownButton = useRef()
   const isFocused = useIsFocused()
-
   const [showDropDown, setShowDropDown] = useState(false)
   const [selectedOption, setSelectedOption] = useState()
   const dropDownAnim = useRef(new Animated.Value(0)).current

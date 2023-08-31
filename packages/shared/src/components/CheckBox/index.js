@@ -36,7 +36,7 @@ const CheckBox = ({
     <TouchableOpacity
       onPress={() => {
         setIsChecked(!isChecked)
-        handleCheck(isChecked, field, label, value)
+        handleCheck(!isChecked, field, label, value)
       }}
       style={[styles(colors).checkBoxContainer, style]}
       key={itemIndex}
