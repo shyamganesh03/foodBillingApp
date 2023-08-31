@@ -7,11 +7,11 @@ import Button from './Button'
 import ModelComponent from './ModalComponent'
 
 export {
-  TextInput,
-  Text,
-  DropDown,
-  DateInput,
-  CheckBox,
   Button,
+  CheckBox,
+  DateInput,
+  DropDown,
   ModelComponent,
+  Text,
+  TextInput,
 }

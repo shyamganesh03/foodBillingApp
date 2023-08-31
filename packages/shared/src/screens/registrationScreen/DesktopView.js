@@ -17,6 +17,8 @@ import {
 } from '../../components'
 import { useTheme } from '@react-navigation/native'
 import { universityLogo } from '@oap/assets'
+import { FilePicker } from '@libs/components'
+import { Icon } from '@r3-oaf/native-icons'
 
 const DesktopView = ({
   activeTab,
@@ -153,7 +155,13 @@ const renderFields = ({
 
   if (stepValue === activeTab) {
     return session?.sections?.map((item, index) => {
-      return (
+      return item?.type === 'model' ? (
+        <ModelContainer
+          data={item}
+          index={index}
+          setModalFields={setModalFields}
+        />
+      ) : (
         <View
           style={[
             {
@@ -163,7 +171,7 @@ const renderFields = ({
             stepValue !== 0
               ? {
                   borderWidth: 2,
-                  borderColor: '#D4D4D4',
+                  borderColor: item.hasNoBorder ? 'transparent' : '#D4D4D4',
                   borderRadius: 5,
                   marginBottom: 10,
                 }
@@ -174,7 +182,7 @@ const renderFields = ({
             variant={stepValue === 0 ? 'heading3' : 'heading4'}
             style={{
               textDecoration: stepValue === 0 ? 'underline' : 'none',
-              marginBottom: 10,
+              marginBottom: item?.type === 'model' ? 0 : 10,
             }}
           >
             {item?.title}
@@ -196,8 +204,7 @@ const renderFields = ({
               }}
             >
               {item?.fields?.map((fieldItem, fieldIndex) => {
-                const isCenter =
-                  item?.direction === 'row' ? (fieldIndex + 2) % 3 : -1
+                const isCenter = !item?.direction ? (fieldIndex + 2) % 3 : -1
                 if (
                   fieldItem.type === 'PickList' ||
                   fieldItem.type === 'dropdown'
@@ -251,39 +258,68 @@ const renderFields = ({
                 if (fieldItem?.type === 'checkbox') {
                   return <CheckBox label={fieldItem.label} />
                 }
-                if (fieldItem?.type === 'attachFile') {
-                }
                 if (fieldItem?.type === 'description') {
                   return (
-                    <Text
-                      variant="body2"
-                      style={{ maxWidth: '80%', marginBottom: 10 }}
-                    >
+                    <Text variant="body2" style={{ marginBottom: 10 }}>
                       {fieldItem?.label}
                     </Text>
                   )
                 }
+                if (fieldItem?.type === 'attachDocument') {
+                  return <FilePicker heading={fieldItem.label} />
+                }
               })}
             </View>
           )}
-          {item?.type === 'model' ? (
-            <Button
-              label={item.buttonText}
-              onPress={() =>
-                setModalFields({
-                  isModelVisible: true,
-                  items: item?.modelFields,
-                  title: item?.title,
-                  direction: item?.direction || 'row',
-                })
-              }
-              labelColors={colors.white}
-            />
-          ) : null}
         </View>
       )
     })
   }
+}
+
+const ModelContainer = ({ data, index, setModalFields }) => {
+  const { colors } = useTheme()
+  return (
+    <View
+      style={[
+        {
+          padding: 12,
+          flexDirection: 'column',
+          borderWidth: 2,
+          borderColor: data.hasNoBorder ? 'transparent' : '#D4D4D4',
+          borderRadius: 5,
+          marginBottom: 10,
+        },
+      ]}
+      key={index}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Text variant="heading4">{data?.title}</Text>
+        <Button
+          label={data.buttonText}
+          onPress={() =>
+            setModalFields({
+              isModelVisible: true,
+              items: data?.modelFields,
+              title: data?.title,
+              direction: data?.modelDirection || 'row',
+            })
+          }
+          labelColors={colors.white}
+        />
+      </View>
+      {data?.description ? (
+        <Text variant="body2" style={{ marginBottom: 10, marginTop: 30 }}>
+          {data?.description?.label}
+        </Text>
+      ) : null}
+    </View>
+  )
 }
 
 const CommonFromContainer = ({
@@ -296,11 +332,7 @@ const CommonFromContainer = ({
   const { colors } = useTheme()
   return item.fields?.map((field, fieldIndex) => {
     if (field?.type === 'description') {
-      return (
-        <Text variant="body2" style={{ maxWidth: '80%' }}>
-          {field?.label}
-        </Text>
-      )
+      return <Text variant="body2">{field?.label}</Text>
     } else if (field?.type === 'image') {
       return (
         <Image
@@ -362,7 +394,7 @@ const Tab = ({ item, index, activeTab, setActiveTab }) => {
       key={index}
       style={isActive ? styles.activeTab : styles.unActiveTab}
       onPress={() => setActiveTab(index)}
-      disabled={index > 4}
+      // disabled={index > 4}
     >
       <Text
         variant="body2"

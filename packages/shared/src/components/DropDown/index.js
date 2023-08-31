@@ -138,7 +138,7 @@ const DropDown = (props) => {
             }
             style={{ marginRight: 6, marginLeft: isCountryCode ? 0 : 6 }}
           >
-            {selectedOption?.label}
+            {selectedOption?.name}
           </Text>
         )}
         {!hideLabel && (
@@ -172,7 +172,7 @@ const DropDown = (props) => {
             >
               <Animated.ScrollView
                 style={{
-                  height: dropDownAnim,
+                  maxHeight: dropDownAnim,
                 }}
                 showsVerticalScrollIndicator={false}
               >

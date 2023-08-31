@@ -431,7 +431,7 @@ export const fieldData = {
           'Clinical/Hospital Experience (Volunteer, Shadowing, Observation or Otherwise)',
         type: 'model',
         buttonText: 'New',
-        direction: 'column',
+        modelDirection: 'column',
         modelFields: [
           {
             label: 'Clinic/Hospital',
@@ -457,7 +457,7 @@ export const fieldData = {
         title: 'Research Experience',
         type: 'model',
         buttonText: 'New',
-        direction: 'column',
+        modelDirection: 'column',
         modelFields: [
           {
             label: 'Previous Research Experience',
@@ -587,8 +587,87 @@ export const fieldData = {
   },
   step5: {
     title: 'Application Document Requirements',
-
-    sections: [],
+    sections: [
+      {
+        title: 'Application Document Requirements',
+        hasNoBorder: true,
+        fields: [{ label: 'Attach File', type: 'attachDocument' }],
+      },
+      {
+        title: 'Attached Files',
+        type: 'model',
+        buttonText: 'New',
+        modelFields: [],
+      },
+      {
+        title: 'Supplemental Requirements',
+        fields: [
+          {
+            label:
+              'Your personal medical school statement, applicant photo and resume/CV will be required of all candidates. You may upload these supplemental documents to your Community Portal. Acceptable document formats for attachments are: Microsoft Word, PDF, and Jpeg.',
+            type: 'description',
+          },
+        ],
+      },
+      {
+        title: 'Recommenders',
+        type: 'model',
+        buttonText: 'New',
+        description: {
+          label:
+            'At least two letters of recommendation are required of all applicants. For recent graduates it is highly recommended that at least one letter is from a professional acquaintance and the other is academic related.',
+          type: 'description',
+        },
+        modelDirection: 'column',
+        modelFields: [
+          {
+            label: 'First Name or Indicate if Interfolio',
+            name: 'Previous Research Experience',
+            type: 'textField',
+            inputType: 'string',
+          },
+          {
+            label: 'Last Name or Indicate if Interfolio',
+            name: 'Previous Research Experience',
+            type: 'textField',
+            inputType: 'string',
+          },
+          {
+            label: 'Email',
+            name: 'Previous Research Experience',
+            type: 'textField',
+            inputType: 'string',
+          },
+          {
+            label: 'Phone',
+            name: 'Previous Research Experience',
+            type: 'textField',
+            inputType: 'string',
+          },
+        ],
+      },
+      {
+        hasNoBorder: true,
+        fields: [
+          {
+            label:
+              "Under the terms of the Family Educational Rights and Privacy Act (FERPA), you can review letters of recommendation and accompanying forms after you enroll at a postsecondary institution and only if that institution saves the documents post-enrollment.Why should you consider waiving your right of access? Waiving your right lets colleges know that you will never try to read your recommendations. That in turn reassures colleges that your recommenders have provided support that is candid and truthful. While you are free to respond as you wish, if you choose not to waive your right, some recommenders may decline your request, and some colleges may disregard letters submitted on your behalf. Remember, even if you retain your right of access, you still won't be able to view any recommendations until after you have been admitted to and enrolled in a college. In other words, FERPA does not give you the right to inspect recommendations before they are sent to your colleges.After you make your selection, you will be able to invite your counselor and recommenders. Once you make the first invitation, you will not be able to change your response to the waiver question. To ensure that you fully understand the implications of your selection, we urge you not to answer the waiver question until you have consulted with your guidance counselor or another school official.For more information on FERPA, click here.",
+            type: 'description',
+          },
+        ],
+      },
+      {
+        hasNoBorder: true,
+        fields: [
+          {
+            label: 'Waive Access to Recommendation',
+            name: 'isCommonApplication',
+            type: 'checkbox',
+            checkboxValues: [true, false],
+          },
+        ],
+      },
+    ],
   },
   step6: {
     title: 'Application Submission',

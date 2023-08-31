@@ -108,6 +108,31 @@ const SvgCheck = (props) =>
     }),
   )
 
+const SvgDownload = (props) =>
+  /*#__PURE__*/ React.createElement(
+    Svg,
+    _extends(
+      {
+        className:
+          'download_svg__slds-button__icon download_svg__slds-button__icon_left',
+        'data-key': 'upload',
+        'aria-hidden': 'true',
+        viewBox: '0 0 52 52',
+        width: 24,
+        height: 24,
+      },
+      props,
+    ),
+    /*#__PURE__*/ React.createElement(Path, {
+      d: 'M48.5 31h-3c-.8 0-1.5.8-1.5 1.5v10c0 .8-.7 1.5-1.5 1.5h-33c-.8 0-1.5-.7-1.5-1.5v-10c0-.7-.7-1.5-1.5-1.5h-3c-.8 0-1.5.8-1.5 1.5V46c0 2.2 1.8 4 4 4h40c2.2 0 4-1.8 4-4V32.5c0-.7-.7-1.5-1.5-1.5z',
+      fill: props.color || '#fff',
+    }),
+    /*#__PURE__*/ React.createElement(Path, {
+      d: 'M27 2.4c-.6-.6-1.5-.6-2.1 0L11.4 15.9c-.6.6-.6 1.5 0 2.1l2.1 2.1c.6.6 1.5.6 2.1 0l5.6-5.6c.6-.6 1.8-.2 1.8.7v21.2c0 .8.6 1.5 1.4 1.5h3c.8 0 1.6-.8 1.6-1.5V15.3c0-.9 1-1.3 1.7-.7l5.6 5.6c.6.6 1.5.6 2.1 0l2.1-2.1c.6-.6.6-1.5 0-2.1L27 2.4z',
+      fill: props.color || '#fff',
+    }),
+  )
+
 const SvgEyeOff = (props) =>
   /*#__PURE__*/ React.createElement(
     Svg,
@@ -175,6 +200,9 @@ const Icon = (props) => {
   if (props.name === 'Check') {
     return /*#__PURE__*/ React__default.createElement(SvgCheck, props)
   }
+  if (props.name === 'Download') {
+    return /*#__PURE__*/ React__default.createElement(SvgDownload, props)
+  }
   if (props.name === 'EyeOff') {
     return /*#__PURE__*/ React__default.createElement(SvgEyeOff, props)
   }
@@ -189,6 +217,7 @@ Icon.propTypes = {
     'Calendar',
     'CalenderFilled',
     'Check',
+    'Download',
     'EyeOff',
     'Eye',
   ]),

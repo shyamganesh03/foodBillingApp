@@ -76,8 +76,5 @@ const styles = (props) =>
       flexDirection: 'column-reverse',
       paddingVertical: spacing.spacing3,
     },
-    labelStyle: {
-      maxWidth: '80%',
-    },
   })
 export default CheckBox

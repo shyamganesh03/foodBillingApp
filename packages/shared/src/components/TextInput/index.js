@@ -47,15 +47,16 @@ const TextInput = (props) => {
       <Row
         style={[
           styles.inputRow,
-          { backgroundColor: editable ? 'transparent' : colors.background },
+          {
+            backgroundColor: editable ? 'transparent' : colors.background,
+            width: textInputWidth || 325,
+          },
           hasFullWidth
             ? {
                 height: 32,
                 width: '100%',
               }
-            : {
-                width: textInputWidth || 325,
-              },
+            : {},
         ]}
       >
         <Input
