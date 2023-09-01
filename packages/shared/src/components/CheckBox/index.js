@@ -20,7 +20,6 @@ const CheckBox = ({
   style = {},
   value,
 }) => {
-  console.log({ labelStyle })
   const [isChecked, setIsChecked] = useState()
 
   useEffect(() => {

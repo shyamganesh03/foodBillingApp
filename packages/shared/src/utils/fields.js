@@ -232,6 +232,7 @@ export const fieldData = {
             label: 'Emergency Contact First Name',
             name: 'Emergency Contact First Name',
             type: 'textField',
+            fieldName: 'emergencyContactFirstName',
             inputType: 'string',
             mandatory: true,
             selectedValue: '',
@@ -239,6 +240,7 @@ export const fieldData = {
           {
             label: 'Emergency Contact Last Name',
             name: 'Emergency Contact Last Name',
+            fieldName: 'emergencyContactLastName',
             type: 'textField',
             inputType: 'string',
             mandatory: true,
@@ -247,6 +249,7 @@ export const fieldData = {
           {
             label: 'Emergency Contact Relationship',
             name: 'studentrelationships',
+            fieldName: 'emergencyContactRelationship',
             type: 'PickList',
             pickListValues: [],
             mandatory: true,
@@ -255,6 +258,7 @@ export const fieldData = {
           {
             label: 'Emergency Contact Primary Phone',
             name: 'Emergency Contact Primary Phone',
+            fieldName: 'emergencyContactPrimaryPhone',
             type: 'textField',
             inputType: 'number',
             mandatory: true,
@@ -263,6 +267,7 @@ export const fieldData = {
           {
             label: 'Emergency Contact Email',
             name: 'Emergency Contact Email',
+            fieldName: 'emergencyContactEmail',
             type: 'textField',
             inputType: 'string',
             mandatory: true,
@@ -406,8 +411,23 @@ export const fieldData = {
         ],
         modelFieldValues: [
           {
-            label: 'Academic Institution',
+            label: 'Academic Institution Estimated Start',
             name: 'academicInstitution',
+            value: '',
+          },
+          {
+            label: 'Academic Institution Estimated Start Date',
+            name: 'startTermApplyingFor',
+            value: '',
+          },
+          {
+            label: 'Academic Institution Estimated End Date',
+            name: 'endTermApplyingFor',
+            value: '',
+          },
+          {
+            label: 'Approx. Degree Earned Date',
+            name: 'degreeEarnedDate',
             value: '',
           },
         ],
@@ -497,6 +517,7 @@ export const fieldData = {
       },
       {
         title: 'AAMC-MCAT Reporting',
+        fieldName: 'AAMCMCATReporting',
         type: 'model',
         buttonText: 'New',
         modelFields: [

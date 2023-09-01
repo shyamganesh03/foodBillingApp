@@ -11,13 +11,16 @@ import Button from '../Button'
 const ModelComponent = ({
   data,
   handleCloseModel = () => {},
+  handleSave = () => {},
   handleValueChanged,
   getDropdownData,
+  step,
   dropdownLeft,
   dropdownTop,
   dropdownWidth,
   toggleDropdown,
 }) => {
+  console.log('test', data)
   const { colors } = useTheme()
   return (
     <Modal
@@ -92,7 +95,7 @@ const ModelComponent = ({
                           fieldName: 'modelFields',
                           step,
                           fieldIndex,
-                          sectionIndex,
+                          sectionIndex: data.sectionIndex,
                         })
                       }
                       selectedItem={fieldItem.selectedValue}
@@ -114,7 +117,7 @@ const ModelComponent = ({
                         fieldName: 'modelFields',
                         step,
                         fieldIndex,
-                        sectionIndex,
+                        sectionIndex: data.sectionIndex,
                       })
                     }}
                   />
@@ -133,7 +136,7 @@ const ModelComponent = ({
                         fieldName: 'modelFields',
                         step,
                         fieldIndex,
-                        sectionIndex,
+                        sectionIndex: data.sectionIndex,
                       })
                     }
                   />
@@ -151,14 +154,14 @@ const ModelComponent = ({
             }}
           >
             <Button
-              label="cancel"
+              label="Cancel"
               appearance="outline"
               onPress={() => handleCloseModel()}
             />
             <Button
-              label="save"
+              label="Save"
               buttonStyle={{ marginLeft: 10 }}
-              onPress={() => handleCloseModel()}
+              onPress={() => handleSave()}
               labelColors={colors.white}
             />
           </View>

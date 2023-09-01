@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   CheckBox,
@@ -124,14 +124,17 @@ const DesktopView = ({
               items: [],
               title: '',
               direction: 'row',
+              sectionIndex: -1,
             })
           }
+          step={`step${activeTab}`}
           getDropdownData={getDropdownData}
           dropdownLeft={dropdownLeft}
           dropdownTop={dropdownTop}
           dropdownWidth={dropdownWidth}
           toggleDropdown={toggleDropdown}
           handleValueChanged={handleValueChanged}
+          handleSave={() => handleSave(formData[`step${activeTab}`], 'save')}
         />
       </View>
     </ScrollView>
@@ -384,11 +387,18 @@ const renderFields = ({
 
 const ModelContainer = ({ data, index, setModalFields }) => {
   const { colors } = useTheme()
+  const [tabs, setTabs] = useState()
+
+  useEffect(() => {
+    if (data?.modelFieldValues?.length <= 0) return
+
+    const tabsData = Object.keys(data?.modelFieldValues)
+    setTabs(tabsData)
+  }, [])
   return (
     <View
       style={[
         {
-          padding: 12,
           flexDirection: 'column',
           borderWidth: 2,
           borderColor: data.hasNoBorder ? 'transparent' : '#D4D4D4',
@@ -402,6 +412,7 @@ const ModelContainer = ({ data, index, setModalFields }) => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
+          padding: 12,
         }}
       >
         <Text variant="heading4">{data?.title}</Text>
@@ -413,6 +424,7 @@ const ModelContainer = ({ data, index, setModalFields }) => {
               items: data?.modelFields,
               title: data?.title,
               direction: data?.modelDirection || 'row',
+              sectionIndex: index,
             })
           }
           labelColors={colors.white}
@@ -423,7 +435,77 @@ const ModelContainer = ({ data, index, setModalFields }) => {
           {data?.description?.label}
         </Text>
       ) : null}
+      {tabs?.length > 0 ? (
+        <ModalTabSection tabs={tabs} data={data?.modelFieldValues} />
+      ) : null}
     </View>
+  )
+}
+
+const ModalTabSection = ({ tabs, data }) => {
+  return (
+    <ScrollView
+      style={{ flexDirection: 'row' }}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+    >
+      <View>
+        <View style={{ flexDirection: 'row' }}>
+          {tabs?.map((item, index) => {
+            return (
+              <Tab
+                item={{ title: item }}
+                isModal
+                index={index}
+                totalLength={tabs.length}
+              />
+            )
+          })}
+        </View>
+        <View style={{ flexDirection: 'row' }}>
+          {Object.entries(data).map(([key, value]) => {
+            return (
+              <View
+                style={{
+                  flexDirection: 'column',
+                  width: 188,
+                }}
+              >
+                {value.map((item, index) => {
+                  if (item?.title == 'empty') {
+                    return (
+                      <View
+                        style={{ alignItems: 'flex-end', flex: 1, padding: 8 }}
+                      >
+                        <Button
+                          label="Delete"
+                          appearance="outline"
+                          buttonStyle={{ height: 32 }}
+                        />
+                      </View>
+                    )
+                  }
+                  return (
+                    <View
+                      style={{
+                        borderColor: '#D4D4D4',
+                        borderBottomWidth: 1,
+                        borderRightWidth: 1,
+                        marginBottom: index === value.length - 1 ? 10 : 0,
+                        padding: 8,
+                        minHeight: 50,
+                      }}
+                    >
+                      <Text variant="body3">{item}</Text>
+                    </View>
+                  )
+                })}
+              </View>
+            )
+          })}
+        </View>
+      </View>
+    </ScrollView>
   )
 }
 
@@ -661,7 +743,7 @@ const CommonFromContainer = ({
 const TabSection = ({ tabItems, activeTab, setActiveTab }) => {
   return (
     <View style={styles.tabContainer}>
-      {tabItems.map((item, index) => (
+      {tabItems?.map((item, index) => (
         <Tab
           item={item}
           index={index}
@@ -673,20 +755,57 @@ const TabSection = ({ tabItems, activeTab, setActiveTab }) => {
   )
 }
 
-const Tab = ({ item, index, activeTab, setActiveTab }) => {
+const Tab = ({
+  item,
+  index,
+  activeTab,
+  setActiveTab,
+  isModal,
+  totalLength,
+}) => {
   const isActive = activeTab === index
+
+  const getTabStyle = () => {
+    if (isModal) {
+      return styles.modalTab
+    } else {
+      if (isActive) {
+        return styles.activeTab
+      } else {
+        return styles.unActiveTab
+      }
+    }
+  }
+
+  const getColor = () => {
+    if (isModal) {
+      if (index === totalLength - 1) {
+        return 'transparent'
+      }
+      return '#5A5A5A'
+    } else {
+      if (isActive) {
+        return '#3558D6'
+      } else {
+        return 'rgb(75,75,75)'
+      }
+    }
+  }
+
   return (
     <TouchableOpacity
       key={index}
-      style={isActive ? styles.activeTab : styles.unActiveTab}
-      onPress={() => setActiveTab(index)}
+      style={getTabStyle()}
+      onPress={() => (isModal ? () => {} : setActiveTab(index))}
     >
       <Text
         variant="body2"
-        color={isActive ? '#3558D6' : 'rgb(75,75,75)'}
-        style={{
-          textDecoration: isActive ? 'underline' : 'none',
-        }}
+        color={getColor()}
+        style={
+          !isModal && {
+            textDecoration: isActive ? 'underline' : 'none',
+          }
+        }
       >
         {item.title}
       </Text>
@@ -728,6 +847,14 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 12,
+  },
+  modalTab: {
+    borderColor: '#D4D4D4',
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    marginTop: 10,
+    padding: 8,
+    width: 188,
   },
 })
 

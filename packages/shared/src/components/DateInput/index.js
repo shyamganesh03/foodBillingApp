@@ -1,12 +1,18 @@
-import React, { Fragment, useState, useRef, useEffect } from 'react'
-import { View, TouchableOpacity, ScrollView, Platform } from 'react-native'
-import { Menu, TouchableRipple } from 'react-native-paper'
+import {
+  View,
+  TouchableOpacity,
+  Modal,
+  ScrollView,
+  Platform,
+} from 'react-native'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Calendar } from 'react-native-calendars'
 import { Icon } from '@r3-oaf/native-icons'
 import Text from '../Text'
 import TextInput from '../TextInput'
 import { spacing } from '@libs/theme'
 import { useTheme } from '@react-navigation/native'
+import { Menu, TouchableRipple } from 'react-native-paper'
 
 const DateInput = (props) => {
   const {
@@ -22,10 +28,15 @@ const DateInput = (props) => {
     textInputWidth,
     style,
   } = props
-  const [isVisible, setIsVisible] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [yearVisible, setYearVisible] = useState(false)
   const { colors } = useTheme()
+  const DropdownButton = useRef()
+  const [visible, setVisible] = useState(false)
+  const [dropDownWidth, setDropDownWidth] = useState(0)
+  const [dropdownTop, setDropdownTop] = useState(0)
+  const [dropDownLeft, setDropDownLeft] = useState(0)
+  const [selectedDate, setSelectedDate] = useState('')
   const minYear = new Date().getFullYear() - 100
   const maxYear = dob
     ? new Date().getFullYear() - 15
@@ -36,7 +47,6 @@ const DateInput = (props) => {
   const [selectedYear, setSelectedYear] = useState(defaultValue.slice(0, 4))
   const [selectedMonth, setSelectedMonth] = useState(defaultValue.slice(5, 7))
   const [selectedDay, setSelectedDay] = useState(defaultValue.slice(8, 10))
-  const [selectedDate, setSelectedDate] = useState()
 
   const yearScrollViewRef = useRef(null)
   const month = [
@@ -76,7 +86,18 @@ const DateInput = (props) => {
         })
       }
     }, 400)
-  }, [selectedYear, yearItems, yearVisible])
+  })
+
+  const toggleDropdown = () => (visible ? setVisible(false) : openDropdown())
+
+  const openDropdown = () => {
+    DropdownButton.current.measure((_fx, _fy, _w, h, _px, py) => {
+      setDropdownTop(py)
+      setDropDownLeft(_px - _fx)
+      setDropDownWidth(_w)
+      setVisible(true)
+    })
+  }
 
   const handleCurrentDate = () => {
     const currentDate = new Date().getDate()
@@ -89,7 +110,11 @@ const DateInput = (props) => {
     setSelectedYear(currentYear)
     setSelectedMonth(currentMonth)
     setSelectedDay(currentDate)
-    setIsVisible(false)
+    setVisible(false)
+  }
+
+  const handleDayPress = (day) => {
+    setSelectedDate(day?.dateString)
   }
 
   const renderHeader = () => {
@@ -191,58 +216,16 @@ const DateInput = (props) => {
     )
   }
 
-  return (
-    <View
-      style={[
-        {
-          // alignSelf: 'flex-end',
-          // marginBottom: 10,
-        },
-        style,
-      ]}
-    >
-      <View style={{ flexDirection: 'row' }}>
-        {isMandatory ? (
-          <Text variant="display5" color={colors.onAlert}>
-            *{' '}
-          </Text>
-        ) : null}
-        <Text variant="display4">{title}</Text>
-      </View>
-      <Menu
-        visible={isVisible}
-        anchorPosition="bottom"
-        onDismiss={() => setIsVisible(false)}
-        anchor={
-          <View>
-            <TouchableOpacity
-              onPress={() => setIsVisible(!isVisible)}
-              style={{ height: 32, width: textInputWidth || 325 }}
-            >
-              <TextInput
-                label={label}
-                placeholder={placeholder}
-                textInputWidth={textInputWidth}
-                inputFieldStyle={{ width: textInputWidth - 50 }}
-                trailingIcon={
-                  <Icon
-                    name="CalenderFilled"
-                    height={20}
-                    width={20}
-                    color={colors.placeHolder}
-                  />
-                }
-                value={value || selectedDate}
-                maxLength={data?.maxLength}
-                error={error}
-                onFocus={() => {
-                  props?.onFocus?.()
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        }
-        contentStyle={{ backgroundColor: colors.white }}
+  const renderDropdown = () => (
+    <Modal visible={visible} transparent animationType="none">
+      <View
+        style={{
+          top: dropdownTop,
+          left: dropDownLeft,
+          width: dropDownWidth,
+          backgroundColor: '#FFFFFF',
+          paddingBottom: 10,
+        }}
       >
         <Calendar
           key={selectedYear}
@@ -260,7 +243,7 @@ const DateInput = (props) => {
             setSelectedYear(day.year)
             setSelectedMonth(day.month)
             setSelectedDay(day.day)
-            setIsVisible(false)
+            setVisible(false)
           }}
           renderHeader={renderHeader}
           onMonthChange={(month) => handleMonthChange(month)}
@@ -295,7 +278,40 @@ const DateInput = (props) => {
             Today
           </Text>
         </TouchableOpacity>
-      </Menu>
+      </View>
+    </Modal>
+  )
+
+  return (
+    <View>
+      <TouchableOpacity
+        ref={DropdownButton}
+        onPress={() => {
+          toggleDropdown()
+        }}
+      >
+        <View style={{ flexDirection: 'row' }}>
+          {isMandatory ? (
+            <Text variant="display5" color={colors.onAlert}>
+              *{' '}
+            </Text>
+          ) : null}
+          <Text variant="display4">{title}</Text>
+        </View>
+        {renderDropdown()}
+        <TextInput
+          label={label}
+          placeholder={placeholder}
+          right={<TextInput.Affix />}
+          value={selectedDate}
+          maxLength={data?.maxLength}
+          error={error}
+          onFocus={() => {
+            props?.onFocus?.()
+          }}
+          style={style}
+        />
+      </TouchableOpacity>
     </View>
   )
 }

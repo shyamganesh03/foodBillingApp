@@ -27,6 +27,7 @@ const Registration = (props) => {
     direction: 'row',
     title: '',
     items: [],
+    sectionIndex: -1,
   })
   const [activeTab, setActiveTab] = useState(0)
   const [tabItems, setTabItems] = useState([])
@@ -38,7 +39,7 @@ const Registration = (props) => {
   const isFocused = useIsFocused()
 
   const { data } = useQuery({
-    queryKey: 'applicationData',
+    queryKey: 'getApplicationData',
     queryFn: async () => {
       const formDataCopy = { ...formData }
       const responseData = await getApplicationByEmailID({ email: emailID })
@@ -49,16 +50,31 @@ const Registration = (props) => {
             for (const section of sections) {
               const fields = section.fields
               if (section.type === 'model') {
-                responseData[section.fieldName]?.forEach((item) => {
-                  const keys = Object.keys(item)
-
-                  keys.map((key) => {
-                    section?.modelFieldValues?.forEach((modalFields) => {
-                      if (modalFields?.name === key)
-                        modalFields.value = item[key]
-                    })
+                const transformedData = {}
+                let newTransformedData = {}
+                if (responseData[section?.fieldName]?.length > 0) {
+                  for (const item of responseData[section.fieldName]) {
+                    for (const key in item) {
+                      if (!transformedData[key]) {
+                        transformedData[key] = []
+                      }
+                      transformedData[key].push(item[key])
+                    }
+                  }
+                  let maxValue = 0
+                  Object.entries(transformedData).map(([key, value]) => {
+                    if (value.length > maxValue) {
+                      maxValue = value.length
+                    }
                   })
-                })
+                  const empty = []
+                  newTransformedData = { ...transformedData, empty }
+
+                  for (let initial = 0; initial <= maxValue - 1; initial++) {
+                    newTransformedData['empty'].push({ title: 'empty' })
+                  }
+                }
+                section.modelFieldValues = newTransformedData
               } else if (fields) {
                 for (const field of fields) {
                   const fieldName = field?.fieldName || ''
@@ -72,6 +88,7 @@ const Registration = (props) => {
         }
       }
       setFormData(formDataCopy)
+      return responseData
     },
     enabled: !!emailID,
     initialData: [],
@@ -161,11 +178,20 @@ const Registration = (props) => {
   }
 
   const handleSave = async (submittedData, type) => {
-    const payload = { email: emailID }
+    let payload = { email: emailID }
     submittedData.sections.forEach((section) => {
+      let fullName = ''
       if (section.fields?.length > 0) {
         section.fields?.forEach((fields) => {
+          console.log({ fields })
           if (fields?.fieldName) {
+            if (
+              fields?.fieldName === 'emergencyContactFirstName' ||
+              fields?.fieldName === 'emergencyContactLastName'
+            ) {
+              fullName = fullName + ' ' + fields?.selectedValue
+              payload['emergencyContactFullName'] = fullName.trim()
+            }
             if (fields?.type === 'PickList' || fields?.type === 'dropdown') {
               const hasKey = Object.keys(fields?.selectedValue)
               if (hasKey.length === 1) {
@@ -175,19 +201,16 @@ const Registration = (props) => {
               }
             } else {
               payload[fields?.fieldName] = fields?.selectedValue || ''
+              console.log('test... ', payload)
             }
           }
         })
       } else {
-        section.modelFields?.forEach((fields) => {
-          if (fields?.fieldName) {
-            if (fields?.type === 'PickList' || fields?.type === 'dropdown') {
-              payload[fields?.fieldName] = fields?.selectedValue?.name
-            } else {
-              payload[fields?.fieldName] = fields?.selectedValue || ''
-            }
-          }
-        })
+        if (!!section.selectedValue) {
+          const previousData = data
+          previousData[section.fieldName].push(section.selectedValue)
+          payload = { ...payload, ...previousData }
+        }
       }
     })
     if (type === 'Submit') {
@@ -207,6 +230,13 @@ const Registration = (props) => {
         setActiveTab(activeTab + 1)
       }
     }
+    setModalFields({
+      isModelVisible: false,
+      items: [],
+      title: '',
+      direction: 'row',
+      sectionIndex: -1,
+    })
   }
 
   const handleValueChanged = ({
@@ -221,21 +251,50 @@ const Registration = (props) => {
       type === 'PickList' || type === 'dropdown'
         ? selectedValue.name
         : selectedValue
+
+    console.log({ value, selectedValue })
     const copyFormData = formData
     const currentField =
       copyFormData[step]?.sections[sectionIndex]?.[fieldName]?.[fieldIndex]
-    const newCurrentField = { ...currentField, selectedValue: value }
-    const newFieldsArray =
-      copyFormData[step]?.sections[sectionIndex]?.[fieldName]
-    newFieldsArray[fieldIndex] = newCurrentField
-    const newSections = copyFormData[step]?.sections
-    newSections[sectionIndex] = {
-      ...newSections[sectionIndex],
-      [fieldName]: newFieldsArray,
+
+    if (copyFormData[step]?.sections[sectionIndex].type === 'model') {
+      console.log({ currentField })
+      let newData = {}
+      copyFormData[step]?.sections[sectionIndex]?.[fieldName]?.map((item) => {
+        const newFields = {
+          [item.fieldName]: '',
+        }
+        newData = { ...newData, ...newFields }
+      })
+      Object.entries(newData).map(([key, emptyValue]) => {
+        if (key === currentField.fieldName) {
+          newData[key] = value
+        }
+      })
+      const currentData =
+        copyFormData[step]?.sections[sectionIndex]?.selectedValue
+
+      copyFormData[step].sections[sectionIndex].selectedValue = {
+        ...currentData,
+        ...newData,
+      }
+      console.log({ copyFormData })
+      setFormData(copyFormData)
+    } else {
+      const newCurrentField = { ...currentField, selectedValue: value }
+
+      const newFieldsArray =
+        copyFormData[step]?.sections[sectionIndex]?.[fieldName]
+      newFieldsArray[fieldIndex] = newCurrentField
+      const newSections = copyFormData[step]?.sections
+      newSections[sectionIndex] = {
+        ...newSections[sectionIndex],
+        [fieldName]: newFieldsArray,
+      }
+      const newStepData = { ...copyFormData[step], sections: newSections }
+      const updatedFieldData = { ...copyFormData, [step]: newStepData }
+      setFormData(updatedFieldData)
     }
-    const newStepData = { ...copyFormData[step], sections: newSections }
-    const updatedFieldData = { ...copyFormData, [step]: newStepData }
-    setFormData(updatedFieldData)
   }
 
   const getCTAStatus = (tabIndex) => {
