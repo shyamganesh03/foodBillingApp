@@ -19,6 +19,7 @@ const DateInput = (props) => {
     error,
     title = '',
     isMandatory,
+    textInputWidth,
     style,
   } = props
   const [isVisible, setIsVisible] = useState(false)
@@ -216,11 +217,13 @@ const DateInput = (props) => {
           <View>
             <TouchableOpacity
               onPress={() => setIsVisible(!isVisible)}
-              style={{ height: 32, width: 325 }}
+              style={{ height: 32, width: textInputWidth || 325 }}
             >
               <TextInput
                 label={label}
                 placeholder={placeholder}
+                textInputWidth={textInputWidth}
+                inputFieldStyle={{ width: textInputWidth - 50 }}
                 trailingIcon={
                   <Icon
                     name="CalenderFilled"

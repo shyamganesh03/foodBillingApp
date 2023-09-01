@@ -26,8 +26,12 @@ const DesktopView = ({
   dropdownTop,
   dropdownWidth,
   modalFields,
+  isCTADisabled,
   formData,
+  handleSave,
+  getValidatedData,
   handleValueChanged,
+  getCTAStatus,
   getDropdownData,
   setActiveTab,
   setModalFields,
@@ -64,6 +68,7 @@ const DesktopView = ({
               handleValueChanged={handleValueChanged}
               setModalFields={setModalFields}
               getDropdownData={getDropdownData}
+              getValidatedData={getValidatedData}
               toggleDropdown={toggleDropdown}
               colors={colors}
             />
@@ -79,6 +84,9 @@ const DesktopView = ({
                 label="Save"
                 buttonStyle={{ flex: 0.4 }}
                 labelColors={colors.white}
+                onPress={() => {
+                  handleSave(formData[`step${activeTab}`], 'save')
+                }}
               />
               <Button
                 label={
@@ -86,11 +94,18 @@ const DesktopView = ({
                 }
                 buttonStyle={{ flex: 0.4 }}
                 labelColors={colors.white}
-                onPress={() =>
-                  activeTab !== tabItems.length - 1
-                    ? setActiveTab(activeTab + 1)
-                    : {}
+                buttonColor={
+                  activeTab !== tabItems.length - 1 ? colors.primary : '#45C65A'
                 }
+                onPress={() => {
+                  handleSave(
+                    formData[`step${activeTab}`],
+                    activeTab !== tabItems.length - 1
+                      ? 'saveAndNext'
+                      : 'Submit',
+                  )
+                }}
+                disable={getCTAStatus(activeTab)} //isCTADisabled && activeTab === tabItems.length - 1
               />
             </View>
           </View>
@@ -125,6 +140,7 @@ const FormFields = ({
   dropdownTop,
   dropdownWidth,
   handleValueChanged,
+  getValidatedData,
   getDropdownData,
   setModalFields,
   toggleDropdown,
@@ -141,6 +157,7 @@ const FormFields = ({
           dropdownTop,
           dropdownWidth,
           handleValueChanged,
+          getValidatedData,
           getDropdownData,
           setModalFields,
           toggleDropdown,
@@ -159,6 +176,7 @@ const renderFields = ({
   dropdownTop,
   dropdownWidth,
   handleValueChanged,
+  getValidatedData,
   getDropdownData,
   setModalFields,
   toggleDropdown,
@@ -166,6 +184,16 @@ const renderFields = ({
   const stepValue = parseInt(step.replace('step', ''))
 
   if (stepValue === activeTab) {
+    if (activeTab === 6) {
+      return (
+        <ApplicationReviewContainer
+          getValidatedData={getValidatedData}
+          data={session?.sections}
+          handleValueChanged={handleValueChanged}
+          step={step}
+        />
+      )
+    }
     return session?.sections?.map((item, sectionIndex) => {
       return item?.type === 'model' ? (
         <ModelContainer
@@ -255,6 +283,7 @@ const renderFields = ({
                             sectionIndex,
                           })
                         }
+                        selectedItem={fieldItem.selectedValue}
                       />
                     </View>
                   )
@@ -310,6 +339,7 @@ const renderFields = ({
                           sectionIndex,
                         })
                       }
+                      checkedStatus={fieldItem.selectedValue}
                     />
                   )
                 }
@@ -377,6 +407,156 @@ const ModelContainer = ({ data, index, setModalFields }) => {
   )
 }
 
+const ApplicationReviewContainer = ({
+  getValidatedData,
+  data,
+  handleValueChanged,
+  step,
+}) => {
+  const validatedData = getValidatedData()
+  const keys = Object.keys(validatedData)
+  if (keys.length === 0) {
+    return (
+      <View style={{ padding: 12 }}>
+        <View
+          style={{
+            marginBottom: 10,
+            backgroundColor: '#ffffdc',
+            padding: 5,
+            margin: 5,
+            borderColor: '#f8e38e',
+            borderWidth: 1,
+            borderRadius: 5,
+          }}
+        >
+          <Text variant="body2">
+            Before submitting your application, please return to the below tabs
+            to complete and save the indicated fields.
+          </Text>
+        </View>
+        {Object.entries(validatedData).map(([key, value]) => {
+          return (
+            <View
+              style={{
+                borderWidth: 2,
+                borderColor: '#D4D4D4',
+                borderRadius: 5,
+                marginBottom: 10,
+                padding: 12,
+                flexDirection: 'column',
+                margin: 12,
+              }}
+            >
+              <Text
+                variant="body1"
+                style={{
+                  marginBottom: 10,
+                }}
+              >
+                {key}
+              </Text>
+              {value.map((item, index) => {
+                return (
+                  <Text key={index} variant="body2">
+                    {item.label}
+                  </Text>
+                )
+              })}
+            </View>
+          )
+        })}
+      </View>
+    )
+  } else {
+    return (
+      <View style={{ padding: 24 }}>
+        <Text variant="body1" style={{ marginBottom: 24 }}>
+          CERTIFICATION STATEMENT
+        </Text>
+        <Text variant="body3" style={{ marginBottom: 24 }}>
+          I hereby authorize Saba University School of Medicine to report
+          information concerning my MCAT scores to the U.S. Department of
+          Education, other regulatory bodies, and accrediting bodies.
+        </Text>
+        <Text variant="body3" style={{ marginBottom: 24 }}>
+          The filling out and electronic submission of this form acknowledges
+          that I understand that withholding any information requested in this
+          application or giving false information may make me ineligible for
+          admission to/or subject to dismissal from Saba University School of
+          Medicine. With this in mind, I certify that the above statements are
+          correct and complete.
+        </Text>
+        <Text variant="body3" style={{ marginBottom: 24 }}>
+          No person shall be excluded from participation in, denied benefits of,
+          or be subject to discrimination under any program or activity
+          sponsored or conducted by Saba University School of Medicine, on any
+          basis prohibited by applicable law, including but not limited to race,
+          color, national origin, sex, age, or handicap.
+        </Text>
+        <Text variant="body3" style={{ marginBottom: 24 }}>
+          Please note: Information on sex, age, ethnic origin, and citizenship
+          status is collected for compliance reports in connection with the
+          federal regulation pursuant to the Civil Rights Acts of 1964,
+          Executive Order 11375 and Title IX of the Education Amendments and
+          Part 86. 45 C.F.R., and will not be used to discriminate in admission
+          to or participation in any educational programs or activities offered
+          by Saba University School of Medicine.
+        </Text>
+        <Text variant="body3" style={{ marginBottom: 24 }}>
+          {
+            '[University policies and academic requirements are subject to change from time-to-time.]'
+          }
+        </Text>
+        <View style={{ flexDirection: 'row' }}>
+          {data?.map((item, index) => {
+            return item?.fields?.map((fieldItem, fieldIndex) => {
+              if (fieldItem.type === 'textField') {
+                return (
+                  <TextInput
+                    label={fieldItem.label}
+                    isMandatory={fieldItem.mandatory}
+                    style={{ marginRight: 20 }}
+                    textInputWidth={145}
+                    value={fieldItem.selectedValue}
+                    onChangeText={(value) => {
+                      handleValueChanged({
+                        selectedValue: value,
+                        type: fieldItem.type,
+                        step,
+                        fieldIndex,
+                        sectionIndex: 0,
+                      })
+                    }}
+                  />
+                )
+              }
+              if (fieldItem.type === 'date') {
+                return (
+                  <DateInput
+                    title={fieldItem.label}
+                    style={{}}
+                    isMandatory={fieldItem.mandatory}
+                    textInputWidth={145}
+                    onChangeText={(selectedDate) =>
+                      handleValueChanged({
+                        selectedValue: selectedDate,
+                        type: fieldItem.type,
+                        step,
+                        fieldIndex,
+                        sectionIndex: 0,
+                      })
+                    }
+                  />
+                )
+              }
+            })
+          })}
+        </View>
+      </View>
+    )
+  }
+}
+
 const CommonFromContainer = ({
   item,
   dropdownLeft,
@@ -420,6 +600,7 @@ const CommonFromContainer = ({
                   sectionIndex,
                 })
               }
+              checkedStatus={field.selectedValue}
             />
           )
         } else if (field?.type === 'PickList' || field?.type === 'dropdown') {
@@ -447,6 +628,7 @@ const CommonFromContainer = ({
                     sectionIndex,
                   })
                 }
+                selectedItem={field.selectedValue}
               />
             </View>
           )
@@ -478,7 +660,6 @@ const Tab = ({ item, index, activeTab, setActiveTab }) => {
       key={index}
       style={isActive ? styles.activeTab : styles.unActiveTab}
       onPress={() => setActiveTab(index)}
-      disabled={index > 5}
     >
       <Text
         variant="body2"

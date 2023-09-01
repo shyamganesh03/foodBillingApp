@@ -95,6 +95,7 @@ const ModelComponent = ({
                           sectionIndex,
                         })
                       }
+                      selectedItem={fieldItem.selectedValue}
                     />
                   </View>
                 )

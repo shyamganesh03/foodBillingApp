@@ -19,9 +19,10 @@ export const fieldData = {
             label:
               'By checking the box below, you are opting in to the Common Application. This will automatically enter you for consideration based on this application to any schools you choose in the fields below.',
             name: 'isCommonApplication',
+            fieldName: 'isCommonApplication',
             type: 'checkbox',
             checkboxValues: [true, false],
-            selectedValue: '',
+            selectedValue: false,
           },
         ],
       },
@@ -30,6 +31,7 @@ export const fieldData = {
         fields: [
           {
             label: 'First Choice School',
+            fieldName: 'firstChoiceSchool',
             name: 'schools',
             type: 'PickList',
             pickListValues: [],
@@ -37,6 +39,7 @@ export const fieldData = {
           },
           {
             label: 'Second Choice School',
+            fieldName: 'secondChoiceSchool',
             name: 'schools',
             type: 'PickList',
             pickListValues: [],
@@ -44,6 +47,7 @@ export const fieldData = {
           },
           {
             label: 'ThirdChoiceSchool',
+            fieldName: 'thirdChoiceSchool',
             name: 'schools',
             type: 'PickList',
             pickListValues: [],
@@ -62,6 +66,7 @@ export const fieldData = {
           {
             label: 'First Name',
             name: 'firstName',
+            fieldName: 'firstName',
             type: 'textField',
             inputType: 'string',
             mandatory: true,
@@ -70,6 +75,7 @@ export const fieldData = {
           {
             label: 'Middle Name',
             name: 'middleName',
+            fieldName: 'middleName',
             type: 'textField',
             inputType: 'string',
             selectedValue: '',
@@ -77,6 +83,7 @@ export const fieldData = {
           {
             label: 'Last Name',
             name: 'lastName',
+            fieldName: 'lastName',
             type: 'textField',
             mandatory: true,
             selectedValue: '',
@@ -84,6 +91,7 @@ export const fieldData = {
           {
             label: 'Title',
             name: 'title',
+            fieldName: 'title',
             type: 'PickList',
             pickListValues: [
               { name: 'Mrs' },
@@ -97,6 +105,7 @@ export const fieldData = {
           {
             label: 'Birthdate',
             name: 'birthdate',
+            fieldName: 'birthdate',
             type: 'date',
             mandatory: true,
             selectedValue: '',
@@ -104,6 +113,7 @@ export const fieldData = {
           {
             label: 'Previous Names Used',
             name: 'previousNamesUsed',
+            fieldName: 'previousNamesUsed',
             type: 'textField',
             inputType: 'string',
             selectedValue: '',
@@ -111,6 +121,7 @@ export const fieldData = {
           {
             label: 'Previously Applied to this Institution?',
             name: 'previouslyAppliedToThisInstitution',
+            fieldName: 'previouslyAppliedToThisInstitution',
             type: 'PickList',
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             selectedValue: '',
@@ -118,6 +129,7 @@ export const fieldData = {
           {
             label: 'Start Term Applying For',
             name: 'intakes',
+            fieldName: 'startTermApplyingFor',
             type: 'PickList',
             pickListValues: [],
             mandatory: true,
@@ -132,6 +144,7 @@ export const fieldData = {
             label: 'Alternative Email Address',
             name: 'alternativeEmailAddress',
             type: 'textField',
+            fieldName: 'alternativeEmailAddress',
             inputType: 'string',
             mandatory: true,
             selectedValue: '',
@@ -139,6 +152,7 @@ export const fieldData = {
           {
             label: 'Mobile/Primary Number',
             name: 'mobileOrPrimaryNumber',
+            fieldName: 'phoneNumber',
             type: 'textField',
             inputType: 'number',
             mandatory: true,
@@ -147,6 +161,7 @@ export const fieldData = {
           {
             label: 'Alternative Phone Number',
             name: 'alternativePhoneNumber',
+            fieldName: 'AltPhoneNumber',
             type: 'textField',
             inputType: 'string',
             mandatory: true,
@@ -155,6 +170,7 @@ export const fieldData = {
           {
             label: 'Street Address',
             name: 'streetAddress',
+            fieldName: 'mailingStreet',
             type: 'textField',
             inputType: 'string',
             mandatory: true,
@@ -164,6 +180,7 @@ export const fieldData = {
             label: 'City',
             name: 'city',
             type: 'textField',
+            fieldName: 'mailingCity',
             inputType: 'string',
             mandatory: true,
             selectedValue: '',
@@ -172,6 +189,7 @@ export const fieldData = {
             label: 'Zip/Postal Code',
             name: 'zipOrPostalCode',
             type: 'textField',
+            fieldName: 'mailingPostalCode',
             inputType: 'string',
             mandatory: true,
             selectedValue: '',
@@ -179,6 +197,7 @@ export const fieldData = {
           {
             label: 'Mailing Country Code',
             name: 'mailingCountryCode',
+            fieldName: 'mailingCountryCode',
             type: 'dropdown',
             dropdownValues: [{ name: 'India' }, { name: 'china' }],
             mandatory: true,
@@ -187,10 +206,20 @@ export const fieldData = {
           {
             label: 'Mailing State/Province Code',
             name: 'mailingStateOrProvinceCode',
+            fieldName: 'mailingStateCode',
             type: 'dropdown',
             dropdownValues: [{ name: 'Ind' }, { name: 'chn' }],
             mandatory: true,
             selectedValue: '',
+          },
+          {
+            label:
+              'Text messages sent by the Admissions Office will not be used for "spam." By checking the confirmation box, you grant permission to Saba University School of Medicine to send text messages to your personal mobile phone number.',
+            name: 'canTextToMobile',
+            fieldName: 'canTextToMobile',
+            type: 'checkbox',
+            checkboxValues: [true, false],
+            selectedValue: false,
           },
         ],
       },
@@ -245,6 +274,7 @@ export const fieldData = {
           {
             label: 'Gender',
             name: 'gender',
+            fieldName: 'gender',
             type: 'PickList',
             pickListValues: [],
             mandatory: true,
@@ -253,6 +283,7 @@ export const fieldData = {
           {
             label: 'Marital Status',
             name: 'maritalstatus',
+            fieldName: 'maritalStatus',
             type: 'PickList',
             pickListValues: [],
             selectedValue: '',
@@ -260,6 +291,7 @@ export const fieldData = {
           {
             label: 'Number of Dependents',
             name: 'NumberOfDependents',
+            fieldName: 'numberOfDependents',
             type: 'textField',
             inputType: 'string',
             selectedValue: '',
@@ -267,6 +299,7 @@ export const fieldData = {
           {
             label: 'Is English your Primary Language',
             name: 'isEnglishYourPrimaryLanguage',
+            fieldName: 'isEnglishYourPrimaryLanguage',
             type: 'PickList',
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             selectedValue: '',
@@ -274,6 +307,7 @@ export const fieldData = {
           {
             label: 'Place of Birth',
             name: 'PlaceOfBirth',
+            fieldName: 'placeOfBirth',
             type: 'textField',
             inputType: 'string',
             mandatory: true,
@@ -282,6 +316,7 @@ export const fieldData = {
           {
             label: 'What is your Citizenship Status?',
             name: 'citizenshipstatus',
+            fieldName: 'citizenshipStatus',
             type: 'PickList',
             pickListValues: [],
             mandatory: true,
@@ -290,6 +325,7 @@ export const fieldData = {
           {
             label: 'Are you a US Citizen/Permanent Resident?',
             name: 'isUsCitizen',
+            fieldName: 'USCitizenOrPermanentResident',
             type: 'PickList',
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
@@ -298,6 +334,7 @@ export const fieldData = {
           {
             label: 'Have a Non US or Canadian Passport?',
             name: 'OtherCountryPassport',
+            fieldName: 'haveNonUSOrCanadianPassport',
             type: 'PickList',
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             selectedValue: '',
@@ -305,6 +342,7 @@ export const fieldData = {
           {
             label: 'If International Passport, Which Country?',
             name: 'internationalCitizenCountry',
+            fieldName: 'internationalPassportCountry',
             type: 'dropdown',
             dropdownValues: [{ name: 'India' }, { name: 'china' }],
             selectedValue: '',
@@ -325,12 +363,14 @@ export const fieldData = {
             label: 'Academic Institution',
             name: 'Academic Institution',
             type: 'textField',
+            fieldName: 'academicInstitution',
             inputType: 'string',
             selectedValue: '',
           },
           {
             label: 'Degree Level',
             name: 'degreelevel',
+            fieldName: 'universityOrCollegeInfo[degreeLevel]',
             type: 'PickList',
             pickListValues: [],
             mandatory: true,
@@ -339,6 +379,7 @@ export const fieldData = {
           {
             label: 'Academic Institution Estimated Start',
             name: 'startTime',
+            fieldName: 'startTermApplyingFor',
             type: 'date',
             mandatory: true,
             selectedValue: '',
@@ -346,6 +387,7 @@ export const fieldData = {
           {
             label: 'Academic Institution Estimated End Date',
             name: 'endTime',
+            fieldName: 'endTermApplyingFor',
             type: 'date',
             mandatory: true,
             selectedValue: '',
@@ -353,6 +395,7 @@ export const fieldData = {
           {
             label: 'Approx. Degree Earned Date',
             name: 'earnedDate',
+            fieldName: 'degreeEarnedDate',
             type: 'date',
             mandatory: true,
             selectedValue: '',
@@ -365,6 +408,7 @@ export const fieldData = {
           {
             label: 'Biology 1',
             name: 'Biology_1',
+            fieldName: 'biology1',
             type: 'PickList',
             pickListValues: [
               { name: 'Incomplete' },
@@ -377,6 +421,7 @@ export const fieldData = {
           {
             label: 'Biology 2',
             name: 'Biology_2',
+            fieldName: 'biology2',
             type: 'PickList',
             pickListValues: [
               { name: 'Incomplete' },
@@ -390,6 +435,7 @@ export const fieldData = {
             label: 'General/Inorganic Chemistry 1',
             name: 'General/Inorganic_Chemistry_1',
             type: 'PickList',
+            fieldName: 'generalOrInorganicChemistry1',
             pickListValues: [
               { name: 'Incomplete' },
               { name: 'Complete' },
@@ -402,6 +448,7 @@ export const fieldData = {
             label: 'General/Inorganic Chemistry 2',
             name: 'General/Inorganic_Chemistry_2',
             type: 'PickList',
+            fieldName: 'generalOrInorganicChemistry2',
             pickListValues: [
               { name: 'Incomplete' },
               { name: 'Complete' },
@@ -413,6 +460,7 @@ export const fieldData = {
           {
             label: 'Organic Chemistry 1',
             name: 'Organic_Chemistry_1',
+            fieldName: 'organicChemistry1',
             type: 'PickList',
             pickListValues: [
               { name: 'Incomplete' },
@@ -425,6 +473,7 @@ export const fieldData = {
           {
             label: 'Organic Chemistry 2 or Biochemistry',
             name: 'Organic_Chemistry_2_or_Biochemistry',
+            fieldName: 'organicChemistry2OrBiochemistry',
             type: 'PickList',
             pickListValues: [
               { name: 'Incomplete' },
@@ -444,12 +493,14 @@ export const fieldData = {
           {
             label: 'MCAT Exam Date',
             name: 'ExamDate',
+            fieldName: 'MCATDate',
             type: 'date',
           },
           {
             label: 'MCAT Total Score',
             name: 'MCAT Total Score',
             type: 'textField',
+            fieldName: 'MCATTotalScore',
             inputType: 'string',
           },
         ],
@@ -471,6 +522,7 @@ export const fieldData = {
             label: 'Clinic/Hospital',
             name: 'Clinic/Hospital',
             type: 'textField',
+            fieldName: 'clinicOrHospital',
             inputType: 'string',
             selectedValue: '',
           },
@@ -478,6 +530,7 @@ export const fieldData = {
             label: 'Clinical Experience Role',
             name: 'Clinical Experience Role',
             type: 'textField',
+            fieldName: 'Professional_Experiences__c',
             inputType: 'string',
             selectedValue: '',
           },
@@ -486,6 +539,7 @@ export const fieldData = {
             name: 'Clinical Experience Hours Completed',
             type: 'textField',
             inputType: 'string',
+            fieldName: 'Professional_Experiences__c', //
             selectedValue: '',
           },
         ],
@@ -501,6 +555,7 @@ export const fieldData = {
             name: 'Previous Research Experience',
             type: 'textField',
             inputType: 'string',
+            fieldName: 'Professional_Experiences__c', //
             selectedValue: '',
           },
         ],
@@ -518,7 +573,6 @@ export const fieldData = {
             label:
               'All candidates for admission must meet the school’s Technical Standards, which describe the essential abilities and characteristics for the study and practice of medicine, including the abilities which relate to observation; communication; motor function; intellectual-conceptual (integrative and quantitative) abilities; and behavioral and social skills. By submitting this application, the candidate affirms that he or she has read the Technical Standards, which are available at www.saba.edu.',
             type: 'description',
-            selectedValue: '',
           },
           {
             label:
@@ -528,12 +582,14 @@ export const fieldData = {
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
             hasFullWidth: true,
+            fieldName: '', //
             selectedValue: '',
           },
           {
             label: 'If yes, then please explain',
             name: 'Previous Research Experience',
             type: 'textField',
+            fieldName: '', //
             inputType: 'string',
             selectedValue: '',
           },
@@ -545,6 +601,7 @@ export const fieldData = {
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
             hasFullWidth: true,
+            fieldName: '', //
             selectedValue: '',
           },
           {
@@ -552,6 +609,7 @@ export const fieldData = {
             name: 'Previous Research Experience',
             type: 'textField',
             inputType: 'string',
+            fieldName: '', //
             selectedValue: '',
           },
           {
@@ -562,6 +620,7 @@ export const fieldData = {
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
             hasFullWidth: true,
+            fieldName: '', //
             selectedValue: '',
           },
           {
@@ -569,6 +628,7 @@ export const fieldData = {
             name: 'Previous Research Experience',
             type: 'textField',
             inputType: 'string',
+            fieldName: '', //
             selectedValue: '',
           },
           {
@@ -579,6 +639,7 @@ export const fieldData = {
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
             hasFullWidth: true,
+            fieldName: '', //
             selectedValue: '',
           },
           {
@@ -586,6 +647,7 @@ export const fieldData = {
             name: 'Previous Research Experience',
             type: 'textField',
             inputType: 'string',
+            fieldName: '', //
             selectedValue: '',
           },
           {
@@ -596,6 +658,7 @@ export const fieldData = {
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
             hasFullWidth: true,
+            fieldName: '', //
             selectedValue: '',
           },
           {
@@ -603,6 +666,7 @@ export const fieldData = {
             name: 'Previous Research Experience',
             type: 'textField',
             inputType: 'string',
+            fieldName: '', //
             selectedValue: '',
           },
         ],
@@ -616,6 +680,7 @@ export const fieldData = {
             name: 'referralsource',
             type: 'PickList',
             pickListValues: [],
+            fieldName: '', //
             mandatory: true,
             hasFullWidth: true,
             selectedValue: '',
@@ -624,6 +689,7 @@ export const fieldData = {
             label: 'Other Schools Applying To',
             name: 'Previous Research Experience',
             type: 'textField',
+            fieldName: '', //
             inputType: 'string',
             selectedValue: '',
           },
@@ -652,7 +718,6 @@ export const fieldData = {
             label:
               'Your personal medical school statement, applicant photo and resume/CV will be required of all candidates. You may upload these supplemental documents to your Community Portal. Acceptable document formats for attachments are: Microsoft Word, PDF, and Jpeg.',
             type: 'description',
-            selectedValue: '',
           },
         ],
       },
@@ -670,7 +735,8 @@ export const fieldData = {
           {
             label: 'First Name or Indicate if Interfolio',
             name: 'Previous Research Experience',
-            type: 'textField',
+            type: 'recommenderFirstName',
+            fieldName: '',
             inputType: 'string',
             selectedValue: '',
           },
@@ -678,6 +744,7 @@ export const fieldData = {
             label: 'Last Name or Indicate if Interfolio',
             name: 'Previous Research Experience',
             type: 'textField',
+            fieldName: 'recommenderLastName',
             inputType: 'string',
             selectedValue: '',
           },
@@ -686,6 +753,7 @@ export const fieldData = {
             name: 'Previous Research Experience',
             type: 'textField',
             inputType: 'string',
+            fieldName: 'recommenderEmail',
             selectedValue: '',
           },
           {
@@ -693,6 +761,7 @@ export const fieldData = {
             name: 'Previous Research Experience',
             type: 'textField',
             inputType: 'string',
+            fieldName: 'recommenderPhone',
             selectedValue: '',
           },
         ],
@@ -713,6 +782,7 @@ export const fieldData = {
           {
             label: 'Waive Access to Recommendation',
             name: 'isCommonApplication',
+            fieldName: 'WaiveAccessToRecommendation',
             type: 'checkbox',
             checkboxValues: [true, false],
             selectedValue: '',
@@ -723,6 +793,26 @@ export const fieldData = {
   },
   step6: {
     title: 'Application Submission',
-    sections: [],
+    sections: [
+      {
+        fields: [
+          {
+            label: 'Submission Signature',
+            name: 'Submission Signature',
+            type: 'textField',
+            inputType: 'string',
+            selectedValue: '',
+          },
+          {
+            label: 'Submitted Signature Date',
+            name: 'Submitted Signature Date',
+            // fieldName: 'Submitted Signature Date',
+            type: 'date',
+            mandatory: true,
+            selectedValue: '',
+          },
+        ],
+      },
+    ],
   },
 }

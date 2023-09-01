@@ -74,7 +74,9 @@ const TextInput = (props) => {
           editable={editable}
         />
         {trailingIcon && (
-          <View style={{ justifyContent: 'center' }}>{trailingIcon}</View>
+          <View style={{ justifyContent: 'center', flex: 1 }}>
+            {trailingIcon}
+          </View>
         )}
       </Row>
     </View>

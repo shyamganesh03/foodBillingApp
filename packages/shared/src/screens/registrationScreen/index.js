@@ -5,8 +5,14 @@ import DesktopView from './DesktopView'
 import { useIsFocused } from '@react-navigation/native'
 import { fieldData } from '../../utils/fields'
 import { useDropDownData } from '../../hooks/useDropDownData'
+import {
+  getApplicationByEmailID,
+  submitApplication,
+  updateApplication,
+} from '../../api'
+import { useQuery } from '@tanstack/react-query'
 
-const Registration = () => {
+const Registration = (props) => {
   const [dropdownTop, setDropdownTop] = useState(0)
   const [dropdownLeft, setDropdownLeft] = useState(0)
   const [dropdownWidth, setDropDownWidth] = useState(0)
@@ -19,7 +25,38 @@ const Registration = () => {
   const [activeTab, setActiveTab] = useState(0)
   const [tabItems, setTabItems] = useState([])
   const [formData, setFormData] = useState(fieldData)
+  const [isCTADisabled, setIsCTADisabled] = useState()
+  const emailID = props.route.params.emailId
   const isFocused = useIsFocused()
+
+  const { data } = useQuery({
+    queryKey: 'applicationData',
+    queryFn: async () => {
+      const formDataCopy = { ...formData }
+      const responseData = await getApplicationByEmailID({ email: emailID })
+      for (const step in formDataCopy) {
+        if (formDataCopy.hasOwnProperty(step)) {
+          const sections = formDataCopy[step].sections
+          if (sections) {
+            for (const section of sections) {
+              const fields = section.fields
+              if (fields) {
+                for (const field of fields) {
+                  const fieldName = field?.fieldName || ''
+                  if (fieldName in responseData) {
+                    field.selectedValue = responseData[fieldName]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      setFormData(formDataCopy)
+    },
+    enabled: !!emailID,
+    initialData: [],
+  })
 
   const toggleDropdown = (visible, ref) => {
     if (visible) {
@@ -32,6 +69,45 @@ const Registration = () => {
         setDropDownWidth(_w)
       })
     }
+  }
+
+  function processFields(fields, sectionTitle, mandatoryFields) {
+    for (const field of fields) {
+      if (field.mandatory && field.selectedValue === '') {
+        // Field is mandatory and has no selected value
+        if (!mandatoryFields[sectionTitle]) {
+          mandatoryFields[sectionTitle] = []
+        }
+        mandatoryFields[sectionTitle].push({ label: field.label })
+      }
+    }
+  }
+
+  const getValidatedData = () => {
+    const formCopy = formData
+    let mandatoryFields = {}
+    for (const stepKey in formCopy) {
+      const step = formCopy[stepKey]
+
+      // Iterate through sections in the step
+      for (const section of step.sections) {
+        if (section.fields) {
+          // If section has "fields" property, process those fields
+          processFields(section.fields, step.title, mandatoryFields)
+        }
+        if (section.modelFields) {
+          // If section has "modelFields" property, process those fields
+          processFields(section.modelFields, step.title, mandatoryFields)
+        }
+      }
+    }
+    const keys = Object.keys(mandatoryFields)
+    if (keys.length > 0) {
+      setIsCTADisabled(true)
+    } else {
+      setIsCTADisabled(false)
+    }
+    return mandatoryFields
   }
 
   useEffect(() => {
@@ -54,6 +130,49 @@ const Registration = () => {
         dropDownName: fieldValue?.name,
       })
       return dropdownValue
+    }
+  }
+
+  const handleSave = async (submittedData, type) => {
+    const payload = {}
+    submittedData.sections.forEach((section) => {
+      if (section.fields.length > 0) {
+        section.fields.forEach((fields) => {
+          if (fields.fieldName) {
+            if (fields.type === 'PickList' || fields.type === 'dropdown') {
+              payload[fields.fieldName] = fields.selectedValue.name
+            } else {
+              payload[fields.fieldName] = fields.selectedValue || ''
+            }
+          }
+        })
+      } else {
+        section.modelFields.forEach((fields) => {
+          if (fields.fieldName) {
+            if (fields.type === 'PickList' || fields.type === 'dropdown') {
+              payload[fields.fieldName] = fields.selectedValue.name
+            } else {
+              payload[fields.fieldName] = fields.selectedValue || ''
+            }
+          }
+        })
+      }
+    })
+    if (type === 'Submit') {
+      payload = {
+        firstName: formData.step1.sections[0].fields[0].selectedValue,
+        lastName: formData.step1.sections[0].fields[2].selectedValue,
+        phoneNumber: formData.step1.sections[1].fields[1].selectedValue,
+        email: emailID,
+        canTextToMobile: formData.step1.sections[1].fields[8].selectedValue,
+        firstChoiceSchool: formData.step0.sections[1].fields[0].selectedValue,
+      }
+      const response = await submitApplication(payload)
+    } else {
+      await updateApplication(payload)
+      if (type === 'saveAndNext') {
+        setActiveTab(activeTab + 1)
+      }
     }
   }
 
@@ -86,6 +205,17 @@ const Registration = () => {
     setFormData(updatedFieldData)
   }
 
+  const getCTAStatus = (tabIndex) => {
+    if (
+      (isCTADisabled ||
+        !formData.step6.sections[0].fields[0].selectedValue ||
+        !formData.step6.sections[0].fields[1].selectedValue) &&
+      tabIndex === 6
+    ) {
+      return true
+    } else return false
+  }
+
   const viewProps = {
     activeTab,
     dropdownLeft,
@@ -94,7 +224,11 @@ const Registration = () => {
     formData,
     modalFields,
     tabItems,
+    isCTADisabled,
+    handleSave,
     handleValueChanged,
+    getCTAStatus,
+    getValidatedData,
     getDropdownData,
     setActiveTab,
     setModalFields,

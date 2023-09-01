@@ -27,7 +27,6 @@ export const apiCall = async (url, options) => {
       return response
     }
   } catch (error) {
-    console.log({ error })
     return error
   }
 }
@@ -40,4 +39,16 @@ export const getDropdownData = async (payload) =>
 export const getApplicationByEmailID = async (payload) =>
   apiCall(`application/${payload.email}`, {
     method: 'GET',
+  })
+
+export const updateApplication = async (payload) =>
+  apiCall(`application`, {
+    method: 'PATCH',
+    payload,
+  })
+
+export const submitApplication = async (payload) =>
+  apiCall(`application`, {
+    method: 'POST',
+    payload,
   })

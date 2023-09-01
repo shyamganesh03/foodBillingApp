@@ -25,6 +25,7 @@ const DropDown = (props) => {
     isOutLine,
     isCountryCode = false,
     toggleDropdown,
+    selectedItem,
     style,
     dropdownWidth,
     dropdownHeight = 115,
@@ -70,16 +71,13 @@ const DropDown = (props) => {
 
   useEffect(() => {
     if (!isFocused) return
-
-    const selectedItem = items?.filter(
-      (filterItem) => filterItem.isSelected === true,
-    )
-    if (selectedItem?.length === 0)
+    if (selectedItem) {
+      console.log({ selectedItem })
+      setSelectedOption(selectedItem)
+    } else {
       setSelectedOption({ name: 'Select an option' })
-    // else if (label) {
-    //   setSelectedOption({ label: label, isPlaceholder: true })
-    // }
-  }, [isFocused])
+    }
+  }, [isFocused, selectedItem])
 
   return (
     <View
@@ -133,7 +131,7 @@ const DropDown = (props) => {
             color={colors.onNeutral}
             style={{ marginRight: 6, marginLeft: isCountryCode ? 0 : 6 }}
           >
-            {selectedOption?.name}
+            {selectedOption?.name || selectedOption}
           </Text>
         )}
         {!hideLabel && (

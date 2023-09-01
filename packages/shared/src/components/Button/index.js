@@ -42,7 +42,7 @@ const Button = (props) => {
         style={[
           styles.label,
           {
-            color: labelColors,
+            color: disable ? colors.onNeutral : labelColors,
             marginLeft: !!leftIcon ? 10 : 0,
             marginRight: !!rightIcon ? 10 : 0,
           },
@@ -69,8 +69,7 @@ const getButtonStyle = (appearance, buttonVariant, disable) => {
 
   if (disable) {
     buttonStyle.push({
-      opacity: 0.5,
-      activeOpacity: 1,
+      backgroundColor: '#c9c7c5',
     })
   }
 

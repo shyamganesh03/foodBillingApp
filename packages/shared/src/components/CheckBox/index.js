@@ -6,30 +6,28 @@ import { spacing } from '@libs/theme'
 import Text from '../Text'
 
 const CheckBox = ({
-  filtersApplied,
-  itemIndex,
+  checkedStatus,
   field,
+  filtersApplied,
+  handleCheck,
+  itemIndex,
   label,
-  value,
   labelColor,
   labelStyle,
-  handleCheck,
   programId,
-  style = {},
   selectedProgrammes,
+  style = {},
+  value,
 }) => {
   const [isChecked, setIsChecked] = useState()
+
   useEffect(() => {
-    const filedName = field?.charAt(0).toUpperCase() + field?.slice(1)
-    if (
-      (field && filtersApplied[filedName]?.values?.includes(label)) ||
-      selectedProgrammes?.includes(programId)
-    ) {
+    if (checkedStatus) {
       setIsChecked(true)
     } else {
       setIsChecked(false)
     }
-  }, [filtersApplied, programId])
+  }, [checkedStatus])
 
   const { colors } = useTheme()
   return (
