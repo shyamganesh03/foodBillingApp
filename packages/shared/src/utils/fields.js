@@ -139,6 +139,7 @@ export const fieldData = {
       },
       {
         title: 'Contact Information',
+        columnIndex: 8,
         fields: [
           {
             label: 'Alternative Email Address',
@@ -217,6 +218,7 @@ export const fieldData = {
               'Text messages sent by the Admissions Office will not be used for "spam." By checking the confirmation box, you grant permission to Saba University School of Medicine to send text messages to your personal mobile phone number.',
             name: 'canTextToMobile',
             fieldName: 'canTextToMobile',
+            isColumn: true,
             type: 'checkbox',
             checkboxValues: [true, false],
             selectedValue: false,

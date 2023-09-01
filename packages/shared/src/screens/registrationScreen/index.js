@@ -1,4 +1,10 @@
-import React, { Suspense, useCallback, useEffect, useState } from 'react'
+import React, {
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { ScreenLayout } from '@libs/utils'
 import { Text } from '../../components'
 import DesktopView from './DesktopView'
@@ -26,6 +32,8 @@ const Registration = (props) => {
   const [tabItems, setTabItems] = useState([])
   const [formData, setFormData] = useState(fieldData)
   const [isCTADisabled, setIsCTADisabled] = useState()
+  const [containerWidth, setContainerWidth] = useState()
+  const containerRef = useRef()
   const emailID = props.route.params?.emailId || 'sindhu@gmail.com'
   const isFocused = useIsFocused()
 
@@ -46,7 +54,7 @@ const Registration = (props) => {
 
                   keys.map((key) => {
                     section?.modelFieldValues?.forEach((modalFields) => {
-                      if (modalFields.name === key)
+                      if (modalFields?.name === key)
                         modalFields.value = item[key]
                     })
                   })
@@ -82,14 +90,22 @@ const Registration = (props) => {
     }
   }
 
+  const getContainerWidth = () => {
+    if (containerRef.current) {
+      containerRef.current.measure((_fx, _fy, _w, _h, _px, _py) => {
+        setContainerWidth(_w)
+      })
+    }
+  }
+
   function processFields(fields, sectionTitle, mandatoryFields) {
     for (const field of fields) {
-      if (field.mandatory && field.selectedValue === '') {
+      if (field?.mandatory && field?.selectedValue === '') {
         // Field is mandatory and has no selected value
         if (!mandatoryFields[sectionTitle]) {
           mandatoryFields[sectionTitle] = []
         }
-        mandatoryFields[sectionTitle].push({ label: field.label })
+        mandatoryFields[sectionTitle].push({ label: field?.label })
       }
     }
   }
@@ -147,28 +163,28 @@ const Registration = (props) => {
   const handleSave = async (submittedData, type) => {
     const payload = { email: emailID }
     submittedData.sections.forEach((section) => {
-      if (section.fields.length > 0) {
-        section.fields.forEach((fields) => {
-          if (fields.fieldName) {
-            if (fields.type === 'PickList' || fields.type === 'dropdown') {
-              const hasKey = Object.keys(fields.selectedValue)
+      if (section.fields?.length > 0) {
+        section.fields?.forEach((fields) => {
+          if (fields?.fieldName) {
+            if (fields?.type === 'PickList' || fields?.type === 'dropdown') {
+              const hasKey = Object.keys(fields?.selectedValue)
               if (hasKey.length === 1) {
-                payload[fields.fieldName] = fields.selectedValue.name
+                payload[fields?.fieldName] = fields?.selectedValue.name
               } else {
-                payload[fields.fieldName] = fields.selectedValue || ''
+                payload[fields?.fieldName] = fields?.selectedValue || ''
               }
             } else {
-              payload[fields.fieldName] = fields.selectedValue || ''
+              payload[fields?.fieldName] = fields?.selectedValue || ''
             }
           }
         })
       } else {
-        section.modelFields.forEach((fields) => {
-          if (fields.fieldName) {
-            if (fields.type === 'PickList' || fields.type === 'dropdown') {
-              payload[fields.fieldName] = fields.selectedValue.name
+        section.modelFields?.forEach((fields) => {
+          if (fields?.fieldName) {
+            if (fields?.type === 'PickList' || fields?.type === 'dropdown') {
+              payload[fields?.fieldName] = fields?.selectedValue?.name
             } else {
-              payload[fields.fieldName] = fields.selectedValue || ''
+              payload[fields?.fieldName] = fields?.selectedValue || ''
             }
           }
         })
@@ -240,12 +256,15 @@ const Registration = (props) => {
     dropdownWidth,
     formData,
     modalFields,
+    containerRef,
+    containerWidth,
     tabItems,
     isCTADisabled,
     handleSave,
     handleValueChanged,
     getCTAStatus,
     getValidatedData,
+    getContainerWidth,
     getDropdownData,
     setActiveTab,
     setModalFields,

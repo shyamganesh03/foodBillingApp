@@ -30,7 +30,10 @@ const DesktopView = ({
   formData,
   handleSave,
   getValidatedData,
+  getContainerWidth,
+  containerWidth,
   handleValueChanged,
+  containerRef,
   getCTAStatus,
   getDropdownData,
   setActiveTab,
@@ -69,7 +72,10 @@ const DesktopView = ({
               setModalFields={setModalFields}
               getDropdownData={getDropdownData}
               getValidatedData={getValidatedData}
+              containerWidth={containerWidth}
               toggleDropdown={toggleDropdown}
+              containerRef={containerRef}
+              getContainerWidth={getContainerWidth}
               colors={colors}
             />
             <View
@@ -140,6 +146,9 @@ const FormFields = ({
   dropdownTop,
   dropdownWidth,
   handleValueChanged,
+  containerWidth,
+  containerRef,
+  getContainerWidth,
   getValidatedData,
   getDropdownData,
   setModalFields,
@@ -153,10 +162,13 @@ const FormFields = ({
           colors,
           session,
           step,
+          containerRef,
           dropdownLeft,
           dropdownTop,
           dropdownWidth,
+          containerWidth,
           handleValueChanged,
+          getContainerWidth,
           getValidatedData,
           getDropdownData,
           setModalFields,
@@ -171,18 +183,20 @@ const renderFields = ({
   activeTab,
   colors,
   session,
+  containerRef,
   step,
   dropdownLeft,
+  containerWidth,
   dropdownTop,
   dropdownWidth,
   handleValueChanged,
+  getContainerWidth,
   getValidatedData,
   getDropdownData,
   setModalFields,
   toggleDropdown,
 }) => {
   const stepValue = parseInt(step.replace('step', ''))
-
   if (stepValue === activeTab) {
     if (activeTab === 6) {
       return (
@@ -206,7 +220,6 @@ const renderFields = ({
           style={[
             {
               padding: 12,
-              flexDirection: item?.type === 'model' ? 'row' : 'column',
             },
             stepValue !== 0
               ? {
@@ -218,144 +231,151 @@ const renderFields = ({
               : {},
           ]}
         >
-          <Text
-            variant={stepValue === 0 ? 'heading3' : 'heading4'}
-            style={{
-              textDecoration: stepValue === 0 ? 'underline' : 'none',
-              marginBottom: item?.type === 'model' ? 0 : 10,
-            }}
+          <View
+            ref={containerRef}
+            style={{ flexDirection: item?.type === 'model' ? 'row' : 'column' }}
           >
-            {item?.title}
-          </Text>
-          {stepValue === 0 ? (
-            <CommonFromContainer
-              item={item}
-              dropdownLeft={dropdownLeft}
-              dropdownTop={dropdownTop}
-              getDropdownData={getDropdownData}
-              dropdownWidth={dropdownWidth}
-              toggleDropdown={toggleDropdown}
-              handleValueChanged={handleValueChanged}
-              step={step}
-              sectionIndex={sectionIndex}
-            />
-          ) : (
-            <View
+            <Text
+              variant={stepValue === 0 ? 'heading3' : 'heading4'}
               style={{
-                flexDirection: item?.direction || 'row',
-                flex: 1,
-                flexWrap: 'wrap',
+                textDecoration: stepValue === 0 ? 'underline' : 'none',
+                marginBottom: item?.type === 'model' ? 0 : 10,
               }}
             >
-              {item?.fields?.map((fieldItem, fieldIndex) => {
-                const isCenter = !item?.direction ? (fieldIndex + 2) % 3 : -1
-                if (
-                  fieldItem.type === 'PickList' ||
-                  fieldItem.type === 'dropdown'
-                ) {
-                  return (
-                    <View
-                      style={{
-                        marginBottom: 10,
-                        marginHorizontal: isCenter === 0 ? 20 : 0,
-                      }}
-                    >
-                      <View style={{ flexDirection: 'row' }}>
-                        {fieldItem.mandatory ? (
-                          <Text variant="display5" color={colors.onAlert}>
-                            *{' '}
-                          </Text>
-                        ) : null}
-                        <Text variant="display4">{fieldItem.label}</Text>
+              {item?.title}
+            </Text>
+            {stepValue === 0 ? (
+              <CommonFromContainer
+                item={item}
+                dropdownLeft={dropdownLeft}
+                dropdownTop={dropdownTop}
+                getDropdownData={getDropdownData}
+                dropdownWidth={dropdownWidth}
+                toggleDropdown={toggleDropdown}
+                handleValueChanged={handleValueChanged}
+                step={step}
+                sectionIndex={sectionIndex}
+              />
+            ) : (
+              <View
+                style={{
+                  flexDirection: item?.direction || 'row',
+                  flex: 1,
+                  flexWrap: 'wrap',
+                }}
+              >
+                {item?.fields?.map((fieldItem, fieldIndex) => {
+                  const isCenter = !item?.direction ? (fieldIndex + 2) % 3 : -1
+                  if (
+                    fieldItem.type === 'PickList' ||
+                    fieldItem.type === 'dropdown'
+                  ) {
+                    return (
+                      <View
+                        style={{
+                          marginBottom: 10,
+                          marginHorizontal: isCenter === 0 ? 20 : 0,
+                        }}
+                      >
+                        <View style={{ flexDirection: 'row' }}>
+                          {fieldItem.mandatory ? (
+                            <Text variant="display5" color={colors.onAlert}>
+                              *{' '}
+                            </Text>
+                          ) : null}
+                          <Text variant="display4">{fieldItem.label}</Text>
+                        </View>
+                        <DropDown
+                          toggleDropdown={toggleDropdown}
+                          dropdownWidth={dropdownWidth}
+                          items={getDropdownData(fieldItem)}
+                          hasFullWidth={fieldItem.hasFullWidth}
+                          position={{ top: dropdownTop, left: dropdownLeft }}
+                          onPress={(selectedValue) =>
+                            handleValueChanged({
+                              selectedValue: selectedValue,
+                              type: fieldItem.type,
+                              step,
+                              fieldIndex,
+                              sectionIndex,
+                            })
+                          }
+                          selectedItem={fieldItem.selectedValue}
+                        />
                       </View>
-                      <DropDown
-                        toggleDropdown={toggleDropdown}
-                        dropdownWidth={dropdownWidth}
-                        items={getDropdownData(fieldItem)}
-                        hasFullWidth={fieldItem.hasFullWidth}
-                        position={{ top: dropdownTop, left: dropdownLeft }}
-                        onPress={(selectedValue) =>
+                    )
+                  }
+                  if (fieldItem.type === 'textField') {
+                    return (
+                      <TextInput
+                        label={fieldItem.label}
+                        isMandatory={fieldItem.mandatory}
+                        style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
+                        textInputWidth={isCenter === -1 ? '100%' : ''}
+                        value={fieldItem.selectedValue}
+                        onChangeText={(value) => {
                           handleValueChanged({
-                            selectedValue: selectedValue,
+                            selectedValue: value,
+                            type: fieldItem.type,
+                            step,
+                            fieldIndex,
+                            sectionIndex,
+                          })
+                        }}
+                      />
+                    )
+                  }
+                  if (fieldItem.type === 'date') {
+                    return (
+                      <DateInput
+                        title={fieldItem.label}
+                        style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
+                        isMandatory={fieldItem.mandatory}
+                        onChangeText={(selectedDate) =>
+                          handleValueChanged({
+                            selectedValue: selectedDate,
                             type: fieldItem.type,
                             step,
                             fieldIndex,
                             sectionIndex,
                           })
                         }
-                        selectedItem={fieldItem.selectedValue}
                       />
-                    </View>
-                  )
-                }
-                if (fieldItem.type === 'textField') {
-                  return (
-                    <TextInput
-                      label={fieldItem.label}
-                      isMandatory={fieldItem.mandatory}
-                      style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
-                      textInputWidth={isCenter === -1 ? '100%' : ''}
-                      value={fieldItem.selectedValue}
-                      onChangeText={(value) => {
-                        handleValueChanged({
-                          selectedValue: value,
-                          type: fieldItem.type,
-                          step,
-                          fieldIndex,
-                          sectionIndex,
-                        })
-                      }}
-                    />
-                  )
-                }
-                if (fieldItem.type === 'date') {
-                  return (
-                    <DateInput
-                      title={fieldItem.label}
-                      style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
-                      isMandatory={fieldItem.mandatory}
-                      onChangeText={(selectedDate) =>
-                        handleValueChanged({
-                          selectedValue: selectedDate,
-                          type: fieldItem.type,
-                          step,
-                          fieldIndex,
-                          sectionIndex,
-                        })
-                      }
-                    />
-                  )
-                }
-                if (fieldItem?.type === 'checkbox') {
-                  return (
-                    <CheckBox
-                      label={fieldItem.label}
-                      handleCheck={(isChecked) =>
-                        handleValueChanged({
-                          selectedValue: isChecked,
-                          type: fieldItem.type,
-                          step,
-                          fieldIndex,
-                          sectionIndex,
-                        })
-                      }
-                      checkedStatus={fieldItem.selectedValue}
-                    />
-                  )
-                }
-                if (fieldItem?.type === 'description') {
-                  return (
-                    <Text variant="body2" style={{ marginBottom: 10 }}>
-                      {fieldItem?.label}
-                    </Text>
-                  )
-                }
-                if (fieldItem?.type === 'attachDocument') {
-                  return <FilePicker heading={fieldItem.label} />
-                }
-              })}
-            </View>
-          )}
+                    )
+                  }
+                  if (fieldItem?.type === 'checkbox') {
+                    return (
+                      <CheckBox
+                        label={fieldItem.label}
+                        handleCheck={(isChecked) =>
+                          handleValueChanged({
+                            selectedValue: isChecked,
+                            type: fieldItem.type,
+                            step,
+                            fieldIndex,
+                            sectionIndex,
+                          })
+                        }
+                        handleWidth={getContainerWidth}
+                        labelStyle={{ width: containerWidth }}
+                        checkedStatus={fieldItem.selectedValue}
+                      />
+                    )
+                  }
+                  if (fieldItem?.type === 'description') {
+                    return (
+                      <Text variant="body2" style={{ marginBottom: 10 }}>
+                        {fieldItem?.label}
+                      </Text>
+                    )
+                  }
+                  if (fieldItem?.type === 'attachDocument') {
+                    return <FilePicker heading={fieldItem.label} />
+                  }
+                })}
+              </View>
+            )}
+          </View>
         </View>
       )
     })

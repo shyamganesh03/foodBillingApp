@@ -9,6 +9,7 @@ const CheckBox = ({
   checkedStatus,
   field,
   filtersApplied,
+  handleWidth = () => {},
   handleCheck,
   itemIndex,
   label,
@@ -19,6 +20,7 @@ const CheckBox = ({
   style = {},
   value,
 }) => {
+  console.log({ labelStyle })
   const [isChecked, setIsChecked] = useState()
 
   useEffect(() => {
@@ -28,6 +30,10 @@ const CheckBox = ({
       setIsChecked(false)
     }
   }, [checkedStatus])
+
+  useEffect(() => {
+    handleWidth()
+  }, [])
 
   const { colors } = useTheme()
   return (
@@ -73,6 +79,9 @@ const styles = (props) =>
     checkBoxContainer: {
       flexDirection: 'column-reverse',
       paddingVertical: spacing.spacing3,
+    },
+    labelStyle: {
+      flex: 1,
     },
   })
 export default CheckBox
