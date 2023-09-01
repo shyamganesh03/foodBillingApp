@@ -40,7 +40,18 @@ const Registration = (props) => {
           if (sections) {
             for (const section of sections) {
               const fields = section.fields
-              if (fields) {
+              if (section.type === 'model') {
+                responseData[section.fieldName]?.forEach((item) => {
+                  const keys = Object.keys(item)
+
+                  keys.map((key) => {
+                    section?.modelFieldValues?.forEach((modalFields) => {
+                      if (modalFields.name === key)
+                        modalFields.value = item[key]
+                    })
+                  })
+                })
+              } else if (fields) {
                 for (const field of fields) {
                   const fieldName = field?.fieldName || ''
                   if (fieldName in responseData) {
@@ -134,13 +145,18 @@ const Registration = (props) => {
   }
 
   const handleSave = async (submittedData, type) => {
-    const payload = {}
+    const payload = { email: emailID }
     submittedData.sections.forEach((section) => {
       if (section.fields.length > 0) {
         section.fields.forEach((fields) => {
           if (fields.fieldName) {
             if (fields.type === 'PickList' || fields.type === 'dropdown') {
-              payload[fields.fieldName] = fields.selectedValue.name
+              const hasKey = Object.keys(fields.selectedValue)
+              if (hasKey.length === 1) {
+                payload[fields.fieldName] = fields.selectedValue.name
+              } else {
+                payload[fields.fieldName] = fields.selectedValue || ''
+              }
             } else {
               payload[fields.fieldName] = fields.selectedValue || ''
             }
@@ -159,7 +175,7 @@ const Registration = (props) => {
       }
     })
     if (type === 'Submit') {
-      payload = {
+      const submitPayload = {
         firstName: formData.step1.sections[0].fields[0].selectedValue,
         lastName: formData.step1.sections[0].fields[2].selectedValue,
         phoneNumber: formData.step1.sections[1].fields[1].selectedValue,
@@ -167,7 +183,8 @@ const Registration = (props) => {
         canTextToMobile: formData.step1.sections[1].fields[8].selectedValue,
         firstChoiceSchool: formData.step0.sections[1].fields[0].selectedValue,
       }
-      const response = await submitApplication(payload)
+      await updateApplication(payload)
+      await submitApplication(submitPayload)
     } else {
       await updateApplication(payload)
       if (type === 'saveAndNext') {

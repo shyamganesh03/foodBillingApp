@@ -72,7 +72,6 @@ const DropDown = (props) => {
   useEffect(() => {
     if (!isFocused) return
     if (selectedItem) {
-      console.log({ selectedItem })
       setSelectedOption(selectedItem)
     } else {
       setSelectedOption({ name: 'Select an option' })

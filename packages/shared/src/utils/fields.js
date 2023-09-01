@@ -358,6 +358,7 @@ export const fieldData = {
         title: 'University/College Information',
         type: 'model',
         buttonText: 'New',
+        fieldName: 'universityOrCollegeInfo',
         modelFields: [
           {
             label: 'Academic Institution',
@@ -399,6 +400,13 @@ export const fieldData = {
             type: 'date',
             mandatory: true,
             selectedValue: '',
+          },
+        ],
+        modelFieldValues: [
+          {
+            label: 'Academic Institution',
+            name: 'academicInstitution',
+            value: '',
           },
         ],
       },
