@@ -334,6 +334,7 @@ const renderFields = ({
                         title={fieldItem.label}
                         style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                         isMandatory={fieldItem.mandatory}
+                        value={fieldItem.selectedValue}
                         onChangeText={(selectedDate) =>
                           handleValueChanged({
                             selectedValue: selectedDate,

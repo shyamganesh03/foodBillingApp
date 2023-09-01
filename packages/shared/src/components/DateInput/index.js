@@ -303,8 +303,16 @@ const DateInput = (props) => {
           label={label}
           placeholder={placeholder}
           right={<TextInput.Affix />}
-          value={selectedDate}
+          value={value || selectedDate}
           maxLength={data?.maxLength}
+          trailingIcon={
+            <Icon
+              name="CalenderFilled"
+              height={20}
+              width={20}
+              color={colors.placeHolder}
+            />
+          }
           error={error}
           onFocus={() => {
             props?.onFocus?.()

@@ -183,7 +183,6 @@ const Registration = (props) => {
       let fullName = ''
       if (section.fields?.length > 0) {
         section.fields?.forEach((fields) => {
-          console.log({ fields })
           if (fields?.fieldName) {
             if (
               fields?.fieldName === 'emergencyContactFirstName' ||
@@ -201,7 +200,6 @@ const Registration = (props) => {
               }
             } else {
               payload[fields?.fieldName] = fields?.selectedValue || ''
-              console.log('test... ', payload)
             }
           }
         })
@@ -251,14 +249,11 @@ const Registration = (props) => {
       type === 'PickList' || type === 'dropdown'
         ? selectedValue.name
         : selectedValue
-
-    console.log({ value, selectedValue })
     const copyFormData = formData
     const currentField =
       copyFormData[step]?.sections[sectionIndex]?.[fieldName]?.[fieldIndex]
 
     if (copyFormData[step]?.sections[sectionIndex].type === 'model') {
-      console.log({ currentField })
       let newData = {}
       copyFormData[step]?.sections[sectionIndex]?.[fieldName]?.map((item) => {
         const newFields = {
@@ -266,19 +261,18 @@ const Registration = (props) => {
         }
         newData = { ...newData, ...newFields }
       })
+      const data = {}
       Object.entries(newData).map(([key, emptyValue]) => {
         if (key === currentField.fieldName) {
-          newData[key] = value
+          data[key] = value
         }
       })
       const currentData =
         copyFormData[step]?.sections[sectionIndex]?.selectedValue
-
       copyFormData[step].sections[sectionIndex].selectedValue = {
         ...currentData,
-        ...newData,
+        ...data,
       }
-      console.log({ copyFormData })
       setFormData(copyFormData)
     } else {
       const newCurrentField = { ...currentField, selectedValue: value }

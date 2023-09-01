@@ -378,7 +378,7 @@ export const fieldData = {
           {
             label: 'Degree Level',
             name: 'degreelevel',
-            fieldName: 'universityOrCollegeInfo[degreeLevel]',
+            fieldName: 'degreeLevel',
             type: 'PickList',
             pickListValues: [],
             mandatory: true,

@@ -4,6 +4,28 @@ import PropTypes from 'prop-types'
 import _extends from '@babel/runtime/helpers/extends'
 import Svg, { Path } from 'react-native-svg'
 
+const SvgArrowNarrowLeft = (props) =>
+  /*#__PURE__*/ React.createElement(
+    Svg,
+    _extends(
+      {
+        width: 24,
+        height: 24,
+        viewBox: '0 0 20 20',
+        fill: 'none',
+        xmlns: 'http://www.w3.org/2000/svg',
+      },
+      props,
+    ),
+    /*#__PURE__*/ React.createElement(Path, {
+      d: 'M8.333 6.667 5 10m0 0 3.333 3.333M5 10h10',
+      stroke: props?.color || '#0A0A0A',
+      strokeWidth: 1.5,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+    }),
+  )
+
 const SvgArrowDown = (props) =>
   /*#__PURE__*/ React.createElement(
     Svg,
@@ -185,6 +207,9 @@ const SvgEye = (props) =>
   )
 
 const Icon = (props) => {
+  if (props.name === 'ArrowNarrowLeft') {
+    return /*#__PURE__*/ React__default.createElement(SvgArrowNarrowLeft, props)
+  }
   if (props.name === 'ArrowDown') {
     return /*#__PURE__*/ React__default.createElement(SvgArrowDown, props)
   }
@@ -212,6 +237,7 @@ const Icon = (props) => {
 }
 Icon.propTypes = {
   name: PropTypes.oneOf([
+    'ArrowNarrowLeft',
     'ArrowDown',
     'CalendarOutline',
     'Calendar',
