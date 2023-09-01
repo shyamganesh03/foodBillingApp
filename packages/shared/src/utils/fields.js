@@ -798,15 +798,16 @@ export const fieldData = {
         fields: [
           {
             label: 'Submission Signature',
-            name: 'Submission Signature',
+            name: 'signature',
+            fieldName: 'signature',
             type: 'textField',
             inputType: 'string',
             selectedValue: '',
           },
           {
             label: 'Submitted Signature Date',
-            name: 'Submitted Signature Date',
-            // fieldName: 'Submitted Signature Date',
+            name: 'signatureDate',
+            fieldName: 'signatureDate',
             type: 'date',
             mandatory: true,
             selectedValue: '',

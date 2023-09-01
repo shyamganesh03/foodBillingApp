@@ -26,7 +26,7 @@ const Registration = (props) => {
   const [tabItems, setTabItems] = useState([])
   const [formData, setFormData] = useState(fieldData)
   const [isCTADisabled, setIsCTADisabled] = useState()
-  const emailID = props.route.params.emailId
+  const emailID = props.route.params?.emailId || 'sindhu@gmail.com'
   const isFocused = useIsFocused()
 
   const { data } = useQuery({

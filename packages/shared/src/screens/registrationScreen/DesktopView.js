@@ -415,7 +415,7 @@ const ApplicationReviewContainer = ({
 }) => {
   const validatedData = getValidatedData()
   const keys = Object.keys(validatedData)
-  if (keys.length === 0) {
+  if (keys.length > 0) {
     return (
       <View style={{ padding: 12 }}>
         <View
