@@ -328,6 +328,7 @@ const DateInput = (props) => {
         onPress={() => {
           toggleDropdown()
         }}
+        style={style}
       >
         <View style={{ flexDirection: 'row' }}>
           {isMandatory ? (
@@ -356,7 +357,6 @@ const DateInput = (props) => {
           onFocus={() => {
             props?.onFocus?.()
           }}
-          style={style}
         />
       </TouchableOpacity>
     </View>

@@ -5,6 +5,7 @@ import DateInput from './DateInput'
 import CheckBox from './CheckBox'
 import Button from './Button'
 import ModelComponent from './ModalComponent'
+import Loader from './Loader'
 
 export {
   Button,
@@ -12,6 +13,7 @@ export {
   DateInput,
   DropDown,
   ModelComponent,
+  Loader,
   Text,
   TextInput,
 }

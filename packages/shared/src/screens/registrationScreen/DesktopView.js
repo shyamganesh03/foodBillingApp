@@ -19,6 +19,7 @@ import { useTheme } from '@react-navigation/native'
 import { universityLogo } from '@oap/assets'
 import { FilePicker } from '@libs/components'
 import { getDropdownData } from '../../api'
+import { Loader } from '../../components'
 
 const DesktopView = ({
   activeTab,
@@ -26,6 +27,7 @@ const DesktopView = ({
   dropdownTop,
   dropdownWidth,
   modalFields,
+  showLoader,
   isCTADisabled,
   formData,
   handleSave,
@@ -119,6 +121,7 @@ const DesktopView = ({
             </View>
           </View>
         </View>
+        <Loader showLoader={showLoader} />
         <ModelComponent
           data={modalFields}
           handleCloseModel={(properties) => {

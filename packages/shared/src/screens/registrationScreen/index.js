@@ -32,6 +32,7 @@ const Registration = (props) => {
   const [activeTab, setActiveTab] = useState(0)
   const [tabItems, setTabItems] = useState([])
   const [formData, setFormData] = useState(fieldData)
+  const [showLoader, setShowLoader] = useState(false)
   const [isCTADisabled, setIsCTADisabled] = useState()
   const [containerWidth, setContainerWidth] = useState()
   const containerRef = useRef()
@@ -186,6 +187,18 @@ const Registration = (props) => {
   }
 
   const handleSave = async (submittedData, type) => {
+    // Reset modalFields.
+    setModalFields({
+      isModelVisible: false,
+      items: [],
+      title: '',
+      direction: 'row',
+      sectionIndex: -1,
+    })
+
+    // set loader true
+    setShowLoader(true)
+
     // Create an initial payload object with the email field.
     let payload = { email }
     if (type === 'initial') {
@@ -270,14 +283,9 @@ const Registration = (props) => {
     }
     // refetch updated Data
     refetch()
-    // Reset modalFields.
-    setModalFields({
-      isModelVisible: false,
-      items: [],
-      title: '',
-      direction: 'row',
-      sectionIndex: -1,
-    })
+
+    // set loader false
+    setShowLoader(false)
   }
 
   const handleValueChanged = ({
@@ -368,6 +376,7 @@ const Registration = (props) => {
     modalFields,
     containerRef,
     containerWidth,
+    showLoader,
     tabItems,
     isCTADisabled,
     handleSave,
