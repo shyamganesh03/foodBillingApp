@@ -20,15 +20,24 @@ const ModelComponent = ({
   dropdownWidth,
   toggleDropdown,
 }) => {
-  console.log('test', data)
   const { colors } = useTheme()
   return (
     <Modal
       visible={data.isModelVisible}
       transparent
-      onBackdropPress={() => handleCloseModel()}
+      onBackdropPress={() =>
+        handleCloseModel({
+          type: 'cancel',
+          step,
+          sectionIndex: data.sectionIndex,
+        })
+      }
       onRequestClose={() => {
-        handleCloseModel()
+        handleCloseModel({
+          type: 'cancel',
+          step,
+          sectionIndex: data.sectionIndex,
+        })
       }}
     >
       <View
@@ -156,7 +165,13 @@ const ModelComponent = ({
             <Button
               label="Cancel"
               appearance="outline"
-              onPress={() => handleCloseModel()}
+              onPress={() =>
+                handleCloseModel({
+                  type: 'cancel',
+                  step,
+                  sectionIndex: data.sectionIndex,
+                })
+              }
             />
             <Button
               label="Save"

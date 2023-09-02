@@ -36,6 +36,9 @@ const DateInput = (props) => {
   const [dropDownWidth, setDropDownWidth] = useState(0)
   const [dropdownTop, setDropdownTop] = useState(0)
   const [dropDownLeft, setDropDownLeft] = useState(0)
+  const [yearDropDownWidth, setYearDropDownWidth] = useState(0)
+  const [yearDropdownTop, setYearDropdownTop] = useState(0)
+  const [yearDropDownLeft, setYearDropDownLeft] = useState(0)
   const [selectedDate, setSelectedDate] = useState('')
   const minYear = new Date().getFullYear() - 100
   const maxYear = dob
@@ -47,6 +50,7 @@ const DateInput = (props) => {
   const [selectedYear, setSelectedYear] = useState(defaultValue.slice(0, 4))
   const [selectedMonth, setSelectedMonth] = useState(defaultValue.slice(5, 7))
   const [selectedDay, setSelectedDay] = useState(defaultValue.slice(8, 10))
+  const yearDropDown = useRef()
 
   const yearScrollViewRef = useRef(null)
   const month = [
@@ -71,11 +75,23 @@ const DateInput = (props) => {
   for (let year = minYear; year <= maxYear; year++) {
     yearItems.push(year)
   }
+
+  useEffect(() => {
+    let inputDate = defaultValue
+    if (typeof inputDate === 'string') {
+      inputDate = new Date(defaultValue)
+    }
+    setSelectedYear(inputDate.getFullYear())
+    setSelectedMonth((inputDate.getMonth() + 1).toString().padStart(2, '0'))
+    setSelectedDay((inputDate.getDate() + 1).toString().padStart(2, '0'))
+  }, [])
+
   useEffect(() => {
     if (!yearVisible) return
     const selectedYearIndex = yearItems.findIndex(
       (year) => year === selectedYear,
     )
+
     setTimeout(() => {
       if (selectedYearIndex !== -1) {
         const yearItemHeight = 48
@@ -86,9 +102,11 @@ const DateInput = (props) => {
         })
       }
     }, 400)
-  })
+  }, [])
 
   const toggleDropdown = () => (visible ? setVisible(false) : openDropdown())
+  const toggleYearDropdown = () =>
+    yearVisible ? setYearVisible(false) : openYearDropdown()
 
   const openDropdown = () => {
     DropdownButton.current.measure((_fx, _fy, _w, h, _px, py) => {
@@ -96,6 +114,15 @@ const DateInput = (props) => {
       setDropDownLeft(_px - _fx)
       setDropDownWidth(_w)
       setVisible(true)
+    })
+  }
+
+  const openYearDropdown = () => {
+    yearDropDown.current.measure((_fx, _fy, _w, h, _px, py) => {
+      setYearDropdownTop(py + h)
+      setYearDropDownLeft(_px + _fx / 5)
+      setYearDropDownWidth(_w - _fx / 5)
+      setYearVisible(true)
     })
   }
 
@@ -113,10 +140,6 @@ const DateInput = (props) => {
     setVisible(false)
   }
 
-  const handleDayPress = (day) => {
-    setSelectedDate(day?.dateString)
-  }
-
   const renderHeader = () => {
     return (
       <View
@@ -126,92 +149,108 @@ const DateInput = (props) => {
         }}
       >
         <Text>{month?.find((item, index) => selectedMonth - 1 === index)}</Text>
-
-        <Menu
-          visible={yearVisible}
-          anchorPosition="bottom"
-          onDismiss={() => setYearVisible(false)}
-          contentStyle={{ backgroundColor: colors.white, marginLeft: 15 }}
-          anchor={
-            <TouchableOpacity onPress={() => setYearVisible(!yearVisible)}>
-              <View
-                style={{
-                  paddingLeft: 16,
-                  alignItems: 'center',
-                }}
-              >
-                <TextInput
-                  value={selectedYear.toString()}
-                  style={{
-                    height: 24,
-                    paddingTop: 0,
-                  }}
-                  textInputWidth={100}
-                  onChangeText={(itemValue) => {
-                    setSelectedYear(itemValue)
-                  }}
-                  editable={false}
-                />
-                <Icon
-                  name="ArrowDown"
-                  color={colors.onNeutral}
-                  style={{
-                    height: 20,
-                    width: 20,
-                    position: 'absolute',
-                    right: spacing.spacing3,
-                    top: Platform.OS === 'web' ? '10%' : '20%',
-                    transform: [{ rotate: '180deg' }],
-                  }}
-                />
-                <Icon
-                  name="ArrowDown"
-                  color={colors.onNeutral}
-                  style={{
-                    height: 20,
-                    width: 20,
-                    position: 'absolute',
-                    right: spacing.spacing3,
-                    top: Platform.OS === 'web' ? '30%' : '20%',
-                  }}
-                />
-              </View>
-            </TouchableOpacity>
-          }
+        <TouchableOpacity
+          onPress={() => toggleYearDropdown()}
+          ref={yearDropDown}
         >
-          <ScrollView
-            ref={yearScrollViewRef}
-            contentContainerStyle={{ flexGrow: 1 }}
-            showsVerticalScrollIndicator={false}
+          <View
             style={{
-              height: 200,
-              width: 100,
-              backgroundColor: colors.white,
+              paddingLeft: 16,
+              alignItems: 'center',
             }}
           >
-            {yearItems?.map((_item, index) => {
-              return (
-                <Fragment key={index}>
-                  <TouchableRipple
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}
-                    onPress={() => {
-                      setSelectedYear(_item)
-                      setYearVisible(false)
-                    }}
-                  >
-                    <Menu.Item
-                      title={_item}
-                      titleStyle={{ color: colors.onNeutral }}
-                    />
-                  </TouchableRipple>
-                </Fragment>
-              )
-            })}
-          </ScrollView>
-        </Menu>
+            <TextInput
+              value={selectedYear.toString()}
+              style={{
+                height: 24,
+                paddingTop: 0,
+              }}
+              textInputWidth={100}
+              onChangeText={(itemValue) => {
+                setSelectedYear(itemValue)
+              }}
+              editable={false}
+            />
+            <Icon
+              name="ArrowDown"
+              color={colors.onNeutral}
+              style={{
+                height: 20,
+                width: 20,
+                position: 'absolute',
+                right: spacing.spacing3,
+                top: Platform.OS === 'web' ? '10%' : '20%',
+                transform: [{ rotate: '180deg' }],
+              }}
+            />
+            <Icon
+              name="ArrowDown"
+              color={colors.onNeutral}
+              style={{
+                height: 20,
+                width: 20,
+                position: 'absolute',
+                right: spacing.spacing3,
+                top: Platform.OS === 'web' ? '30%' : '20%',
+              }}
+            />
+          </View>
+        </TouchableOpacity>
+        <Modal id="model" visible={yearVisible} transparent>
+          <View
+            style={{
+              top: yearDropdownTop,
+              left: yearDropDownLeft,
+              width: yearDropDownWidth,
+              backgroundColor: 'red',
+            }}
+          >
+            <ScrollView
+              ref={yearScrollViewRef}
+              contentContainerStyle={{ flexGrow: 1 }}
+              showsVerticalScrollIndicator={false}
+              style={{
+                height: 200,
+              }}
+            >
+              <View
+                style={{
+                  shadowColor: 'rgba(3, 30, 125, 0.05)',
+                  shadowOffset: { width: 0, height: 2 },
+                  elevation: 5,
+                  shadowOpacity: 1,
+                  shadowRadius: 10,
+                  backgroundColor: colors.white,
+                  borderRadius: 5,
+                }}
+              >
+                {yearItems?.map((_item, index) => {
+                  return (
+                    <Fragment key={index}>
+                      <TouchableRipple
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          padding: 12,
+                        }}
+                        onPress={() => {
+                          setSelectedYear(_item)
+                          setYearVisible(false)
+                        }}
+                      >
+                        <Text>{_item}</Text>
+                        {/* <Menu.Item
+                        title={_item}
+                        titleStyle={{ color: colors.onNeutral }}
+                      /> */}
+                      </TouchableRipple>
+                    </Fragment>
+                  )
+                })}
+              </View>
+            </ScrollView>
+          </View>
+        </Modal>
       </View>
     )
   }

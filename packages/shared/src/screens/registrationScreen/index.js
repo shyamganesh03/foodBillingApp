@@ -35,62 +35,70 @@ const Registration = (props) => {
   const [isCTADisabled, setIsCTADisabled] = useState()
   const [containerWidth, setContainerWidth] = useState()
   const containerRef = useRef()
-  const emailID = props.route.params?.emailId || 'sindhu@gmail.com'
+  const {
+    firstName,
+    lastName,
+    email,
+    countryCode,
+    phoneNumber,
+    country,
+    programme,
+  } = props.route.params
   const isFocused = useIsFocused()
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: 'getApplicationData',
     queryFn: async () => {
       const formDataCopy = { ...formData }
-      const responseData = await getApplicationByEmailID({ email: emailID })
+      const responseData = await getApplicationByEmailID({ email })
+
       for (const step in formDataCopy) {
         if (formDataCopy.hasOwnProperty(step)) {
-          const sections = formDataCopy[step].sections
+          const sections = formDataCopy[step]?.sections
           if (sections) {
             for (const section of sections) {
-              const fields = section.fields
+              const fields = section?.fields
               if (section.type === 'model') {
                 const transformedData = {}
-                let newTransformedData = {}
-                if (responseData[section?.fieldName]?.length > 0) {
-                  for (const item of responseData[section.fieldName]) {
+
+                if (responseData[section.fieldName]?.length > 0) {
+                  responseData[section.fieldName].forEach((item) => {
                     for (const key in item) {
                       if (!transformedData[key]) {
                         transformedData[key] = []
                       }
                       transformedData[key].push(item[key])
                     }
-                  }
-                  let maxValue = 0
-                  Object.entries(transformedData).map(([key, value]) => {
-                    if (value.length > maxValue) {
-                      maxValue = value.length
-                    }
                   })
-                  const empty = []
-                  newTransformedData = { ...transformedData, empty }
 
-                  for (let initial = 0; initial <= maxValue - 1; initial++) {
-                    newTransformedData['empty'].push({ title: 'empty' })
-                  }
+                  const maxValue = Math.max(
+                    ...Object.values(transformedData).map(
+                      (value) => value.length,
+                    ),
+                  )
+                  const empty = Array.from({ length: maxValue }, () => ({
+                    title: 'empty',
+                  }))
+
+                  section.modelFieldValues = { ...transformedData, empty }
                 }
-                section.modelFieldValues = newTransformedData
               } else if (fields) {
-                for (const field of fields) {
+                fields.forEach((field) => {
                   const fieldName = field?.fieldName || ''
                   if (fieldName in responseData) {
                     field.selectedValue = responseData[fieldName]
                   }
-                }
+                })
               }
             }
           }
         }
       }
+
       setFormData(formDataCopy)
       return responseData
     },
-    enabled: !!emailID,
+    enabled: !!email,
     initialData: [],
   })
 
@@ -178,56 +186,91 @@ const Registration = (props) => {
   }
 
   const handleSave = async (submittedData, type) => {
-    let payload = { email: emailID }
+    // Create an initial payload object with the email field.
+    let payload = { email }
+    if (type === 'initial') {
+      const initialPayload = {
+        email,
+        firstName,
+        lastName,
+        countryCode,
+        phoneNumber,
+        country,
+        programme,
+      }
+      if (!data?.email) {
+        await submitApplication(initialPayload)
+      }
+    }
+
+    // Iterate through the sections in submittedData.
     submittedData.sections.forEach((section) => {
+      // Initialize a variable to store the emergency contact full name.
       let fullName = ''
+
+      // Check if the section has fields.
       if (section.fields?.length > 0) {
-        section.fields?.forEach((fields) => {
-          if (fields?.fieldName) {
+        section.fields.forEach((field) => {
+          // Check if the field has a fieldName.
+          if (field?.fieldName) {
+            // Handle emergency contact fields.
             if (
-              fields?.fieldName === 'emergencyContactFirstName' ||
-              fields?.fieldName === 'emergencyContactLastName'
+              field.fieldName === 'emergencyContactFirstName' ||
+              field.fieldName === 'emergencyContactLastName'
             ) {
-              fullName = fullName + ' ' + fields?.selectedValue
-              payload['emergencyContactFullName'] = fullName.trim()
+              fullName = `${fullName} ${field.selectedValue || ''}`.trim()
+              payload['emergencyContactFullName'] = fullName
             }
-            if (fields?.type === 'PickList' || fields?.type === 'dropdown') {
-              const hasKey = Object.keys(fields?.selectedValue)
-              if (hasKey.length === 1) {
-                payload[fields?.fieldName] = fields?.selectedValue.name
-              } else {
-                payload[fields?.fieldName] = fields?.selectedValue || ''
-              }
+
+            // Handle PickList or dropdown fields.
+            if (field.type === 'PickList' || field.type === 'dropdown') {
+              payload[field.fieldName] =
+                field.selectedValue?.name || field.selectedValue
             } else {
-              payload[fields?.fieldName] = fields?.selectedValue || ''
+              payload[field.fieldName] = field.selectedValue || ''
             }
           }
         })
       } else {
+        // Handle sections with selectedValue (assumed to be an array).
         if (!!section.selectedValue) {
-          const previousData = data
-          previousData[section.fieldName].push(section.selectedValue)
-          payload = { ...payload, ...previousData }
+          payload = {
+            ...payload,
+            [section.fieldName]: [
+              ...(data[section.fieldName] || []),
+              section.selectedValue,
+            ],
+          }
         }
       }
     })
+
+    // Update the application with the payload.
+    await updateApplication(payload)
+
+    // If it's a 'Submit' type, submit the application with the submitPayload.
     if (type === 'Submit') {
+      // Define a submitPayload object for 'Submit' type.
       const submitPayload = {
-        firstName: formData.step1.sections[0].fields[0].selectedValue,
-        lastName: formData.step1.sections[0].fields[2].selectedValue,
-        phoneNumber: formData.step1.sections[1].fields[1].selectedValue,
-        email: emailID,
-        canTextToMobile: formData.step1.sections[1].fields[8].selectedValue,
-        firstChoiceSchool: formData.step0.sections[1].fields[0].selectedValue,
+        firstName: formData.step1.sections[0].fields[0].selectedValue || '',
+        lastName: formData.step1.sections[0].fields[2].selectedValue || '',
+        phoneNumber: formData.step1.sections[1].fields[1].selectedValue || '',
+        email: email,
+        canTextToMobile:
+          formData.step1.sections[1].fields[8].selectedValue || '',
+        firstChoiceSchool:
+          formData.step0.sections[1].fields[0].selectedValue || '',
       }
-      await updateApplication(payload)
       await submitApplication(submitPayload)
     } else {
-      await updateApplication(payload)
+      // Handle 'saveAndNext' and other types.
       if (type === 'saveAndNext') {
         setActiveTab(activeTab + 1)
       }
     }
+    // refetch updated Data
+    refetch()
+    // Reset modalFields.
     setModalFields({
       isModelVisible: false,
       items: [],
@@ -245,48 +288,62 @@ const Registration = (props) => {
     sectionIndex,
     fieldName = 'fields',
   }) => {
-    const value =
-      type === 'PickList' || type === 'dropdown'
-        ? selectedValue.name
-        : selectedValue
-    const copyFormData = formData
-    const currentField =
-      copyFormData[step]?.sections[sectionIndex]?.[fieldName]?.[fieldIndex]
-
-    if (copyFormData[step]?.sections[sectionIndex].type === 'model') {
-      let newData = {}
-      copyFormData[step]?.sections[sectionIndex]?.[fieldName]?.map((item) => {
-        const newFields = {
-          [item.fieldName]: '',
-        }
-        newData = { ...newData, ...newFields }
-      })
-      const data = {}
-      Object.entries(newData).map(([key, emptyValue]) => {
-        if (key === currentField.fieldName) {
-          data[key] = value
-        }
-      })
-      const currentData =
-        copyFormData[step]?.sections[sectionIndex]?.selectedValue
-      copyFormData[step].sections[sectionIndex].selectedValue = {
-        ...currentData,
-        ...data,
+    const currentSection = formData[step]?.sections[sectionIndex]
+    if (type === 'cancel') {
+      currentSection.selectedValue = ''
+      const updatedFieldData = {
+        ...formData,
+        [step]: {
+          ...formData[step],
+          sections: [
+            ...formData[step]?.sections.slice(0, sectionIndex),
+            { ...currentSection },
+            ...formData[step]?.sections.slice(sectionIndex + 1),
+          ],
+        },
       }
-      setFormData(copyFormData)
-    } else {
-      const newCurrentField = { ...currentField, selectedValue: value }
+      setFormData(updatedFieldData)
+      return ''
+    }
+    if (currentSection) {
+      const currentField = currentSection[fieldName]?.[fieldIndex]
 
-      const newFieldsArray =
-        copyFormData[step]?.sections[sectionIndex]?.[fieldName]
-      newFieldsArray[fieldIndex] = newCurrentField
-      const newSections = copyFormData[step]?.sections
-      newSections[sectionIndex] = {
-        ...newSections[sectionIndex],
-        [fieldName]: newFieldsArray,
+      if (currentSection.type === 'model') {
+        const newData = currentSection[fieldName]?.reduce((acc, item) => {
+          if (currentSection.selectedValue?.[item.fieldName]) {
+            return { ...acc, [item.fieldName]: item.fieldName }
+          }
+          return { ...acc, [item.fieldName]: '' }
+        }, {})
+        const data = {
+          ...newData,
+          [currentField.fieldName]: selectedValue.name || selectedValue,
+        }
+        currentSection.selectedValue = {
+          ...currentSection.selectedValue,
+          ...data,
+        }
+      } else {
+        const newFieldsArray = [...currentSection[fieldName]]
+        newFieldsArray[fieldIndex] = {
+          ...currentField,
+          selectedValue: selectedValue.name || selectedValue,
+        }
+
+        currentSection[fieldName] = newFieldsArray
       }
-      const newStepData = { ...copyFormData[step], sections: newSections }
-      const updatedFieldData = { ...copyFormData, [step]: newStepData }
+
+      const updatedFieldData = {
+        ...formData,
+        [step]: {
+          ...formData[step],
+          sections: [
+            ...formData[step]?.sections.slice(0, sectionIndex),
+            { ...currentSection },
+            ...formData[step]?.sections.slice(sectionIndex + 1),
+          ],
+        },
+      }
       setFormData(updatedFieldData)
     }
   }

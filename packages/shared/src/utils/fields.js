@@ -373,6 +373,7 @@ export const fieldData = {
             type: 'textField',
             fieldName: 'academicInstitution',
             inputType: 'string',
+            mandatory: true,
             selectedValue: '',
           },
           {
@@ -407,28 +408,6 @@ export const fieldData = {
             type: 'date',
             mandatory: true,
             selectedValue: '',
-          },
-        ],
-        modelFieldValues: [
-          {
-            label: 'Academic Institution Estimated Start',
-            name: 'academicInstitution',
-            value: '',
-          },
-          {
-            label: 'Academic Institution Estimated Start Date',
-            name: 'startTermApplyingFor',
-            value: '',
-          },
-          {
-            label: 'Academic Institution Estimated End Date',
-            name: 'endTermApplyingFor',
-            value: '',
-          },
-          {
-            label: 'Approx. Degree Earned Date',
-            name: 'degreeEarnedDate',
-            value: '',
           },
         ],
       },

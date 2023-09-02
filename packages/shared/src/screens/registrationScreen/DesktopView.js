@@ -91,7 +91,10 @@ const DesktopView = ({
                 buttonStyle={{ flex: 0.4 }}
                 labelColors={colors.white}
                 onPress={() => {
-                  handleSave(formData[`step${activeTab}`], 'save')
+                  handleSave(
+                    formData[`step${activeTab}`],
+                    activeTab === 0 ? 'initial' : 'save',
+                  )
                 }}
               />
               <Button
@@ -118,7 +121,8 @@ const DesktopView = ({
         </View>
         <ModelComponent
           data={modalFields}
-          handleCloseModel={() =>
+          handleCloseModel={(properties) => {
+            handleValueChanged(properties)
             setModalFields({
               isModelVisible: false,
               items: [],
@@ -126,7 +130,7 @@ const DesktopView = ({
               direction: 'row',
               sectionIndex: -1,
             })
-          }
+          }}
           step={`step${activeTab}`}
           getDropdownData={getDropdownData}
           dropdownLeft={dropdownLeft}
@@ -388,10 +392,10 @@ const renderFields = ({
 
 const ModelContainer = ({ data, index, setModalFields }) => {
   const { colors } = useTheme()
-  const [tabs, setTabs] = useState()
+  const [tabs, setTabs] = useState([])
 
   useEffect(() => {
-    if (data?.modelFieldValues?.length <= 0) return
+    if (data?.modelFieldValues?.length <= 0 || !data?.modelFieldValues) return
 
     const tabsData = Object.keys(data?.modelFieldValues)
     setTabs(tabsData)
