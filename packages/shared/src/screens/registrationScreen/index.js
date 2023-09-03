@@ -36,22 +36,16 @@ const Registration = (props) => {
   const [isCTADisabled, setIsCTADisabled] = useState()
   const [containerWidth, setContainerWidth] = useState()
   const containerRef = useRef()
-  const {
-    firstName,
-    lastName,
-    email,
-    countryCode,
-    phoneNumber,
-    country,
-    programme,
-  } = props.route.params
+  const paramsData = props.route.params
   const isFocused = useIsFocused()
 
   const { data, refetch } = useQuery({
     queryKey: 'getApplicationData',
     queryFn: async () => {
       const formDataCopy = { ...formData }
-      const responseData = await getApplicationByEmailID({ email })
+      const responseData = await getApplicationByEmailID({
+        email: paramsData?.email,
+      })
 
       for (const step in formDataCopy) {
         if (formDataCopy.hasOwnProperty(step)) {
@@ -99,7 +93,7 @@ const Registration = (props) => {
       setFormData(formDataCopy)
       return responseData
     },
-    enabled: !!email,
+    enabled: !!paramsData?.email,
     initialData: [],
   })
 
@@ -200,21 +194,7 @@ const Registration = (props) => {
     setShowLoader(true)
 
     // Create an initial payload object with the email field.
-    let payload = { email }
-    if (type === 'initial') {
-      const initialPayload = {
-        email,
-        firstName,
-        lastName,
-        countryCode,
-        phoneNumber,
-        country,
-        programme,
-      }
-      if (!data?.email) {
-        await submitApplication(initialPayload)
-      }
-    }
+    let payload = { email: paramsData?.email }
 
     // Iterate through the sections in submittedData.
     submittedData.sections.forEach((section) => {
@@ -257,7 +237,21 @@ const Registration = (props) => {
         }
       }
     })
-
+    if (type === 'initial') {
+      const initialPayload = {
+        ...payload,
+        email: paramsData?.email,
+        firstName: paramsData?.firstName,
+        lastName: paramsData?.lastName,
+        countryCode: paramsData?.countryCode,
+        phoneNumber: paramsData?.phoneNumber,
+        country: paramsData?.country,
+        programme: paramsData?.programme,
+      }
+      if (!data?.email) {
+        return await submitApplication(initialPayload)
+      }
+    }
     // Update the application with the payload.
     await updateApplication(payload)
 
@@ -268,7 +262,7 @@ const Registration = (props) => {
         firstName: formData.step1.sections[0].fields[0].selectedValue || '',
         lastName: formData.step1.sections[0].fields[2].selectedValue || '',
         phoneNumber: formData.step1.sections[1].fields[1].selectedValue || '',
-        email: email,
+        email: paramsData?.email,
         canTextToMobile:
           formData.step1.sections[1].fields[8].selectedValue || '',
         firstChoiceSchool:
