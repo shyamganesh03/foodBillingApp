@@ -35,6 +35,7 @@ const Registration = (props) => {
   const [showLoader, setShowLoader] = useState(false)
   const [isCTADisabled, setIsCTADisabled] = useState()
   const [containerWidth, setContainerWidth] = useState()
+  const [hasError, setHasError] = useState()
   const containerRef = useRef()
   const paramsData = props.route.params
   const isFocused = useIsFocused()
@@ -248,8 +249,24 @@ const Registration = (props) => {
         country: paramsData?.country,
         programme: paramsData?.programme,
       }
+      let selectedSchoolValue = []
+      formData.step0.sections[formData.step0.sections.length - 1].fields.map(
+        (fields) => {
+          selectedSchoolValue.push(
+            fields.selectedValue || fields.selectedValue.name,
+          )
+        },
+      )
+      const duplicateValueCheck = new Set(selectedSchoolValue)
+      if (duplicateValueCheck.size !== selectedSchoolValue.length) {
+        setHasError(true)
+        setShowLoader(false)
+        return
+      }
       if (!data?.email) {
-        return await submitApplication(initialPayload)
+        await submitApplication(initialPayload)
+        setShowLoader(false)
+        return
       }
     }
     // Update the application with the payload.
@@ -290,6 +307,7 @@ const Registration = (props) => {
     sectionIndex,
     fieldName = 'fields',
   }) => {
+    setHasError(false)
     const currentSection = formData[step]?.sections[sectionIndex]
     if (type === 'cancel') {
       currentSection.selectedValue = ''
@@ -363,22 +381,23 @@ const Registration = (props) => {
 
   const viewProps = {
     activeTab,
+    containerRef,
+    containerWidth,
     dropdownLeft,
     dropdownTop,
     dropdownWidth,
     formData,
+    hasError,
+    isCTADisabled,
     modalFields,
-    containerRef,
-    containerWidth,
     showLoader,
     tabItems,
-    isCTADisabled,
+    getContainerWidth,
+    getCTAStatus,
+    getDropdownData,
+    getValidatedData,
     handleSave,
     handleValueChanged,
-    getCTAStatus,
-    getValidatedData,
-    getContainerWidth,
-    getDropdownData,
     setActiveTab,
     setModalFields,
     toggleDropdown,

@@ -28,6 +28,7 @@ const DesktopView = ({
   dropdownWidth,
   modalFields,
   showLoader,
+  hasError,
   isCTADisabled,
   formData,
   handleSave,
@@ -70,6 +71,7 @@ const DesktopView = ({
               dropdownLeft={dropdownLeft}
               dropdownTop={dropdownTop}
               dropdownWidth={dropdownWidth}
+              hasError={hasError}
               handleValueChanged={handleValueChanged}
               setModalFields={setModalFields}
               getDropdownData={getDropdownData}
@@ -150,6 +152,7 @@ const DesktopView = ({
 
 const FormFields = ({
   activeTab,
+  hasError,
   colors,
   fieldData,
   dropdownLeft,
@@ -185,6 +188,16 @@ const FormFields = ({
           toggleDropdown,
         })
       })}
+      {hasError ? (
+        <Text
+          variant="body2"
+          style={{ marginTop: 20, paddingLeft: 12 }}
+          color={colors.onAlert}
+        >
+          * Please select different schools, as some of your chosen options are
+          the same.
+        </Text>
+      ) : null}
     </View>
   )
 }
