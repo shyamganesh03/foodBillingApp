@@ -33,6 +33,7 @@ export const fieldData = {
             label: 'First Choice School',
             fieldName: 'firstChoiceSchool',
             name: 'schools',
+            mandatory: true,
             type: 'PickList',
             pickListValues: [],
             selectedValue: '',
@@ -428,10 +429,7 @@ export const fieldData = {
             selectedValue: '',
           },
         ],
-        selectedValue: {
-          academicInstitution: 'Alexandria University',
-          academicInstitutionId: 'a054P000010xoVgQAI',
-        },
+        selectedValue: '',
       },
       {
         title: 'Prerequisite Coursework Information',
@@ -742,7 +740,6 @@ export const fieldData = {
       {
         title: 'Attached Files',
         type: 'model',
-        buttonText: 'New',
         modelFields: [],
       },
       {
@@ -774,6 +771,7 @@ export const fieldData = {
             fieldName: 'recommenderFirstName',
             inputType: 'string',
             selectedValue: '',
+            type: 'textField',
           },
           {
             label: 'Last Name or Indicate if Interfolio',

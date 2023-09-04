@@ -98,7 +98,7 @@ const DesktopView = ({
                 onPress={() => {
                   handleSave(
                     formData[`step${activeTab}`],
-                    activeTab === 0 ? 'initial' : 'save',
+                    activeTab === 0 ? 'initialSave' : 'save',
                   )
                 }}
               />
@@ -461,22 +461,27 @@ const ModelContainer = ({ data, index, setModalFields }) => {
         }}
       >
         <Text variant="heading4">{data?.title}</Text>
-        <Button
-          label={data.buttonText}
-          onPress={() =>
-            setModalFields({
-              isModelVisible: true,
-              items: data?.modelFields,
-              title: data?.title,
-              direction: data?.modelDirection || 'row',
-              sectionIndex: index,
-            })
-          }
-          labelColors={colors.white}
-        />
+        {data.buttonText ? (
+          <Button
+            label={data.buttonText}
+            onPress={() =>
+              setModalFields({
+                isModelVisible: true,
+                items: data?.modelFields,
+                title: data?.title,
+                direction: data?.modelDirection || 'row',
+                sectionIndex: index,
+              })
+            }
+            labelColors={colors.white}
+          />
+        ) : null}
       </View>
       {data?.description ? (
-        <Text variant="body2" style={{ marginBottom: 10, marginTop: 30 }}>
+        <Text
+          variant="body2"
+          style={{ marginBottom: 10, marginTop: 30, paddingLeft: 12 }}
+        >
           {data?.description?.label}
         </Text>
       ) : null}
@@ -552,7 +557,7 @@ const ModalTabSection = ({ tabs, data }) => {
                         variant="body3"
                         color={item === 'noData' ? 'transparent' : ''}
                       >
-                        {item || 'temp'}
+                        {item}
                       </Text>
                     </View>
                   )

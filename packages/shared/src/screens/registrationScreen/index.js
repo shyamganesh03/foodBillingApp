@@ -141,14 +141,24 @@ const Registration = (props) => {
     }
   }
 
-  function processFields(fields, sectionTitle, mandatoryFields) {
-    for (const field of fields) {
-      if (field?.mandatory && field?.selectedValue === '') {
-        // Field is mandatory and has no selected value
-        if (!mandatoryFields[sectionTitle]) {
-          mandatoryFields[sectionTitle] = []
+  function processFields(fields, sectionTitle, mandatoryFields, type) {
+    if (type === 'modal') {
+      if (fields.selectedValue === '') {
+        processFields(fields?.modelFields, sectionTitle, mandatoryFields)
+      } else {
+        // Object.entries(fields?.selectedValue).map(([key, value]) => {
+        //   console.log({ value })
+        // })
+      }
+    } else {
+      for (const field of fields) {
+        if (field?.mandatory && field?.selectedValue === '') {
+          // Field is mandatory and has no selected value
+          if (!mandatoryFields[sectionTitle]) {
+            mandatoryFields[sectionTitle] = []
+          }
+          mandatoryFields[sectionTitle].push({ label: field?.label })
         }
-        mandatoryFields[sectionTitle].push({ label: field?.label })
       }
     }
   }
@@ -167,7 +177,7 @@ const Registration = (props) => {
         }
         if (section.modelFields) {
           // If section has "modelFields" property, process those fields
-          processFields(section.modelFields, step.title, mandatoryFields)
+          processFields(section, step.title, mandatoryFields, 'modal')
         }
       }
     }
@@ -262,15 +272,28 @@ const Registration = (props) => {
         sessionName === section?.title &&
         section.fieldName
       ) {
+        const sectionData = section.selectedValue
+        let newSectionDate
+        if (section?.title === 'University/College Information') {
+          newSectionDate = {
+            ...sectionData,
+            academicInstitution: 'Alexandria University',
+            academicInstitutionId: 'a054P000010xoVgQAI',
+          }
+        } else {
+          newSectionDate = {
+            ...sectionData,
+          }
+        }
         modalPayload = { email: paramsData?.email }
         modalPayload = {
           ...modalPayload,
-          [section.fieldName]: [section.selectedValue],
+          [section.fieldName]: [newSectionDate],
         }
       }
     })
 
-    if (type === 'initial') {
+    if (type === 'initial' || type === 'initialSave') {
       const initialPayload = {
         ...payload,
         firstName: paramsData?.firstName,
@@ -316,9 +339,11 @@ const Registration = (props) => {
 
         setHasError(errorMessage)
         setShowLoader(false)
-        return
+        if (errorMessage.errorMessage1 || errorMessage.errorMessage2) {
+          return
+        }
       }
-
+      setShowLoader(true)
       if (!data?.email) {
         await submitApplication(initialPayload)
         // refetch updated Data
@@ -328,7 +353,6 @@ const Registration = (props) => {
         return
       }
     }
-
     // Update the application with the payload.
     await updateApplication(modalPayload || payload)
 
@@ -348,7 +372,7 @@ const Registration = (props) => {
       await submitApplication(submitPayload)
     } else {
       // Handle 'saveAndNext' and other types.
-      if (type === 'saveAndNext') {
+      if (type === 'saveAndNext' || type === 'initial') {
         setActiveTab(activeTab + 1)
       }
     }
@@ -399,37 +423,28 @@ const Registration = (props) => {
               [item.fieldName]: currentSection.selectedValue?.[item.fieldName],
             }
           }
-          if (currentSection.selectedValue?.['academicInstitutionId']) {
-            return {
-              ...acc,
-              academicInstitutionId:
-                currentSection.selectedValue?.['academicInstitutionId'],
-            }
-          }
           return { ...acc, [item.fieldName]: '' }
         }, {})
-        if (currentField.fieldName !== 'academicInstitution') {
-          console.log({ ji: currentField.fieldName })
-          let data
-          const number = parseFloat(selectedValue)
-          if (
-            number !== 'NaN' &&
-            !currentField.fieldName?.toLowerCase().includes('date')
-          ) {
-            data = {
-              ...newData,
-              [currentField.fieldName]: number,
-            }
-          } else {
-            data = {
-              ...newData,
-              [currentField.fieldName]: selectedValue.name || selectedValue,
-            }
+        let data
+        const number = parseFloat(selectedValue)
+        if (
+          number &&
+          !currentField.fieldName?.toLowerCase().includes('date') &&
+          !currentField.fieldName?.toLowerCase().includes('termapplyingfor')
+        ) {
+          data = {
+            ...newData,
+            [currentField.fieldName]: number,
           }
+        } else {
+          data = {
+            ...newData,
+            [currentField.fieldName]: selectedValue.name || selectedValue,
+          }
+        }
 
-          currentSection.selectedValue = {
-            ...data,
-          }
+        currentSection.selectedValue = {
+          ...data,
         }
       } else {
         const newFieldsArray = [...currentSection[fieldName]]
