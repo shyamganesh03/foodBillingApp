@@ -182,7 +182,7 @@ const Registration = (props) => {
     }
   }
 
-  const handleSave = async (submittedData, type) => {
+  const handleSave = async (submittedData, type, sessionName) => {
     // Reset modalFields.
     setModalFields({
       isModelVisible: false,
@@ -197,6 +197,7 @@ const Registration = (props) => {
 
     // Create an initial payload object with the email field.
     let payload = { email: paramsData?.email }
+    let modalPayload = { email: paramsData?.email }
 
     // Iterate through the sections in submittedData.
     submittedData.sections.forEach((section) => {
@@ -234,19 +235,22 @@ const Registration = (props) => {
             }
           }
         })
-      } else {
-        // Handle sections with selectedValue (assumed to be an array).
-        if (!!section.selectedValue) {
-          payload = {
-            ...payload,
-            [section.fieldName]: [
-              ...(data[section.fieldName] || []),
-              section.selectedValue,
-            ],
-          }
+      }
+      if (
+        type === 'modalSave' &&
+        sessionName === section?.title &&
+        section.fieldName
+      ) {
+        modalPayload = {
+          ...modalPayload,
+          [section.fieldName]: [
+            ...(data[section.fieldName] || []),
+            section.selectedValue,
+          ],
         }
       }
     })
+
     if (type === 'initial') {
       const initialPayload = {
         ...payload,
@@ -283,8 +287,9 @@ const Registration = (props) => {
         return
       }
     }
+
     // Update the application with the payload.
-    await updateApplication(payload)
+    await updateApplication(modalPayload || payload)
 
     // If it's a 'Submit' type, submit the application with the submitPayload.
     if (type === 'Submit') {
@@ -352,9 +357,12 @@ const Registration = (props) => {
           }
           return { ...acc, [item.fieldName]: '' }
         }, {})
-        const data = {
-          ...newData,
-          [currentField.fieldName]: selectedValue.name || selectedValue,
+        let data = {}
+        if (currentField.fieldName !== 'academicInstitution') {
+          data = {
+            ...newData,
+            [currentField.fieldName]: selectedValue.name || selectedValue,
+          }
         }
         currentSection.selectedValue = {
           ...currentSection.selectedValue,

@@ -146,7 +146,13 @@ const DesktopView = ({
           dropdownWidth={dropdownWidth}
           toggleDropdown={toggleDropdown}
           handleValueChanged={handleValueChanged}
-          handleSave={() => handleSave(formData[`step${activeTab}`], 'save')}
+          handleSave={() =>
+            handleSave(
+              formData[`step${activeTab}`],
+              'modalSave',
+              modalFields?.title,
+            )
+          }
         />
       </View>
     </ScrollView>

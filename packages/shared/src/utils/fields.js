@@ -414,6 +414,9 @@ export const fieldData = {
             selectedValue: '',
           },
         ],
+        selectedValue: {
+          academicInstitution: 'Alexandria University',
+        },
       },
       {
         title: 'Prerequisite Coursework Information',
