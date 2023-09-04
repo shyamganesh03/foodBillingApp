@@ -428,10 +428,17 @@ const ModelContainer = ({ data, index, setModalFields }) => {
   const [tabs, setTabs] = useState([])
 
   useEffect(() => {
-    if (data?.modelFieldValues?.length <= 0 || !data?.modelFieldValues) return
-
-    const tabsData = Object.keys(data?.modelFieldValues)
-    setTabs(tabsData)
+    if (data?.modelFieldValues) {
+      const keys = Object.entries(data?.modelFieldValues)
+      if (keys.length > 1) {
+        let tabsData = []
+        data?.modelFields?.map((item) => {
+          tabsData.push(item.label)
+        })
+        tabsData.push('delete')
+        setTabs(tabsData)
+      }
+    }
   }, [])
   return (
     <View
@@ -496,6 +503,7 @@ const ModalTabSection = ({ tabs, data }) => {
                 isModal
                 index={index}
                 totalLength={tabs.length}
+                transparent={item === 'delete'}
               />
             )
           })}
@@ -509,11 +517,16 @@ const ModalTabSection = ({ tabs, data }) => {
                   width: 188,
                 }}
               >
-                {value.map((item, index) => {
+                {value?.map((item, index) => {
                   if (item?.title == 'empty') {
                     return (
                       <View
-                        style={{ alignItems: 'flex-end', flex: 1, padding: 8 }}
+                        style={{
+                          alignItems: 'flex-end',
+                          flex: 1,
+                          padding: 8,
+                          minHeight: 50,
+                        }}
                       >
                         <Button
                           label="Delete"
@@ -532,9 +545,15 @@ const ModalTabSection = ({ tabs, data }) => {
                         marginBottom: index === value.length - 1 ? 10 : 0,
                         padding: 8,
                         minHeight: 50,
+                        width: 188,
                       }}
                     >
-                      <Text variant="body3">{item}</Text>
+                      <Text
+                        variant="body3"
+                        color={item === 'noData' ? 'transparent' : ''}
+                      >
+                        {item || 'temp'}
+                      </Text>
                     </View>
                   )
                 })}
@@ -796,6 +815,7 @@ const Tab = ({
   index,
   activeTab,
   setActiveTab,
+  transparent,
   isModal,
   totalLength,
 }) => {
@@ -815,7 +835,7 @@ const Tab = ({
 
   const getColor = () => {
     if (isModal) {
-      if (index === totalLength - 1) {
+      if (index === totalLength || transparent) {
         return 'transparent'
       }
       return '#5A5A5A'

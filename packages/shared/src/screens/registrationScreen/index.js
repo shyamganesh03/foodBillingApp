@@ -79,8 +79,26 @@ const Registration = (props) => {
                   const empty = Array.from({ length: maxValue }, () => ({
                     title: 'empty',
                   }))
-
-                  section.modelFieldValues = { ...transformedData, empty }
+                  let availableTabs = []
+                  section.modelFields.map((item) => {
+                    availableTabs.push(item?.name)
+                  })
+                  Object.entries(transformedData).map(([key, value]) => {
+                    if (!availableTabs.includes(key)) {
+                      delete transformedData[key]
+                    }
+                    if (value?.length !== maxValue) {
+                      const emptyArray = Array.from(
+                        { length: maxValue - 1 },
+                        () => 'noData',
+                      )
+                      transformedData[key] = [...value, ...emptyArray]
+                    }
+                  })
+                  section.modelFieldValues = {
+                    ...transformedData,
+                    empty,
+                  }
                 }
               } else if (fields) {
                 fields.forEach((field) => {
@@ -247,10 +265,7 @@ const Registration = (props) => {
         modalPayload = { email: paramsData?.email }
         modalPayload = {
           ...modalPayload,
-          [section.fieldName]: [
-            ...(data[section.fieldName] || []),
-            section.selectedValue,
-          ],
+          [section.fieldName]: [section.selectedValue],
         }
       }
     })
@@ -394,9 +409,22 @@ const Registration = (props) => {
           return { ...acc, [item.fieldName]: '' }
         }, {})
         if (currentField.fieldName !== 'academicInstitution') {
-          const data = {
-            ...newData,
-            [currentField.fieldName]: selectedValue.name || selectedValue,
+          console.log({ ji: currentField.fieldName })
+          let data
+          const number = parseFloat(selectedValue)
+          if (
+            number !== 'NaN' &&
+            !currentField.fieldName?.toLowerCase().includes('date')
+          ) {
+            data = {
+              ...newData,
+              [currentField.fieldName]: number,
+            }
+          } else {
+            data = {
+              ...newData,
+              [currentField.fieldName]: selectedValue.name || selectedValue,
+            }
           }
 
           currentSection.selectedValue = {

@@ -387,7 +387,7 @@ export const fieldData = {
         modelFields: [
           {
             label: 'Academic Institution',
-            name: 'Academic Institution',
+            name: 'academicInstitution',
             type: 'textField',
             fieldName: 'academicInstitution',
             inputType: 'string',
@@ -396,7 +396,7 @@ export const fieldData = {
           },
           {
             label: 'Degree Level',
-            name: 'degreelevel',
+            name: 'degreeLevel',
             fieldName: 'degreeLevel',
             type: 'PickList',
             pickListValues: [],
@@ -405,7 +405,7 @@ export const fieldData = {
           },
           {
             label: 'Academic Institution Estimated Start',
-            name: 'startTime',
+            name: 'startTermApplyingFor',
             fieldName: 'startTermApplyingFor',
             type: 'date',
             mandatory: true,
@@ -413,7 +413,7 @@ export const fieldData = {
           },
           {
             label: 'Academic Institution Estimated End Date',
-            name: 'endTime',
+            name: 'endTermApplyingFor',
             fieldName: 'endTermApplyingFor',
             type: 'date',
             mandatory: true,
@@ -421,7 +421,7 @@ export const fieldData = {
           },
           {
             label: 'Approx. Degree Earned Date',
-            name: 'earnedDate',
+            name: 'degreeEarnedDate',
             fieldName: 'degreeEarnedDate',
             type: 'date',
             mandatory: true,
@@ -524,13 +524,13 @@ export const fieldData = {
         modelFields: [
           {
             label: 'MCAT Exam Date',
-            name: 'ExamDate',
+            name: 'MCATDate',
             fieldName: 'MCATDate',
             type: 'date',
           },
           {
             label: 'MCAT Total Score',
-            name: 'MCAT Total Score',
+            name: 'MCATTotalScore',
             type: 'textField',
             fieldName: 'MCATTotalScore',
             inputType: 'string',
@@ -553,7 +553,7 @@ export const fieldData = {
         modelFields: [
           {
             label: 'Clinic/Hospital',
-            name: 'Clinic/Hospital',
+            name: 'clinicOrHospital',
             type: 'textField',
             fieldName: 'clinicOrHospital',
             inputType: 'string',
@@ -561,7 +561,7 @@ export const fieldData = {
           },
           {
             label: 'Clinical Experience Role',
-            name: 'Clinical Experience Role',
+            name: 'clinicalExperienceRole',
             type: 'textField',
             fieldName: 'clinicalExperienceRole',
             inputType: 'string',
@@ -569,10 +569,10 @@ export const fieldData = {
           },
           {
             label: 'Clinical Experience Hours Completed',
-            name: 'Clinical Experience Hours Completed',
+            name: 'clinicalExperienceHoursCompleted',
             type: 'textField',
             inputType: 'string',
-            fieldName: 'clinicalExperienceHoursCompleted', //
+            fieldName: 'clinicalExperienceHoursCompleted',
             selectedValue: '',
           },
         ],
@@ -586,7 +586,7 @@ export const fieldData = {
         modelFields: [
           {
             label: 'Previous Research Experience',
-            name: 'Previous Research Experience',
+            name: 'previousResearchExperience',
             type: 'textField',
             inputType: 'string',
             fieldName: 'previousResearchExperience',
@@ -769,7 +769,7 @@ export const fieldData = {
         modelFields: [
           {
             label: 'First Name or Indicate if Interfolio',
-            name: 'Previous Research Experience',
+            name: 'recommenderFirstName',
             type: 'recommenderFirstName',
             fieldName: 'recommenderFirstName',
             inputType: 'string',
@@ -777,7 +777,7 @@ export const fieldData = {
           },
           {
             label: 'Last Name or Indicate if Interfolio',
-            name: 'Previous Research Experience',
+            name: 'recommenderLastName',
             type: 'textField',
             fieldName: 'recommenderLastName',
             inputType: 'string',
@@ -785,7 +785,7 @@ export const fieldData = {
           },
           {
             label: 'Email',
-            name: 'Previous Research Experience',
+            name: 'recommenderEmail',
             type: 'textField',
             inputType: 'string',
             fieldName: 'recommenderEmail',
@@ -793,7 +793,7 @@ export const fieldData = {
           },
           {
             label: 'Phone',
-            name: 'Previous Research Experience',
+            name: 'recommenderPhone',
             type: 'textField',
             inputType: 'string',
             fieldName: 'recommenderPhone',
