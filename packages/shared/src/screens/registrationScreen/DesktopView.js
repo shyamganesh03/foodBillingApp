@@ -114,7 +114,9 @@ const DesktopView = ({
                 onPress={() => {
                   handleSave(
                     formData[`step${activeTab}`],
-                    activeTab !== tabItems.length - 1
+                    activeTab === 0
+                      ? 'initial'
+                      : activeTab !== tabItems.length - 1
                       ? 'saveAndNext'
                       : 'Submit',
                   )

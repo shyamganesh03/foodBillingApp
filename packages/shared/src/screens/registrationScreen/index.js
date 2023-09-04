@@ -214,19 +214,23 @@ const Registration = (props) => {
               field.fieldName === 'emergencyContactLastName'
             ) {
               fullName = `${fullName} ${field.selectedValue || ''}`.trim()
-              payload['emergencyContactFullName'] = fullName
+              if (!!fullName) payload['emergencyContactFullName'] = fullName
             }
 
             // Handle PickList or dropdown fields.
             if (field.type === 'PickList' || field.type === 'dropdown') {
-              if (field.selectedValue?.value) {
+              if (!!field.selectedValue?.value) {
                 payload[field.fieldName] = field.selectedValue?.value
               } else {
-                payload[field.fieldName] =
-                  field.selectedValue?.name || field.selectedValue
+                if (!!field.selectedValue?.name || !!field.selectedValue) {
+                  payload[field.fieldName] =
+                    field.selectedValue?.name || field.selectedValue
+                }
               }
             } else {
-              payload[field.fieldName] = field.selectedValue || ''
+              if (!!field.selectedValue) {
+                payload[field.fieldName] = field.selectedValue
+              }
             }
           }
         })
@@ -240,20 +244,21 @@ const Registration = (props) => {
               section.selectedValue,
             ],
           }
-          console.log({ payload })
         }
       }
     })
     if (type === 'initial') {
       const initialPayload = {
         ...payload,
-        email: paramsData?.email,
         firstName: paramsData?.firstName,
         lastName: paramsData?.lastName,
-        countryCode: paramsData?.countryCode,
         phoneNumber: paramsData?.phoneNumber,
-        country: paramsData?.country,
-        programme: paramsData?.programme,
+        email: paramsData?.email,
+        universityOrCollegeInfo: [],
+        AAMCMCATReporting: [],
+        clinicalOrHospitalExperienceDetails: [],
+        researchExperience: [],
+        recommenders: [],
       }
       let selectedSchoolValue = []
       formData.step0.sections[formData.step0.sections.length - 1].fields.map(
@@ -271,6 +276,9 @@ const Registration = (props) => {
       }
       if (!data?.email) {
         await submitApplication(initialPayload)
+        // refetch updated Data
+        refetch()
+        setActiveTab(activeTab + 1)
         setShowLoader(false)
         return
       }
