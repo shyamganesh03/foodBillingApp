@@ -331,7 +331,10 @@ const Registration = (props) => {
       if (currentSection.type === 'model') {
         const newData = currentSection[fieldName]?.reduce((acc, item) => {
           if (currentSection.selectedValue?.[item.fieldName]) {
-            return { ...acc, [item.fieldName]: item.fieldName }
+            return {
+              ...acc,
+              [item.fieldName]: currentSection.selectedValue?.[item.fieldName],
+            }
           }
           return { ...acc, [item.fieldName]: '' }
         }, {})
@@ -343,6 +346,7 @@ const Registration = (props) => {
           ...currentSection.selectedValue,
           ...data,
         }
+        console.log({ newFieldsArray: currentSection.selectedValue })
       } else {
         const newFieldsArray = [...currentSection[fieldName]]
         newFieldsArray[fieldIndex] = {

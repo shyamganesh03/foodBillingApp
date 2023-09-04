@@ -526,6 +526,7 @@ export const fieldData = {
           'Clinical/Hospital Experience (Volunteer, Shadowing, Observation or Otherwise)',
         type: 'model',
         buttonText: 'New',
+        fieldName: 'clinicalOrHospitalExperienceDetails',
         modelDirection: 'column',
         modelFields: [
           {
@@ -540,7 +541,7 @@ export const fieldData = {
             label: 'Clinical Experience Role',
             name: 'Clinical Experience Role',
             type: 'textField',
-            fieldName: 'Professional_Experiences__c',
+            fieldName: 'clinicalExperienceRole',
             inputType: 'string',
             selectedValue: '',
           },
@@ -549,7 +550,7 @@ export const fieldData = {
             name: 'Clinical Experience Hours Completed',
             type: 'textField',
             inputType: 'string',
-            fieldName: 'Professional_Experiences__c', //
+            fieldName: 'clinicalExperienceHoursCompleted', //
             selectedValue: '',
           },
         ],
@@ -558,6 +559,7 @@ export const fieldData = {
         title: 'Research Experience',
         type: 'model',
         buttonText: 'New',
+        fieldName: 'researchExperience',
         modelDirection: 'column',
         modelFields: [
           {
@@ -565,7 +567,7 @@ export const fieldData = {
             name: 'Previous Research Experience',
             type: 'textField',
             inputType: 'string',
-            fieldName: 'Professional_Experiences__c', //
+            fieldName: 'previousResearchExperience',
             selectedValue: '',
           },
         ],
@@ -592,14 +594,14 @@ export const fieldData = {
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
             hasFullWidth: true,
-            fieldName: '', //
+            fieldName: 'academicWithdrawal',
             selectedValue: '',
           },
           {
             label: 'If yes, then please explain',
             name: 'Previous Research Experience',
             type: 'textField',
-            fieldName: '', //
+            fieldName: 'academicWithdrawalReason',
             inputType: 'string',
             selectedValue: '',
           },
@@ -611,15 +613,15 @@ export const fieldData = {
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
             hasFullWidth: true,
-            fieldName: '', //
+            fieldName: 'arrestedChargedOrConvictedOfCrime',
             selectedValue: '',
           },
           {
             label: 'If yes, then please explain',
-            name: 'Previous Research Experience',
+            name: 'crimeReason',
             type: 'textField',
             inputType: 'string',
-            fieldName: '', //
+            fieldName: 'crimeReason',
             selectedValue: '',
           },
           {
@@ -630,7 +632,7 @@ export const fieldData = {
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
             hasFullWidth: true,
-            fieldName: '', //
+            fieldName: 'technicalStandardAccommodationNeeded',
             selectedValue: '',
           },
           {
@@ -638,7 +640,7 @@ export const fieldData = {
             name: 'Previous Research Experience',
             type: 'textField',
             inputType: 'string',
-            fieldName: '', //
+            fieldName: 'technicalStandardAccommodationReason',
             selectedValue: '',
           },
           {
@@ -649,7 +651,7 @@ export const fieldData = {
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
             hasFullWidth: true,
-            fieldName: '', //
+            fieldName: 'technicalStandardsMedicalConditions',
             selectedValue: '',
           },
           {
@@ -657,7 +659,7 @@ export const fieldData = {
             name: 'Previous Research Experience',
             type: 'textField',
             inputType: 'string',
-            fieldName: '', //
+            fieldName: 'technicalStandardsMedicalReason',
             selectedValue: '',
           },
           {
@@ -668,7 +670,7 @@ export const fieldData = {
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
             hasFullWidth: true,
-            fieldName: '', //
+            fieldName: 'nonAcademicSuspendedDismissWithdrawn',
             selectedValue: '',
           },
           {
@@ -676,7 +678,7 @@ export const fieldData = {
             name: 'Previous Research Experience',
             type: 'textField',
             inputType: 'string',
-            fieldName: '', //
+            fieldName: 'nonAcademicWithdrawalReason',
             selectedValue: '',
           },
         ],
@@ -690,7 +692,7 @@ export const fieldData = {
             name: 'referralsource',
             type: 'PickList',
             pickListValues: [],
-            fieldName: '', //
+            fieldName: 'howDidYouHearAboutSABA',
             mandatory: true,
             hasFullWidth: true,
             selectedValue: '',
@@ -699,7 +701,7 @@ export const fieldData = {
             label: 'Other Schools Applying To',
             name: 'Previous Research Experience',
             type: 'textField',
-            fieldName: '', //
+            fieldName: 'otherSchoolsApplyingTo', //
             inputType: 'string',
             selectedValue: '',
           },
@@ -740,13 +742,14 @@ export const fieldData = {
             'At least two letters of recommendation are required of all applicants. For recent graduates it is highly recommended that at least one letter is from a professional acquaintance and the other is academic related.',
           type: 'description',
         },
+        fieldName: 'recommenders',
         modelDirection: 'column',
         modelFields: [
           {
             label: 'First Name or Indicate if Interfolio',
             name: 'Previous Research Experience',
             type: 'recommenderFirstName',
-            fieldName: '',
+            fieldName: 'recommenderFirstName',
             inputType: 'string',
             selectedValue: '',
           },

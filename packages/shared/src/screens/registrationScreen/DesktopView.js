@@ -20,6 +20,7 @@ import { universityLogo } from '@oap/assets'
 import { FilePicker } from '@libs/components'
 import { getDropdownData } from '../../api'
 import { Loader } from '../../components'
+import { Icon } from '@r3-oaf/native-icons'
 
 const DesktopView = ({
   activeTab,
@@ -570,14 +571,12 @@ const ApplicationReviewContainer = ({
                 margin: 12,
               }}
             >
-              <Text
-                variant="body1"
-                style={{
-                  marginBottom: 10,
-                }}
-              >
-                {key}
-              </Text>
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Icon name="FileEdit" color="rgb(115,115,115)" />
+                <Text variant="body1" style={{ marginLeft: 10 }}>
+                  {key}
+                </Text>
+              </View>
               {value.map((item, index) => {
                 return (
                   <Text key={index} variant="body2">
