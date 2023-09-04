@@ -52,3 +52,9 @@ export const submitApplication = async (payload) =>
     method: 'POST',
     payload,
   })
+
+export const getApplicationFileByID = async (payload) =>
+  apiCall(`application/file/${payload.Id}`, {
+    method: 'GET',
+    payload,
+  })

@@ -13,6 +13,7 @@ import { fieldData } from '../../utils/fields'
 import { useDropDownData } from '../../hooks/useDropDownData'
 import {
   getApplicationByEmailID,
+  getApplicationDetailsByID,
   submitApplication,
   updateApplication,
 } from '../../api'
@@ -218,8 +219,12 @@ const Registration = (props) => {
 
             // Handle PickList or dropdown fields.
             if (field.type === 'PickList' || field.type === 'dropdown') {
-              payload[field.fieldName] =
-                field.selectedValue?.name || field.selectedValue
+              if (field.selectedValue?.value) {
+                payload[field.fieldName] = field.selectedValue?.value
+              } else {
+                payload[field.fieldName] =
+                  field.selectedValue?.name || field.selectedValue
+              }
             } else {
               payload[field.fieldName] = field.selectedValue || ''
             }
@@ -235,6 +240,7 @@ const Registration = (props) => {
               section.selectedValue,
             ],
           }
+          console.log({ payload })
         }
       }
     })
@@ -346,14 +352,15 @@ const Registration = (props) => {
           ...currentSection.selectedValue,
           ...data,
         }
-        console.log({ newFieldsArray: currentSection.selectedValue })
       } else {
         const newFieldsArray = [...currentSection[fieldName]]
         newFieldsArray[fieldIndex] = {
           ...currentField,
-          selectedValue: selectedValue.name || selectedValue,
+          selectedValue:
+            selectedValue?.value || !selectedValue.name
+              ? selectedValue
+              : selectedValue.name,
         }
-
         currentSection[fieldName] = newFieldsArray
       }
 
