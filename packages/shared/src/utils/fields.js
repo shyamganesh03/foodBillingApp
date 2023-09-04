@@ -65,15 +65,10 @@ export const fieldData = {
         fields: [
           {
             label: 'Choose your Program',
-            name: 'program',
-            // fieldName: 'pro',
+            name: 'programmes',
+            fieldName: 'programmeName',
             type: 'PickList',
-            pickListValues: [
-              { name: 'Mrs' },
-              { name: 'Dr' },
-              { name: 'Mr' },
-              { name: 'Ms' },
-            ],
+            pickListValues: [],
             mandatory: true,
             selectedValue: '',
           },
@@ -435,6 +430,7 @@ export const fieldData = {
         ],
         selectedValue: {
           academicInstitution: 'Alexandria University',
+          academicInstitutionId: 'a054P000010xoVgQAI',
         },
       },
       {

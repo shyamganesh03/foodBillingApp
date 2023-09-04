@@ -384,17 +384,24 @@ const Registration = (props) => {
               [item.fieldName]: currentSection.selectedValue?.[item.fieldName],
             }
           }
+          if (currentSection.selectedValue?.['academicInstitutionId']) {
+            return {
+              ...acc,
+              academicInstitutionId:
+                currentSection.selectedValue?.['academicInstitutionId'],
+            }
+          }
           return { ...acc, [item.fieldName]: '' }
         }, {})
-        let data = {}
         if (currentField.fieldName !== 'academicInstitution') {
-          data = {
+          const data = {
             ...newData,
             [currentField.fieldName]: selectedValue.name || selectedValue,
           }
-        }
-        currentSection.selectedValue = {
-          ...currentSection.selectedValue,
+
+          currentSection.selectedValue = {
+            ...data,
+          }
         }
       } else {
         const newFieldsArray = [...currentSection[fieldName]]
