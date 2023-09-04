@@ -197,14 +197,22 @@ const FormFields = ({
           toggleDropdown,
         })
       })}
-      {hasError ? (
+      {hasError.errorMessage1 ? (
         <Text
           variant="body2"
           style={{ marginTop: 20, paddingLeft: 12 }}
           color={colors.onAlert}
         >
-          * Please select different schools, as some of your chosen options are
-          the same.
+          {hasError.errorMessage1}
+        </Text>
+      ) : null}
+      {hasError.errorMessage2 ? (
+        <Text
+          variant="body2"
+          style={{ marginTop: 10, paddingLeft: 12 }}
+          color={colors.onAlert}
+        >
+          {hasError.errorMessage2}
         </Text>
       ) : null}
     </View>

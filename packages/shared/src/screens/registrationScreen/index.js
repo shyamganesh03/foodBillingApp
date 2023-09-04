@@ -36,7 +36,10 @@ const Registration = (props) => {
   const [showLoader, setShowLoader] = useState(false)
   const [isCTADisabled, setIsCTADisabled] = useState()
   const [containerWidth, setContainerWidth] = useState()
-  const [hasError, setHasError] = useState()
+  const [hasError, setHasError] = useState({
+    errorMessage1: '',
+    errorMessage2: '',
+  })
   const containerRef = useRef()
   const paramsData = props.route.params
   const isFocused = useIsFocused()
@@ -197,7 +200,7 @@ const Registration = (props) => {
 
     // Create an initial payload object with the email field.
     let payload = { email: paramsData?.email }
-    let modalPayload = { email: paramsData?.email }
+    let modalPayload
 
     // Iterate through the sections in submittedData.
     submittedData.sections.forEach((section) => {
@@ -241,6 +244,7 @@ const Registration = (props) => {
         sessionName === section?.title &&
         section.fieldName
       ) {
+        modalPayload = { email: paramsData?.email }
         modalPayload = {
           ...modalPayload,
           [section.fieldName]: [
@@ -273,17 +277,39 @@ const Registration = (props) => {
         },
       )
       const duplicateValueCheck = new Set(selectedSchoolValue)
-      if (duplicateValueCheck.size !== selectedSchoolValue.length) {
-        setHasError(true)
+      if (selectedSchoolValue.length > 1) {
+        let errorMessage = {
+          errorMessage1: '',
+          errorMessage2: '',
+        }
+        if (duplicateValueCheck.size !== selectedSchoolValue.length) {
+          errorMessage = {
+            ...errorMessage,
+            errorMessage1:
+              '* Please select different schools, as some of your chosen options are the same.',
+          }
+        }
+        const checkBox =
+          formData.step0.sections[formData.step0.sections.length - 2].fields[2]
+            .selectedValue
+        if (!checkBox) {
+          errorMessage = {
+            ...errorMessage,
+            errorMessage2: '* Please check the above check box to proceed',
+          }
+        }
+
+        setHasError(errorMessage)
         setShowLoader(false)
         return
       }
+
       if (!data?.email) {
         await submitApplication(initialPayload)
         // refetch updated Data
-        refetch()
-        setActiveTab(activeTab + 1)
+        await refetch()
         setShowLoader(false)
+        setActiveTab(activeTab + 1)
         return
       }
     }
@@ -326,7 +352,10 @@ const Registration = (props) => {
     sectionIndex,
     fieldName = 'fields',
   }) => {
-    setHasError(false)
+    setHasError({
+      errorMessage1: '',
+      errorMessage2: '',
+    })
     const currentSection = formData[step]?.sections[sectionIndex]
     if (type === 'cancel') {
       currentSection.selectedValue = ''
@@ -366,7 +395,6 @@ const Registration = (props) => {
         }
         currentSection.selectedValue = {
           ...currentSection.selectedValue,
-          ...data,
         }
       } else {
         const newFieldsArray = [...currentSection[fieldName]]

@@ -61,6 +61,25 @@ export const fieldData = {
     title: 'Start Your Application',
     sections: [
       {
+        title: 'Program',
+        fields: [
+          {
+            label: 'Choose your Program',
+            name: 'program',
+            // fieldName: 'pro',
+            type: 'PickList',
+            pickListValues: [
+              { name: 'Mrs' },
+              { name: 'Dr' },
+              { name: 'Mr' },
+              { name: 'Ms' },
+            ],
+            mandatory: true,
+            selectedValue: '',
+          },
+        ],
+      },
+      {
         title: 'Application Information',
         fields: [
           {
