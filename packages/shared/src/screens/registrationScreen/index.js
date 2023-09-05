@@ -92,11 +92,19 @@ const Registration = (props) => {
                         { length: maxValue - 1 },
                         () => 'noData',
                       )
+                      console.log({ emptyArray })
                       transformedData[key] = [...value, ...emptyArray]
                     }
                   })
+                  let formattedTransformedData = {}
+                  section.modelFields.map((item) => {
+                    formattedTransformedData = {
+                      ...formattedTransformedData,
+                      [item?.fieldName]: transformedData[item?.fieldName],
+                    }
+                  })
                   section.modelFieldValues = {
-                    ...transformedData,
+                    ...formattedTransformedData,
                     empty,
                   }
                 }
@@ -143,12 +151,11 @@ const Registration = (props) => {
 
   function processFields(fields, sectionTitle, mandatoryFields, type) {
     if (type === 'modal') {
-      if (fields.selectedValue === '') {
+      if (
+        fields.selectedValue === '' &&
+        fields?.modelFieldValues?.length <= 0
+      ) {
         processFields(fields?.modelFields, sectionTitle, mandatoryFields)
-      } else {
-        // Object.entries(fields?.selectedValue).map(([key, value]) => {
-        //   console.log({ value })
-        // })
       }
     } else {
       for (const field of fields) {
@@ -171,13 +178,15 @@ const Registration = (props) => {
 
       // Iterate through sections in the step
       for (const section of step.sections) {
-        if (section.fields) {
-          // If section has "fields" property, process those fields
-          processFields(section.fields, step.title, mandatoryFields)
-        }
-        if (section.modelFields) {
-          // If section has "modelFields" property, process those fields
-          processFields(section, step.title, mandatoryFields, 'modal')
+        if (step.title !== 'Application Submission') {
+          if (section.fields) {
+            // If section has "fields" property, process those fields
+            processFields(section.fields, step.title, mandatoryFields)
+          }
+          if (section.modelFields) {
+            // If section has "modelFields" property, process those fields
+            processFields(section, step.title, mandatoryFields, 'modal')
+          }
         }
       }
     }

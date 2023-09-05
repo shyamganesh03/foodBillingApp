@@ -96,13 +96,13 @@ const DateInput = (props) => {
       if (selectedYearIndex !== -1) {
         const yearItemHeight = 48
         const scrollToOffset = selectedYearIndex * yearItemHeight
-        yearScrollViewRef.current.scrollTo({
-          y: scrollToOffset,
+        yearScrollViewRef.current?.scrollTo({
+          y: scrollToOffset + 200,
           animated: true,
         })
       }
     }, 400)
-  }, [])
+  }, [yearVisible])
 
   const toggleDropdown = () => (visible ? setVisible(false) : openDropdown())
   const toggleYearDropdown = () =>
@@ -237,6 +237,7 @@ const DateInput = (props) => {
                           setSelectedYear(_item)
                           setYearVisible(false)
                         }}
+                        id={_item}
                       >
                         <Text>{_item}</Text>
                         {/* <Menu.Item

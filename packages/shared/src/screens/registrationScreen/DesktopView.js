@@ -426,15 +426,33 @@ const renderFields = ({
 const ModelContainer = ({ data, index, setModalFields }) => {
   const { colors } = useTheme()
   const [tabs, setTabs] = useState([])
+  const [listItems, setListItems] = useState({})
 
   useEffect(() => {
     if (data?.modelFieldValues) {
-      const keys = Object.entries(data?.modelFieldValues)
+      console.log({ data2: data?.modelFieldValues })
+      const keys = Object.keys(data?.modelFieldValues)
       if (keys.length > 1) {
         let tabsData = []
         data?.modelFields?.map((item) => {
           tabsData.push(item.label)
         })
+        let listItem = {}
+        Object.entries(data?.modelFieldValues).map(([key, value]) => {
+          const emptyArrayLength = data?.modelFieldValues['empty']?.length
+          if (value?.length > emptyArrayLength) {
+            listItem = {
+              ...listItem,
+              [key]: value.slice(0, emptyArrayLength),
+            }
+          } else {
+            listItem = {
+              ...listItem,
+              [key]: value,
+            }
+          }
+        })
+        setListItems(listItem)
         tabsData.push('delete')
         setTabs(tabsData)
       }
@@ -486,13 +504,14 @@ const ModelContainer = ({ data, index, setModalFields }) => {
         </Text>
       ) : null}
       {tabs?.length > 0 ? (
-        <ModalTabSection tabs={tabs} data={data?.modelFieldValues} />
+        <ModalTabSection tabs={tabs} data={listItems} />
       ) : null}
     </View>
   )
 }
 
 const ModalTabSection = ({ tabs, data }) => {
+  console.log({ data })
   return (
     <ScrollView
       style={{ flexDirection: 'row' }}
