@@ -23,6 +23,7 @@ const DesktopView = ({
   showLoader,
   hasError,
   isFileSuccess,
+  isEditMode,
   isCTADisabled,
   uploadDocs,
   formData,
@@ -65,6 +66,7 @@ const DesktopView = ({
               setIsFileSuccess={setIsFileSuccess}
               isSuccess={isFileSuccess}
               activeTab={activeTab}
+              modalFields={modalFields}
               fieldData={formData}
               dropdownLeft={dropdownLeft}
               dropdownTop={dropdownTop}
@@ -80,49 +82,56 @@ const DesktopView = ({
               toggleDropdown={toggleDropdown}
               containerRef={containerRef}
               getContainerWidth={getContainerWidth}
+              isEditMode={isEditMode}
               colors={colors}
             />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                paddingHorizontal: 16,
-                paddingBottom: 16,
-              }}
-            >
-              <Button
-                label="Save"
-                buttonStyle={{ flex: 0.4 }}
-                labelColors={colors.white}
-                onPress={() => {
-                  handleSave(
-                    formData[`step${activeTab}`],
-                    activeTab === 0 ? 'initialSave' : 'save',
-                  )
+            {isEditMode ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  paddingHorizontal: 16,
+                  paddingBottom: 16,
                 }}
-              />
-              <Button
-                label={
-                  activeTab !== tabItems.length - 1 ? 'Save and Next' : 'Submit'
-                }
-                buttonStyle={{ flex: 0.4 }}
-                labelColors={colors.white}
-                buttonColor={
-                  activeTab !== tabItems.length - 1 ? colors.primary : '#45C65A'
-                }
-                onPress={() => {
-                  handleSave(
-                    formData[`step${activeTab}`],
-                    activeTab === 0
-                      ? 'initial'
-                      : activeTab !== tabItems.length - 1
-                      ? 'saveAndNext'
-                      : 'Submit',
-                  )
-                }}
-                disable={getCTAStatus(activeTab)} //isCTADisabled && activeTab === tabItems.length - 1
-              />
-            </View>
+              >
+                <Button
+                  label={isEditMode ? 'Save' : 'Close'}
+                  buttonStyle={{ flex: 0.4 }}
+                  labelColors={colors.white}
+                  onPress={() => {
+                    handleSave(
+                      formData[`step${activeTab}`],
+                      activeTab === 0 ? 'initialSave' : 'save',
+                    )
+                  }}
+                />
+                <Button
+                  label={
+                    activeTab !== tabItems.length - 1
+                      ? 'Save and Next'
+                      : 'Submit'
+                  }
+                  buttonStyle={{ flex: 0.4 }}
+                  labelColors={colors.white}
+                  buttonColor={
+                    activeTab !== tabItems.length - 1
+                      ? colors.primary
+                      : '#45C65A'
+                  }
+                  onPress={() => {
+                    handleSave(
+                      formData[`step${activeTab}`],
+                      activeTab === 0
+                        ? 'initial'
+                        : activeTab !== tabItems.length - 1
+                        ? 'saveAndNext'
+                        : 'Submit',
+                    )
+                  }}
+                  disable={getCTAStatus(activeTab)}
+                />
+              </View>
+            ) : null}
           </View>
         </View>
         <Loader showLoader={showLoader} />
@@ -138,6 +147,7 @@ const DesktopView = ({
               sectionIndex: -1,
             })
           }}
+          isEditMode={isEditMode}
           step={`step${activeTab}`}
           getDropdownData={getDropdownData}
           dropdownLeft={dropdownLeft}
@@ -161,10 +171,12 @@ const DesktopView = ({
 const FormFields = ({
   setIsFileSuccess,
   isSuccess,
+  modalFields,
   activeTab,
   hasError,
   colors,
   fieldData,
+  isEditMode,
   dropdownLeft,
   dropdownTop,
   dropdownWidth,
@@ -181,10 +193,21 @@ const FormFields = ({
 }) => {
   return (
     <View style={{ flex: 1, padding: 12 }}>
+      {!isEditMode && activeTab === 1 ? (
+        <Text
+          variant="body2"
+          style={{ marginVertical: 20, paddingLeft: 12 }}
+          color={colors.onNeutral}
+        >
+          Your Completed and Submitted Application
+        </Text>
+      ) : null}
       {Object.entries(fieldData)?.map(([step, session]) => {
         return renderFields({
           setIsFileSuccess,
           isSuccess,
+          modalFields,
+          isEditMode,
           activeTab,
           colors,
           session,
@@ -229,6 +252,8 @@ const FormFields = ({
 const renderFields = ({
   setIsFileSuccess,
   isSuccess,
+  modalFields,
+  isEditMode,
   activeTab,
   colors,
   session,
@@ -254,16 +279,21 @@ const renderFields = ({
         <ApplicationReviewContainer
           getValidatedData={getValidatedData}
           data={session?.sections}
+          isEditMode={isEditMode}
           handleValueChanged={handleValueChanged}
           step={step}
         />
       )
     }
+
     return session?.sections?.map((item, sectionIndex) => {
       return item?.type === 'model' ? (
         <ModelContainer
           data={item}
           index={sectionIndex}
+          step={step}
+          isEditMode={isEditMode}
+          modalFields={modalFields}
           setModalFields={setModalFields}
           handleDelete={handleDelete}
         />
@@ -302,6 +332,7 @@ const renderFields = ({
                 dropdownLeft={dropdownLeft}
                 dropdownTop={dropdownTop}
                 getDropdownData={getDropdownData}
+                isEditMode={isEditMode}
                 dropdownWidth={dropdownWidth}
                 toggleDropdown={toggleDropdown}
                 handleValueChanged={handleValueChanged}
@@ -330,7 +361,7 @@ const renderFields = ({
                         }}
                       >
                         <View style={{ flexDirection: 'row' }}>
-                          {fieldItem.mandatory ? (
+                          {fieldItem.mandatory && isEditMode ? (
                             <Text variant="display5" color={colors.onAlert}>
                               *{' '}
                             </Text>
@@ -340,6 +371,7 @@ const renderFields = ({
                         <DropDown
                           toggleDropdown={toggleDropdown}
                           dropdownWidth={dropdownWidth}
+                          isEditMode={isEditMode}
                           items={getDropdownData(fieldItem)}
                           hasFullWidth={fieldItem.hasFullWidth}
                           position={{ top: dropdownTop, left: dropdownLeft }}
@@ -362,6 +394,7 @@ const renderFields = ({
                       <TextInput
                         label={fieldItem.label}
                         isMandatory={fieldItem.mandatory}
+                        isEditMode={isEditMode}
                         style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                         textInputWidth={isCenter === -1 ? '100%' : ''}
                         value={fieldItem.selectedValue}
@@ -381,6 +414,7 @@ const renderFields = ({
                     return (
                       <DateInput
                         title={fieldItem.label}
+                        isEditMode={isEditMode}
                         style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                         isMandatory={fieldItem.mandatory}
                         dob={
@@ -405,6 +439,7 @@ const renderFields = ({
                     return (
                       <CheckBox
                         label={fieldItem.label}
+                        isEditMode={isEditMode}
                         handleCheck={(isChecked) =>
                           handleValueChanged({
                             selectedValue: isChecked,
@@ -427,7 +462,7 @@ const renderFields = ({
                       </Text>
                     )
                   }
-                  if (fieldItem?.type === 'attachDocument') {
+                  if (fieldItem?.type === 'attachDocument' && isEditMode) {
                     return (
                       <FilePicker
                         heading={fieldItem.label}
@@ -447,10 +482,20 @@ const renderFields = ({
   }
 }
 
-const ModelContainer = ({ data, index, setModalFields, handleDelete }) => {
+const ModelContainer = ({
+  modalFields,
+  uploadDocs = () => {},
+  step,
+  data,
+  index,
+  setModalFields,
+  handleDelete,
+  isEditMode,
+}) => {
   const { colors } = useTheme()
   const [tabs, setTabs] = useState([])
   const [listItems, setListItems] = useState({})
+
   useEffect(() => {
     if (data?.modelFieldValues) {
       const keys = Object.keys(data?.modelFieldValues)
@@ -483,6 +528,15 @@ const ModelContainer = ({ data, index, setModalFields, handleDelete }) => {
       }
     }
   }, [data?.modelFieldValues])
+
+  const getTitle = () => {
+    if (!isEditMode && data?.hasAttachments) {
+      return modalFields?.readModeTitle || data?.title
+    } else {
+      return data?.title
+    }
+  }
+
   return (
     <View
       style={[
@@ -503,12 +557,13 @@ const ModelContainer = ({ data, index, setModalFields, handleDelete }) => {
           padding: 12,
         }}
       >
-        <Text variant="heading4">{data?.title}</Text>
-        {data.buttonText ? (
+        <Text variant="heading4">{getTitle()}</Text>
+        {data.buttonText && isEditMode ? (
           <Button
             label={data.buttonText}
             onPress={() =>
               setModalFields({
+                ...modalFields,
                 isModelVisible: true,
                 items: data?.modelFields,
                 title: data?.title,
@@ -523,7 +578,7 @@ const ModelContainer = ({ data, index, setModalFields, handleDelete }) => {
       {data?.description ? (
         <Text
           variant="body2"
-          style={{ marginBottom: 10, marginTop: 30, paddingLeft: 12 }}
+          style={{ marginBottom: 10, marginTop: 30, paddingHorizontal: 12 }}
         >
           {data?.description?.label}
         </Text>
@@ -534,13 +589,14 @@ const ModelContainer = ({ data, index, setModalFields, handleDelete }) => {
           data={listItems}
           allData={data}
           handleDelete={handleDelete}
+          isEditMode={isEditMode}
         />
       ) : null}
     </View>
   )
 }
 
-const ModalTabSection = ({ tabs, data, handleDelete, allData }) => {
+const ModalTabSection = ({ tabs, data, handleDelete, allData, isEditMode }) => {
   const { colors } = useTheme()
   return (
     <ScrollView
@@ -565,6 +621,10 @@ const ModalTabSection = ({ tabs, data, handleDelete, allData }) => {
                 isModal
                 index={index}
                 totalLength={tabs.length}
+                style={{
+                  display:
+                    !isEditMode && index === tabs.length - 1 ? 'none' : '',
+                }}
                 transparent={item === 'delete'}
               />
             )
@@ -577,6 +637,7 @@ const ModalTabSection = ({ tabs, data, handleDelete, allData }) => {
                 style={{
                   flexDirection: 'column',
                   width: 188,
+                  display: !isEditMode && key === 'empty' ? 'none' : '',
                 }}
               >
                 {value?.map((item, index) => {
@@ -668,6 +729,7 @@ const DownLoadLinkContainer = ({ index, title, value }) => {
 }
 
 const ApplicationReviewContainer = ({
+  isEditMode,
   getValidatedData,
   data,
   handleValueChanged,
@@ -772,6 +834,7 @@ const ApplicationReviewContainer = ({
                 return (
                   <TextInput
                     label={fieldItem.label}
+                    isEditMode={isEditMode}
                     isMandatory={fieldItem.mandatory}
                     style={{ marginRight: 20 }}
                     textInputWidth={145}
@@ -792,7 +855,7 @@ const ApplicationReviewContainer = ({
                 return (
                   <DateInput
                     title={fieldItem.label}
-                    style={{}}
+                    isEditMode={isEditMode}
                     isMandatory={fieldItem.mandatory}
                     textInputWidth={145}
                     onChangeText={(selectedDate) =>
@@ -816,6 +879,7 @@ const ApplicationReviewContainer = ({
 }
 
 const CommonFromContainer = ({
+  isEditMode,
   item,
   dropdownLeft,
   dropdownTop,
@@ -832,6 +896,7 @@ const CommonFromContainer = ({
       style={{
         flexDirection: item.direction || 'column',
         justifyContent: 'space-between',
+        maxWidth: isEditMode ? '' : '80%',
       }}
     >
       {item.fields?.map((field, fieldIndex) => {
@@ -849,6 +914,7 @@ const CommonFromContainer = ({
           return (
             <CheckBox
               label={field.label}
+              isEditMode={isEditMode}
               handleCheck={(isChecked) =>
                 handleValueChanged({
                   selectedValue: isChecked,
@@ -865,7 +931,7 @@ const CommonFromContainer = ({
           return (
             <View>
               <View style={{ flexDirection: 'row' }}>
-                {field.mandatory ? (
+                {field.mandatory && isEditMode ? (
                   <Text variant="display5" color={colors.onAlert}>
                     *{' '}
                   </Text>
@@ -874,6 +940,7 @@ const CommonFromContainer = ({
               </View>
               <DropDown
                 toggleDropdown={toggleDropdown}
+                isEditMode={isEditMode}
                 dropdownWidth={dropdownWidth}
                 items={getDropdownData(field)}
                 position={{ top: dropdownTop, left: dropdownLeft }}
@@ -912,6 +979,7 @@ const TabSection = ({ tabItems, activeTab, setActiveTab }) => {
 }
 
 const Tab = ({
+  style,
   item,
   index,
   activeTab,
@@ -952,7 +1020,7 @@ const Tab = ({
   return (
     <TouchableOpacity
       key={index}
-      style={getTabStyle()}
+      style={[getTabStyle(), style]}
       onPress={() => (isModal ? () => {} : setActiveTab(index))}
     >
       <Text

@@ -15,6 +15,7 @@ import { TextInput, Text } from '@libs/components'
 
 const DateInput = (props) => {
   const {
+    isEditMode,
     label,
     placeholder,
     dob,
@@ -176,6 +177,7 @@ const DateInput = (props) => {
                 height: 24,
                 paddingTop: 0,
               }}
+              isEditMode={isEditMode}
               textInputWidth={100}
               onChangeText={(itemValue) => {
                 setSelectedYear(itemValue)
@@ -213,7 +215,6 @@ const DateInput = (props) => {
               top: yearDropdownTop,
               left: yearDropDownLeft,
               width: yearDropDownWidth,
-              backgroundColor: 'red',
             }}
           >
             <ScrollView
@@ -343,7 +344,7 @@ const DateInput = (props) => {
         style={style}
       >
         <View style={{ flexDirection: 'row' }}>
-          {isMandatory ? (
+          {isMandatory && isEditMode ? (
             <Text variant="display5" color={colors.onAlert}>
               *{' '}
             </Text>
@@ -354,16 +355,19 @@ const DateInput = (props) => {
         <TextInput
           label={label}
           placeholder={placeholder}
+          isEditMode={isEditMode}
           right={<TextInput.Affix />}
           value={value || selectedDate}
           maxLength={data?.maxLength}
           trailingIcon={
-            <Icon
-              name="CalenderFilled"
-              height={20}
-              width={20}
-              color={colors.placeHolder}
-            />
+            isEditMode ? (
+              <Icon
+                name="CalenderFilled"
+                height={20}
+                width={20}
+                color={colors.placeHolder}
+              />
+            ) : null
           }
           error={error}
           onFocus={() => {

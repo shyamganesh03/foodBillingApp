@@ -6,17 +6,15 @@ import { spacing } from '@libs/theme'
 import { Text } from '@libs/components'
 
 const CheckBox = ({
+  isEditMode,
   checkedStatus,
   field,
-  filtersApplied,
   handleWidth = () => {},
   handleCheck,
   itemIndex,
   label,
   labelColor,
   labelStyle,
-  programId,
-  selectedProgrammes,
   style = {},
   value,
 }) => {
@@ -44,8 +42,15 @@ const CheckBox = ({
         }}
         style={[
           styles(colors).checkBox,
-          { backgroundColor: isChecked ? colors.primary : 'transparent' },
+          {
+            backgroundColor: isChecked
+              ? colors.primary
+              : isEditMode
+              ? 'transparent'
+              : '#F3F3F3',
+          },
         ]}
+        disabled={!isEditMode}
       >
         {isChecked && <Icon name="Check" color={colors.white} />}
       </TouchableOpacity>

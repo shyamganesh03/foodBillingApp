@@ -8,6 +8,7 @@ import Text from '../Text'
 const TextInput = (props) => {
   const { colors } = useTheme()
   const {
+    isEditMode,
     trailingIcon,
     inputFieldStyle,
     isMandatory,
@@ -37,7 +38,7 @@ const TextInput = (props) => {
   return (
     <View style={[{ marginBottom: 10 }, style]}>
       <View style={{ flexDirection: 'row' }}>
-        {isMandatory ? (
+        {isMandatory && isEditMode ? (
           <Text variant="display5" color={colors.onAlert}>
             *{' '}
           </Text>
@@ -46,7 +47,7 @@ const TextInput = (props) => {
       </View>
       <Row
         style={[
-          styles.inputRow,
+          isEditMode ? styles.inputRow : styles.disableStye,
           {
             backgroundColor: editable ? 'transparent' : colors.background,
             width: textInputWidth || 325,
@@ -71,7 +72,7 @@ const TextInput = (props) => {
           secureTextEntry={secureTextEntry}
           style={[styles.inputField, inputFieldStyle]}
           value={value}
-          editable={editable}
+          editable={isEditMode}
         />
         {trailingIcon && (
           <View style={{ justifyContent: 'center' }}>{trailingIcon}</View>
@@ -90,6 +91,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 14,
     height: 32,
   },
+  disableStye: {},
 
   inputField: {
     flex: 1,

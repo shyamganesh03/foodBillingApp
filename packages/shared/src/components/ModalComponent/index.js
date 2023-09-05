@@ -6,6 +6,7 @@ import { useTheme } from '@react-navigation/native'
 import { Divider, Button, Text, TextInput } from '@libs/components'
 
 const ModelComponent = ({
+  isEditMode,
   data,
   handleCloseModel = () => {},
   handleSave = () => {},
@@ -18,6 +19,7 @@ const ModelComponent = ({
   toggleDropdown,
 }) => {
   const { colors } = useTheme()
+
   return (
     <Modal
       visible={data.isModelVisible}
@@ -82,7 +84,7 @@ const ModelComponent = ({
                     }}
                   >
                     <View style={{ flexDirection: 'row' }}>
-                      {fieldItem.mandatory ? (
+                      {fieldItem.mandatory && isEditMode ? (
                         <Text variant="display5" color={colors.onAlert}>
                           *{' '}
                         </Text>
@@ -92,6 +94,7 @@ const ModelComponent = ({
                     <DropDown
                       toggleDropdown={toggleDropdown}
                       dropdownWidth={dropdownWidth}
+                      isEditMode={isEditMode}
                       items={getDropdownData(fieldItem)}
                       position={{ top: dropdownTop, left: dropdownLeft }}
                       onPress={(selectedValue) =>
@@ -115,6 +118,7 @@ const ModelComponent = ({
                     label={fieldItem.label}
                     isMandatory={fieldItem.mandatory}
                     hasFullWidth={data?.direction !== 'row'}
+                    isEditMode={isEditMode}
                     style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                     onChangeText={(value) => {
                       handleValueChanged({
@@ -135,6 +139,7 @@ const ModelComponent = ({
                     title={fieldItem.label}
                     style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                     isMandatory={fieldItem.mandatory}
+                    isEditMode={isEditMode}
                     isModal
                     onChangeText={(selectedDate) =>
                       handleValueChanged({

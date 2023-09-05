@@ -29,6 +29,7 @@ const Application = (props) => {
   const [dropdownWidth, setDropDownWidth] = useState(0)
   const [isFileSuccess, setIsFileSuccess] = useState(false)
   const [modalFields, setModalFields] = useState({
+    readModeTitle: 'Your Submitted Documents',
     isModelVisible: false,
     direction: 'row',
     title: '',
@@ -41,12 +42,12 @@ const Application = (props) => {
   const [showLoader, setShowLoader] = useState(false)
   const [isCTADisabled, setIsCTADisabled] = useState()
   const [containerWidth, setContainerWidth] = useState()
+  const [isEditMode, setIsEditMode] = useState(true)
   const [hasError, setHasError] = useState({
     errorMessage1: '',
     errorMessage2: '',
   })
   const containerRef = useRef()
-  const { id } = props.route.params
   const paramsData = props.route.params
   const isFocused = useIsFocused()
 
@@ -55,7 +56,7 @@ const Application = (props) => {
       queryKey: ['getApplicationDetails'],
       queryFn: async () => {
         const response = await getApplicationByID({
-          applicationId: id,
+          applicationId: paramsData?.id,
         })
         const formDataCopy = formData
         formDataCopy.step1.sections[1].fields[0].selectedValue =
@@ -66,7 +67,7 @@ const Application = (props) => {
           response.First_Name__c
         return response
       },
-      enabled: !!id,
+      enabled: !!paramsData?.id,
       initialData: [],
     })
 
@@ -77,6 +78,9 @@ const Application = (props) => {
       const responseData = await getApplicationByEmailID({
         email: paramsData?.email || applicationDetails?.Email__c,
       })
+      if (responseData.applicationStatus === 'Completed') {
+        setIsEditMode(false)
+      }
 
       for (const step in formDataCopy) {
         if (formDataCopy.hasOwnProperty(step)) {
@@ -179,7 +183,6 @@ const Application = (props) => {
         return {
           Name: nameArray,
           Type: typeArray,
-          Download: downloadArray,
           empty,
         }
       }
@@ -202,7 +205,7 @@ const Application = (props) => {
       return response.records
     },
     initialData: [],
-    enabled: isFocused && !!id,
+    enabled: isFocused && !!data?.r3ApplicationId,
   })
 
   const toggleDropdown = (visible, ref) => {
@@ -313,7 +316,9 @@ const Application = (props) => {
     setShowLoader(true)
 
     // Create an initial payload object with the email field.
-    let payload = { email: paramsData?.email || applicationDetails?.Email__c }
+    let payload = {
+      email: paramsData?.email || applicationDetails?.Email__c,
+    }
     let modalPayload
 
     // Iterate through the sections in submittedData.
@@ -366,7 +371,7 @@ const Application = (props) => {
         }
 
         modalPayload = {
-          email: paramsData?.email || !!applicationDetails?.Email__c,
+          email: paramsData?.email || applicationDetails?.Email__c,
         }
         modalPayload = {
           ...modalPayload,
@@ -384,7 +389,7 @@ const Application = (props) => {
           paramsData?.phoneNumber ||
           applicationDetails?.Phone_Number_Emergency__c,
         email: paramsData?.email || applicationDetails?.Email__c,
-        gusApplicationId: id,
+        gusApplicationId: paramsData?.id,
         universityOrCollegeInfo: [],
         AAMCMCATReporting: [],
         clinicalOrHospitalExperienceDetails: [],
@@ -434,16 +439,20 @@ const Application = (props) => {
       }
       setShowLoader(true)
       if (!data?.email) {
-        await submitApplication(initialPayload)
+        const response = await submitApplication(initialPayload)
         // refetch updated Data
         await refetch()
         setShowLoader(false)
-        if (type !== 'initialSave') setActiveTab(activeTab + 1)
+        if (type === 'initial' && response.statusCode === 201) {
+          setActiveTab(activeTab + 1)
+        }
         return
       }
     }
+
     // Update the application with the payload.
     const updateResponse = await updateApplication(modalPayload || payload)
+
     if (updateResponse?.message[0]?.message) {
       setHasError({
         ...hasError,
@@ -466,8 +475,10 @@ const Application = (props) => {
           formData.step0.sections[1].fields[0].selectedValue ||
           formData.step0.sections[1].fields[0].selectedValue.name ||
           '',
+        applicationStatus: 'Completed',
       }
       await submitApplication(submitPayload)
+      setActiveTab(0)
       setShowLoader(false)
     } else {
       // Handle 'saveAndNext' and other types.
@@ -476,7 +487,7 @@ const Application = (props) => {
       }
     }
     // refetch updated Data
-    refetch()
+    await refetch()
 
     // set loader false
     setShowLoader(false)
@@ -610,6 +621,7 @@ const Application = (props) => {
     activeTab,
     containerRef,
     containerWidth,
+    isEditMode,
     dropdownLeft,
     dropdownTop,
     dropdownWidth,
@@ -619,7 +631,7 @@ const Application = (props) => {
     modalFields,
     showLoader:
       showLoader || isFetching || isDocumentFetching || isApplicationFetching,
-    tabItems,
+    tabItems: isEditMode ? tabItems : tabItems.slice(0, tabItems.length - 1),
     getContainerWidth,
     getCTAStatus,
     getDropdownData,

@@ -14,6 +14,7 @@ import { Text } from '@libs/components'
 
 const DropDown = (props) => {
   const {
+    isEditMode,
     disable,
     label,
     items = [],
@@ -79,7 +80,9 @@ const DropDown = (props) => {
     if (selectedItem) {
       setSelectedOption(selectedItem)
     } else {
-      setSelectedOption({ name: 'Select an option' })
+      if (isEditMode) {
+        setSelectedOption({ name: 'Select an option' })
+      }
     }
   }, [isFocused, selectedItem])
 
@@ -95,58 +98,68 @@ const DropDown = (props) => {
         style,
       ]}
     >
-      <TouchableOpacity
-        onPress={
-          !disable
-            ? () => {
-                setShowDropDown(!showDropDown)
-                toggleDropdown(showDropDown, DropdownButton)
-              }
-            : null
-        }
-        style={[
-          getDropDownStyle(),
-          {
-            opacity: disable ? 0.8 : 1,
-          },
-          isCountryCode
-            ? {
-                borderRadius: 0,
-                backgroundColor: colors.backgroundVariant,
-                borderWidth: 0,
-              }
-            : {},
-        ]}
-        disabled={disable}
-      >
-        {selectedOption?.image && (
-          <Image
-            source={selectedOption?.image}
-            style={{
-              height: hideLabel ? 40 : 11,
-              width: hideLabel ? 40 : 20,
-              borderRadius: hideLabel ? 20 : 0,
-            }}
-          />
-        )}
-        {!hideLabel && (
-          <Text
-            variant={'body2'}
-            color={colors.onNeutral}
-            style={{ marginRight: 6, marginLeft: isCountryCode ? 0 : 6 }}
-          >
-            {selectedOption?.name || selectedOption}
-          </Text>
-        )}
-        {!hideLabel && (
-          <Icon
-            name="ArrowDown"
-            height={16}
-            width={16}
-            style={{ opacity: disable ? 0.5 : 1 }}
-          />
-        )}
-      </TouchableOpacity>
+      {isEditMode ? (
+        <TouchableOpacity
+          onPress={
+            !disable
+              ? () => {
+                  setShowDropDown(!showDropDown)
+                  toggleDropdown(showDropDown, DropdownButton)
+                }
+              : null
+          }
+          style={[
+            getDropDownStyle(),
+            {
+              opacity: disable ? 0.8 : 1,
+            },
+            isCountryCode
+              ? {
+                  borderRadius: 0,
+                  backgroundColor: colors.backgroundVariant,
+                  borderWidth: 0,
+                }
+              : {},
+          ]}
+          disabled={disable}
+        >
+          {selectedOption?.image && (
+            <Image
+              source={selectedOption?.image}
+              style={{
+                height: hideLabel ? 40 : 11,
+                width: hideLabel ? 40 : 20,
+                borderRadius: hideLabel ? 20 : 0,
+              }}
+            />
+          )}
+          {!hideLabel && (
+            <Text
+              variant={'body2'}
+              color={colors.onNeutral}
+              style={{ marginRight: 6, marginLeft: isCountryCode ? 0 : 6 }}
+            >
+              {selectedOption?.name || selectedOption}
+            </Text>
+          )}
+          {!hideLabel && (
+            <Icon
+              name="ArrowDown"
+              height={16}
+              width={16}
+              style={{ opacity: disable ? 0.5 : 1 }}
+            />
+          )}
+        </TouchableOpacity>
+      ) : (
+        <Text
+          variant={'body2'}
+          color={colors.onNeutral}
+          style={{ marginRight: 6, marginLeft: isCountryCode ? 0 : 6 }}
+        >
+          {selectedOption?.name || selectedOption}
+        </Text>
+      )}
       {showDropDown ? (
         <Modal
           transparent
