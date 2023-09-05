@@ -21,6 +21,7 @@ const DateInput = (props) => {
     value,
     data,
     onChangeText = () => {},
+    isModal,
     error,
     title = '',
     isMandatory,
@@ -113,9 +114,16 @@ const DateInput = (props) => {
 
   const openDropdown = () => {
     DropdownButton.current.measure((_fx, _fy, _w, h, _px, py) => {
-      setDropdownTop(py)
-      setDropDownLeft(_px - _fx)
-      setDropDownWidth(_w)
+      if (isModal) {
+        setDropdownTop(py + 60)
+        setDropDownLeft(_px)
+        setDropDownWidth(_w)
+      } else {
+        setDropdownTop(py)
+        setDropDownLeft(_px - _fx)
+        setDropDownWidth(_w)
+      }
+
       setVisible(true)
     })
   }

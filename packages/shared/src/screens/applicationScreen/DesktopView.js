@@ -29,6 +29,7 @@ const DesktopView = ({
   getContainerWidth,
   containerWidth,
   handleValueChanged,
+  handleDelete,
   containerRef,
   getCTAStatus,
   getDropdownData,
@@ -66,6 +67,7 @@ const DesktopView = ({
               dropdownWidth={dropdownWidth}
               uploadDocs={uploadDocs}
               hasError={hasError}
+              handleDelete={handleDelete}
               handleValueChanged={handleValueChanged}
               setModalFields={setModalFields}
               getDropdownData={getDropdownData}
@@ -161,6 +163,7 @@ const FormFields = ({
   dropdownTop,
   dropdownWidth,
   handleValueChanged,
+  handleDelete,
   containerWidth,
   containerRef,
   getContainerWidth,
@@ -182,6 +185,7 @@ const FormFields = ({
           dropdownLeft,
           dropdownTop,
           dropdownWidth,
+          handleDelete,
           containerWidth,
           handleValueChanged,
           getContainerWidth,
@@ -225,6 +229,7 @@ const renderFields = ({
   dropdownTop,
   dropdownWidth,
   handleValueChanged,
+  handleDelete,
   getContainerWidth,
   getValidatedData,
   getDropdownData,
@@ -250,6 +255,7 @@ const renderFields = ({
           data={item}
           index={sectionIndex}
           setModalFields={setModalFields}
+          handleDelete={handleDelete}
         />
       ) : (
         <View
@@ -429,7 +435,7 @@ const renderFields = ({
   }
 }
 
-const ModelContainer = ({ data, index, setModalFields }) => {
+const ModelContainer = ({ data, index, setModalFields, handleDelete }) => {
   const { colors } = useTheme()
   const [tabs, setTabs] = useState([])
   const [listItems, setListItems] = useState({})
@@ -459,6 +465,9 @@ const ModelContainer = ({ data, index, setModalFields }) => {
         setListItems(listItem)
         tabsData.push('delete')
         setTabs(tabsData)
+      } else {
+        setTabs([])
+        setListItems({})
       }
     }
   }, [data?.modelFieldValues])
@@ -508,22 +517,35 @@ const ModelContainer = ({ data, index, setModalFields }) => {
         </Text>
       ) : null}
       {tabs?.length > 0 ? (
-        <ModalTabSection tabs={tabs} data={listItems} />
+        <ModalTabSection
+          tabs={tabs}
+          data={listItems}
+          allData={data}
+          handleDelete={handleDelete}
+        />
       ) : null}
     </View>
   )
 }
 
-const ModalTabSection = ({ tabs, data }) => {
+const ModalTabSection = ({ tabs, data, handleDelete, allData }) => {
   const { colors } = useTheme()
   return (
     <ScrollView
       style={{ flexDirection: 'row' }}
       horizontal
+      contentContainerStyle={{
+        flex: 1,
+        paddingHorizontal: 10,
+      }}
       showsHorizontalScrollIndicator={false}
     >
       <View>
-        <View style={{ flexDirection: 'row' }}>
+        <View
+          style={{
+            flexDirection: 'row',
+          }}
+        >
           {tabs?.map((item, index) => {
             return (
               <Tab
@@ -550,16 +572,19 @@ const ModalTabSection = ({ tabs, data }) => {
                     return (
                       <View
                         style={{
-                          alignItems: 'flex-end',
-                          flex: 1,
+                          alignItems: 'center',
                           padding: 8,
-                          minHeight: 50,
+                          borderColor: '#D4D4D4',
+                          borderWidth: 1,
                         }}
                       >
                         <Button
                           label="Delete"
                           appearance="outline"
-                          buttonStyle={{ height: 32 }}
+                          buttonStyle={{ height: 20, padding: 15 }}
+                          onPress={() => {
+                            handleDelete({ index, data, value, key, allData })
+                          }}
                         />
                       </View>
                     )
@@ -577,8 +602,7 @@ const ModalTabSection = ({ tabs, data }) => {
                     <View
                       style={{
                         borderColor: '#D4D4D4',
-                        borderBottomWidth: 1,
-                        borderRightWidth: 1,
+                        borderWidth: 1,
                         marginBottom: index === value.length - 1 ? 10 : 0,
                         padding: 8,
                         minHeight: 50,
@@ -609,7 +633,7 @@ const DownLoadLinkContainer = ({ index, title, value }) => {
     <TouchableOpacity
       style={{
         borderColor: '#D4D4D4',
-        borderBottomWidth: 1,
+        borderWidth: 1,
         borderRightWidth: 1,
         marginBottom: index === value.length - 1 ? 10 : 0,
         padding: 8,
@@ -956,14 +980,13 @@ const styles = StyleSheet.create({
   activeTab: {
     padding: 12,
     borderColor: '#D4D4D4',
-    borderBottomWidth: 1,
+    borderWidth: 1,
     width: 191,
   },
   unActiveTab: {
     padding: 12,
     borderColor: '#D4D4D4',
-    borderBottomWidth: 1,
-    borderRightWidth: 1,
+    borderWidth: 1,
     width: 191,
   },
   header: {
@@ -971,8 +994,7 @@ const styles = StyleSheet.create({
   },
   modalTab: {
     borderColor: '#D4D4D4',
-    borderBottomWidth: 1,
-    borderRightWidth: 1,
+    borderWidth: 1,
     marginTop: 10,
     padding: 8,
     width: 188,

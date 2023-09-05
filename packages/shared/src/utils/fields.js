@@ -388,11 +388,10 @@ export const fieldData = {
         modelFields: [
           {
             label: 'Academic Institution',
-            name: 'academicInstitution',
+            name: 'institutionNameIfNotFound',
             type: 'textField',
-            fieldName: 'academicInstitution',
+            fieldName: 'institutionNameIfNotFound',
             inputType: 'string',
-            mandatory: true,
             selectedValue: '',
           },
           {
@@ -551,7 +550,7 @@ export const fieldData = {
         modelFields: [
           {
             label: 'Clinic/Hospital',
-            name: 'clinicOrHospital',
+            name: 'Clinic_Hospital__c',
             type: 'textField',
             fieldName: 'Clinic_Hospital__c',
             inputType: 'string',
@@ -559,7 +558,7 @@ export const fieldData = {
           },
           {
             label: 'Clinical Experience Role',
-            name: 'clinicalExperienceRole',
+            name: 'Clinical_Experience_Role_Responsility__c',
             type: 'textField',
             fieldName: 'Clinical_Experience_Role_Responsility__c',
             inputType: 'string',
@@ -567,7 +566,7 @@ export const fieldData = {
           },
           {
             label: 'Clinical Experience Hours Completed',
-            name: 'clinicalExperienceHoursCompleted',
+            name: 'Clinical_Experience_Hours_Completed__c',
             type: 'textField',
             inputType: 'string',
             fieldName: 'Clinical_Experience_Hours_Completed__c',

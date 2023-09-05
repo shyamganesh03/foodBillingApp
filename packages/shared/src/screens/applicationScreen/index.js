@@ -11,6 +11,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { fieldData } from '../../utils/fields'
 import { useDropDownData } from '../../hooks/useDropDownData'
 import {
+  deleteListItem,
   getApplicationByEmailID,
   getApplicationByID,
   getApplicationDetailsByID,
@@ -44,7 +45,7 @@ const Application = (props) => {
     errorMessage2: '',
   })
   const containerRef = useRef()
-  const { applicationId = 'a3l0X000000G1zsQAC' } = props.route.params
+  const { id } = props.route.params
   const paramsData = props.route.params
   const isFocused = useIsFocused()
 
@@ -53,7 +54,7 @@ const Application = (props) => {
       queryKey: ['getApplicationDetails'],
       queryFn: async () => {
         const response = await getApplicationByID({
-          applicationId,
+          applicationId: id,
         })
         const formDataCopy = formData
         formDataCopy.step1.sections[1].fields[0].selectedValue =
@@ -64,6 +65,8 @@ const Application = (props) => {
           response.First_Name__c
         return response
       },
+      enabled: !!id,
+      initialData: [],
     })
 
   const { data, refetch, isFetching } = useQuery({
@@ -71,24 +74,26 @@ const Application = (props) => {
     queryFn: async () => {
       const formDataCopy = { ...formData }
       const responseData = await getApplicationByEmailID({
-        email: applicationDetails?.Email__c,
+        email: paramsData?.email || applicationDetails?.Email__c,
       })
 
       for (const step in formDataCopy) {
         if (formDataCopy.hasOwnProperty(step)) {
           const sections = formDataCopy[step]?.sections
+          let listIds = []
           if (sections) {
             for (const section of sections) {
               const fields = section?.fields
               if (section.type === 'model') {
                 const transformedData = {}
-
                 if (responseData[section.fieldName]?.length > 0) {
-                  responseData[section.fieldName].forEach((item) => {
+                  responseData[section.fieldName].forEach((item, index) => {
+                    listIds.push(item?.id || index.toString())
                     for (const key in item) {
                       if (!transformedData[key]) {
                         transformedData[key] = []
                       }
+
                       transformedData[key].push(item[key])
                     }
                   })
@@ -124,10 +129,13 @@ const Application = (props) => {
                       [item?.fieldName]: transformedData[item?.fieldName],
                     }
                   })
+                  section.listIDs = listIds //[...new Set(listIds)]
                   section.modelFieldValues = {
                     ...formattedTransformedData,
                     empty,
                   }
+                } else {
+                  section.modelFieldValues = {}
                 }
               } else if (fields) {
                 fields.forEach((field) => {
@@ -145,7 +153,7 @@ const Application = (props) => {
       setFormData(formDataCopy)
       return responseData
     },
-    enabled: !!applicationDetails?.Email__c,
+    enabled: !!paramsData?.email || !!applicationDetails?.Email__c,
     initialData: [],
   })
 
@@ -177,7 +185,7 @@ const Application = (props) => {
 
       // Assuming response contains the 'data' property with the array of data
       const response = await getApplicationFileByID({
-        Id: applicationId,
+        Id: id || 'a00S000000CUiQrIAL',
       })
 
       // Transform the data
@@ -193,7 +201,7 @@ const Application = (props) => {
       return response.records
     },
     initialData: [],
-    enabled: isFocused && !!applicationId,
+    enabled: isFocused && !!id,
   })
 
   const toggleDropdown = (visible, ref) => {
@@ -304,7 +312,7 @@ const Application = (props) => {
     setShowLoader(true)
 
     // Create an initial payload object with the email field.
-    let payload = { email: applicationDetails?.Email__c }
+    let payload = { email: paramsData?.email || applicationDetails?.Email__c }
     let modalPayload
 
     // Iterate through the sections in submittedData.
@@ -351,18 +359,14 @@ const Application = (props) => {
       ) {
         const sectionData = section.selectedValue
         let newSectionDate
-        if (section?.title === 'University/College Information') {
-          newSectionDate = {
-            ...sectionData,
-            academicInstitution: 'Alexandria University',
-            academicInstitutionId: 'a054P000010xoVgQAI',
-          }
-        } else {
-          newSectionDate = {
-            ...sectionData,
-          }
+
+        newSectionDate = {
+          ...sectionData,
         }
-        modalPayload = { email: !!applicationDetails?.Email__c }
+
+        modalPayload = {
+          email: paramsData?.email || !!applicationDetails?.Email__c,
+        }
         modalPayload = {
           ...modalPayload,
           [section.fieldName]: [newSectionDate],
@@ -373,11 +377,13 @@ const Application = (props) => {
     if (type === 'initial' || type === 'initialSave') {
       const initialPayload = {
         ...payload,
-        firstName: applicationDetails?.First_Name__c,
-        lastName: applicationDetails?.Last_Name__c,
-        phoneNumber: applicationDetails?.Phone_Number_Emergency__c,
-        email: applicationDetails?.Email__c,
-        gusApplicationId: applicationId,
+        firstName: paramsData?.firstName || applicationDetails?.First_Name__c,
+        lastName: paramsData?.lastName || applicationDetails?.Last_Name__c,
+        phoneNumber:
+          paramsData?.phoneNumber ||
+          applicationDetails?.Phone_Number_Emergency__c,
+        email: paramsData?.email || applicationDetails?.Email__c,
+        gusApplicationId: id,
         universityOrCollegeInfo: [],
         AAMCMCATReporting: [],
         clinicalOrHospitalExperienceDetails: [],
@@ -427,34 +433,41 @@ const Application = (props) => {
       }
       setShowLoader(true)
       if (!data?.email) {
-        const response = await submitApplication(initialPayload)
-        if (response.statusCode !== 201) {
-          setShowLoader(false)
-          return
-        }
+        await submitApplication(initialPayload)
         // refetch updated Data
         await refetch()
         setShowLoader(false)
-        setActiveTab(activeTab + 1)
+        if (type !== 'initialSave') setActiveTab(activeTab + 1)
         return
       }
     }
     // Update the application with the payload.
-    await updateApplication(modalPayload || payload)
-    // If it's a 'Submit' type, submit the application with the submitPayload.
+    const updateResponse = await updateApplication(modalPayload || payload)
+    if (updateResponse?.message[0]?.message) {
+      setHasError({
+        ...hasError,
+        errorMessage1: `* ${updateResponse?.message[0]?.message}`,
+      })
+    }
     if (type === 'Submit') {
+      // If it's a 'Submit' type, submit the application with the submitPayload.
       // Define a submitPayload object for 'Submit' type.
       const submitPayload = {
-        firstName: formData.step1.sections[0].fields[0].selectedValue || '',
-        lastName: formData.step1.sections[0].fields[2].selectedValue || '',
-        phoneNumber: formData.step1.sections[1].fields[1].selectedValue || '',
-        email: paramsData?.email,
+        firstName: paramsData?.firstName || applicationDetails?.First_Name__c,
+        lastName: paramsData?.lastName || applicationDetails?.Last_Name__c,
+        phoneNumber:
+          paramsData?.phoneNumber ||
+          applicationDetails?.Phone_Number_Emergency__c,
+        email: paramsData?.email || applicationDetails?.Email__c,
         canTextToMobile:
           formData.step1.sections[1].fields[8].selectedValue || '',
         firstChoiceSchool:
-          formData.step0.sections[1].fields[0].selectedValue || '',
+          formData.step0.sections[1].fields[0].selectedValue ||
+          formData.step0.sections[1].fields[0].selectedValue.name ||
+          '',
       }
       await submitApplication(submitPayload)
+      setShowLoader(false)
     } else {
       // Handle 'saveAndNext' and other types.
       if (type === 'saveAndNext' || type === 'initial') {
@@ -558,6 +571,18 @@ const Application = (props) => {
     }
   }
 
+  const handleDelete = async ({ index, allData }) => {
+    setShowLoader(true)
+    const payload = {
+      email: paramsData?.email || applicationDetails?.Email__c,
+      type: allData?.fieldName,
+      id: allData?.listIDs[index],
+    }
+    await deleteListItem(payload)
+    await refetch()
+    setShowLoader(false)
+  }
+
   const getCTAStatus = (tabIndex) => {
     if (
       (isCTADisabled ||
@@ -573,7 +598,7 @@ const Application = (props) => {
     setShowLoader(true)
     await uploadFile({
       ...fileData,
-      applicationId: applicationId,
+      applicationId: data?.r3ApplicationId,
     })
     await refetchDocument()
     setShowLoader(false)
@@ -599,6 +624,7 @@ const Application = (props) => {
     getValidatedData,
     handleSave,
     handleValueChanged,
+    handleDelete,
     uploadDocs,
     setActiveTab,
     setModalFields,

@@ -15,7 +15,8 @@ export const apiCall = async (url, options) => {
     const response = await fetch(`${apiUrl}/${url}`, requestOptions)
 
     if (!response.ok) {
-      return response
+      const errorData = await response.json()
+      return errorData
     }
 
     try {
@@ -24,7 +25,8 @@ export const apiCall = async (url, options) => {
         return data
       }
     } catch (error) {
-      return response
+      const errorData = await response.json()
+      return errorData
     }
   } catch (error) {
     return error
@@ -66,5 +68,11 @@ export const getApplicationFileByID = async (payload) =>
 export const uploadFile = async (payload) =>
   apiCall(`application/file`, {
     method: 'POST',
+    payload,
+  })
+
+export const deleteListItem = async (payload) =>
+  apiCall(`record`, {
+    method: 'DELETE',
     payload,
   })

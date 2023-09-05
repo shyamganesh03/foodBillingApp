@@ -164,7 +164,8 @@ const DropDown = (props) => {
             >
               <Animated.ScrollView
                 style={{
-                  maxHeight: dropDownAnim,
+                  minHeight: 115,
+                  maxHeight: 200,
                 }}
                 showsVerticalScrollIndicator={false}
               >

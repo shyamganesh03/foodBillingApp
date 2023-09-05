@@ -43,7 +43,7 @@ const ModelComponent = ({
           backgroundColor: 'rgba(107,106,106, 0.6)',
           position: 'relative',
           alignItems: 'center',
-          justifyContent: 'center',
+          paddingTop: '10%',
         }}
       >
         <View
@@ -135,6 +135,7 @@ const ModelComponent = ({
                     title={fieldItem.label}
                     style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                     isMandatory={fieldItem.mandatory}
+                    isModal
                     onChangeText={(selectedDate) =>
                       handleValueChanged({
                         selectedValue: selectedDate,
