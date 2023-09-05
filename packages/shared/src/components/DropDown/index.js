@@ -28,7 +28,6 @@ const DropDown = (props) => {
     selectedItem,
     style,
     dropdownWidth,
-    dropdownHeight = 115,
   } = props
 
   const DropdownButton = useRef()
@@ -38,7 +37,13 @@ const DropDown = (props) => {
   const dropDownAnim = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
+    let dropdownHeight
     if (showDropDown) {
+      if (items.length > 4) {
+        dropdownHeight = 200
+      } else {
+        dropdownHeight = 150
+      }
       Animated.timing(dropDownAnim, {
         toValue: dropdownHeight,
         duration: 100,
@@ -155,19 +160,18 @@ const DropDown = (props) => {
             style={{ flex: 1 }}
             onPress={() => handleDropDownClose()}
           >
-            <View
-              style={[
-                styles.dropDownList,
-                position,
-                { width: dropdownWidth || '' },
-              ]}
+            <Animated.ScrollView
+              style={{
+                height: dropDownAnim,
+              }}
+              showsVerticalScrollIndicator={false}
             >
-              <Animated.ScrollView
-                style={{
-                  minHeight: 115,
-                  maxHeight: 200,
-                }}
-                showsVerticalScrollIndicator={false}
+              <View
+                style={[
+                  styles.dropDownList,
+                  position,
+                  { width: dropdownWidth || '' },
+                ]}
               >
                 {items?.map((item, index) => (
                   <DropDownItem
@@ -180,8 +184,8 @@ const DropDown = (props) => {
                     onPress={onPress}
                   />
                 ))}
-              </Animated.ScrollView>
-            </View>
+              </View>
+            </Animated.ScrollView>
           </TouchableOpacity>
         </Modal>
       ) : null}

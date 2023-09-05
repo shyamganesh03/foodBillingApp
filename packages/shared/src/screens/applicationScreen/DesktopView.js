@@ -14,6 +14,7 @@ import { Loader } from '../../components'
 import { Icon } from '@r3-oaf/native-icons'
 
 const DesktopView = ({
+  setIsFileSuccess,
   activeTab,
   dropdownLeft,
   dropdownTop,
@@ -21,6 +22,7 @@ const DesktopView = ({
   modalFields,
   showLoader,
   hasError,
+  isFileSuccess,
   isCTADisabled,
   uploadDocs,
   formData,
@@ -60,6 +62,8 @@ const DesktopView = ({
           />
           <View style={{ flex: 1 }}>
             <FormFields
+              setIsFileSuccess={setIsFileSuccess}
+              isSuccess={isFileSuccess}
               activeTab={activeTab}
               fieldData={formData}
               dropdownLeft={dropdownLeft}
@@ -155,6 +159,8 @@ const DesktopView = ({
 }
 
 const FormFields = ({
+  setIsFileSuccess,
+  isSuccess,
   activeTab,
   hasError,
   colors,
@@ -177,6 +183,8 @@ const FormFields = ({
     <View style={{ flex: 1, padding: 12 }}>
       {Object.entries(fieldData)?.map(([step, session]) => {
         return renderFields({
+          setIsFileSuccess,
+          isSuccess,
           activeTab,
           colors,
           session,
@@ -219,6 +227,8 @@ const FormFields = ({
 }
 
 const renderFields = ({
+  setIsFileSuccess,
+  isSuccess,
   activeTab,
   colors,
   session,
@@ -422,6 +432,8 @@ const renderFields = ({
                       <FilePicker
                         heading={fieldItem.label}
                         uploadFile={uploadDocs}
+                        isSuccess={isSuccess}
+                        setIsFileSuccess={setIsFileSuccess}
                       />
                     )
                   }

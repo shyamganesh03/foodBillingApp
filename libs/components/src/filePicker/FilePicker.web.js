@@ -7,6 +7,7 @@ import { View } from 'react-native'
 import { Modal } from 'react-native'
 
 const FilePicker = ({
+  setIsFileSuccess,
   heading = '',
   isMandatory,
   uploadFile = () => {},
@@ -147,12 +148,19 @@ const FilePicker = ({
         setShowModalDetails={setFileModalDetails}
         modalDetails={fileModalDetails}
         isSuccess={isSuccess}
+        setIsFileSuccess={setIsFileSuccess}
       />
     </View>
   )
 }
 
-const FileModal = ({ count, setShowModalDetails, modalDetails, isSuccess }) => {
+const FileModal = ({
+  count,
+  setShowModalDetails,
+  modalDetails,
+  isSuccess,
+  setIsFileSuccess,
+}) => {
   const { colors } = useTheme()
   return (
     <Modal transparent visible={modalDetails.isVisible}>
@@ -197,7 +205,7 @@ const FileModal = ({ count, setShowModalDetails, modalDetails, isSuccess }) => {
                 alignItems: 'center',
               }}
             >
-              <ProgressBar hideTitle percentage={10} />
+              <ProgressBar hideTitle percentage={100} />
               {isSuccess ? (
                 <View
                   style={{
@@ -254,12 +262,13 @@ const FileModal = ({ count, setShowModalDetails, modalDetails, isSuccess }) => {
             <Button
               label="Done"
               buttonStyle={{ marginLeft: 10 }}
-              onPress={() =>
+              onPress={() => {
                 setShowModalDetails({
                   ...modalDetails,
                   isVisible: false,
                 })
-              }
+                setIsFileSuccess(false)
+              }}
               labelColors={colors.white}
             />
           </View>

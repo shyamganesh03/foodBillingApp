@@ -27,6 +27,7 @@ const Application = (props) => {
   const [dropdownTop, setDropdownTop] = useState(0)
   const [dropdownLeft, setDropdownLeft] = useState(0)
   const [dropdownWidth, setDropDownWidth] = useState(0)
+  const [isFileSuccess, setIsFileSuccess] = useState(false)
   const [modalFields, setModalFields] = useState({
     isModelVisible: false,
     direction: 'row',
@@ -185,7 +186,7 @@ const Application = (props) => {
 
       // Assuming response contains the 'data' property with the array of data
       const response = await getApplicationFileByID({
-        Id: id || 'a00S000000CUiQrIAL',
+        Id: data?.r3ApplicationId,
       })
 
       // Transform the data
@@ -595,16 +596,17 @@ const Application = (props) => {
   }
 
   const uploadDocs = async (fileData) => {
-    setShowLoader(true)
     await uploadFile({
       ...fileData,
       applicationId: data?.r3ApplicationId,
     })
     await refetchDocument()
-    setShowLoader(false)
+    setIsFileSuccess(true)
   }
 
   const viewProps = {
+    setIsFileSuccess,
+    isFileSuccess,
     activeTab,
     containerRef,
     containerWidth,
