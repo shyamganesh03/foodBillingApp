@@ -6,19 +6,10 @@ import {
   View,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import {
-  Button,
-  CheckBox,
-  DateInput,
-  DropDown,
-  ModelComponent,
-  Text,
-  TextInput,
-} from '../../components'
+import { CheckBox, DateInput, DropDown, ModelComponent } from '../../components'
 import { useTheme } from '@react-navigation/native'
 import { universityLogo } from '@oap/assets'
-import { FilePicker } from '@libs/components'
-import { getDropdownData } from '../../api'
+import { FilePicker, Button, Text, TextInput } from '@libs/components'
 import { Loader } from '../../components'
 import { Icon } from '@r3-oaf/native-icons'
 
@@ -31,6 +22,7 @@ const DesktopView = ({
   showLoader,
   hasError,
   isCTADisabled,
+  uploadDocs,
   formData,
   handleSave,
   getValidatedData,
@@ -72,6 +64,7 @@ const DesktopView = ({
               dropdownLeft={dropdownLeft}
               dropdownTop={dropdownTop}
               dropdownWidth={dropdownWidth}
+              uploadDocs={uploadDocs}
               hasError={hasError}
               handleValueChanged={handleValueChanged}
               setModalFields={setModalFields}
@@ -175,6 +168,7 @@ const FormFields = ({
   getDropdownData,
   setModalFields,
   toggleDropdown,
+  uploadDocs,
 }) => {
   return (
     <View style={{ flex: 1, padding: 12 }}>
@@ -195,6 +189,7 @@ const FormFields = ({
           getDropdownData,
           setModalFields,
           toggleDropdown,
+          uploadDocs,
         })
       })}
       {hasError.errorMessage1 ? (
@@ -235,6 +230,7 @@ const renderFields = ({
   getDropdownData,
   setModalFields,
   toggleDropdown,
+  uploadDocs,
 }) => {
   const stepValue = parseInt(step.replace('step', ''))
   if (stepValue === activeTab) {
@@ -411,7 +407,12 @@ const renderFields = ({
                     )
                   }
                   if (fieldItem?.type === 'attachDocument') {
-                    return <FilePicker heading={fieldItem.label} />
+                    return (
+                      <FilePicker
+                        heading={fieldItem.label}
+                        uploadFile={uploadDocs}
+                      />
+                    )
                   }
                 })}
               </View>
@@ -427,10 +428,8 @@ const ModelContainer = ({ data, index, setModalFields }) => {
   const { colors } = useTheme()
   const [tabs, setTabs] = useState([])
   const [listItems, setListItems] = useState({})
-
   useEffect(() => {
     if (data?.modelFieldValues) {
-      console.log({ data2: data?.modelFieldValues })
       const keys = Object.keys(data?.modelFieldValues)
       if (keys.length > 1) {
         let tabsData = []
@@ -457,7 +456,7 @@ const ModelContainer = ({ data, index, setModalFields }) => {
         setTabs(tabsData)
       }
     }
-  }, [])
+  }, [data?.modelFieldValues])
   return (
     <View
       style={[
@@ -511,7 +510,7 @@ const ModelContainer = ({ data, index, setModalFields }) => {
 }
 
 const ModalTabSection = ({ tabs, data }) => {
-  console.log({ data })
+  const { colors } = useTheme()
   return (
     <ScrollView
       style={{ flexDirection: 'row' }}
@@ -560,6 +559,15 @@ const ModalTabSection = ({ tabs, data }) => {
                       </View>
                     )
                   }
+                  if (item?.title === 'download') {
+                    return (
+                      <DownLoadLinkContainer
+                        index={index}
+                        title={item?.title}
+                        value={value}
+                      />
+                    )
+                  }
                   return (
                     <View
                       style={{
@@ -587,6 +595,33 @@ const ModalTabSection = ({ tabs, data }) => {
         </View>
       </View>
     </ScrollView>
+  )
+}
+
+const DownLoadLinkContainer = ({ index, title, value }) => {
+  const [onHover, setOnHover] = useState(false)
+  return (
+    <TouchableOpacity
+      style={{
+        borderColor: '#D4D4D4',
+        borderBottomWidth: 1,
+        borderRightWidth: 1,
+        marginBottom: index === value.length - 1 ? 10 : 0,
+        padding: 8,
+        minHeight: 50,
+        width: 188,
+      }}
+      onMouseEnter={() => setOnHover(true)}
+      onMouseLeave={() => setOnHover(false)}
+    >
+      <Text
+        variant="body3"
+        style={{ textDecoration: onHover ? 'underline' : 'none' }}
+        color={onHover ? '#135F90' : '#3558D6'}
+      >
+        {title}
+      </Text>
+    </TouchableOpacity>
   )
 }
 

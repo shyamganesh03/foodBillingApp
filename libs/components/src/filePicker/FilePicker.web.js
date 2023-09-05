@@ -1,17 +1,68 @@
 import { Icon } from '@r3-oaf/native-icons'
-import { Text } from '@libs/components'
+import { Button, Divider, ProgressBar, Text } from '@libs/components'
 import { useTheme } from '@react-navigation/native'
-import React from 'react'
-import { FileUploader } from 'react-drag-drop-files'
+import React, { useRef, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { View } from 'react-native'
+import { Modal } from 'react-native'
 
-const FilePicker = ({ heading = '', isMandatory }) => {
+const FilePicker = ({
+  heading = '',
+  isMandatory,
+  uploadFile = () => {},
+  isSuccess,
+}) => {
   const { colors } = useTheme()
-  const fileTypes = ['PNG', 'JPG', 'GIF']
+  const [fileModalDetails, setFileModalDetails] = useState({
+    isVisible: false,
+    image: '',
+    name: '',
+    fileSize: '',
+  })
+  const documentRef = useRef()
 
-  const handleFilePicker = (file) => {
-    console.log('worked', { file })
+  const handleDragOver = (event) => {
+    event.preventDefault()
+  }
+  const handleDrop = async (event) => {
+    event.preventDefault()
+    const file = event.dataTransfer.files[0]
+    setFileModalDetails({
+      isVisible: true,
+      image: '',
+      name: file.name,
+      fileSize: `${file.size} b`,
+    })
+    const base64Docs = await getBase64(file)
+    uploadFile({
+      file: base64Docs.split(',')[1],
+      path: file.name,
+      pathName: file.name.split('.')[0],
+    })
+  }
+
+  const getBase64 = async (f) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(f)
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = (error) => reject(error)
+    })
+
+  const handleFilePicker = async (event) => {
+    const file = event.target.files[0]
+    setFileModalDetails({
+      isVisible: true,
+      image: '',
+      name: file.name,
+      fileSize: `${file.size} b`,
+    })
+    const base64Docs = await getBase64(file)
+    uploadFile({
+      file: base64Docs.split(',')[1],
+      path: file.name,
+      pathName: file.name.split('.')[0],
+    })
   }
 
   return (
@@ -24,10 +75,12 @@ const FilePicker = ({ heading = '', isMandatory }) => {
           </Text>
         ) : null}
       </Text>
-      <FileUploader
-        handleChange={handleFilePicker}
-        name="file"
-        types={fileTypes}
+      <form
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        onSubmit={(e) => {
+          handleFilePicker(e)
+        }}
       >
         <View
           style={{
@@ -54,7 +107,9 @@ const FilePicker = ({ heading = '', isMandatory }) => {
                   alignItems: 'center',
                   flexDirection: 'row',
                 }}
-                onPress={handleFilePicker}
+                onPress={() => {
+                  documentRef.current.click()
+                }}
               >
                 <Icon
                   name="Download"
@@ -79,8 +134,138 @@ const FilePicker = ({ heading = '', isMandatory }) => {
             </View>
           </View>
         </View>
-      </FileUploader>
+        <input
+          type="file"
+          ref={documentRef}
+          style={{ display: 'none' }}
+          onChange={(e) => {
+            handleFilePicker(e)
+          }}
+        />
+      </form>
+      <FileModal
+        setShowModalDetails={setFileModalDetails}
+        modalDetails={fileModalDetails}
+        isSuccess={isSuccess}
+      />
     </View>
+  )
+}
+
+const FileModal = ({ count, setShowModalDetails, modalDetails, isSuccess }) => {
+  const { colors } = useTheme()
+  return (
+    <Modal transparent visible={modalDetails.isVisible}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'rgba(107,106,106, 0.6)',
+          position: 'relative',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <View
+          style={{
+            position: 'absolute',
+            backgroundColor: colors.white,
+            width: '40%',
+            paddingBottom: 16,
+          }}
+        >
+          <View style={{ padding: 16, alignItems: 'center' }}>
+            <Text variant="display1">Upload Files</Text>
+          </View>
+          <Divider />
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              padding: 16,
+              position: 'relative',
+              justifyContent: 'space-between',
+            }}
+          >
+            <View style={{ flexDirection: 'column' }}>
+              <Text variant="body2">{modalDetails.name}</Text>
+              <Text variant="body2">{modalDetails.fileSize}</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <ProgressBar hideTitle percentage={10} />
+              {isSuccess ? (
+                <View
+                  style={{
+                    height: 20,
+                    width: 20,
+                    borderRadius: 10,
+                    backgroundColor: 'green',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: 10,
+                  }}
+                >
+                  <Icon
+                    name="Check"
+                    height={15}
+                    width={15}
+                    color={colors.white}
+                  />
+                </View>
+              ) : (
+                <View
+                  style={{
+                    height: 12,
+                    width: 12,
+                    borderRadius: 10,
+                    backgroundColor: 'rgb(114,114,114)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: 10,
+                  }}
+                >
+                  <Icon
+                    name="Close"
+                    height={6}
+                    width={6}
+                    color={colors.white}
+                  />
+                </View>
+              )}
+            </View>
+          </View>
+          <Divider />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingTop: 16,
+              paddingHorizontal: 16,
+            }}
+          >
+            <Text variant="body2">{`${
+              isSuccess ? 1 : 0
+            } of 1 file upload`}</Text>
+            <Button
+              label="Done"
+              buttonStyle={{ marginLeft: 10 }}
+              onPress={() =>
+                setShowModalDetails({
+                  ...modalDetails,
+                  isVisible: false,
+                })
+              }
+              labelColors={colors.white}
+            />
+          </View>
+        </View>
+      </View>
+    </Modal>
   )
 }
 

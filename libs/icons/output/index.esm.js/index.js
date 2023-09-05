@@ -19,7 +19,7 @@ const SvgArrowNarrowLeft = (props) =>
     ),
     /*#__PURE__*/ React.createElement(Path, {
       d: 'M8.333 6.667 5 10m0 0 3.333 3.333M5 10h10',
-      stroke: props?.color || '#0A0A0A',
+      stroke: props.color || '#0A0A0A',
       strokeWidth: 1.5,
       strokeLinecap: 'round',
       strokeLinejoin: 'round',
@@ -127,6 +127,26 @@ const SvgCheck = (props) =>
       strokeWidth: 1.5,
       strokeLinecap: 'round',
       strokeLinejoin: 'round',
+    }),
+  )
+
+const SvgClose = (props) =>
+  /*#__PURE__*/ React.createElement(
+    Svg,
+    _extends(
+      {
+        className: 'close_svg__slds-icon close_svg__slds-icon_xx-small',
+        'data-key': 'close',
+        'aria-hidden': 'true',
+        viewBox: '0 0 52 52',
+        width: 24,
+        height: 24,
+      },
+      props,
+    ),
+    /*#__PURE__*/ React.createElement(Path, {
+      d: 'm31 25.4 13-13.1c.6-.6.6-1.5 0-2.1l-2-2.1c-.6-.6-1.5-.6-2.1 0L26.8 21.2c-.4.4-1 .4-1.4 0L12.3 8c-.6-.6-1.5-.6-2.1 0l-2.1 2.1c-.6.6-.6 1.5 0 2.1l13.1 13.1c.4.4.4 1 0 1.4L8 39.9c-.6.6-.6 1.5 0 2.1l2.1 2.1c.6.6 1.5.6 2.1 0L25.3 31c.4-.4 1-.4 1.4 0l13.1 13.1c.6.6 1.5.6 2.1 0L44 42c.6-.6.6-1.5 0-2.1L31 26.8c-.4-.4-.4-1 0-1.4z',
+      fill: props.color || '#ffffff',
     }),
   )
 
@@ -250,6 +270,9 @@ const Icon = (props) => {
   if (props.name === 'Check') {
     return /*#__PURE__*/ React__default.createElement(SvgCheck, props)
   }
+  if (props.name === 'Close') {
+    return /*#__PURE__*/ React__default.createElement(SvgClose, props)
+  }
   if (props.name === 'Download') {
     return /*#__PURE__*/ React__default.createElement(SvgDownload, props)
   }
@@ -271,6 +294,7 @@ Icon.propTypes = {
     'Calendar',
     'CalenderFilled',
     'Check',
+    'Close',
     'Download',
     'EyeOff',
     'Eye',

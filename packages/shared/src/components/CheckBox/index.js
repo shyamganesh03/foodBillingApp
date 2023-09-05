@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useTheme } from '@react-navigation/native'
 import { Icon } from '@r3-oaf/native-icons'
 import { spacing } from '@libs/theme'
-import Text from '../Text'
+import { Text } from '@libs/components'
 
 const CheckBox = ({
   checkedStatus,
@@ -36,22 +36,19 @@ const CheckBox = ({
 
   const { colors } = useTheme()
   return (
-    <TouchableOpacity
-      onPress={() => {
-        setIsChecked(!isChecked)
-        handleCheck(!isChecked, field, label, value)
-      }}
-      style={[styles(colors).checkBoxContainer, style]}
-      key={itemIndex}
-    >
-      <View
+    <View style={[styles(colors).checkBoxContainer, style]} key={itemIndex}>
+      <TouchableOpacity
+        onPress={() => {
+          setIsChecked(!isChecked)
+          handleCheck(!isChecked, field, label, value)
+        }}
         style={[
           styles(colors).checkBox,
           { backgroundColor: isChecked ? colors.primary : 'transparent' },
         ]}
       >
         {isChecked && <Icon name="Check" color={colors.white} />}
-      </View>
+      </TouchableOpacity>
       <Text
         variant="display4"
         color={labelColor}
@@ -59,7 +56,7 @@ const CheckBox = ({
       >
         {label}
       </Text>
-    </TouchableOpacity>
+    </View>
   )
 }
 

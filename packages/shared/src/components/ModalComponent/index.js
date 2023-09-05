@@ -1,12 +1,9 @@
 import { View, Modal } from 'react-native'
 import React from 'react'
-import Text from '../Text'
 import DropDown from '../DropDown'
-import TextInput from '../TextInput'
 import DateInput from '../DateInput'
 import { useTheme } from '@react-navigation/native'
-import Divider from '../Divider'
-import Button from '../Button'
+import { Divider, Button, Text, TextInput } from '@libs/components'
 
 const ModelComponent = ({
   data,

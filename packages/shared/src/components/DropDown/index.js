@@ -9,8 +9,8 @@ import {
 } from 'react-native'
 import { useIsFocused, useTheme } from '@react-navigation/native'
 import { Icon } from '@r3-oaf/native-icons'
-import Text from '../Text'
 import { styles } from './styles'
+import { Text } from '@libs/components'
 
 const DropDown = (props) => {
   const {

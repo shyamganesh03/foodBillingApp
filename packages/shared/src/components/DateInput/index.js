@@ -8,11 +8,10 @@ import {
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Calendar } from 'react-native-calendars'
 import { Icon } from '@r3-oaf/native-icons'
-import Text from '../Text'
-import TextInput from '../TextInput'
 import { spacing } from '@libs/theme'
 import { useTheme } from '@react-navigation/native'
 import { Menu, TouchableRipple } from 'react-native-paper'
+import { TextInput, Text } from '@libs/components'
 
 const DateInput = (props) => {
   const {

@@ -739,8 +739,13 @@ export const fieldData = {
       },
       {
         title: 'Attached Files',
+        hasAttachments: true,
         type: 'model',
-        modelFields: [],
+        modelFields: [
+          { label: 'Name' },
+          { label: 'Type' },
+          { label: 'Download' },
+        ],
       },
       {
         title: 'Supplemental Requirements',

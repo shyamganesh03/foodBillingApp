@@ -6,7 +6,6 @@ import React, {
   useState,
 } from 'react'
 import { ScreenLayout } from '@libs/utils'
-import { Text } from '../../components'
 import DesktopView from './DesktopView'
 import { useIsFocused } from '@react-navigation/native'
 import { fieldData } from '../../utils/fields'
@@ -14,12 +13,15 @@ import { useDropDownData } from '../../hooks/useDropDownData'
 import {
   getApplicationByEmailID,
   getApplicationDetailsByID,
+  getApplicationFileByID,
   submitApplication,
   updateApplication,
+  uploadFile,
 } from '../../api'
 import { useQuery } from '@tanstack/react-query'
+import { Text } from '@libs/components'
 
-const Registration = (props) => {
+const Application = (props) => {
   const [dropdownTop, setDropdownTop] = useState(0)
   const [dropdownLeft, setDropdownLeft] = useState(0)
   const [dropdownWidth, setDropDownWidth] = useState(0)
@@ -44,7 +46,7 @@ const Registration = (props) => {
   const paramsData = props.route.params
   const isFocused = useIsFocused()
 
-  const { data, refetch } = useQuery({
+  const { data, refetch, isFetching } = useQuery({
     queryKey: 'getApplicationData',
     queryFn: async () => {
       const formDataCopy = { ...formData }
@@ -92,7 +94,6 @@ const Registration = (props) => {
                         { length: maxValue - 1 },
                         () => 'noData',
                       )
-                      console.log({ emptyArray })
                       transformedData[key] = [...value, ...emptyArray]
                     }
                   })
@@ -126,6 +127,53 @@ const Registration = (props) => {
     },
     enabled: !!paramsData?.email,
     initialData: [],
+  })
+
+  const {
+    data: documentsData,
+    refetch: refetchDocument,
+    isFetching: isDocumentFetching,
+  } = useQuery({
+    queryKey: ['getDocuments'],
+    queryFn: async () => {
+      // Define a function to transform data
+      function transformData(entryData) {
+        const nameArray = entryData.map((entry) => entry.Title || 'Nodata')
+        const typeArray = entryData.map((entry) => entry.FileType || 'NoData')
+        const downloadArray = entryData.map((entry) => {
+          return { title: 'download' }
+        })
+        const empty = entryData.map(() => {
+          return { title: 'empty' }
+        })
+
+        return {
+          Name: nameArray,
+          Type: typeArray,
+          Download: downloadArray,
+          empty,
+        }
+      }
+
+      // Assuming response contains the 'data' property with the array of data
+      const response = await getApplicationFileByID({
+        Id: 'a00S000000CUiQrIAL',
+      })
+
+      // Transform the data
+      const result = transformData(response.records)
+
+      // Update formDataCopy
+      const formDataCopy = { ...formData }
+      formDataCopy.step5.sections[1] = {
+        ...formDataCopy.step5.sections[1],
+        modelFieldValues: result,
+      }
+      setFormData(formDataCopy)
+      return response.records
+    },
+    initialData: [],
+    enabled: isFocused,
   })
 
   const toggleDropdown = (visible, ref) => {
@@ -345,7 +393,6 @@ const Registration = (props) => {
             errorMessage2: '* Please check the above check box to proceed',
           }
         }
-
         setHasError(errorMessage)
         setShowLoader(false)
         if (errorMessage.errorMessage1 || errorMessage.errorMessage2) {
@@ -364,7 +411,6 @@ const Registration = (props) => {
     }
     // Update the application with the payload.
     await updateApplication(modalPayload || payload)
-
     // If it's a 'Submit' type, submit the application with the submitPayload.
     if (type === 'Submit') {
       // Define a submitPayload object for 'Submit' type.
@@ -493,6 +539,16 @@ const Registration = (props) => {
     } else return false
   }
 
+  const uploadDocs = async (fileData) => {
+    setShowLoader(true)
+    await uploadFile({
+      ...fileData,
+      applicationId: 'a00S000000CUiQrIAL',
+    })
+    await refetchDocument()
+    setShowLoader(false)
+  }
+
   const viewProps = {
     activeTab,
     containerRef,
@@ -504,7 +560,7 @@ const Registration = (props) => {
     hasError,
     isCTADisabled,
     modalFields,
-    showLoader,
+    showLoader: showLoader || isFetching || isDocumentFetching,
     tabItems,
     getContainerWidth,
     getCTAStatus,
@@ -512,6 +568,7 @@ const Registration = (props) => {
     getValidatedData,
     handleSave,
     handleValueChanged,
+    uploadDocs,
     setActiveTab,
     setModalFields,
     toggleDropdown,
@@ -528,4 +585,4 @@ const Registration = (props) => {
   )
 }
 
-export default Registration
+export default Application
