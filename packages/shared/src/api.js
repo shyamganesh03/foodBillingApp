@@ -41,6 +41,11 @@ export const getApplicationByEmailID = async (payload) =>
     method: 'GET',
   })
 
+export const getApplicationByID = async (payload) =>
+  apiCall(`application?id=${payload.applicationId}`, {
+    method: 'GET',
+  })
+
 export const updateApplication = async (payload) =>
   apiCall(`application`, {
     method: 'PATCH',

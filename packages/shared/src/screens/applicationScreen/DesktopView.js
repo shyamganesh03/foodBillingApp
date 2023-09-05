@@ -367,6 +367,11 @@ const renderFields = ({
                         title={fieldItem.label}
                         style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                         isMandatory={fieldItem.mandatory}
+                        dob={
+                          fieldItem.label.toLowerCase().includes('birthdate')
+                            ? fieldItem.selectedValue
+                            : ''
+                        }
                         value={fieldItem.selectedValue}
                         onChangeText={(selectedDate) =>
                           handleValueChanged({
@@ -613,6 +618,7 @@ const DownLoadLinkContainer = ({ index, title, value }) => {
       }}
       onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
+      disabled
     >
       <Text
         variant="body3"

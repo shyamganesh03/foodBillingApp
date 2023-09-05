@@ -41,7 +41,7 @@ const DateInput = (props) => {
   const [selectedDate, setSelectedDate] = useState('')
   const minYear = new Date().getFullYear() - 100
   const maxYear = dob
-    ? new Date().getFullYear() - 15
+    ? new Date().getFullYear()
     : new Date().getFullYear() + 100
   const currentYear = new Date().getFullYear()
   const defaultValue =
@@ -103,9 +103,13 @@ const DateInput = (props) => {
     }, 400)
   }, [yearVisible])
 
-  const toggleDropdown = () => (visible ? setVisible(false) : openDropdown())
-  const toggleYearDropdown = () =>
+  const toggleDropdown = () => {
+    visible ? setVisible(false) : openDropdown()
+    setYearVisible(false)
+  }
+  const toggleYearDropdown = () => {
     yearVisible ? setYearVisible(false) : openYearDropdown()
+  }
 
   const openDropdown = () => {
     DropdownButton.current.measure((_fx, _fy, _w, h, _px, py) => {

@@ -12,6 +12,7 @@ import { fieldData } from '../../utils/fields'
 import { useDropDownData } from '../../hooks/useDropDownData'
 import {
   getApplicationByEmailID,
+  getApplicationByID,
   getApplicationDetailsByID,
   getApplicationFileByID,
   submitApplication,
@@ -43,15 +44,34 @@ const Application = (props) => {
     errorMessage2: '',
   })
   const containerRef = useRef()
+  const { applicationId = 'a3l0X000000G1zsQAC' } = props.route.params
   const paramsData = props.route.params
   const isFocused = useIsFocused()
+
+  const { data: applicationDetails, isFetching: isApplicationFetching } =
+    useQuery({
+      queryKey: ['getApplicationDetails'],
+      queryFn: async () => {
+        const response = await getApplicationByID({
+          applicationId,
+        })
+        const formDataCopy = formData
+        formDataCopy.step1.sections[1].fields[0].selectedValue =
+          response.First_Name__c || ''
+        formDataCopy.step1.sections[1].fields[2].selectedValue =
+          response.Last_Name__c || ''
+        formDataCopy.step1.sections[1].fields[0].selectedValue =
+          response.First_Name__c
+        return response
+      },
+    })
 
   const { data, refetch, isFetching } = useQuery({
     queryKey: 'getApplicationData',
     queryFn: async () => {
       const formDataCopy = { ...formData }
       const responseData = await getApplicationByEmailID({
-        email: paramsData?.email,
+        email: applicationDetails?.Email__c,
       })
 
       for (const step in formDataCopy) {
@@ -125,7 +145,7 @@ const Application = (props) => {
       setFormData(formDataCopy)
       return responseData
     },
-    enabled: !!paramsData?.email,
+    enabled: !!applicationDetails?.Email__c,
     initialData: [],
   })
 
@@ -157,7 +177,7 @@ const Application = (props) => {
 
       // Assuming response contains the 'data' property with the array of data
       const response = await getApplicationFileByID({
-        Id: 'a00S000000CUiQrIAL',
+        Id: applicationId,
       })
 
       // Transform the data
@@ -173,7 +193,7 @@ const Application = (props) => {
       return response.records
     },
     initialData: [],
-    enabled: isFocused,
+    enabled: isFocused && !!applicationId,
   })
 
   const toggleDropdown = (visible, ref) => {
@@ -284,7 +304,7 @@ const Application = (props) => {
     setShowLoader(true)
 
     // Create an initial payload object with the email field.
-    let payload = { email: paramsData?.email }
+    let payload = { email: applicationDetails?.Email__c }
     let modalPayload
 
     // Iterate through the sections in submittedData.
@@ -342,7 +362,7 @@ const Application = (props) => {
             ...sectionData,
           }
         }
-        modalPayload = { email: paramsData?.email }
+        modalPayload = { email: !!applicationDetails?.Email__c }
         modalPayload = {
           ...modalPayload,
           [section.fieldName]: [newSectionDate],
@@ -353,10 +373,11 @@ const Application = (props) => {
     if (type === 'initial' || type === 'initialSave') {
       const initialPayload = {
         ...payload,
-        firstName: paramsData?.firstName,
-        lastName: paramsData?.lastName,
-        phoneNumber: paramsData?.phoneNumber,
-        email: paramsData?.email,
+        firstName: applicationDetails?.First_Name__c,
+        lastName: applicationDetails?.Last_Name__c,
+        phoneNumber: applicationDetails?.Phone_Number_Emergency__c,
+        email: applicationDetails?.Email__c,
+        gusApplicationId: applicationId,
         universityOrCollegeInfo: [],
         AAMCMCATReporting: [],
         clinicalOrHospitalExperienceDetails: [],
@@ -366,12 +387,17 @@ const Application = (props) => {
       let selectedSchoolValue = []
       formData.step0.sections[formData.step0.sections.length - 1].fields.map(
         (fields) => {
-          selectedSchoolValue.push(
-            fields.selectedValue || fields.selectedValue.name,
-          )
+          if (fields.selectedValue.name) {
+            return selectedSchoolValue.push(fields.selectedValue.name)
+          }
+          if (fields.selectedValue) {
+            return selectedSchoolValue.push(fields.selectedValue)
+          }
         },
       )
-      const duplicateValueCheck = new Set(selectedSchoolValue)
+      const duplicateValueCheck = new Set(
+        selectedSchoolValue.filter((item) => item !== undefined),
+      )
       if (selectedSchoolValue.length > 1) {
         let errorMessage = {
           errorMessage1: '',
@@ -401,7 +427,11 @@ const Application = (props) => {
       }
       setShowLoader(true)
       if (!data?.email) {
-        await submitApplication(initialPayload)
+        const response = await submitApplication(initialPayload)
+        if (response.statusCode !== 201) {
+          setShowLoader(false)
+          return
+        }
         // refetch updated Data
         await refetch()
         setShowLoader(false)
@@ -543,7 +573,7 @@ const Application = (props) => {
     setShowLoader(true)
     await uploadFile({
       ...fileData,
-      applicationId: 'a00S000000CUiQrIAL',
+      applicationId: applicationId,
     })
     await refetchDocument()
     setShowLoader(false)
@@ -560,7 +590,8 @@ const Application = (props) => {
     hasError,
     isCTADisabled,
     modalFields,
-    showLoader: showLoader || isFetching || isDocumentFetching,
+    showLoader:
+      showLoader || isFetching || isDocumentFetching || isApplicationFetching,
     tabItems,
     getContainerWidth,
     getCTAStatus,
