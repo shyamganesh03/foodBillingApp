@@ -33,7 +33,7 @@ export const apiCall = async (url, options) => {
   }
 }
 
-export const getDropdownData = async (payload) =>
+export const getDropdownValue = async (payload) =>
   apiCall(payload.apiName, {
     method: 'GET',
   })

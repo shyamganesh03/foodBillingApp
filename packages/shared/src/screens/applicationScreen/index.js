@@ -16,6 +16,7 @@ import {
   getApplicationByID,
   getApplicationDetailsByID,
   getApplicationFileByID,
+  getDropdownValue,
   submitApplication,
   updateApplication,
   uploadFile,
@@ -86,9 +87,10 @@ const Application = (props) => {
     })
 
   const { data, refetch, isFetching } = useQuery({
-    queryKey: 'getApplicationData',
+    queryKey: ['getApplicationData'],
     queryFn: async () => {
       const formDataCopy = { ...formData }
+      const dropdown = await getDropdownValue({ apiName: 'mailingCountryCode' })
       const responseData = await getApplicationByEmailID({
         email: paramsData?.email || applicationDetails?.Email__c,
       })
@@ -161,9 +163,14 @@ const Application = (props) => {
                   const fieldName = field?.fieldName || ''
                   if (fieldName in responseData) {
                     if (fieldName === 'mailingCountryCode') {
-                      field.selectedValue = {
-                        name: responseData['mailingCountry'],
-                        value: responseData[fieldName],
+                      const selectedData = dropdown?.filter(
+                        (item) => item?.Value === responseData[fieldName],
+                      )
+                      if (selectedData) {
+                        field.selectedValue = {
+                          name: selectedData[0]?.Label,
+                          value: selectedData[0]?.Value,
+                        }
                       }
                     } else {
                       field.selectedValue = responseData[fieldName]
