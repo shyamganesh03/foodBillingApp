@@ -520,7 +520,10 @@ const ModelContainer = ({
           }
         })
         setListItems(listItem)
-        tabsData.push('delete')
+        if (!data?.hasAttachments) {
+          tabsData.push('delete')
+        }
+
         setTabs(tabsData)
       } else {
         setTabs([])
@@ -632,7 +635,7 @@ const ModalTabSection = ({ tabs, data, handleDelete, allData, isEditMode }) => {
         </View>
         <View style={{ flexDirection: 'row' }}>
           {Object.entries(data).map(([key, value]) => {
-            return (
+                        return (
               <View
                 style={{
                   flexDirection: 'column',
@@ -641,7 +644,7 @@ const ModalTabSection = ({ tabs, data, handleDelete, allData, isEditMode }) => {
                 }}
               >
                 {value?.map((item, index) => {
-                  if (item?.title == 'empty') {
+                  if (item?.title === 'empty') {
                     return (
                       <View
                         style={{
@@ -649,6 +652,7 @@ const ModalTabSection = ({ tabs, data, handleDelete, allData, isEditMode }) => {
                           padding: 8,
                           borderColor: '#D4D4D4',
                           borderWidth: 1,
+                          display: !allData?.hasAttachments ? '' : 'none',
                         }}
                       >
                         <Button

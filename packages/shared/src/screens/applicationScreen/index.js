@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { ScreenLayout } from '@libs/utils'
 import DesktopView from './DesktopView'
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { fieldData } from '../../utils/fields'
 import { useDropDownData } from '../../hooks/useDropDownData'
 import {
@@ -50,6 +50,18 @@ const Application = (props) => {
   const containerRef = useRef()
   const paramsData = props.route.params
   const isFocused = useIsFocused()
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    if (isEditMode) return
+
+    const programName = formData.step1.sections[0].fields[0]?.selectedValue
+    if (!isEditMode && !!programName) {
+      navigation.navigate('success', {
+        programName: programName,
+      })
+    }
+  }, [isEditMode, formData])
 
   const { data: applicationDetails, isFetching: isApplicationFetching } =
     useQuery({
@@ -65,9 +77,11 @@ const Application = (props) => {
           response.Last_Name__c || ''
         formDataCopy.step1.sections[1].fields[0].selectedValue =
           response.First_Name__c
+        formDataCopy.step1.sections[0].fields[0].selectedValue =
+          response.R3_Picklist__c
         return response
       },
-      enabled: !!paramsData?.id,
+      enabled: !!paramsData?.id && isFocused,
       initialData: [],
     })
 
@@ -78,7 +92,7 @@ const Application = (props) => {
       const responseData = await getApplicationByEmailID({
         email: paramsData?.email || applicationDetails?.Email__c,
       })
-      if (responseData.applicationStatus === 'Completed') {
+      if (responseData.applicationStatus === 'Submitted') {
         setIsEditMode(false)
       }
 
@@ -134,7 +148,7 @@ const Application = (props) => {
                       [item?.fieldName]: transformedData[item?.fieldName],
                     }
                   })
-                  section.listIDs = listIds //[...new Set(listIds)]
+                  section.listIDs = listIds
                   section.modelFieldValues = {
                     ...formattedTransformedData,
                     empty,
@@ -146,7 +160,14 @@ const Application = (props) => {
                 fields.forEach((field) => {
                   const fieldName = field?.fieldName || ''
                   if (fieldName in responseData) {
-                    field.selectedValue = responseData[fieldName]
+                    if (fieldName === 'mailingCountryCode') {
+                      field.selectedValue = {
+                        name: responseData['mailingCountry'],
+                        value: responseData[fieldName],
+                      }
+                    } else {
+                      field.selectedValue = responseData[fieldName]
+                    }
                   }
                 })
               }
@@ -158,7 +179,8 @@ const Application = (props) => {
       setFormData(formDataCopy)
       return responseData
     },
-    enabled: !!paramsData?.email || !!applicationDetails?.Email__c,
+    enabled:
+      (!!paramsData?.email || !!applicationDetails?.Email__c) && isFocused,
     initialData: [],
   })
 
@@ -342,7 +364,8 @@ const Application = (props) => {
 
             // Handle PickList or dropdown fields.
             if (field.type === 'PickList' || field.type === 'dropdown') {
-              if (!!field.selectedValue?.value) {
+              if (field.fieldName === 'mailingCountryCode') {
+                payload['mailingCountry'] = field.selectedValue?.name
                 payload[field.fieldName] = field.selectedValue?.value
               } else {
                 if (!!field.selectedValue?.name || !!field.selectedValue) {
@@ -395,6 +418,7 @@ const Application = (props) => {
         clinicalOrHospitalExperienceDetails: [],
         researchExperience: [],
         recommenders: [],
+        applicationStatus: 'In Progress',
       }
       let selectedSchoolValue = []
       formData.step0.sections[formData.step0.sections.length - 1].fields.map(
@@ -440,14 +464,43 @@ const Application = (props) => {
       setShowLoader(true)
       if (!data?.email) {
         const response = await submitApplication(initialPayload)
+        if (response?.message[0]?.message) {
+          setHasError({
+            ...hasError,
+            errorMessage1: `* ${response?.message[0]?.message}`,
+          })
+          setShowLoader(false)
+          return
+        }
         // refetch updated Data
         await refetch()
         setShowLoader(false)
-        if (type === 'initial' && response.statusCode === 201) {
+        if (type === 'initial' && response.statusCode !== 500) {
           setActiveTab(activeTab + 1)
         }
         return
       }
+    }
+    if (type === 'Submit') {
+      // If it's a 'Submit' type, submit the application with the submitPayload.
+      // Define a submitPayload object for 'Submit' type.
+      const submitPayload = {
+        ...payload,
+        applicationStatus: 'Submitted',
+      }
+      const updateResponse = await updateApplication(submitPayload)
+      if (updateResponse?.message[0]?.message) {
+        setHasError({
+          ...hasError,
+          errorMessage1: `* ${updateResponse?.message[0]?.message}`,
+        })
+        setShowLoader(false)
+        return
+      }
+      setShowLoader(false)
+      return navigation.navigate('success', {
+        programName: formData.step1.sections[0].fields[0]?.selectedValue || '',
+      })
     }
 
     // Update the application with the payload.
@@ -459,33 +512,11 @@ const Application = (props) => {
         errorMessage1: `* ${updateResponse?.message[0]?.message}`,
       })
     }
-    if (type === 'Submit') {
-      // If it's a 'Submit' type, submit the application with the submitPayload.
-      // Define a submitPayload object for 'Submit' type.
-      const submitPayload = {
-        firstName: paramsData?.firstName || applicationDetails?.First_Name__c,
-        lastName: paramsData?.lastName || applicationDetails?.Last_Name__c,
-        phoneNumber:
-          paramsData?.phoneNumber ||
-          applicationDetails?.Phone_Number_Emergency__c,
-        email: paramsData?.email || applicationDetails?.Email__c,
-        canTextToMobile:
-          formData.step1.sections[1].fields[8].selectedValue || '',
-        firstChoiceSchool:
-          formData.step0.sections[1].fields[0].selectedValue ||
-          formData.step0.sections[1].fields[0].selectedValue.name ||
-          '',
-        applicationStatus: 'Completed',
-      }
-      await submitApplication(submitPayload)
-      setActiveTab(0)
-      setShowLoader(false)
-    } else {
-      // Handle 'saveAndNext' and other types.
-      if (type === 'saveAndNext' || type === 'initial') {
-        setActiveTab(activeTab + 1)
-      }
+    // Handle 'saveAndNext' and other types.
+    if (type === 'saveAndNext' || type === 'initial') {
+      setActiveTab(activeTab + 1)
     }
+
     // refetch updated Data
     await refetch()
 
@@ -558,12 +589,13 @@ const Application = (props) => {
         }
       } else {
         const newFieldsArray = [...currentSection[fieldName]]
+        const finalSelectedValue =
+          selectedValue?.value || !selectedValue.name
+            ? selectedValue
+            : selectedValue.name
         newFieldsArray[fieldIndex] = {
           ...currentField,
-          selectedValue:
-            selectedValue?.value || !selectedValue.name
-              ? selectedValue
-              : selectedValue.name,
+          selectedValue: finalSelectedValue,
         }
         currentSection[fieldName] = newFieldsArray
       }

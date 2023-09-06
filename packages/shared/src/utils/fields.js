@@ -47,7 +47,7 @@ export const fieldData = {
             selectedValue: '',
           },
           {
-            label: 'ThirdChoiceSchool',
+            label: 'Third Choice School',
             fieldName: 'thirdChoiceSchool',
             name: 'schools',
             type: 'PickList',
@@ -219,19 +219,19 @@ export const fieldData = {
             mandatory: true,
             selectedValue: '',
           },
-          {
-            label: 'Mailing State/Province Code',
-            name: 'mailingStateOrProvinceCode',
-            fieldName: 'mailingStateCode',
-            type: 'dropdown',
-            dropdownValues: [
-              { name: 'Tamil Nadu', value: 'TN' },
-              { name: 'Karnataka', value: 'KA' },
-              { name: 'Kerala', value: 'KL' },
-            ],
-            mandatory: true,
-            selectedValue: '',
-          },
+          // {
+          //   label: 'Mailing State/Province Code',
+          //   name: 'mailingStateOrProvinceCode',
+          //   fieldName: 'mailingStateCode',
+          //   type: 'dropdown',
+          //   dropdownValues: [
+          //     { name: 'Tamil Nadu', value: 'TN' },
+          //     { name: 'Karnataka', value: 'KA' },
+          //     { name: 'Kerala', value: 'KL' },
+          //   ],
+          //   mandatory: true,
+          //   selectedValue: '',
+          // },
           {
             label:
               'Text messages sent by the Admissions Office will not be used for "spam." By checking the confirmation box, you grant permission to Saba University School of Medicine to send text messages to your personal mobile phone number.',

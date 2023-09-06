@@ -270,67 +270,69 @@ const DateInput = (props) => {
 
   const renderDropdown = () => (
     <Modal visible={visible} transparent animationType="none">
-      <View
-        style={{
-          top: dropdownTop,
-          left: dropDownLeft,
-          width: dropDownWidth,
-          backgroundColor: '#FFFFFF',
-          paddingBottom: 10,
-        }}
-      >
-        <Calendar
-          key={selectedYear}
-          enableSwipeMonths={true}
-          current={`${selectedYear}-${selectedMonth}-${selectedDay}`}
-          minDate={`${minYear}-01-01`}
-          maxDate={`${maxYear}-12-31`}
-          disableAllTouchEventsForDisabledDays={true}
-          onDayPress={(day) => {
-            const fullDate = `${day.year}-${
-              day.month.toString().length > 1 ? day.month : '0' + day.month
-            }-${day.day.toString().length > 1 ? day.day : '0' + day.day}`
-            onChangeText(fullDate)
-            setSelectedDate(fullDate)
-            setSelectedYear(day.year)
-            setSelectedMonth(day.month)
-            setSelectedDay(day.day)
-            setVisible(false)
+      <ScrollView style={{ flex: 1 }}>
+        <View
+          style={{
+            top: dropdownTop,
+            left: dropDownLeft,
+            width: dropDownWidth,
+            backgroundColor: '#FFFFFF',
+            paddingBottom: 10,
           }}
-          renderHeader={renderHeader}
-          onMonthChange={(month) => handleMonthChange(month)}
-          renderArrow={(direction) => (
-            <Icon
-              name="ArrowNarrowLeft"
-              color={colors.onNeutral}
-              width={20}
-              height={20}
-              style={{
-                transform:
-                  direction === 'left'
-                    ? [{ rotate: '360deg' }]
-                    : [{ rotate: '180deg' }],
-              }}
-            />
-          )}
-        />
-        <TouchableOpacity
-          onPress={() => handleCurrentDate()}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseOut={() => setIsHovered(false)}
-          style={{ alignSelf: 'center' }}
         >
-          <Text
-            variant="display5"
-            style={{
-              textDecoration: isHovered ? 'underline' : 'none',
+          <Calendar
+            key={selectedYear}
+            enableSwipeMonths={true}
+            current={`${selectedYear}-${selectedMonth}-${selectedDay}`}
+            minDate={`${minYear}-01-01`}
+            maxDate={`${maxYear}-12-31`}
+            disableAllTouchEventsForDisabledDays={true}
+            onDayPress={(day) => {
+              const fullDate = `${day.year}-${
+                day.month.toString().length > 1 ? day.month : '0' + day.month
+              }-${day.day.toString().length > 1 ? day.day : '0' + day.day}`
+              onChangeText(fullDate)
+              setSelectedDate(fullDate)
+              setSelectedYear(day.year)
+              setSelectedMonth(day.month)
+              setSelectedDay(day.day)
+              setVisible(false)
             }}
-            color="#3558D6"
+            renderHeader={renderHeader}
+            onMonthChange={(month) => handleMonthChange(month)}
+            renderArrow={(direction) => (
+              <Icon
+                name="ArrowNarrowLeft"
+                color={colors.onNeutral}
+                width={20}
+                height={20}
+                style={{
+                  transform:
+                    direction === 'left'
+                      ? [{ rotate: '360deg' }]
+                      : [{ rotate: '180deg' }],
+                }}
+              />
+            )}
+          />
+          <TouchableOpacity
+            onPress={() => handleCurrentDate()}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseOut={() => setIsHovered(false)}
+            style={{ alignSelf: 'center' }}
           >
-            Today
-          </Text>
-        </TouchableOpacity>
-      </View>
+            <Text
+              variant="display5"
+              style={{
+                textDecoration: isHovered ? 'underline' : 'none',
+              }}
+              color="#3558D6"
+            >
+              Today
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </Modal>
   )
 
