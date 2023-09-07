@@ -2,7 +2,7 @@ import { Icon } from '@r3-oaf/native-icons'
 import { Button, Divider, ProgressBar, Text } from '@libs/components'
 import { useTheme } from '@react-navigation/native'
 import React, { useRef, useState } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { ActivityIndicator, TouchableOpacity } from 'react-native'
 import { View } from 'react-native'
 import { Modal } from 'react-native'
 
@@ -205,7 +205,6 @@ const FileModal = ({
                 alignItems: 'center',
               }}
             >
-              <ProgressBar hideTitle percentage={isSuccess ? 100 : 0} />
               {isSuccess ? (
                 <View
                   style={{
@@ -226,24 +225,7 @@ const FileModal = ({
                   />
                 </View>
               ) : (
-                <View
-                  style={{
-                    height: 12,
-                    width: 12,
-                    borderRadius: 10,
-                    backgroundColor: 'rgb(114,114,114)',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginLeft: 10,
-                  }}
-                >
-                  <Icon
-                    name="Close"
-                    height={6}
-                    width={6}
-                    color={colors.white}
-                  />
-                </View>
+                <ActivityIndicator />
               )}
             </View>
           </View>

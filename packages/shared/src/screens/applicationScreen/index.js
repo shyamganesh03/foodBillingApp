@@ -72,6 +72,12 @@ const Application = (props) => {
         const response = await getApplicationByID({
           applicationId: paramsData?.id,
         })
+        if (response?.statusCode === 500) {
+          setHasError({
+            ...hasError,
+            errorMessage1: '* Invalid Application id',
+          })
+        }
         const formDataCopy = formData
         formDataCopy.step1.sections[1].fields[0].selectedValue =
           response.First_Name__c || ''
@@ -245,7 +251,7 @@ const Application = (props) => {
       return response.records
     },
     initialData: [],
-    enabled: isFocused && !!data?.r3ApplicationId,
+    enabled: isFocused && !!data?.r3ApplicationId && activeTab === 5,
   })
 
   const toggleDropdown = (visible, ref) => {
