@@ -550,7 +550,7 @@ export const fieldData = {
         modelFields: [
           {
             label: 'Clinic/Hospital',
-            name: 'Clinic_Hospital__c',
+            name: 'clinicOrHospital',
             type: 'textField',
             fieldName: 'clinicOrHospital',
             inputType: 'string',
@@ -558,7 +558,7 @@ export const fieldData = {
           },
           {
             label: 'Clinical Experience Role',
-            name: 'Clinical_Experience_Role_Responsility__c',
+            name: 'clinicalExperienceRole',
             type: 'textField',
             fieldName: 'clinicalExperienceRole',
             inputType: 'string',
@@ -566,7 +566,7 @@ export const fieldData = {
           },
           {
             label: 'Clinical Experience Hours Completed',
-            name: 'Clinical_Experience_Hours_Completed__c',
+            name: 'clinicalExperienceHoursCompleted',
             type: 'textField',
             inputType: 'string',
             fieldName: 'clinicalExperienceHoursCompleted',
