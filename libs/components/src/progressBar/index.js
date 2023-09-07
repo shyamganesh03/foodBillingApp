@@ -14,7 +14,7 @@ const ProgressBar = ({
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: percentage,
-      duration: 1000,
+      duration: 500,
       useNativeDriver: false,
     }).start()
   }, [percentage])

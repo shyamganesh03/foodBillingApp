@@ -76,3 +76,8 @@ export const deleteListItem = async (payload) =>
     method: 'DELETE',
     payload,
   })
+
+export const deleteDocument = async (payload) =>
+  apiCall(`application/file/${payload.id}`, {
+    method: 'DELETE',
+  })

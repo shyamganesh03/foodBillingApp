@@ -11,6 +11,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { fieldData } from '../../utils/fields'
 import { useDropDownData } from '../../hooks/useDropDownData'
 import {
+  deleteDocument,
   deleteListItem,
   getApplicationByEmailID,
   getApplicationByID,
@@ -109,7 +110,7 @@ const Application = (props) => {
                 const transformedData = {}
                 if (responseData[section.fieldName]?.length > 0) {
                   responseData[section.fieldName].forEach((item, index) => {
-                    listIds.push(item?.id || index.toString())
+                    listIds.push(item?.id || '')
                     for (const key in item) {
                       if (!transformedData[key]) {
                         transformedData[key] = []
@@ -221,13 +222,23 @@ const Application = (props) => {
         Id: data?.r3ApplicationId,
       })
 
-      // Transform the data
-      const result = transformData(response.records)
+      let listIds = []
+      response.records?.map((item) => {
+        listIds.push(item?.Id || '')
+      })
+      let result
+      if (response.records) {
+        // Transform the data
+        result = transformData(response.records)
+      } else {
+        result = {}
+      }
 
       // Update formDataCopy
       const formDataCopy = { ...formData }
       formDataCopy.step5.sections[1] = {
         ...formDataCopy.step5.sections[1],
+        listIDs: listIds,
         modelFieldValues: result,
       }
       setFormData(formDataCopy)
@@ -624,13 +635,17 @@ const Application = (props) => {
 
   const handleDelete = async ({ index, allData }) => {
     setShowLoader(true)
-    const payload = {
-      email: paramsData?.email || applicationDetails?.Email__c,
-      type: allData?.fieldName,
-      id: allData?.listIDs[index],
+    if (allData?.hasAttachments) {
+      await deleteDocument({ id: allData?.listIDs[index] })
+    } else {
+      const payload = {
+        email: paramsData?.email || applicationDetails?.Email__c,
+        type: allData?.fieldName,
+        id: allData?.listIDs[index],
+      }
+      await deleteListItem(payload)
     }
-    await deleteListItem(payload)
-    await refetch()
+    await refetchDocument()
     setShowLoader(false)
   }
 

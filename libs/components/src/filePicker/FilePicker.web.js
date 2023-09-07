@@ -205,7 +205,7 @@ const FileModal = ({
                 alignItems: 'center',
               }}
             >
-              <ProgressBar hideTitle percentage={100} />
+              <ProgressBar hideTitle percentage={isSuccess ? 100 : 0} />
               {isSuccess ? (
                 <View
                   style={{
