@@ -60,6 +60,8 @@ const DesktopView = ({
             tabItems={tabItems}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            handleSave={handleSave}
+            formData={formData}
           />
           <View style={{ flex: 1 }}>
             <FormFields
@@ -964,7 +966,13 @@ const CommonFromContainer = ({
   )
 }
 
-const TabSection = ({ tabItems, activeTab, setActiveTab }) => {
+const TabSection = ({
+  tabItems,
+  activeTab,
+  setActiveTab,
+  handleSave,
+  formData,
+}) => {
   return (
     <View style={styles.tabContainer}>
       {tabItems?.map((item, index) => (
@@ -973,6 +981,8 @@ const TabSection = ({ tabItems, activeTab, setActiveTab }) => {
           index={index}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          handleSave={handleSave}
+          formData={formData}
         />
       ))}
     </View>
@@ -980,6 +990,8 @@ const TabSection = ({ tabItems, activeTab, setActiveTab }) => {
 }
 
 const Tab = ({
+  formData,
+  handleSave,
   style,
   item,
   index,
@@ -1022,7 +1034,15 @@ const Tab = ({
     <TouchableOpacity
       key={index}
       style={[getTabStyle(), style]}
-      onPress={() => (isModal ? () => {} : setActiveTab(index))}
+      onPress={() => {
+        if (!isModal) {
+          setActiveTab(activeTab)
+          handleSave(
+            formData[`step${activeTab}`],
+            activeTab === 0 ? 'initialSave' : 'save',
+          )
+        }
+      }}
     >
       <Text
         variant="body2"

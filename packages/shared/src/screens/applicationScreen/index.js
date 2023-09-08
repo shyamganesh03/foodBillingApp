@@ -643,6 +643,7 @@ const Application = (props) => {
     setShowLoader(true)
     if (allData?.hasAttachments) {
       await deleteDocument({ id: allData?.listIDs[index] })
+      await refetchDocument()
     } else {
       const payload = {
         email: paramsData?.email || applicationDetails?.Email__c,
@@ -650,8 +651,9 @@ const Application = (props) => {
         id: allData?.listIDs[index],
       }
       await deleteListItem(payload)
+      await refetch()
     }
-    await refetchDocument()
+
     setShowLoader(false)
   }
 
