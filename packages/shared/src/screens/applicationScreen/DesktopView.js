@@ -400,6 +400,7 @@ const renderFields = ({
                         style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                         textInputWidth={isCenter === -1 ? '100%' : ''}
                         value={fieldItem.selectedValue}
+                        error={fieldItem.error || ''}
                         onChangeText={(value) => {
                           handleValueChanged({
                             selectedValue: value,
@@ -842,6 +843,7 @@ const ApplicationReviewContainer = ({
                     style={{ marginRight: 20 }}
                     textInputWidth={145}
                     value={fieldItem.selectedValue}
+                    error={fieldItem.error || ''}
                     onChangeText={(value) => {
                       handleValueChanged({
                         selectedValue: value,
@@ -1029,14 +1031,13 @@ const Tab = ({
       }
     }
   }
-
   return (
     <TouchableOpacity
       key={index}
       style={[getTabStyle(), style]}
       onPress={() => {
         if (!isModal) {
-          setActiveTab(activeTab)
+          setActiveTab(index)
           handleSave(
             formData[`step${activeTab}`],
             activeTab === 0 ? 'initialSave' : 'save',

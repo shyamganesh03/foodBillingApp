@@ -349,6 +349,7 @@ const Application = (props) => {
   }
 
   const handleSave = async (submittedData, type, sessionName) => {
+    // const isValidData = validationCheck(submittedData, sessionName)
     // Reset modalFields.
     setModalFields({
       isModelVisible: false,
@@ -398,9 +399,7 @@ const Application = (props) => {
                 }
               }
             } else {
-              if (!!field.selectedValue) {
-                payload[field.fieldName] = field.selectedValue
-              }
+              payload[field.fieldName] = field.selectedValue
             }
           }
         })
@@ -454,6 +453,9 @@ const Application = (props) => {
             return selectedSchoolValue.push(fields.selectedValue)
           }
         },
+      )
+      selectedSchoolValue = selectedSchoolValue.filter(
+        (item) => item !== 'None',
       )
       const duplicateValueCheck = new Set(
         selectedSchoolValue.filter((item) => item !== undefined),
@@ -546,6 +548,41 @@ const Application = (props) => {
 
     // set loader false
     setShowLoader(false)
+  }
+
+  const validationCheck = (submittedData, sessionName) => {
+    const copyFieldData = formData
+    let updatedData
+    submittedData.section.map((value) => {
+      if (value.inputType) {
+        switch (value.inputType) {
+          case 'email':
+            const emailPattern =
+              /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+            const isValidEmail = emailPattern.test(fieldValue.selectedValue)
+            if (!isValidEmail) {
+              const currentSection = fieldValue
+              currentSection.error = {
+                hasError: true,
+                message: 'Email is not valid',
+              }
+              updatedData = {
+                ...formData,
+                [step]: {
+                  ...formData[step],
+                  currentSection,
+                  sections: [...formData[step]?.sections],
+                },
+              }
+              console.log({ updatedData })
+            }
+            break
+
+          default:
+            break
+        }
+      }
+    })
   }
 
   const handleValueChanged = ({

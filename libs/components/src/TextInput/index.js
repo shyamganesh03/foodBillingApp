@@ -26,6 +26,7 @@ const TextInput = (props) => {
     value,
     style,
     editable = true,
+    error,
   } = props
 
   const handleInputOnFocus = async () => {
@@ -78,6 +79,11 @@ const TextInput = (props) => {
           <View style={{ justifyContent: 'center' }}>{trailingIcon}</View>
         )}
       </Row>
+      {error?.hasError ? (
+        <Text variant="body2" color={colors.onAlert}>
+          {error?.message}
+        </Text>
+      ) : null}
     </View>
   )
 }
