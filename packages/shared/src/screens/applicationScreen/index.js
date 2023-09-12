@@ -11,6 +11,10 @@ import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { fieldData } from '../../utils/fields'
 import { useDropDownData } from '../../hooks/useDropDownData'
 import {
+  useFormValueChanged,
+  useModalValueChanged,
+} from '../../hooks/useHandleValueChanged'
+import {
   deleteDocument,
   deleteListItem,
   getApplicationByEmailID,
@@ -24,6 +28,8 @@ import {
 } from '../../api'
 import { useQuery } from '@tanstack/react-query'
 import { Text } from '@libs/components'
+import { useFormSave, useInitialForm, useModalSave } from '../../hooks/useSave'
+import { useValidation } from '../../hooks/useValidation'
 
 const Application = (props) => {
   const [dropdownTop, setDropdownTop] = useState(0)
@@ -32,11 +38,12 @@ const Application = (props) => {
   const [isFileSuccess, setIsFileSuccess] = useState(false)
   const [modalFields, setModalFields] = useState({
     readModeTitle: 'Your Submitted Documents',
-    isModelVisible: false,
+    isModalVisible: false,
     direction: 'row',
     title: '',
     items: [],
     sectionIndex: -1,
+    error: '',
   })
   const [activeTab, setActiveTab] = useState(0)
   const [tabItems, setTabItems] = useState([])
@@ -112,7 +119,7 @@ const Application = (props) => {
           if (sections) {
             for (const section of sections) {
               const fields = section?.fields
-              if (section.type === 'model') {
+              if (section.type === 'modal') {
                 const transformedData = {}
                 if (responseData[section.fieldName]?.length > 0) {
                   responseData[section.fieldName].forEach((item, index) => {
@@ -135,7 +142,7 @@ const Application = (props) => {
                     title: 'empty',
                   }))
                   let availableTabs = []
-                  section.modelFields.map((item) => {
+                  section.modalFields.map((item) => {
                     availableTabs.push(item?.name)
                   })
                   Object.entries(transformedData).map(([key, value]) => {
@@ -151,19 +158,19 @@ const Application = (props) => {
                     }
                   })
                   let formattedTransformedData = {}
-                  section.modelFields.map((item) => {
+                  section.modalFields.map((item) => {
                     formattedTransformedData = {
                       ...formattedTransformedData,
                       [item?.fieldName]: transformedData[item?.fieldName],
                     }
                   })
                   section.listIDs = listIds
-                  section.modelFieldValues = {
+                  section.modalFieldValues = {
                     ...formattedTransformedData,
                     empty,
                   }
                 } else {
-                  section.modelFieldValues = {}
+                  section.modalFieldValues = {}
                 }
               } else if (fields) {
                 fields.forEach((field) => {
@@ -245,7 +252,7 @@ const Application = (props) => {
       formDataCopy.step5.sections[1] = {
         ...formDataCopy.step5.sections[1],
         listIDs: listIds,
-        modelFieldValues: result,
+        modalFieldValues: result,
       }
       setFormData(formDataCopy)
       return response.records
@@ -279,9 +286,9 @@ const Application = (props) => {
     if (type === 'modal') {
       if (
         fields.selectedValue === '' &&
-        fields?.modelFieldValues?.length <= 0
+        fields?.modalFieldValues?.length <= 0
       ) {
-        processFields(fields?.modelFields, sectionTitle, mandatoryFields)
+        processFields(fields?.modalFields, sectionTitle, mandatoryFields)
       }
     } else {
       for (const field of fields) {
@@ -309,8 +316,8 @@ const Application = (props) => {
             // If section has "fields" property, process those fields
             processFields(section.fields, step.title, mandatoryFields)
           }
-          if (section.modelFields) {
-            // If section has "modelFields" property, process those fields
+          if (section.modalFields) {
+            // If section has "modalFields" property, process those fields
             processFields(section, step.title, mandatoryFields, 'modal')
           }
         }
@@ -328,13 +335,20 @@ const Application = (props) => {
   useEffect(() => {
     if (!isFocused) return
     ;(async () => {
-      const tabsTitle = Object.keys(fieldData)
+      const tabsTitle = Object.keys(formData)
       const tabs = tabsTitle.map((item) => {
-        return { title: fieldData[item]?.title }
+        return { title: formData[item]?.title }
       })
       setTabItems(tabs)
     })()
-  }, [isFocused])
+  }, [isFocused, formData])
+
+  useEffect(() => {
+    setHasError({
+      errorMessage1: '',
+      errorMessage2: '',
+    })
+  }, [isFocused, modalFields, activeTab])
 
   const getDropdownData = (fieldValue) => {
     const values = fieldValue?.pickListValues || fieldValue?.dropdownValues
@@ -348,87 +362,36 @@ const Application = (props) => {
     }
   }
 
-  const handleSave = async (submittedData, type, sessionName) => {
-    // const isValidData = validationCheck(submittedData, sessionName)
+  const handleSave = async (submittedData, type, sessionName, tabIndex) => {
+    let response
+    const isDataValid = useValidation({
+      step: `step${activeTab}`,
+      modalFields,
+      setModalFields,
+      formData,
+      hasError,
+      type,
+      submittedData,
+      setFormData,
+      setHasError,
+      sessionName,
+    })
+    if (!isDataValid) {
+      return
+    }
+    setShowLoader(true)
     // Reset modalFields.
     setModalFields({
-      isModelVisible: false,
+      isModalVisible: false,
       items: [],
       title: '',
       direction: 'row',
       sectionIndex: -1,
+      error: '',
     })
 
-    // set loader true
-    setShowLoader(true)
-
-    // Create an initial payload object with the email field.
-    let payload = {
-      email: paramsData?.email || applicationDetails?.Email__c,
-    }
-    let modalPayload
-
-    // Iterate through the sections in submittedData.
-    submittedData.sections.forEach((section) => {
-      // Initialize a variable to store the emergency contact full name.
-      let fullName = ''
-
-      // Check if the section has fields.
-      if (section.fields?.length > 0) {
-        section.fields.forEach((field) => {
-          // Check if the field has a fieldName.
-          if (field?.fieldName) {
-            // Handle emergency contact fields.
-            if (
-              field.fieldName === 'emergencyContactFirstName' ||
-              field.fieldName === 'emergencyContactLastName'
-            ) {
-              fullName = `${fullName} ${field.selectedValue || ''}`.trim()
-              if (!!fullName) payload['emergencyContactFullName'] = fullName
-            }
-
-            // Handle PickList or dropdown fields.
-            if (field.type === 'PickList' || field.type === 'dropdown') {
-              if (field.fieldName === 'mailingCountryCode') {
-                payload['mailingCountry'] = field.selectedValue?.name
-                payload[field.fieldName] = field.selectedValue?.value
-              } else {
-                if (!!field.selectedValue?.name || !!field.selectedValue) {
-                  payload[field.fieldName] =
-                    field.selectedValue?.name || field.selectedValue
-                }
-              }
-            } else {
-              payload[field.fieldName] = field.selectedValue
-            }
-          }
-        })
-      }
-      if (
-        type === 'modalSave' &&
-        sessionName === section?.title &&
-        section.fieldName
-      ) {
-        const sectionData = section.selectedValue
-        let newSectionDate
-
-        newSectionDate = {
-          ...sectionData,
-        }
-
-        modalPayload = {
-          email: paramsData?.email || applicationDetails?.Email__c,
-        }
-        modalPayload = {
-          ...modalPayload,
-          [section.fieldName]: [newSectionDate],
-        }
-      }
-    })
-
-    if (type === 'initial' || type === 'initialSave') {
+    if (type === 'initial' || type === 'initialSave' || type === 'initialTab') {
       const initialPayload = {
-        ...payload,
         firstName: paramsData?.firstName || applicationDetails?.First_Name__c,
         lastName: paramsData?.lastName || applicationDetails?.Last_Name__c,
         phoneNumber:
@@ -443,78 +406,34 @@ const Application = (props) => {
         recommenders: [],
         applicationStatus: 'In Progress',
       }
-      let selectedSchoolValue = []
-      formData.step0.sections[formData.step0.sections.length - 1].fields.map(
-        (fields) => {
-          if (fields.selectedValue.name) {
-            return selectedSchoolValue.push(fields.selectedValue.name)
-          }
-          if (fields.selectedValue) {
-            return selectedSchoolValue.push(fields.selectedValue)
-          }
-        },
-      )
-      selectedSchoolValue = selectedSchoolValue.filter(
-        (item) => item !== 'None',
-      )
-      const duplicateValueCheck = new Set(
-        selectedSchoolValue.filter((item) => item !== undefined),
-      )
-      if (selectedSchoolValue.length > 1) {
-        let errorMessage = {
-          errorMessage1: '',
-          errorMessage2: '',
-        }
-        if (duplicateValueCheck.size !== selectedSchoolValue.length) {
-          errorMessage = {
-            ...errorMessage,
-            errorMessage1:
-              '* Please select different schools, as some of your chosen options are the same.',
-          }
-        }
-        const checkBox =
-          formData.step0.sections[formData.step0.sections.length - 2].fields[2]
-            .selectedValue
-        if (!checkBox) {
-          errorMessage = {
-            ...errorMessage,
-            errorMessage2: '* Please check the above check box to proceed',
-          }
-        }
-        setHasError(errorMessage)
+      response = await useInitialForm({
+        userData: data,
+        initialPayload,
+        formData,
+      })
+      if (response?.message?.[0]?.message) {
+        setHasError({
+          ...hasError,
+          errorMessage1: `* ${response?.message?.[0]?.message}`,
+        })
         setShowLoader(false)
-        if (errorMessage.errorMessage1 || errorMessage.errorMessage2) {
-          return
-        }
+        return
       }
-      setShowLoader(true)
-      if (!data?.email) {
-        const response = await submitApplication(initialPayload)
-        if (response?.message[0]?.message) {
-          setHasError({
-            ...hasError,
-            errorMessage1: `* ${response?.message[0]?.message}`,
-          })
-          setShowLoader(false)
-          return
-        }
-        // refetch updated Data
-        await refetch()
+      if (response.error) {
+        response.error?.map((errorValue, index) => {
+          setHasError({ ...hasError, [`errorMessage${index + 1}`]: errorValue })
+        })
         setShowLoader(false)
-        if (type === 'initial' && response.statusCode !== 500) {
-          setActiveTab(activeTab + 1)
-        }
         return
       }
     }
+
     if (type === 'Submit') {
-      // If it's a 'Submit' type, submit the application with the submitPayload.
-      // Define a submitPayload object for 'Submit' type.
-      const submitPayload = {
-        ...payload,
+      const updateResponse = await useFormSave({
+        submittedData,
+        email: paramsData?.email || applicationDetails?.Email__c,
         applicationStatus: 'Submitted',
-      }
-      const updateResponse = await updateApplication(submitPayload)
+      })
       if (updateResponse?.message[0]?.message) {
         setHasError({
           ...hasError,
@@ -528,16 +447,53 @@ const Application = (props) => {
         programName: formData.step1.sections[0].fields[0]?.selectedValue || '',
       })
     }
+    if (type === 'modalSave') {
+      response = await useModalSave({
+        email: paramsData?.email || applicationDetails?.Email__c,
+        submittedData,
+      })
+      if (response?.message[0]?.message) {
+        setHasError({
+          ...hasError,
+          errorMessage1: `* ${response?.message[0]?.message}`,
+        })
+        setShowLoader(false)
+        return
+      }
+      // refetch updated Data
+      await refetch()
+      setShowLoader(false)
+      return
+    }
 
     // Update the application with the payload.
-    const updateResponse = await updateApplication(modalPayload || payload)
+    response = await useFormSave({
+      submittedData,
+      email: paramsData?.email || applicationDetails?.Email__c,
+    })
 
-    if (updateResponse?.message[0]?.message) {
+    if (response?.message[0]?.message) {
       setHasError({
         ...hasError,
-        errorMessage1: `* ${updateResponse?.message[0]?.message}`,
+        errorMessage1: `* ${response?.message[0]?.message}`,
       })
+      setShowLoader(false)
+      return
     }
+    // Reset modalFields.
+    setModalFields({
+      isModalVisible: false,
+      items: [],
+      title: '',
+      direction: 'row',
+      sectionIndex: -1,
+      error: '',
+    })
+    if (type === 'TabSaveAndNext' || type === 'initialTab') {
+      console.log({ tabIndex })
+      setActiveTab(tabIndex)
+    }
+
     // Handle 'saveAndNext' and other types.
     if (type === 'saveAndNext' || type === 'initial') {
       setActiveTab(activeTab + 1)
@@ -545,135 +501,8 @@ const Application = (props) => {
 
     // refetch updated Data
     await refetch()
-
     // set loader false
     setShowLoader(false)
-  }
-
-  const validationCheck = (submittedData, sessionName) => {
-    const copyFieldData = formData
-    let updatedData
-    submittedData.section.map((value) => {
-      if (value.inputType) {
-        switch (value.inputType) {
-          case 'email':
-            const emailPattern =
-              /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
-            const isValidEmail = emailPattern.test(fieldValue.selectedValue)
-            if (!isValidEmail) {
-              const currentSection = fieldValue
-              currentSection.error = {
-                hasError: true,
-                message: 'Email is not valid',
-              }
-              updatedData = {
-                ...formData,
-                [step]: {
-                  ...formData[step],
-                  currentSection,
-                  sections: [...formData[step]?.sections],
-                },
-              }
-              console.log({ updatedData })
-            }
-            break
-
-          default:
-            break
-        }
-      }
-    })
-  }
-
-  const handleValueChanged = ({
-    type,
-    selectedValue,
-    step,
-    fieldIndex,
-    sectionIndex,
-    fieldName = 'fields',
-  }) => {
-    setHasError({
-      errorMessage1: '',
-      errorMessage2: '',
-    })
-    const currentSection = formData[step]?.sections[sectionIndex]
-    if (type === 'cancel') {
-      currentSection.selectedValue = ''
-      const updatedFieldData = {
-        ...formData,
-        [step]: {
-          ...formData[step],
-          sections: [
-            ...formData[step]?.sections.slice(0, sectionIndex),
-            { ...currentSection },
-            ...formData[step]?.sections.slice(sectionIndex + 1),
-          ],
-        },
-      }
-      setFormData(updatedFieldData)
-      return ''
-    }
-    if (currentSection) {
-      const currentField = currentSection[fieldName]?.[fieldIndex]
-
-      if (currentSection.type === 'model') {
-        const newData = currentSection[fieldName]?.reduce((acc, item) => {
-          if (currentSection.selectedValue?.[item.fieldName]) {
-            return {
-              ...acc,
-              [item.fieldName]: currentSection.selectedValue?.[item.fieldName],
-            }
-          }
-          return { ...acc, [item.fieldName]: '' }
-        }, {})
-        let data
-        const number = parseFloat(selectedValue)
-        if (
-          number &&
-          !currentField.fieldName?.toLowerCase().includes('date') &&
-          !currentField.fieldName?.toLowerCase().includes('termapplyingfor')
-        ) {
-          data = {
-            ...newData,
-            [currentField.fieldName]: number,
-          }
-        } else {
-          data = {
-            ...newData,
-            [currentField.fieldName]: selectedValue.name || selectedValue,
-          }
-        }
-
-        currentSection.selectedValue = {
-          ...data,
-        }
-      } else {
-        const newFieldsArray = [...currentSection[fieldName]]
-        const finalSelectedValue =
-          selectedValue?.value || !selectedValue.name
-            ? selectedValue
-            : selectedValue.name
-        newFieldsArray[fieldIndex] = {
-          ...currentField,
-          selectedValue: finalSelectedValue,
-        }
-        currentSection[fieldName] = newFieldsArray
-      }
-
-      const updatedFieldData = {
-        ...formData,
-        [step]: {
-          ...formData[step],
-          sections: [
-            ...formData[step]?.sections.slice(0, sectionIndex),
-            { ...currentSection },
-            ...formData[step]?.sections.slice(sectionIndex + 1),
-          ],
-        },
-      }
-      setFormData(updatedFieldData)
-    }
   }
 
   const handleDelete = async ({ index, allData }) => {
@@ -697,8 +526,8 @@ const Application = (props) => {
   const getCTAStatus = (tabIndex) => {
     if (
       (isCTADisabled ||
-        !formData.step6.sections[0].fields[0].selectedValue ||
-        !formData.step6.sections[0].fields[1].selectedValue) &&
+        !formData?.step6?.sections[0]?.fields[0]?.selectedValue ||
+        !formData?.step6?.sections[0]?.fields[1]?.selectedValue) &&
       tabIndex === 6
     ) {
       return true
@@ -712,6 +541,59 @@ const Application = (props) => {
     })
     await refetchDocument()
     setIsFileSuccess(true)
+  }
+
+  const handleValueChanged = ({
+    type,
+    selectedValue,
+    step,
+    fieldIndex,
+    sectionIndex,
+  }) => {
+    setHasError({
+      errorMessage1: '',
+      errorMessage2: '',
+    })
+    if (type === 'cancel') {
+      const currentSection = formData[step]?.sections[sectionIndex]
+      currentSection.selectedValue = ''
+      currentSection?.modalFields?.map((fieldValues) => {
+        fieldValues.selectedValue = ''
+        fieldValues.error = {}
+      })
+      const updatedFieldData = {
+        ...formData,
+        [step]: {
+          ...formData[step],
+          sections: [
+            ...formData[step]?.sections.slice(0, sectionIndex),
+            { ...currentSection },
+            ...formData[step]?.sections.slice(sectionIndex + 1),
+          ],
+        },
+      }
+      setFormData(updatedFieldData)
+      return ''
+    }
+    let newData
+    if (type === 'form') {
+      newData = useFormValueChanged({
+        formData,
+        selectedValue,
+        step,
+        fieldIndex,
+        sectionIndex,
+      })
+    } else {
+      newData = useModalValueChanged({
+        formData,
+        selectedValue,
+        step,
+        fieldIndex,
+        sectionIndex,
+      })
+    }
+    setFormData(newData)
   }
 
   const viewProps = {

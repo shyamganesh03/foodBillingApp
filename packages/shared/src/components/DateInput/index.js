@@ -16,6 +16,8 @@ import { TextInput, Text } from '@libs/components'
 const DateInput = (props) => {
   const {
     isEditMode,
+    inputType,
+    disable,
     label,
     placeholder,
     dob,
@@ -29,6 +31,7 @@ const DateInput = (props) => {
     textInputWidth,
     style,
   } = props
+
   const [isHovered, setIsHovered] = useState(false)
   const [yearVisible, setYearVisible] = useState(false)
   const { colors } = useTheme()
@@ -42,12 +45,14 @@ const DateInput = (props) => {
   const [yearDropDownLeft, setYearDropDownLeft] = useState(0)
   const [selectedDate, setSelectedDate] = useState('')
   const minYear = new Date().getFullYear() - 100
-  const maxYear = dob
-    ? new Date().getFullYear()
-    : new Date().getFullYear() + 100
+  const maxYear =
+    inputType === 'dob' || dob
+      ? new Date().getFullYear()
+      : new Date().getFullYear() + 100
   const currentYear = new Date().getFullYear()
   const defaultValue =
     value || `${currentYear}-${new Date().toISOString().slice(5, 10)}`
+
   const [selectedYear, setSelectedYear] = useState(defaultValue.slice(0, 4))
   const [selectedMonth, setSelectedMonth] = useState(defaultValue.slice(5, 7))
   const [selectedDay, setSelectedDay] = useState(defaultValue.slice(8, 10))
@@ -209,7 +214,7 @@ const DateInput = (props) => {
             />
           </View>
         </TouchableOpacity>
-        <Modal id="model" visible={yearVisible} transparent>
+        <Modal id="modal" visible={yearVisible} transparent>
           <View
             style={{
               top: yearDropdownTop,
@@ -343,7 +348,15 @@ const DateInput = (props) => {
         onPress={() => {
           toggleDropdown()
         }}
-        style={style}
+        disabled={disable}
+        style={[
+          style,
+          disable
+            ? { opacity: 0.6 }
+            : {
+                borderColor: error?.hasError ? colors.onAlert : '#E0E0E0',
+              },
+        ]}
       >
         <View style={{ flexDirection: 'row' }}>
           {isMandatory && isEditMode ? (

@@ -14,6 +14,7 @@ import { Text } from '@libs/components'
 
 const DropDown = (props) => {
   const {
+    error,
     isEditMode,
     disable,
     label,
@@ -93,7 +94,7 @@ const DropDown = (props) => {
         { position: 'relative' },
         {
           width: hasFullWidth ? '100%' : 325,
-          height: 32,
+          height: error?.hasError ? '' : 32,
         },
         style,
       ]}
@@ -120,6 +121,7 @@ const DropDown = (props) => {
                   borderWidth: 0,
                 }
               : {},
+            { borderColor: error?.hasError ? colors.onAlert : '#E0E0E0' },
           ]}
           disabled={disable}
         >
@@ -201,6 +203,11 @@ const DropDown = (props) => {
             </Animated.ScrollView>
           </TouchableOpacity>
         </Modal>
+      ) : null}
+      {error?.hasError ? (
+        <Text variant="body2" color={colors.onAlert}>
+          {error?.message}
+        </Text>
       ) : null}
     </View>
   )

@@ -122,6 +122,7 @@ export const fieldData = {
             name: 'birthdate',
             fieldName: 'birthdate',
             type: 'date',
+            inputType: 'dob',
             mandatory: true,
             selectedValue: '',
           },
@@ -170,7 +171,7 @@ export const fieldData = {
             name: 'mobileOrPrimaryNumber',
             fieldName: 'phoneNumber',
             type: 'textField',
-            inputType: 'phone',
+            inputType: 'string',
             mandatory: true,
             selectedValue: '',
           },
@@ -179,7 +180,7 @@ export const fieldData = {
             name: 'alternativePhoneNumber',
             fieldName: 'AltPhoneNumber',
             type: 'textField',
-            inputType: 'phone',
+            inputType: 'string',
             mandatory: true,
             selectedValue: '',
           },
@@ -279,7 +280,7 @@ export const fieldData = {
             name: 'Emergency Contact Primary Phone',
             fieldName: 'emergencyContactPrimaryPhone',
             type: 'textField',
-            inputType: 'phone',
+            inputType: 'number',
             mandatory: true,
             selectedValue: '',
           },
@@ -382,16 +383,17 @@ export const fieldData = {
     sections: [
       {
         title: 'University/College Information',
-        type: 'model',
+        type: 'modal',
         buttonText: 'New',
         fieldName: 'universityOrCollegeInfo',
-        modelFields: [
+        modalFields: [
           {
             label: 'Academic Institution',
             name: 'institutionNameIfNotFound',
             type: 'textField',
             fieldName: 'institutionNameIfNotFound',
             inputType: 'string',
+            mandatory: true,
             selectedValue: '',
           },
           {
@@ -409,12 +411,14 @@ export const fieldData = {
             fieldName: 'startTermApplyingFor',
             type: 'date',
             mandatory: true,
+            inputType: 'startAcademicDate',
             selectedValue: '',
           },
           {
             label: 'Academic Institution Estimated End Date',
             name: 'endTermApplyingFor',
             fieldName: 'endTermApplyingFor',
+            inputType: 'endAcademicDate',
             type: 'date',
             mandatory: true,
             selectedValue: '',
@@ -423,6 +427,7 @@ export const fieldData = {
             label: 'Approx. Degree Earned Date',
             name: 'degreeEarnedDate',
             fieldName: 'degreeEarnedDate',
+            inputType: 'degreeEarnedDate',
             type: 'date',
             mandatory: true,
             selectedValue: '',
@@ -516,21 +521,22 @@ export const fieldData = {
       {
         title: 'AAMC-MCAT Reporting',
         fieldName: 'AAMCMCATReporting',
-        type: 'model',
+        type: 'modal',
         buttonText: 'New',
-        modelFields: [
+        modalFields: [
           {
             label: 'MCAT Exam Date',
             name: 'MCATDate',
             fieldName: 'MCATDate',
+            inputType: 'MCATDate',
             type: 'date',
           },
           {
             label: 'MCAT Total Score',
             name: 'MCATTotalScore',
+            inputType: 'number',
             type: 'textField',
             fieldName: 'MCATTotalScore',
-            inputType: 'number',
           },
         ],
         selectedValue: '',
@@ -543,11 +549,11 @@ export const fieldData = {
       {
         title:
           'Clinical/Hospital Experience (Volunteer, Shadowing, Observation or Otherwise)',
-        type: 'model',
+        type: 'modal',
         buttonText: 'New',
         fieldName: 'clinicalOrHospitalExperienceDetails',
-        modelDirection: 'column',
-        modelFields: [
+        modalDirection: 'column',
+        modalFields: [
           {
             label: 'Clinic/Hospital',
             name: 'clinicOrHospital',
@@ -568,7 +574,7 @@ export const fieldData = {
             label: 'Clinical Experience Hours Completed',
             name: 'clinicalExperienceHoursCompleted',
             type: 'textField',
-            inputType: 'string',
+            inputType: 'number',
             fieldName: 'clinicalExperienceHoursCompleted',
             selectedValue: '',
           },
@@ -576,11 +582,11 @@ export const fieldData = {
       },
       {
         title: 'Research Experience',
-        type: 'model',
+        type: 'modal',
         buttonText: 'New',
         fieldName: 'researchExperience',
-        modelDirection: 'column',
-        modelFields: [
+        modalDirection: 'column',
+        modalFields: [
           {
             label: 'Previous Research Experience',
             name: 'previousResearchExperience',
@@ -739,8 +745,8 @@ export const fieldData = {
       {
         title: 'Attached Files',
         hasAttachments: true,
-        type: 'model',
-        modelFields: [{ label: 'Name' }, { label: 'Type' }],
+        type: 'modal',
+        modalFields: [{ label: 'Name' }, { label: 'Type' }],
       },
       {
         title: 'Supplemental Requirements',
@@ -754,7 +760,7 @@ export const fieldData = {
       },
       {
         title: 'Recommenders',
-        type: 'model',
+        type: 'modal',
         buttonText: 'New',
         description: {
           label:
@@ -762,8 +768,8 @@ export const fieldData = {
           type: 'description',
         },
         fieldName: 'recommenders',
-        modelDirection: 'column',
-        modelFields: [
+        modalDirection: 'column',
+        modalFields: [
           {
             label: 'First Name or Indicate if Interfolio',
             name: 'recommenderFirstName',
@@ -785,7 +791,7 @@ export const fieldData = {
             label: 'Email',
             name: 'recommenderEmail',
             type: 'textField',
-            inputType: 'string',
+            inputType: 'email',
             fieldName: 'recommenderEmail',
             selectedValue: '',
           },
@@ -842,6 +848,7 @@ export const fieldData = {
             name: 'signatureDate',
             fieldName: 'signatureDate',
             type: 'date',
+            inputType: 'signatureDate',
             mandatory: true,
             selectedValue: '',
           },

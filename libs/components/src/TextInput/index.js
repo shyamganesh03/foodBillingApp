@@ -48,10 +48,11 @@ const TextInput = (props) => {
       </View>
       <Row
         style={[
-          isEditMode ? styles.inputRow : styles.disableStye,
+          isEditMode ? styles.inputRow : styles.disableStyle,
           {
             backgroundColor: editable ? 'transparent' : colors.background,
             width: textInputWidth || 325,
+            borderColor: error?.hasError ? colors.onAlert : '#E0E0E0',
           },
           hasFullWidth
             ? {
@@ -72,7 +73,7 @@ const TextInput = (props) => {
           required={required}
           secureTextEntry={secureTextEntry}
           style={[styles.inputField, inputFieldStyle]}
-          value={value}
+          value={value || ''}
           editable={isEditMode}
         />
         {trailingIcon && (
@@ -93,11 +94,10 @@ export const styles = StyleSheet.create({
     alignSelf: 'stretch',
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: '#E0E0E0',
     paddingHorizontal: 14,
     height: 32,
   },
-  disableStye: {},
+  disableStyle: {},
 
   inputField: {
     flex: 1,

@@ -6,12 +6,13 @@ import {
   View,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { CheckBox, DateInput, DropDown, ModelComponent } from '../../components'
+import { CheckBox, DateInput, DropDown, ModalComponent } from '../../components'
 import { useTheme } from '@react-navigation/native'
 import { universityLogo } from '@oap/assets'
 import { FilePicker, Button, Text, TextInput } from '@libs/components'
 import { Loader } from '../../components'
 import { Icon } from '@r3-oaf/native-icons'
+import { getCurrentDate } from '../../utils/dateFunction'
 
 const DesktopView = ({
   setIsFileSuccess,
@@ -65,6 +66,7 @@ const DesktopView = ({
           />
           <View style={{ flex: 1 }}>
             <FormFields
+              formData={formData}
               setIsFileSuccess={setIsFileSuccess}
               isSuccess={isFileSuccess}
               activeTab={activeTab}
@@ -137,16 +139,18 @@ const DesktopView = ({
           </View>
         </View>
         <Loader showLoader={showLoader} />
-        <ModelComponent
+        <ModalComponent
           data={modalFields}
-          handleCloseModel={(properties) => {
+          formData={formData}
+          hasError={{ message: hasError.errorMessage1 }}
+          handleCloseModal={(properties) => {
             handleValueChanged(properties)
             setModalFields({
-              isModelVisible: false,
-              items: [],
+              isModalVisible: false,
               title: '',
               direction: 'row',
               sectionIndex: -1,
+              error: '',
             })
           }}
           isEditMode={isEditMode}
@@ -171,6 +175,7 @@ const DesktopView = ({
 }
 
 const FormFields = ({
+  formData,
   setIsFileSuccess,
   isSuccess,
   modalFields,
@@ -206,6 +211,7 @@ const FormFields = ({
       ) : null}
       {Object.entries(fieldData)?.map(([step, session]) => {
         return renderFields({
+          formData,
           setIsFileSuccess,
           isSuccess,
           modalFields,
@@ -229,7 +235,7 @@ const FormFields = ({
           uploadDocs,
         })
       })}
-      {hasError.errorMessage1 ? (
+      {hasError.errorMessage1 && !modalFields.isModalVisible ? (
         <Text
           variant="body2"
           style={{ marginTop: 20, paddingLeft: 12 }}
@@ -252,6 +258,7 @@ const FormFields = ({
 }
 
 const renderFields = ({
+  formData,
   setIsFileSuccess,
   isSuccess,
   modalFields,
@@ -289,9 +296,10 @@ const renderFields = ({
     }
 
     return session?.sections?.map((item, sectionIndex) => {
-      return item?.type === 'model' ? (
-        <ModelContainer
+      return item?.type === 'modal' ? (
+        <ModalContainer
           data={item}
+          formData={formData}
           index={sectionIndex}
           step={step}
           isEditMode={isEditMode}
@@ -317,13 +325,13 @@ const renderFields = ({
         >
           <View
             ref={containerRef}
-            style={{ flexDirection: item?.type === 'model' ? 'row' : 'column' }}
+            style={{ flexDirection: item?.type === 'modal' ? 'row' : 'column' }}
           >
             <Text
               variant={stepValue === 0 ? 'heading3' : 'heading4'}
               style={{
                 textDecoration: stepValue === 0 ? 'underline' : 'none',
-                marginBottom: item?.type === 'model' ? 0 : 10,
+                marginBottom: item?.type === 'modal' ? 0 : 10,
               }}
             >
               {item?.title}
@@ -374,13 +382,14 @@ const renderFields = ({
                           toggleDropdown={toggleDropdown}
                           dropdownWidth={dropdownWidth}
                           isEditMode={isEditMode}
+                          error={fieldItem.error || ''}
                           items={getDropdownData(fieldItem)}
                           hasFullWidth={fieldItem.hasFullWidth}
                           position={{ top: dropdownTop, left: dropdownLeft }}
                           onPress={(selectedValue) =>
                             handleValueChanged({
                               selectedValue: selectedValue,
-                              type: fieldItem.type,
+                              type: 'form',
                               step,
                               fieldIndex,
                               sectionIndex,
@@ -404,7 +413,7 @@ const renderFields = ({
                         onChangeText={(value) => {
                           handleValueChanged({
                             selectedValue: value,
-                            type: fieldItem.type,
+                            type: 'form',
                             step,
                             fieldIndex,
                             sectionIndex,
@@ -417,6 +426,8 @@ const renderFields = ({
                     return (
                       <DateInput
                         title={fieldItem.label}
+                        error={fieldItem.error || ''}
+                        inputType={fieldItem.inputType}
                         isEditMode={isEditMode}
                         style={{ marginHorizontal: isCenter === 0 ? 20 : 0 }}
                         isMandatory={fieldItem.mandatory}
@@ -425,11 +436,16 @@ const renderFields = ({
                             ? fieldItem.selectedValue
                             : ''
                         }
-                        value={fieldItem.selectedValue}
+                        disable={fieldItem.inputType === 'signatureDate'}
+                        value={
+                          fieldItem.inputType === 'signatureDate'
+                            ? getCurrentDate()
+                            : fieldItem.selectedValue
+                        }
                         onChangeText={(selectedDate) =>
                           handleValueChanged({
                             selectedValue: selectedDate,
-                            type: fieldItem.type,
+                            type: 'form',
                             step,
                             fieldIndex,
                             sectionIndex,
@@ -446,7 +462,7 @@ const renderFields = ({
                         handleCheck={(isChecked) =>
                           handleValueChanged({
                             selectedValue: isChecked,
-                            type: fieldItem.type,
+                            type: 'form',
                             step,
                             fieldIndex,
                             sectionIndex,
@@ -485,9 +501,10 @@ const renderFields = ({
   }
 }
 
-const ModelContainer = ({
+const ModalContainer = ({
   modalFields,
   uploadDocs = () => {},
+  formData,
   step,
   data,
   index,
@@ -500,16 +517,16 @@ const ModelContainer = ({
   const [listItems, setListItems] = useState({})
 
   useEffect(() => {
-    if (data?.modelFieldValues) {
-      const keys = Object.keys(data?.modelFieldValues)
+    if (data?.modalFieldValues) {
+      const keys = Object.keys(data?.modalFieldValues)
       if (keys.length > 1) {
         let tabsData = []
-        data?.modelFields?.map((item) => {
+        data?.modalFields?.map((item) => {
           tabsData.push(item.label)
         })
         let listItem = {}
-        Object.entries(data?.modelFieldValues).map(([key, value]) => {
-          const emptyArrayLength = data?.modelFieldValues['empty']?.length
+        Object.entries(data?.modalFieldValues).map(([key, value]) => {
+          const emptyArrayLength = data?.modalFieldValues['empty']?.length
           if (value?.length > emptyArrayLength) {
             listItem = {
               ...listItem,
@@ -531,7 +548,7 @@ const ModelContainer = ({
         setListItems({})
       }
     }
-  }, [data?.modelFieldValues])
+  }, [data?.modalFieldValues])
 
   const getTitle = () => {
     if (!isEditMode && data?.hasAttachments) {
@@ -568,10 +585,9 @@ const ModelContainer = ({
             onPress={() =>
               setModalFields({
                 ...modalFields,
-                isModelVisible: true,
-                items: data?.modelFields,
+                isModalVisible: true,
                 title: data?.title,
-                direction: data?.modelDirection || 'row',
+                direction: data?.modalDirection || 'row',
                 sectionIndex: index,
               })
             }
@@ -847,7 +863,7 @@ const ApplicationReviewContainer = ({
                     onChangeText={(value) => {
                       handleValueChanged({
                         selectedValue: value,
-                        type: fieldItem.type,
+                        type: 'form',
                         step,
                         fieldIndex,
                         sectionIndex: 0,
@@ -859,14 +875,22 @@ const ApplicationReviewContainer = ({
               if (fieldItem.type === 'date') {
                 return (
                   <DateInput
+                    error={fieldItem.error || ''}
                     title={fieldItem.label}
+                    disable={fieldItem.inputType === 'signatureDate'}
+                    value={
+                      fieldItem.inputType === 'signatureDate'
+                        ? `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`
+                        : fieldItem.selectedValue
+                    }
+                    inputType={fieldItem.inputType}
                     isEditMode={isEditMode}
                     isMandatory={fieldItem.mandatory}
                     textInputWidth={145}
                     onChangeText={(selectedDate) =>
                       handleValueChanged({
                         selectedValue: selectedDate,
-                        type: fieldItem.type,
+                        type: 'form',
                         step,
                         fieldIndex,
                         sectionIndex: 0,
@@ -923,7 +947,7 @@ const CommonFromContainer = ({
               handleCheck={(isChecked) =>
                 handleValueChanged({
                   selectedValue: isChecked,
-                  type: field.type,
+                  type: 'form',
                   step,
                   fieldIndex,
                   sectionIndex,
@@ -949,12 +973,13 @@ const CommonFromContainer = ({
                 dropdownWidth={dropdownWidth}
                 items={getDropdownData(field)}
                 position={{ top: dropdownTop, left: dropdownLeft }}
+                error={field.error || ''}
                 onPress={(selectedValue) =>
                   handleValueChanged({
                     selectedValue: selectedValue,
-                    type: field.type,
+                    type: 'form',
                     step,
-                    fieldIndex: fieldIndex,
+                    fieldIndex,
                     sectionIndex,
                   })
                 }
@@ -1037,10 +1062,11 @@ const Tab = ({
       style={[getTabStyle(), style]}
       onPress={() => {
         if (!isModal) {
-          setActiveTab(index)
           handleSave(
             formData[`step${activeTab}`],
-            activeTab === 0 ? 'initialSave' : 'save',
+            activeTab === 0 ? 'initialTab' : 'TabSaveAndNext',
+            '',
+            index,
           )
         }
       }}
