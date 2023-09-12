@@ -439,7 +439,7 @@ const renderFields = ({
                         disable={fieldItem.inputType === 'signatureDate'}
                         value={
                           fieldItem.inputType === 'signatureDate'
-                            ? getCurrentDate()
+                            ? getCurrentDate({ type: 'string' })
                             : fieldItem.selectedValue
                         }
                         onChangeText={(selectedDate) =>

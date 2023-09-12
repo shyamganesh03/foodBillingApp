@@ -280,7 +280,7 @@ export const fieldData = {
             name: 'Emergency Contact Primary Phone',
             fieldName: 'emergencyContactPrimaryPhone',
             type: 'textField',
-            inputType: 'number',
+            inputType: 'String',
             mandatory: true,
             selectedValue: '',
           },

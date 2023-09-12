@@ -93,10 +93,10 @@ export const useInitialForm = async ({
   return { initial: false }
 }
 
-export const useModalSave = async ({ email, submittedData }) => {
+export const useModalSave = async ({ email, submittedData, sessionName }) => {
   let modalPayload = { email: email }
   submittedData.sections.forEach((section) => {
-    if (section.fieldName) {
+    if (section.fieldName && sessionName === section.title) {
       const sectionData = section.selectedValue
       let newSectionDate
 
@@ -110,6 +110,7 @@ export const useModalSave = async ({ email, submittedData }) => {
       }
     }
   })
+
   const updateResponse = await updateApplication(modalPayload)
   return updateResponse
 }

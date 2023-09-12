@@ -39,7 +39,7 @@ export const useValidation = ({
 
   const validateForFutureDate = (dateToValidate, dateName, value, hasValid) => {
     // Assuming you have a function getCurrentDate() defined somewhere
-    const currentDate = getCurrentDate()
+    const currentDate = getCurrentDate({ type: 'Date' })
     if (dateToValidate >= currentDate) {
       // Assuming you want to set an error message
       value.error = {
@@ -72,7 +72,7 @@ export const useValidation = ({
         }
         if (fieldValue.inputType === 'dob') {
           const birthDate = new Date(fieldValue.selectedValue)
-          const currentDate = getCurrentDate()
+          const currentDate = getCurrentDate({ type: 'Date' })
 
           if (currentDate < birthDate) {
             // If email is not valid, set the error message

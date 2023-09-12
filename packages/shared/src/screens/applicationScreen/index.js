@@ -30,6 +30,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Text } from '@libs/components'
 import { useFormSave, useInitialForm, useModalSave } from '../../hooks/useSave'
 import { useValidation } from '../../hooks/useValidation'
+import { getCurrentDate } from '../../utils/dateFunction'
 
 const Application = (props) => {
   const [dropdownTop, setDropdownTop] = useState(0)
@@ -94,6 +95,10 @@ const Application = (props) => {
           response.First_Name__c
         formDataCopy.step1.sections[0].fields[0].selectedValue =
           response.R3_Picklist__c
+        formDataCopy.step6.sections[0].fields[1].selectedValue = getCurrentDate(
+          { type: 'string' },
+        )
+
         return response
       },
       enabled: !!paramsData?.id && isFocused,
@@ -108,6 +113,9 @@ const Application = (props) => {
       const responseData = await getApplicationByEmailID({
         email: paramsData?.email || applicationDetails?.Email__c,
       })
+      formDataCopy.step6.sections[0].fields[1].selectedValue = getCurrentDate({
+        type: 'string',
+      })
       if (responseData.applicationStatus === 'Submitted') {
         setIsEditMode(false)
       }
@@ -115,10 +123,11 @@ const Application = (props) => {
       for (const step in formDataCopy) {
         if (formDataCopy.hasOwnProperty(step)) {
           const sections = formDataCopy[step]?.sections
-          let listIds = []
+
           if (sections) {
             for (const section of sections) {
               const fields = section?.fields
+              let listIds = []
               if (section.type === 'modal') {
                 const transformedData = {}
                 if (responseData[section.fieldName]?.length > 0) {
@@ -196,7 +205,6 @@ const Application = (props) => {
           }
         }
       }
-
       setFormData(formDataCopy)
       return responseData
     },
@@ -204,6 +212,8 @@ const Application = (props) => {
       (!!paramsData?.email || !!applicationDetails?.Email__c) && isFocused,
     initialData: [],
   })
+
+  console.log({ formData })
 
   const {
     data: documentsData,
@@ -292,7 +302,11 @@ const Application = (props) => {
       }
     } else {
       for (const field of fields) {
-        if (field?.mandatory && field?.selectedValue === '') {
+        if (
+          field?.mandatory &&
+          field?.selectedValue === '' &&
+          field?.fieldName !== 'signatureDate'
+        ) {
           // Field is mandatory and has no selected value
           if (!mandatoryFields[sectionTitle]) {
             mandatoryFields[sectionTitle] = []
@@ -376,7 +390,17 @@ const Application = (props) => {
       setHasError,
       sessionName,
     })
-    if (!isDataValid) {
+    if (activeTab === 6 && isCTADisabled) {
+      if (type === 'TabSaveAndNext' || type === 'initialTab') {
+        setActiveTab(tabIndex)
+      }
+      // Handle 'saveAndNext' and other types.
+      if (type === 'saveAndNext' || type === 'initial') {
+        setActiveTab(activeTab + 1)
+      }
+      return
+    }
+    if (!isDataValid && activeTab !== 6) {
       return
     }
     setShowLoader(true)
@@ -404,6 +428,9 @@ const Application = (props) => {
         clinicalOrHospitalExperienceDetails: [],
         researchExperience: [],
         recommenders: [],
+        firstChoiceSchool: submittedData.sections[1].fields[0]?.selectedValue,
+        secondChoiceSchool: submittedData.sections[1].fields[1]?.selectedValue,
+        thirdChoiceSchool: submittedData.sections[1].fields[2]?.selectedValue,
         applicationStatus: 'In Progress',
       }
       response = await useInitialForm({
@@ -451,6 +478,7 @@ const Application = (props) => {
       response = await useModalSave({
         email: paramsData?.email || applicationDetails?.Email__c,
         submittedData,
+        sessionName,
       })
       if (response?.message[0]?.message) {
         setHasError({
@@ -462,6 +490,44 @@ const Application = (props) => {
       }
       // refetch updated Data
       await refetch()
+      const sections = submittedData.sections
+      let sectionIndex = -1
+      for (let i = 0; i < sections.length; i++) {
+        if (sections[i].title === sessionName) {
+          sectionIndex = i // Update the index if the title matches
+          break // Exit the loop when the first match is found
+        }
+      }
+
+      const currentSection =
+        formData[`step${activeTab}`]?.sections[sectionIndex]
+      currentSection.selectedValue = ''
+      currentSection?.modalFields?.map((fieldValues) => {
+        fieldValues.selectedValue = ''
+        fieldValues.error = {}
+      })
+      const updatedFieldData = {
+        ...formData,
+        [`step${activeTab}`]: {
+          ...formData[`step${activeTab}`],
+          sections: [
+            ...formData[`step${activeTab}`]?.sections.slice(0, sectionIndex),
+            { ...currentSection },
+            ...formData[`step${activeTab}`]?.sections.slice(sectionIndex + 1),
+          ],
+        },
+      }
+      setFormData(updatedFieldData)
+
+      // Reset modalFields.
+      setModalFields({
+        isModalVisible: false,
+        items: [],
+        title: '',
+        direction: 'row',
+        sectionIndex: -1,
+        error: '',
+      })
       setShowLoader(false)
       return
     }
@@ -478,19 +544,11 @@ const Application = (props) => {
         errorMessage1: `* ${response?.message[0]?.message}`,
       })
       setShowLoader(false)
+
       return
     }
-    // Reset modalFields.
-    setModalFields({
-      isModalVisible: false,
-      items: [],
-      title: '',
-      direction: 'row',
-      sectionIndex: -1,
-      error: '',
-    })
+
     if (type === 'TabSaveAndNext' || type === 'initialTab') {
-      console.log({ tabIndex })
       setActiveTab(tabIndex)
     }
 
