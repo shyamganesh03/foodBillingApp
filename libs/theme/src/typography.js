@@ -59,7 +59,7 @@ export const typography = {
   },
   body2: {
     fontFamily: `${MUKTA}`,
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: 300,
   },
   body3: {

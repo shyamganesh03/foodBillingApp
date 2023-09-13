@@ -1,6 +1,7 @@
 export const colors = {
   primary: {
     green400: '#0099DD',
+    red500: '#B42638',
   },
   neutral: {
     white: '#FFFFFF',
