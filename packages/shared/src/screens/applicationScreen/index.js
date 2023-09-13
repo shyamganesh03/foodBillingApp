@@ -194,9 +194,17 @@ const Application = (props) => {
                           name: selectedData[0]?.Label,
                           value: selectedData[0]?.Value,
                         }
+                        field.isSave = true
+                      } else {
+                        field.isSave = false
                       }
                     } else {
-                      field.selectedValue = responseData[fieldName]
+                      if (responseData[fieldName]) {
+                        field.selectedValue = responseData[fieldName]
+                        field.isSave = true
+                      } else {
+                        field.isSave = false
+                      }
                     }
                   }
                 })
@@ -212,8 +220,6 @@ const Application = (props) => {
       (!!paramsData?.email || !!applicationDetails?.Email__c) && isFocused,
     initialData: [],
   })
-
-  console.log({ formData })
 
   const {
     data: documentsData,
@@ -303,9 +309,10 @@ const Application = (props) => {
     } else {
       for (const field of fields) {
         if (
-          field?.mandatory &&
-          field?.selectedValue === '' &&
-          field?.fieldName !== 'signatureDate'
+          (field?.mandatory &&
+            field?.selectedValue === '' &&
+            field?.fieldName !== 'signatureDate') ||
+          (field?.selectedValue !== '' && !field.isSave && field?.mandatory)
         ) {
           // Field is mandatory and has no selected value
           if (!mandatoryFields[sectionTitle]) {
@@ -431,6 +438,7 @@ const Application = (props) => {
         firstChoiceSchool: submittedData.sections[1].fields[0]?.selectedValue,
         secondChoiceSchool: submittedData.sections[1].fields[1]?.selectedValue,
         thirdChoiceSchool: submittedData.sections[1].fields[2]?.selectedValue,
+        isCommonApplication: submittedData.sections[0].fields[2]?.selectedValue,
         applicationStatus: 'In Progress',
       }
       response = await useInitialForm({

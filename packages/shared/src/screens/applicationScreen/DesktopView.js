@@ -1062,12 +1062,7 @@ const Tab = ({
       style={[getTabStyle(), style]}
       onPress={() => {
         if (!isModal) {
-          handleSave(
-            formData[`step${activeTab}`],
-            activeTab === 0 ? 'initialTab' : 'TabSaveAndNext',
-            '',
-            index,
-          )
+          setActiveTab(index)
         }
       }}
     >
