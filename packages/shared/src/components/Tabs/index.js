@@ -3,15 +3,19 @@ import React from 'react'
 import { Icon } from '@r3-oaf/native-icons'
 import { useTheme } from '@react-navigation/native'
 import { Text } from '@libs/components'
+import { TouchableOpacity } from 'react-native'
+import { getLabelMargin } from './helpers'
+import { IconContainer } from './icon-container'
 
-const ApplicationProgressCard = ({ categoryData = [], currentActiveIndex }) => {
+const Tabs = ({ categoryData = [], setActiveTab, activeTab }) => {
   return (
     <View style={{ paddingVertical: 30 }}>
       {categoryData.map((item, index) => (
         <Label
           title={item?.title}
           status={item?.status}
-          currentActiveIndex={currentActiveIndex}
+          currentActiveIndex={activeTab}
+          setActiveTab={setActiveTab}
           index={index}
           isLastIndex={categoryData?.length === index + 1}
         />
@@ -20,58 +24,23 @@ const ApplicationProgressCard = ({ categoryData = [], currentActiveIndex }) => {
   )
 }
 
-const renderIcon = (status, currentActiveIndex, index, colors) => {
-  if (currentActiveIndex === index) {
-    return (
-      <View
-        style={{
-          height: 15,
-          width: 15,
-          backgroundColor: colors.white,
-          borderRadius: 7.5,
-        }}
-      />
-    )
-  }
-  if (currentActiveIndex !== index && status !== 'completed') {
-    return (
-      <View
-        style={{
-          height: 10,
-          width: 10,
-          backgroundColor: colors.white,
-          borderRadius: 5,
-          // opacity: 0.5,
-        }}
-      />
-    )
-  }
-  if (status === 'completed') {
-    return <Icon name="Check" height={20} width={20} color={colors.white} />
-  }
-}
-
-const getLabelMargin = (status, currentActiveIndex, index, colors) => {
-  if (currentActiveIndex === index) {
-    return 7
-  }
-  if (currentActiveIndex !== index && status !== 'completed') {
-    return 4
-  }
-  if (status === 'completed') {
-    return 7
-  }
-}
-
-const Label = ({ title, status, currentActiveIndex, index, isLastIndex }) => {
+const Label = ({
+  title,
+  status,
+  currentActiveIndex,
+  index,
+  isLastIndex,
+  setActiveTab,
+}) => {
   const { colors } = useTheme()
   const isActive = currentActiveIndex === index
   return (
-    <View
+    <TouchableOpacity
       style={{
         flexDirection: 'column',
       }}
       key={index}
+      onPress={() => setActiveTab(index)}
     >
       {!isLastIndex ? (
         <View
@@ -93,9 +62,12 @@ const Label = ({ title, status, currentActiveIndex, index, isLastIndex }) => {
           alignItems: 'center',
         }}
       >
-        <View style={{ width: 25 }}>
-          {renderIcon(status, currentActiveIndex, index, colors)}
-        </View>
+        <IconContainer
+          status={status}
+          currentActiveIndex={currentActiveIndex}
+          index={index}
+          colors={colors}
+        />
         <Text
           variant={'body2'}
           color={colors.white}
@@ -104,8 +76,8 @@ const Label = ({ title, status, currentActiveIndex, index, isLastIndex }) => {
           {title}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
-export default ApplicationProgressCard
+export default Tabs
