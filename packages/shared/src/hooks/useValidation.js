@@ -37,7 +37,7 @@ export const useValidation = ({
     }
   }
 
-  const validateForFutureDate = (dateToValidate, dateName, value, hasValid) => {
+  const validateForFutureDate = ({ dateToValidate, dateName, value }) => {
     // Assuming you have a function getCurrentDate() defined somewhere
     const currentDate = getCurrentDate({ type: 'Date' })
     if (dateToValidate >= currentDate) {
@@ -51,24 +51,45 @@ export const useValidation = ({
       hasValid.push(true)
     }
   }
+  const validateEmail = ({ fieldValue }) => {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+    const isValidEmail = emailPattern.test(fieldValue.selectedValue)
+    if (!isValidEmail) {
+      // If email is not valid, set the error message
+      fieldValue.error = {
+        hasError: true,
+        message: 'Invalid Email',
+      }
+      hasValid.push(false)
+    } else {
+      hasValid.push(true)
+    }
+  }
+
+  const validateMobile = ({ fieldValue }) => {
+    const phoneNumberRegex = /^(\+\d{1,3}-?)?(\d{5}-?)?\d{5}$/
+    const isValidNumber = phoneNumberRegex.test(fieldValue.selectedValue)
+    if (!isValidNumber) {
+      // If email is not valid, set the error message
+      fieldValue.error = {
+        hasError: true,
+        message: 'Invalid Mobile number',
+      }
+      hasValid.push(false)
+    } else {
+      hasValid.push(true)
+    }
+  }
 
   updatedData.sections = updatedData?.sections?.map((section) => {
     // Corrected 'section' access
     if (section?.fields && type !== 'modalSave') {
       section.fields = section.fields.map((fieldValue) => {
         if (fieldValue.inputType === 'email') {
-          const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
-          const isValidEmail = emailPattern.test(fieldValue.selectedValue)
-          if (!isValidEmail) {
-            // If email is not valid, set the error message
-            fieldValue.error = {
-              hasError: true,
-              message: 'Invalid Email',
-            }
-            hasValid.push(false)
-          } else {
-            hasValid.push(true)
-          }
+          validateEmail({ fieldValue })
+        }
+        if (fieldValue.inputType === 'phone') {
+          validateMobile({ fieldValue })
         }
         if (fieldValue.inputType === 'dob') {
           const birthDate = new Date(fieldValue.selectedValue)
@@ -98,19 +119,27 @@ export const useValidation = ({
         const degreeDate = new Date(
           section?.modalFields[4]?.selectedValue || '',
         )
+        if (modalFieldValue.inputType === 'email') {
+          validateEmail({ fieldValue: modalFieldValue })
+        }
+        if (modalFieldValue.inputType === 'phone') {
+          validateMobile({ fieldValue: modalFieldValue })
+        }
 
         if (modalFieldValue.inputType === 'startAcademicDate') {
-          validateForFutureDate(
-            startDate,
-            'Start Date',
-            modalFieldValue,
-            hasValid,
-          )
+          validateForFutureDate({
+            dateToValidate: startDate,
+            dateName: 'Start Date',
+            value: modalFieldValue,
+          })
         }
 
         if (modalFieldValue.inputType === 'endAcademicDate') {
-          validateForFutureDate(endDate, 'End Date', modalFieldValue, hasValid)
-
+          validateForFutureDate({
+            dateToValidate: endDate,
+            dateName: 'End Date',
+            value: modalFieldValue,
+          })
           if (endDate < startDate) {
             modalFieldValue.error = {
               hasError: true,
@@ -122,12 +151,11 @@ export const useValidation = ({
           }
         }
         if (modalFieldValue.inputType === 'degreeEarnedDate') {
-          validateForFutureDate(
-            degreeDate,
-            'Degree Earned',
-            modalFieldValue,
-            hasValid,
-          )
+          validateForFutureDate({
+            dateToValidate: degreeDate,
+            dateName: 'Degree Earned',
+            value: modalFieldValue,
+          })
 
           if (degreeDate < endDate) {
             modalFieldValue.error = {
@@ -142,12 +170,11 @@ export const useValidation = ({
         }
         if (modalFieldValue.inputType === 'MCATDate') {
           const mcatDate = new Date(modalFieldValue.selectedValue)
-          validateForFutureDate(
-            mcatDate,
-            'MCAT Exam Date',
-            modalFieldValue,
-            hasValid,
-          )
+          validateForFutureDate({
+            dateToValidate: mcatDate,
+            dateName: 'MCAT Exam Date',
+            value: modalFieldValue,
+          })
         }
         mandatoryCheck({ fieldValue: modalFieldValue })
         if (!modalFieldValue?.selectedValue) {
