@@ -17,10 +17,8 @@ const DesktopView = ({
   validationError,
 }) => {
   const { colors } = useTheme()
-  console.log({ activeTab })
 
   if (Number(steps) === 1) {
-    console.log({ steps })
     return (
       <View style={styles({ colors }).container}>
         <View style={styles({ colors }).rightContainer}>

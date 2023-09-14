@@ -1,31 +1,52 @@
-import { View } from 'react-native'
-import React from 'react'
+import { ScrollView, View } from 'react-native'
+import React, { useState } from 'react'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import { Text } from '@libs/components'
 import { TouchableOpacity } from 'react-native'
 import { getLabelMargin } from './helpers'
 import { IconContainer } from './icon-container'
 
-const TimeLine = ({ categoryData = [], activeTab }) => {
+const TimeLine = ({ categoryData = [] }) => {
+  const { colors } = useTheme()
+  const [activeTab, setActiveTab] = useState(0)
   return (
-    <View style={{ paddingVertical: 30 }}>
+    <View>
+      <View
+        style={{
+          width: '100%',
+          height: 700,
+          borderColor: colors.white,
+          borderLeftWidth: 1,
+          top: 24,
+          position: 'absolute',
+          marginLeft: 7,
+        }}
+      />
       {categoryData.map((item, index) => (
         <Label
           title={item?.displayName}
           status={item?.status}
-          currentActiveIndex={activeTab}
           index={index}
           isLastIndex={categoryData?.length === index + 1}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
         />
       ))}
     </View>
   )
 }
 
-const Label = ({ title, status, currentActiveIndex, index, isLastIndex }) => {
+const Label = ({
+  title,
+  status,
+  index,
+  currentSteps,
+  activeTab,
+  setActiveTab,
+}) => {
   const { colors } = useTheme()
   const navigation = useNavigation()
-  const isActive = currentActiveIndex === navigation.route?.params?.steps || 0
+  const isActive = index === activeTab
   return (
     <View
       style={{
@@ -33,19 +54,6 @@ const Label = ({ title, status, currentActiveIndex, index, isLastIndex }) => {
       }}
       key={index}
     >
-      {!isLastIndex ? (
-        <View
-          style={{
-            width: '100%',
-            height: status === 'completed' ? 50 : 52,
-            marginLeft: getLabelMargin(status, currentActiveIndex, index),
-            borderColor: colors.white,
-            borderLeftWidth: 1,
-            top: status === 'completed' ? 25 : 22,
-            position: 'absolute',
-          }}
-        />
-      ) : null}
       <View
         style={{
           flexDirection: 'row',
@@ -55,7 +63,7 @@ const Label = ({ title, status, currentActiveIndex, index, isLastIndex }) => {
       >
         <IconContainer
           status={status}
-          currentActiveIndex={currentActiveIndex}
+          currentActiveIndex={currentSteps}
           index={index}
           colors={colors}
         />
@@ -66,7 +74,10 @@ const Label = ({ title, status, currentActiveIndex, index, isLastIndex }) => {
             maxWidth: '80%',
           }}
           key={index}
-          onPress={() => navigation.setParams({ steps: index })}
+          onPress={() => {
+            setActiveTab(index)
+            navigation.setParams({ steps: index })
+          }}
         >
           <Text
             variant={'body2'}

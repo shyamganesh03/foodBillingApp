@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ProgressBar } from '@libs/components'
 import TimeLine from '../../components/TimeLine'
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, View } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { universityLogo } from '@oap/assets'
 
-const LeftContainer = ({ content, tabItems, setActiveTab, activeTab }) => {
+const LeftContainer = ({ tabItems }) => {
   const { colors } = useTheme()
+
   return (
     <View style={styles({ colors }).leftContainer}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
@@ -32,11 +33,12 @@ const LeftContainer = ({ content, tabItems, setActiveTab, activeTab }) => {
         /> */}
       </View>
       {/* <ProgressBar progressBarStyle={{ paddingTop: 40 }} /> */}
-      <TimeLine
-        categoryData={tabItems}
-        setActiveTab={setActiveTab}
-        activeTab={activeTab}
-      />
+      <ScrollView
+        contentContainerStyle={{ flex: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <TimeLine categoryData={tabItems} />
+      </ScrollView>
     </View>
   )
 }
@@ -45,6 +47,7 @@ const styles = (props) =>
   StyleSheet.create({
     leftContainer: {
       backgroundColor: props.colors?.primary,
+      height: '100vh',
       paddingHorizontal: 25,
       paddingVertical: 20,
       maxWidth: 350,
