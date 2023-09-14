@@ -56,7 +56,7 @@ const Application = (props) => {
   const [validationError, setValidationError] = useState('')
   const containerRef = useRef()
   const paramsData = props.route.params
-  const [steps, setSteps] = useState(props.route.params.steps || 0)
+  const [steps, setSteps] = useState(paramsData?.steps || 0)
   const isFocused = useIsFocused()
   const navigation = useNavigation()
   const route = useRoute()
