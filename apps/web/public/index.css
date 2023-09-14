@@ -6,11 +6,107 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Roboto-Black';
+  src: url(/fonts/Roboto-Black.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-BlackItalic';
+  src: url(/fonts/Roboto-BlackItalic.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-Bold';
+  src: url(/fonts/Roboto-Bold.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-BoldItalic';
+  src: url(/fonts/Roboto-BoldItalic.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-Italic';
+  src: url(/fonts/Roboto-Italic.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-Light';
+  src: url(/fonts/Roboto-Light.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-LightItalic';
+  src: url(/fonts/Roboto-LightItalic.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-Medium';
+  src: url(/fonts/Roboto-Medium.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-MediumItalic';
+  src: url(/fonts/Roboto-MediumItalic.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: url(/fonts/Roboto-Regular.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-Thin';
+  src: url(/fonts/Roboto-Thin.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-ThinItalic';
+  src: url(/fonts/Roboto-ThinItalic.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 html,
 body,
 #root,
 #root > div {
-  font-family: 'EK-Mukta', sans-serif;
+  font-family: 'Roboto-Black', sans-serif;
   width: 100%;
   height: 100%;
 }
@@ -18,7 +114,7 @@ html {
   overflow: hidden;
 }
 body {
-  font-family: 'EK-Mukta', sans-serif;
+  font-family: 'Roboto-Black', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -56,7 +152,7 @@ input {
   /* font-size: 20px; */
   color: white;
   font-style: normal;
-  font-family: 'EK-Mukta', sans-serif;
+  font-family: 'Roboto-Black', sans-serif;
 }
 
 .ql-toolbar.ql-snow,

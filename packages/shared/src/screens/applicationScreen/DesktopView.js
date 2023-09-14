@@ -1,16 +1,8 @@
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Platform,
-} from 'react-native'
+import { View, StyleSheet, ScrollView } from 'react-native'
 import React from 'react'
-import { useNavigation, useTheme } from '@react-navigation/native'
-import { Icon } from '@r3-oaf/native-icons'
+import { useTheme } from '@react-navigation/native'
 import { Text, ProgressBar } from '@libs/components'
 import {
-  Tabs,
   Header,
   Loader,
   LeftContainer,
@@ -18,11 +10,14 @@ import {
 } from '../../components'
 
 const DesktopView = ({
-  isLoading,
-  tabItems,
   activeTab,
   formData,
+  handleSave,
+  handleValueChanged,
+  isLoading,
   setActiveTab,
+  tabItems,
+  validationError,
 }) => {
   const { colors } = useTheme()
 
@@ -48,31 +43,42 @@ const DesktopView = ({
       />
       <View style={styles({ colors }).rightContainer}>
         <Header title={'saba university school of medicine'} />
-        <ScrollView
-          contentContainerStyle={{
-            flex: 1,
-            paddingVertical: 60,
-            paddingHorizontal: 40,
-          }}
-        >
-          <RenderComponent
-            activeTab={activeTab}
-            fieldData={formData}
-            tabItems={tabItems}
-          />
-        </ScrollView>
+        <RenderComponent
+          activeTab={activeTab}
+          fieldData={formData}
+          tabItems={tabItems}
+          handleValueChanged={handleValueChanged}
+          handleSave={handleSave}
+        />
+        {validationError ? (
+          <Text
+            variant="body2"
+            style={{ marginTop: 20, paddingLeft: 12 }}
+            color={colors.onAlert}
+          >
+            {validationError}
+          </Text>
+        ) : null}
       </View>
     </View>
   )
 }
 
-const RenderComponent = ({ activeTab, fieldData, tabItems }) => {
+const RenderComponent = ({
+  handleSave,
+  activeTab,
+  fieldData,
+  tabItems,
+  handleValueChanged,
+}) => {
   if (activeTab === 0) {
     return (
       <CommonApplication
         fieldData={fieldData[`step${activeTab}`]}
         activeTab={activeTab}
         tabItems={tabItems}
+        handleValueChanged={handleValueChanged}
+        handleSave={handleSave}
       />
     )
   }

@@ -34,18 +34,17 @@ const Label = ({
   const { colors } = useTheme()
   const isActive = currentActiveIndex === index
   return (
-    <TouchableOpacity
+    <View
       style={{
         flexDirection: 'column',
       }}
       key={index}
-      onPress={() => setActiveTab(index)}
     >
       {!isLastIndex ? (
         <View
           style={{
             width: '100%',
-            height: status === 'completed' ? 68 : 70,
+            height: status === 'completed' ? 50 : 52,
             marginLeft: getLabelMargin(status, currentActiveIndex, index),
             borderColor: colors.white,
             borderLeftWidth: 1,
@@ -67,15 +66,25 @@ const Label = ({
           index={index}
           colors={colors}
         />
-        <Text
-          variant={'body2'}
-          color={colors.white}
-          style={{ opacity: isActive ? 1.0 : 0.5, marginLeft: 10 }}
+        <TouchableOpacity
+          style={{
+            flexDirection: 'column',
+            flexWrap: 'wrap',
+            maxWidth: '80%',
+          }}
+          key={index}
+          onPress={() => setActiveTab(index)}
         >
-          {title}
-        </Text>
+          <Text
+            variant={'body2'}
+            color={colors.white}
+            style={{ opacity: isActive ? 1.0 : 0.5, marginLeft: 10 }}
+          >
+            {title}
+          </Text>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </View>
   )
 }
 

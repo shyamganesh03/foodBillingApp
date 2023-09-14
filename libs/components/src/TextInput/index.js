@@ -27,6 +27,7 @@ const TextInput = (props) => {
     style,
     editable = true,
     error,
+    key,
   } = props
 
   const handleInputOnFocus = async () => {
@@ -37,7 +38,7 @@ const TextInput = (props) => {
   }
 
   return (
-    <View style={[{ marginBottom: 10 }, style]}>
+    <View style={[{ marginBottom: 10 }, style]} key={key}>
       <View style={{ flexDirection: 'row' }}>
         {isMandatory && isEditMode ? (
           <Text variant="display5" color={colors.onAlert}>

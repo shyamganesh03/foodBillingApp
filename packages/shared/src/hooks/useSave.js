@@ -3,7 +3,7 @@ import { submitApplication, updateApplication } from '../api'
 export const useFormSave = async ({
   submittedData,
   email,
-  applicationStatus = 'In progress',
+  applicationStatus = 'In Progress',
 }) => {
   let payload = {
     email,

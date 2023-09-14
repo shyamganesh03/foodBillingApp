@@ -15,6 +15,7 @@ import { TextInput, Text } from '@libs/components'
 
 const DateInput = (props) => {
   const {
+    key,
     isEditMode,
     inputType,
     disable,
@@ -342,7 +343,7 @@ const DateInput = (props) => {
   )
 
   return (
-    <View>
+    <View key={key}>
       <TouchableOpacity
         ref={DropdownButton}
         onPress={() => {

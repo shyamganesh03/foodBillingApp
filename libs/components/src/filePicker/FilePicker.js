@@ -1,4 +1,4 @@
-const FilePicker = ({ heading = '' }) => {
+const FilePicker = ({ heading = '', key }) => {
   const { colors } = useTheme()
   const filePickerRef = useRef()
   const fileTypes = ['PNG', 'JPG', 'GIF']

@@ -12,6 +12,7 @@ const FilePicker = ({
   isMandatory,
   uploadFile = () => {},
   isSuccess,
+  key,
 }) => {
   const { colors } = useTheme()
   const [fileModalDetails, setFileModalDetails] = useState({
@@ -67,7 +68,7 @@ const FilePicker = ({
   }
 
   return (
-    <View>
+    <View key={key}>
       <Text variant="display5">
         {heading}{' '}
         {isMandatory ? (

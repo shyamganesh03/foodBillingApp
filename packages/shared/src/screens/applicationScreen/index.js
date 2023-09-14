@@ -53,10 +53,7 @@ const Application = (props) => {
   const [isCTADisabled, setIsCTADisabled] = useState()
   const [containerWidth, setContainerWidth] = useState()
   const [isEditMode, setIsEditMode] = useState(true)
-  const [hasError, setHasError] = useState({
-    errorMessage1: '',
-    errorMessage2: '',
-  })
+  const [validationError, setValidationError] = useState('')
   const containerRef = useRef()
   const paramsData = props.route.params
   const isFocused = useIsFocused()
@@ -81,10 +78,7 @@ const Application = (props) => {
           applicationId: paramsData?.id,
         })
         if (response?.statusCode === 500) {
-          setHasError({
-            ...hasError,
-            errorMessage1: '* Invalid Application id',
-          })
+          setValidationError('* Invalid Application id')
         }
         const formDataCopy = formData
         formDataCopy.step1.sections[1].fields[0].selectedValue =
@@ -365,10 +359,7 @@ const Application = (props) => {
   }, [isFocused, formData])
 
   useEffect(() => {
-    setHasError({
-      errorMessage1: '',
-      errorMessage2: '',
-    })
+    setValidationError('')
   }, [isFocused, modalFields, activeTab])
 
   const getDropdownData = (fieldValue) => {
@@ -390,11 +381,11 @@ const Application = (props) => {
       modalFields,
       setModalFields,
       formData,
-      hasError,
+      validationError,
       type,
       submittedData,
       setFormData,
-      setHasError,
+      setValidationError,
       sessionName,
     })
     if (activeTab === 6 && isCTADisabled) {
@@ -447,17 +438,7 @@ const Application = (props) => {
         formData,
       })
       if (response?.message?.[0]?.message) {
-        setHasError({
-          ...hasError,
-          errorMessage1: `* ${response?.message?.[0]?.message}`,
-        })
-        setShowLoader(false)
-        return
-      }
-      if (response.error) {
-        response.error?.map((errorValue, index) => {
-          setHasError({ ...hasError, [`errorMessage${index + 1}`]: errorValue })
-        })
+        setValidationError(`* ${response?.message?.[0]?.message}`)
         setShowLoader(false)
         return
       }
@@ -470,10 +451,7 @@ const Application = (props) => {
         applicationStatus: 'Submitted',
       })
       if (updateResponse?.message[0]?.message) {
-        setHasError({
-          ...hasError,
-          errorMessage1: `* ${updateResponse?.message[0]?.message}`,
-        })
+        setValidationError(`* ${updateResponse?.message[0]?.message}`)
         setShowLoader(false)
         return
       }
@@ -489,10 +467,7 @@ const Application = (props) => {
         sessionName,
       })
       if (response?.message[0]?.message) {
-        setHasError({
-          ...hasError,
-          errorMessage1: `* ${response?.message[0]?.message}`,
-        })
+        setValidationError(`* ${response?.message[0]?.message}`)
         setShowLoader(false)
         return
       }
@@ -547,10 +522,7 @@ const Application = (props) => {
     })
 
     if (response?.message[0]?.message) {
-      setHasError({
-        ...hasError,
-        errorMessage1: `* ${response?.message[0]?.message}`,
-      })
+      setValidationError(`* ${response?.message[0]?.message}`)
       setShowLoader(false)
 
       return
@@ -616,10 +588,7 @@ const Application = (props) => {
     fieldIndex,
     sectionIndex,
   }) => {
-    setHasError({
-      errorMessage1: '',
-      errorMessage2: '',
-    })
+    setValidationError('')
     if (type === 'cancel') {
       const currentSection = formData[step]?.sections[sectionIndex]
       currentSection.selectedValue = ''
@@ -673,7 +642,7 @@ const Application = (props) => {
     dropdownTop,
     dropdownWidth,
     formData,
-    hasError,
+    validationError,
     isCTADisabled,
     modalFields,
     showLoader:
