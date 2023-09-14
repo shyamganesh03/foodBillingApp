@@ -5,8 +5,8 @@ import ModalComponent from './ModalComponent'
 import Loader from './Loader'
 import Header from './Header'
 import DynamicFields from './DynamicFields'
-import Tabs from './Tabs'
-import LeftContainer from './applications/LeftContainer'
+import Tabs from './TimeLine'
+import LeftContainer from '../container/LeftContanier'
 import CommonApplication from './applications/CommonApplication'
 
 export {

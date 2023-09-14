@@ -1,13 +1,12 @@
 import { View } from 'react-native'
 import React from 'react'
-import { Icon } from '@r3-oaf/native-icons'
 import { useTheme } from '@react-navigation/native'
 import { Text } from '@libs/components'
 import { TouchableOpacity } from 'react-native'
 import { getLabelMargin } from './helpers'
 import { IconContainer } from './icon-container'
 
-const Tabs = ({ categoryData = [], setActiveTab, activeTab }) => {
+const TimeLine = ({ categoryData = [], setActiveTab, activeTab }) => {
   return (
     <View style={{ paddingVertical: 30 }}>
       {categoryData.map((item, index) => (
@@ -80,4 +79,4 @@ const Label = ({
   )
 }
 
-export default Tabs
+export default TimeLine

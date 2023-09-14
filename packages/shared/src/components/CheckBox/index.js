@@ -43,14 +43,10 @@ const CheckBox = ({
         style={[
           styles(colors).checkBox,
           {
-            backgroundColor: isChecked
-              ? colors.primary
-              : isEditMode
-              ? 'transparent'
-              : '#F3F3F3',
+            backgroundColor: isChecked ? colors.primary : '#FFFFFF',
           },
         ]}
-        disabled={!isEditMode}
+        // disabled={!isEditMode}
       >
         {isChecked && <Icon name="Check" color={colors.white} />}
       </TouchableOpacity>
@@ -74,15 +70,16 @@ const styles = (props) =>
       borderWidth: 1,
       borderStyle: 'solid',
       borderColor: props.fieldBorder,
-      borderRadius: 1,
+      borderRadius: 4,
       alignItems: 'center',
+      marginRight: 20,
     },
     checkBoxContainer: {
-      flexDirection: 'column-reverse',
+      flexDirection: 'row',
       paddingVertical: spacing.spacing3,
     },
     labelStyle: {
-      flex: 1,
+      // marginLeft: 2,
     },
   })
 export default CheckBox

@@ -47,7 +47,7 @@ const DesktopView = ({
         activeTab={activeTab}
       />
       <View style={styles({ colors }).rightContainer}>
-        <Header title={'Test'} />
+        <Header title={'saba university school of medicine'} />
         <ScrollView
           contentContainerStyle={{
             flex: 1,
@@ -55,16 +55,26 @@ const DesktopView = ({
             paddingHorizontal: 40,
           }}
         >
-          <RenderComponent activeTab={activeTab} fieldData={formData} />
+          <RenderComponent
+            activeTab={activeTab}
+            fieldData={formData}
+            tabItems={tabItems}
+          />
         </ScrollView>
       </View>
     </View>
   )
 }
 
-const RenderComponent = ({ activeTab, fieldData }) => {
+const RenderComponent = ({ activeTab, fieldData, tabItems }) => {
   if (activeTab === 0) {
-    return <CommonApplication fieldData={fieldData[`step${activeTab}`]} />
+    return (
+      <CommonApplication
+        fieldData={fieldData[`step${activeTab}`]}
+        activeTab={activeTab}
+        tabItems={tabItems}
+      />
+    )
   }
 }
 
