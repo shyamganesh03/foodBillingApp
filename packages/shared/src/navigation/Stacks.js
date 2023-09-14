@@ -1,6 +1,6 @@
 import React from 'react'
-import Application from '../screens/applicationScreen'
-import ThankYouScreen from '../screens/thankyouScreen'
+import Application from '../screens/application'
+import ThankYouScreen from '../screens/success'
 import { Header } from '../components'
 
 const screenOptions = {

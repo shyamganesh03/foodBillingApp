@@ -1,14 +1,29 @@
-import { ScrollView, View } from 'react-native'
-import React, { useState } from 'react'
-import { useNavigation, useTheme } from '@react-navigation/native'
+import { Platform, ScrollView, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+  useTheme,
+} from '@react-navigation/native'
 import { Text } from '@libs/components'
 import { TouchableOpacity } from 'react-native'
-import { getLabelMargin } from './helpers'
 import { IconContainer } from './icon-container'
 
 const TimeLine = ({ categoryData = [] }) => {
   const { colors } = useTheme()
-  const [activeTab, setActiveTab] = useState(0)
+  const [activeTab, setActiveTab] = useState(1)
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    if (!isFocused) return
+
+    if (Platform.OS === 'web') {
+      const searchParams = new URLSearchParams(window.location.search)
+      const paramValue = searchParams.get('steps')
+      setActiveTab(Number(paramValue))
+    }
+  }, [isFocused])
   return (
     <View>
       <View
@@ -46,7 +61,7 @@ const Label = ({
 }) => {
   const { colors } = useTheme()
   const navigation = useNavigation()
-  const isActive = index === activeTab
+  const isActive = index + 1 === activeTab
   return (
     <View
       style={{
@@ -76,7 +91,7 @@ const Label = ({
           key={index}
           onPress={() => {
             setActiveTab(index)
-            navigation.setParams({ steps: index })
+            navigation.setParams({ steps: index + 1 })
           }}
         >
           <Text

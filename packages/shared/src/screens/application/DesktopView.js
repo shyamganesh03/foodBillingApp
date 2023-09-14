@@ -3,7 +3,8 @@ import React from 'react'
 import { useTheme } from '@react-navigation/native'
 import { Text, ProgressBar } from '@libs/components'
 import { Header, Loader, StartApplication } from '../../components'
-import CommonApplication from '../common-application-step-0'
+import CommonApplication from '../common-application-step-1'
+import ChooseProgrammes from '../chooseProgrammes-step-2'
 
 const DesktopView = ({
   steps,
@@ -18,29 +19,17 @@ const DesktopView = ({
 }) => {
   const { colors } = useTheme()
 
-  if (Number(steps) === 1) {
+  if (Number(steps) === 2) {
     return (
       <View style={styles({ colors }).container}>
-        <View style={styles({ colors }).rightContainer}>
-          <StartApplication
-            fieldData={formData[`step${steps}`]}
-            activeTab={steps}
-            tabItems={tabItems}
-            handleValueChanged={handleValueChanged}
-            handleSave={handleSave}
-          />
-        </View>
+        <ChooseProgrammes />
       </View>
     )
   }
-
   return (
-    <CommonApplication
-      fieldData={formData[`step${activeTab}`]}
-      activeTab={activeTab}
-      tabItems={tabItems}
-      handleSave={handleSave}
-    />
+    <View style={styles({ colors }).container}>
+      <CommonApplication />
+    </View>
   )
 }
 

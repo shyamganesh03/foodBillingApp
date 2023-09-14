@@ -68,7 +68,6 @@ const DesktopView = ({
             onPress={() => {
               handleSave({ fieldData, type: 'initial', fieldData: school })
             }}
-            // disable={getCTAStatus(activeTab)}
           />
         </View>
       </ScrollView>

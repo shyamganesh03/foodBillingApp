@@ -12,7 +12,6 @@ export const fieldData = {
             type: 'PickList',
             pickListValues: [],
             mandatory: true,
-            selectedValue: '',
           },
         ],
       },
@@ -26,7 +25,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'string',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Middle Name',
@@ -34,7 +32,6 @@ export const fieldData = {
             fieldName: 'middleName',
             type: 'textField',
             inputType: 'string',
-            selectedValue: '',
           },
           {
             label: 'Last Name',
@@ -42,7 +39,6 @@ export const fieldData = {
             fieldName: 'lastName',
             type: 'textField',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Title',
@@ -56,7 +52,6 @@ export const fieldData = {
               { name: 'Ms' },
             ],
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Birthdate',
@@ -65,7 +60,6 @@ export const fieldData = {
             type: 'date',
             inputType: 'dob',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Previous Names Used',
@@ -73,7 +67,6 @@ export const fieldData = {
             fieldName: 'previousNamesUsed',
             type: 'textField',
             inputType: 'string',
-            selectedValue: '',
           },
           {
             label: 'Previously Applied to this Institution?',
@@ -81,7 +74,6 @@ export const fieldData = {
             fieldName: 'previouslyAppliedToThisInstitution',
             type: 'PickList',
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
-            selectedValue: '',
           },
           {
             label: 'Start Term Applying For',
@@ -90,7 +82,6 @@ export const fieldData = {
             type: 'PickList',
             pickListValues: [],
             mandatory: true,
-            selectedValue: '',
           },
         ],
       },
@@ -105,7 +96,6 @@ export const fieldData = {
             fieldName: 'alternativeEmailAddress',
             inputType: 'email',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Mobile/Primary Number',
@@ -114,7 +104,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'phone',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Alternative Phone Number',
@@ -123,7 +112,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'phone',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Street Address',
@@ -132,7 +120,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'string',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'City',
@@ -141,7 +128,6 @@ export const fieldData = {
             fieldName: 'mailingCity',
             inputType: 'string',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Zip/Postal Code',
@@ -150,7 +136,6 @@ export const fieldData = {
             fieldName: 'mailingPostalCode',
             inputType: 'string',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Mailing Country Code',
@@ -159,7 +144,6 @@ export const fieldData = {
             type: 'dropdown',
             dropdownValues: [],
             mandatory: true,
-            selectedValue: '',
           },
           // {
           //   label: 'Mailing State/Province Code',
@@ -172,7 +156,7 @@ export const fieldData = {
           //     { name: 'Kerala', value: 'KL' },
           //   ],
           //   mandatory: true,
-          //   selectedValue: '',
+          //
           // },
           {
             label:
@@ -196,7 +180,6 @@ export const fieldData = {
             fieldName: 'emergencyContactFirstName',
             inputType: 'string',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Emergency Contact Last Name',
@@ -205,7 +188,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'string',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Emergency Contact Relationship',
@@ -214,7 +196,6 @@ export const fieldData = {
             type: 'PickList',
             pickListValues: [],
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Emergency Contact Primary Phone',
@@ -223,7 +204,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'String',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Emergency Contact Email',
@@ -232,7 +212,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'email',
             mandatory: true,
-            selectedValue: '',
           },
         ],
       },
@@ -246,7 +225,6 @@ export const fieldData = {
             type: 'PickList',
             pickListValues: [],
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Marital Status',
@@ -254,7 +232,6 @@ export const fieldData = {
             fieldName: 'maritalStatus',
             type: 'PickList',
             pickListValues: [],
-            selectedValue: '',
           },
           {
             label: 'Number of Dependents',
@@ -262,7 +239,6 @@ export const fieldData = {
             fieldName: 'numberOfDependents',
             type: 'textField',
             inputType: 'number',
-            selectedValue: '',
           },
           {
             label: 'Is English your Primary Language',
@@ -270,7 +246,6 @@ export const fieldData = {
             fieldName: 'isEnglishYourPrimaryLanguage',
             type: 'PickList',
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
-            selectedValue: '',
           },
           {
             label: 'Place of Birth',
@@ -279,7 +254,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'dob',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'What is your Citizenship Status?',
@@ -288,7 +262,6 @@ export const fieldData = {
             type: 'PickList',
             pickListValues: [],
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Are you a US Citizen/Permanent Resident?',
@@ -297,7 +270,6 @@ export const fieldData = {
             type: 'PickList',
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Have a Non US or Canadian Passport?',
@@ -305,7 +277,6 @@ export const fieldData = {
             fieldName: 'haveNonUSOrCanadianPassport',
             type: 'PickList',
             pickListValues: [{ name: 'Yes' }, { name: 'No' }],
-            selectedValue: '',
           },
           {
             label: 'If International Passport, Which Country?',
@@ -313,7 +284,6 @@ export const fieldData = {
             fieldName: 'internationalPassportCountry',
             type: 'textField',
             inputType: 'string',
-            selectedValue: '',
           },
         ],
       },
@@ -335,7 +305,6 @@ export const fieldData = {
             fieldName: 'institutionNameIfNotFound',
             inputType: 'string',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Degree Level',
@@ -344,7 +313,6 @@ export const fieldData = {
             type: 'PickList',
             pickListValues: [],
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Academic Institution Estimated Start',
@@ -353,7 +321,6 @@ export const fieldData = {
             type: 'date',
             mandatory: true,
             inputType: 'startAcademicDate',
-            selectedValue: '',
           },
           {
             label: 'Academic Institution Estimated End Date',
@@ -362,7 +329,6 @@ export const fieldData = {
             inputType: 'endAcademicDate',
             type: 'date',
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Approx. Degree Earned Date',
@@ -371,10 +337,8 @@ export const fieldData = {
             inputType: 'degreeEarnedDate',
             type: 'date',
             mandatory: true,
-            selectedValue: '',
           },
         ],
-        selectedValue: '',
       },
       {
         title: 'Prerequisite Coursework Information',
@@ -390,7 +354,6 @@ export const fieldData = {
               { name: 'InProgress' },
             ],
             mandatory: true,
-            selectedValue: '',
           },
           {
             label: 'Biology 2',
@@ -402,7 +365,7 @@ export const fieldData = {
               { name: 'Complete' },
               { name: 'InProgress' },
             ],
-            selectedValue: '',
+
             mandatory: true,
           },
           {
@@ -415,7 +378,7 @@ export const fieldData = {
               { name: 'Complete' },
               { name: 'InProgress' },
             ],
-            selectedValue: '',
+
             mandatory: true,
           },
           {
@@ -428,7 +391,7 @@ export const fieldData = {
               { name: 'Complete' },
               { name: 'InProgress' },
             ],
-            selectedValue: '',
+
             mandatory: true,
           },
           {
@@ -441,7 +404,7 @@ export const fieldData = {
               { name: 'Complete' },
               { name: 'InProgress' },
             ],
-            selectedValue: '',
+
             mandatory: true,
           },
           {
@@ -454,7 +417,7 @@ export const fieldData = {
               { name: 'Complete' },
               { name: 'InProgress' },
             ],
-            selectedValue: '',
+
             mandatory: true,
           },
         ],
@@ -480,7 +443,6 @@ export const fieldData = {
             fieldName: 'MCATTotalScore',
           },
         ],
-        selectedValue: '',
       },
     ],
   },
@@ -501,7 +463,6 @@ export const fieldData = {
             type: 'textField',
             fieldName: 'clinicOrHospital',
             inputType: 'string',
-            selectedValue: '',
           },
           {
             label: 'Clinical Experience Role',
@@ -509,7 +470,6 @@ export const fieldData = {
             type: 'textField',
             fieldName: 'clinicalExperienceRole',
             inputType: 'string',
-            selectedValue: '',
           },
           {
             label: 'Clinical Experience Hours Completed',
@@ -517,7 +477,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'number',
             fieldName: 'clinicalExperienceHoursCompleted',
-            selectedValue: '',
           },
         ],
       },
@@ -534,7 +493,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'string',
             fieldName: 'previousResearchExperience',
-            selectedValue: '',
           },
         ],
       },
@@ -561,7 +519,6 @@ export const fieldData = {
             mandatory: true,
             hasFullWidth: true,
             fieldName: 'academicWithdrawal',
-            selectedValue: '',
           },
           {
             label: 'If yes, then please explain',
@@ -569,7 +526,6 @@ export const fieldData = {
             type: 'textField',
             fieldName: 'academicWithdrawalReason',
             inputType: 'string',
-            selectedValue: '',
           },
           {
             label:
@@ -580,7 +536,6 @@ export const fieldData = {
             mandatory: true,
             hasFullWidth: true,
             fieldName: 'arrestedChargedOrConvictedOfCrime',
-            selectedValue: '',
           },
           {
             label: 'If yes, then please explain',
@@ -588,7 +543,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'string',
             fieldName: 'crimeReason',
-            selectedValue: '',
           },
           {
             label:
@@ -599,7 +553,6 @@ export const fieldData = {
             mandatory: true,
             hasFullWidth: true,
             fieldName: 'technicalStandardAccommodationNeeded',
-            selectedValue: '',
           },
           {
             label: 'If yes, then please explain',
@@ -607,7 +560,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'string',
             fieldName: 'technicalStandardAccommodationReason',
-            selectedValue: '',
           },
           {
             label:
@@ -618,7 +570,6 @@ export const fieldData = {
             mandatory: true,
             hasFullWidth: true,
             fieldName: 'technicalStandardsMedicalConditions',
-            selectedValue: '',
           },
           {
             label: 'If yes, then please explain',
@@ -626,7 +577,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'string',
             fieldName: 'technicalStandardsMedicalReason',
-            selectedValue: '',
           },
           {
             label:
@@ -637,7 +587,6 @@ export const fieldData = {
             mandatory: true,
             hasFullWidth: true,
             fieldName: 'nonAcademicSuspendedDismissWithdrawn',
-            selectedValue: '',
           },
           {
             label: 'If yes, then please explain',
@@ -645,7 +594,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'string',
             fieldName: 'nonAcademicWithdrawalReason',
-            selectedValue: '',
           },
         ],
       },
@@ -661,7 +609,6 @@ export const fieldData = {
             fieldName: 'howDidYouHearAboutSABA',
             mandatory: true,
             hasFullWidth: true,
-            selectedValue: '',
           },
           {
             label: 'Other Schools Applying To',
@@ -669,7 +616,6 @@ export const fieldData = {
             type: 'textField',
             fieldName: 'otherSchoolsApplyingTo', //
             inputType: 'string',
-            selectedValue: '',
           },
         ],
       },
@@ -717,7 +663,7 @@ export const fieldData = {
             type: 'recommenderFirstName',
             fieldName: 'recommenderFirstName',
             inputType: 'string',
-            selectedValue: '',
+
             type: 'textField',
           },
           {
@@ -726,7 +672,6 @@ export const fieldData = {
             type: 'textField',
             fieldName: 'recommenderLastName',
             inputType: 'string',
-            selectedValue: '',
           },
           {
             label: 'Email',
@@ -734,7 +679,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'email',
             fieldName: 'recommenderEmail',
-            selectedValue: '',
           },
           {
             label: 'Phone',
@@ -742,7 +686,6 @@ export const fieldData = {
             type: 'textField',
             inputType: 'phone',
             fieldName: 'recommenderPhone',
-            selectedValue: '',
           },
         ],
       },
@@ -765,7 +708,6 @@ export const fieldData = {
             fieldName: 'WaiveAccessToRecommendation',
             type: 'checkbox',
             checkboxValues: [true, false],
-            selectedValue: '',
           },
         ],
       },
@@ -782,7 +724,6 @@ export const fieldData = {
             fieldName: 'signature',
             type: 'textField',
             inputType: 'string',
-            selectedValue: '',
           },
           {
             label: 'Submitted Signature Date',
@@ -791,7 +732,6 @@ export const fieldData = {
             type: 'date',
             inputType: 'signatureDate',
             mandatory: true,
-            selectedValue: '',
           },
         ],
       },
