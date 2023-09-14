@@ -83,7 +83,7 @@ const DynamicFields = ({
       <TextInput
         label={label}
         isMandatory={isMandatory}
-        style={{}}
+        style={{ marginBottom: 30 }}
         value={selectedValue}
         error={error}
         onChangeText={(value) => {

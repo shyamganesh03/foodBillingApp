@@ -8,7 +8,6 @@ import Text from '../Text'
 const TextInput = (props) => {
   const { colors } = useTheme()
   const {
-    isEditMode,
     trailingIcon,
     inputFieldStyle,
     isMandatory,
@@ -39,17 +38,18 @@ const TextInput = (props) => {
 
   return (
     <View style={[{ marginBottom: 10 }, style]} key={key}>
-      <View style={{ flexDirection: 'row' }}>
-        {isMandatory && isEditMode ? (
+      <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+        <Text variant="display4">{label}</Text>
+        {isMandatory ? (
           <Text variant="display5" color={colors.onAlert}>
-            *{' '}
+            {' '}
+            *
           </Text>
         ) : null}
-        <Text variant="display4">{label}</Text>
       </View>
       <Row
         style={[
-          isEditMode ? styles.inputRow : styles.disableStyle,
+          styles.inputRow,
           {
             backgroundColor: editable ? 'transparent' : colors.background,
             width: textInputWidth || 325,
@@ -75,7 +75,6 @@ const TextInput = (props) => {
           secureTextEntry={secureTextEntry}
           style={[styles.inputField, inputFieldStyle]}
           value={value || ''}
-          editable={isEditMode}
         />
         {trailingIcon && (
           <View style={{ justifyContent: 'center' }}>{trailingIcon}</View>

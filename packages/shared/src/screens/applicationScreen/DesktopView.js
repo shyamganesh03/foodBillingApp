@@ -2,14 +2,11 @@ import { View, StyleSheet, ScrollView } from 'react-native'
 import React from 'react'
 import { useTheme } from '@react-navigation/native'
 import { Text, ProgressBar } from '@libs/components'
-import {
-  Header,
-  Loader,
-  LeftContainer,
-  CommonApplication,
-} from '../../components'
+import { Header, Loader, StartApplication } from '../../components'
+import CommonApplication from '../common-application-step-0'
 
 const DesktopView = ({
+  steps,
   activeTab,
   formData,
   handleSave,
@@ -20,68 +17,42 @@ const DesktopView = ({
   validationError,
 }) => {
   const { colors } = useTheme()
+  console.log({ activeTab })
 
-  if (isLoading) {
+  if (Number(steps) === 1) {
+    console.log({ steps })
     return (
-      <ScrollView
-        contentContainerStyle={{
-          height: '100vh',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Loader />
-      </ScrollView>
+      <View style={styles({ colors }).container}>
+        <View style={styles({ colors }).rightContainer}>
+          <StartApplication
+            fieldData={formData[`step${steps}`]}
+            activeTab={steps}
+            tabItems={tabItems}
+            handleValueChanged={handleValueChanged}
+            handleSave={handleSave}
+          />
+        </View>
+      </View>
     )
   }
+
+  return (
+    <CommonApplication
+      fieldData={formData[`step${activeTab}`]}
+      activeTab={activeTab}
+      tabItems={tabItems}
+      handleValueChanged={handleValueChanged}
+      handleSave={handleSave}
+    />
+  )
+
   return (
     <View style={styles({ colors }).container}>
-      <LeftContainer
-        tabItems={tabItems}
-        setActiveTab={setActiveTab}
-        activeTab={activeTab}
-      />
       <View style={styles({ colors }).rightContainer}>
-        <Header title={'saba university school of medicine'} />
-        <RenderComponent
-          activeTab={activeTab}
-          fieldData={formData}
-          tabItems={tabItems}
-          handleValueChanged={handleValueChanged}
-          handleSave={handleSave}
-        />
-        {validationError ? (
-          <Text
-            variant="body2"
-            style={{ marginTop: 20, paddingLeft: 12 }}
-            color={colors.onAlert}
-          >
-            {validationError}
-          </Text>
-        ) : null}
+        <ApplicationLayout />
       </View>
     </View>
   )
-}
-
-const RenderComponent = ({
-  handleSave,
-  activeTab,
-  fieldData,
-  tabItems,
-  handleValueChanged,
-}) => {
-  if (activeTab === 0) {
-    return (
-      <CommonApplication
-        fieldData={fieldData[`step${activeTab}`]}
-        activeTab={activeTab}
-        tabItems={tabItems}
-        handleValueChanged={handleValueChanged}
-        handleSave={handleSave}
-      />
-    )
-  }
 }
 
 const styles = (props) =>

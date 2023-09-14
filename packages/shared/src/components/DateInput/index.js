@@ -10,13 +10,12 @@ import { Calendar } from 'react-native-calendars'
 import { Icon } from '@r3-oaf/native-icons'
 import { spacing } from '@libs/theme'
 import { useTheme } from '@react-navigation/native'
-import { Menu, TouchableRipple } from 'react-native-paper'
+import { TouchableRipple } from 'react-native-paper'
 import { TextInput, Text } from '@libs/components'
 
 const DateInput = (props) => {
   const {
     key,
-    isEditMode,
     inputType,
     disable,
     label,
@@ -183,7 +182,6 @@ const DateInput = (props) => {
                 height: 24,
                 paddingTop: 0,
               }}
-              isEditMode={isEditMode}
               textInputWidth={100}
               onChangeText={(itemValue) => {
                 setSelectedYear(itemValue)
@@ -258,10 +256,6 @@ const DateInput = (props) => {
                         id={_item}
                       >
                         <Text>{_item}</Text>
-                        {/* <Menu.Item
-                        title={_item}
-                        titleStyle={{ color: colors.onNeutral }}
-                      /> */}
                       </TouchableRipple>
                     </Fragment>
                   )
@@ -360,30 +354,28 @@ const DateInput = (props) => {
         ]}
       >
         <View style={{ flexDirection: 'row' }}>
-          {isMandatory && isEditMode ? (
+          <Text variant="display4">{title}</Text>
+          {isMandatory ? (
             <Text variant="display5" color={colors.onAlert}>
-              *{' '}
+              {' '}
+              *
             </Text>
           ) : null}
-          <Text variant="display4">{title}</Text>
         </View>
         {renderDropdown()}
         <TextInput
           label={label}
           placeholder={placeholder}
-          isEditMode={isEditMode}
           right={<TextInput.Affix />}
           value={value || selectedDate}
           maxLength={data?.maxLength}
           trailingIcon={
-            isEditMode ? (
-              <Icon
-                name="CalenderFilled"
-                height={20}
-                width={20}
-                color={colors.placeHolder}
-              />
-            ) : null
+            <Icon
+              name="CalenderFilled"
+              height={20}
+              width={20}
+              color={colors.placeHolder}
+            />
           }
           error={error}
           onFocus={() => {

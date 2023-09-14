@@ -1,12 +1,12 @@
 import { StyleSheet, View } from 'react-native'
 import React from 'react'
 import { Button, Text } from '@libs/components'
-import DynamicFields from '../DynamicFields'
 import { useTheme } from '@react-navigation/native'
 import { ScrollView } from 'react-native'
+import { DynamicFields } from '../../components'
+import { fieldData } from './data/metaData'
 
-const CommonApplication = ({
-  fieldData,
+const DesktopView = ({
   activeTab,
   tabItems,
   handleValueChanged,
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default CommonApplication
+export default DesktopView

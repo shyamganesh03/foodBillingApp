@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { ScreenLayout } from '@libs/utils'
 import DesktopView from './DesktopView'
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import { fieldData } from '../../utils/fields'
 import { useDropDownData } from '../../hooks/useDropDownData'
 import {
@@ -56,8 +56,10 @@ const Application = (props) => {
   const [validationError, setValidationError] = useState('')
   const containerRef = useRef()
   const paramsData = props.route.params
+  const [steps, setSteps] = useState(props.route.params.steps || 0)
   const isFocused = useIsFocused()
   const navigation = useNavigation()
+  const route = useRoute()
 
   useEffect(() => {
     if (isEditMode) return
@@ -69,6 +71,12 @@ const Application = (props) => {
       })
     }
   }, [isEditMode, formData])
+
+  useEffect(() => {
+    if (!isFocused) return
+    const steps = route.params?.steps ?? 0
+    setSteps(steps)
+  }, [isFocused, route])
 
   const { data: applicationDetails, isFetching: isApplicationFetching } =
     useQuery({
@@ -354,6 +362,9 @@ const Application = (props) => {
       const tabs = tabsTitle.map((item) => {
         return { title: formData[item]?.title }
       })
+
+      console.log(tabs)
+
       setTabItems(tabs)
     })()
   }, [isFocused, formData])
@@ -632,7 +643,7 @@ const Application = (props) => {
   }
 
   const viewProps = {
-    setIsFileSuccess,
+    steps,
     isFileSuccess,
     activeTab,
     containerRef,
@@ -658,6 +669,7 @@ const Application = (props) => {
     uploadDocs,
     setActiveTab,
     setModalFields,
+    setIsFileSuccess,
     toggleDropdown,
   }
 

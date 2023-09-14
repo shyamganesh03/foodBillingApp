@@ -1,20 +1,19 @@
 import { View } from 'react-native'
 import React from 'react'
-import { useTheme } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import { Text } from '@libs/components'
 import { TouchableOpacity } from 'react-native'
 import { getLabelMargin } from './helpers'
 import { IconContainer } from './icon-container'
 
-const TimeLine = ({ categoryData = [], setActiveTab, activeTab }) => {
+const TimeLine = ({ categoryData = [], activeTab }) => {
   return (
     <View style={{ paddingVertical: 30 }}>
       {categoryData.map((item, index) => (
         <Label
-          title={item?.title}
+          title={item?.displayName}
           status={item?.status}
           currentActiveIndex={activeTab}
-          setActiveTab={setActiveTab}
           index={index}
           isLastIndex={categoryData?.length === index + 1}
         />
@@ -23,16 +22,10 @@ const TimeLine = ({ categoryData = [], setActiveTab, activeTab }) => {
   )
 }
 
-const Label = ({
-  title,
-  status,
-  currentActiveIndex,
-  index,
-  isLastIndex,
-  setActiveTab,
-}) => {
+const Label = ({ title, status, currentActiveIndex, index, isLastIndex }) => {
   const { colors } = useTheme()
-  const isActive = currentActiveIndex === index
+  const navigation = useNavigation()
+  const isActive = currentActiveIndex === navigation.route?.params?.steps || 0
   return (
     <View
       style={{
@@ -73,7 +66,7 @@ const Label = ({
             maxWidth: '80%',
           }}
           key={index}
-          onPress={() => setActiveTab(index)}
+          onPress={() => navigation.setParams({ steps: index })}
         >
           <Text
             variant={'body2'}
