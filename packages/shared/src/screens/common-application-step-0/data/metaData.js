@@ -21,7 +21,6 @@ export const fieldData = {
           fieldName: 'isCommonApplication',
           type: 'checkbox',
           checkboxValues: [true, false],
-          selectedValue: false,
         },
       ],
     },

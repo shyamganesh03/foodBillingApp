@@ -41,17 +41,8 @@ const DesktopView = ({
       fieldData={formData[`step${activeTab}`]}
       activeTab={activeTab}
       tabItems={tabItems}
-      handleValueChanged={handleValueChanged}
       handleSave={handleSave}
     />
-  )
-
-  return (
-    <View style={styles({ colors }).container}>
-      <View style={styles({ colors }).rightContainer}>
-        <ApplicationLayout />
-      </View>
-    </View>
   )
 }
 

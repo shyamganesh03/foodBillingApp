@@ -4,7 +4,7 @@ import ThankYouScreen from '../screens/thankyouScreen'
 import { Header } from '../components'
 
 const screenOptions = {
-  headerLeft: (props) => <Header title="Saba university school of medicine" />,
+  headerLeft: (props) => <Header title="GUS Medical Universities" />,
   title: '',
 }
 

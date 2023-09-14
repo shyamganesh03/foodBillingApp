@@ -7,17 +7,17 @@ import { DynamicFields } from '../../components'
 import { fieldData } from './data/metaData'
 
 const DesktopView = ({
+  school,
   activeTab,
   tabItems,
-  handleValueChanged,
+  handleValueChange,
   handleSave,
 }) => {
   const { colors } = useTheme()
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <ScrollView
         contentContainerStyle={{
-          flex: 1,
           paddingVertical: 60,
           paddingHorizontal: 40,
         }}
@@ -35,15 +35,15 @@ const DesktopView = ({
                     fieldType={fieldItem?.type}
                     isMandatory={fieldItem?.mandatory}
                     label={fieldItem?.label}
-                    selectedValue={fieldItem?.selectedValue}
+                    selectedValue={school[fieldItem.fieldName]}
                     inputType={fieldItem?.inputType}
                     index={fieldIndex}
                     fieldItem={fieldItem}
                     descriptionStyle={styles.description}
                     handleValueChanged={(value) => {
-                      handleValueChanged({
+                      handleValueChange({
                         fieldItem,
-                        value,
+                        selectedValue: value,
                       })
                     }}
                   />
@@ -58,17 +58,15 @@ const DesktopView = ({
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
             onPress={() => {
-              handleSave(fieldData, 'initialSave')
+              handleSave({ type: 'create', fieldData: school })
             }}
           />
           <Button
             label="Save and Next"
             labelColors={colors.white}
-            buttonColor={
-              activeTab !== tabItems.length - 1 ? colors.primary : '#45C65A'
-            }
+            buttonColor={colors.primary}
             onPress={() => {
-              handleSave(fieldData, 'initial')
+              handleSave({ fieldData, type: 'initial', fieldData: school })
             }}
             // disable={getCTAStatus(activeTab)}
           />

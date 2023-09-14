@@ -54,7 +54,7 @@ export const updateApplication = async (payload) =>
     payload,
   })
 
-export const submitApplication = async (payload) =>
+export const createApplication = async (payload) =>
   apiCall(`application`, {
     method: 'POST',
     payload,

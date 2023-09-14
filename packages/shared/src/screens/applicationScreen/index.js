@@ -22,15 +22,13 @@ import {
   getApplicationDetailsByID,
   getApplicationFileByID,
   getDropdownValue,
-  submitApplication,
-  updateApplication,
   uploadFile,
 } from '../../api'
 import { useQuery } from '@tanstack/react-query'
 import { Text } from '@libs/components'
-import { useFormSave, useInitialForm, useModalSave } from '../../hooks/useSave'
-import { useValidation } from '../../hooks/useValidation'
 import { getCurrentDate } from '../../utils/dateFunction'
+import { useAtom } from 'jotai'
+import { studentDetails } from '../../utils/atom'
 
 const Application = (props) => {
   const [dropdownTop, setDropdownTop] = useState(0)
@@ -60,6 +58,7 @@ const Application = (props) => {
   const isFocused = useIsFocused()
   const navigation = useNavigation()
   const route = useRoute()
+  const [, setStudentDetail] = useAtom(studentDetails)
 
   useEffect(() => {
     if (isEditMode) return
@@ -82,6 +81,7 @@ const Application = (props) => {
     useQuery({
       queryKey: ['getApplicationDetails'],
       queryFn: async () => {
+        console.log('first')
         const response = await getApplicationByID({
           applicationId: paramsData?.id,
         })
@@ -89,6 +89,12 @@ const Application = (props) => {
           setValidationError('* Invalid Application id')
         }
         const formDataCopy = formData
+        setStudentDetail({
+          gusApplicationId: '',
+          email: response.Email__c || paramsData?.email,
+          firstName: response.First_Name__c || paramsData?.firstName,
+          lastName: response.Last_Name__c || paramsData?.lastName,
+        })
         formDataCopy.step1.sections[1].fields[0].selectedValue =
           response.First_Name__c || ''
         formDataCopy.step1.sections[1].fields[2].selectedValue =
@@ -114,6 +120,13 @@ const Application = (props) => {
       const dropdown = await getDropdownValue({ apiName: 'mailingCountryCode' })
       const responseData = await getApplicationByEmailID({
         email: paramsData?.email || applicationDetails?.Email__c,
+      })
+
+      setStudentDetail({
+        gusApplicationId: '',
+        email: responseData.email || paramsData?.email,
+        firstName: responseData.firstName || paramsData?.firstName,
+        lastName: responseData.lastName || paramsData?.lastName,
       })
       formDataCopy.step6.sections[0].fields[1].selectedValue = getCurrentDate({
         type: 'string',
@@ -386,170 +399,170 @@ const Application = (props) => {
   }
 
   const handleSave = async (submittedData, type, sessionName, tabIndex) => {
-    let response
-    const isDataValid = useValidation({
-      step: `step${activeTab}`,
-      modalFields,
-      setModalFields,
-      formData,
-      validationError,
-      type,
-      submittedData,
-      setFormData,
-      setValidationError,
-      sessionName,
-    })
-    if (activeTab === 6 && isCTADisabled) {
-      if (type === 'TabSaveAndNext' || type === 'initialTab') {
-        setActiveTab(tabIndex)
-      }
-      // Handle 'saveAndNext' and other types.
-      if (type === 'saveAndNext' || type === 'initial') {
-        setActiveTab(activeTab + 1)
-      }
-      return
-    }
-    if (!isDataValid && activeTab !== 6) {
-      return
-    }
-    setShowLoader(true)
-    // Reset modalFields.
-    setModalFields({
-      isModalVisible: false,
-      items: [],
-      title: '',
-      direction: 'row',
-      sectionIndex: -1,
-      error: '',
-    })
+    // let response
+    // const isDataValid = useValidation({
+    //   step: `step${activeTab}`,
+    //   modalFields,
+    //   setModalFields,
+    //   formData,
+    //   validationError,
+    //   type,
+    //   submittedData,
+    //   setFormData,
+    //   setValidationError,
+    //   sessionName,
+    // })
+    // if (activeTab === 6 && isCTADisabled) {
+    //   if (type === 'TabSaveAndNext' || type === 'initialTab') {
+    //     setActiveTab(tabIndex)
+    //   }
+    //   // Handle 'saveAndNext' and other types.
+    //   if (type === 'saveAndNext' || type === 'initial') {
+    //     setActiveTab(activeTab + 1)
+    //   }
+    //   return
+    // }
+    // if (!isDataValid && activeTab !== 6) {
+    //   return
+    // }
+    // setShowLoader(true)
+    // // Reset modalFields.
+    // setModalFields({
+    //   isModalVisible: false,
+    //   items: [],
+    //   title: '',
+    //   direction: 'row',
+    //   sectionIndex: -1,
+    //   error: '',
+    // })
 
-    if (type === 'initial' || type === 'initialSave' || type === 'initialTab') {
-      const initialPayload = {
-        firstName: paramsData?.firstName || applicationDetails?.First_Name__c,
-        lastName: paramsData?.lastName || applicationDetails?.Last_Name__c,
-        phoneNumber:
-          paramsData?.phoneNumber ||
-          applicationDetails?.Phone_Number_Emergency__c,
-        email: paramsData?.email || applicationDetails?.Email__c,
-        gusApplicationId: paramsData?.id,
-        universityOrCollegeInfo: [],
-        AAMCMCATReporting: [],
-        clinicalOrHospitalExperienceDetails: [],
-        researchExperience: [],
-        recommenders: [],
-        firstChoiceSchool: submittedData.sections[1].fields[0]?.selectedValue,
-        secondChoiceSchool: submittedData.sections[1].fields[1]?.selectedValue,
-        thirdChoiceSchool: submittedData.sections[1].fields[2]?.selectedValue,
-        isCommonApplication: submittedData.sections[0].fields[2]?.selectedValue,
-        applicationStatus: 'In Progress',
-      }
-      response = await useInitialForm({
-        userData: data,
-        initialPayload,
-        formData,
-      })
-      if (response?.message?.[0]?.message) {
-        setValidationError(`* ${response?.message?.[0]?.message}`)
-        setShowLoader(false)
-        return
-      }
-    }
+    // if (type === 'initial' || type === 'initialSave' || type === 'initialTab') {
+    //   const initialPayload = {
+    //     firstName: paramsData?.firstName || applicationDetails?.First_Name__c,
+    //     lastName: paramsData?.lastName || applicationDetails?.Last_Name__c,
+    //     phoneNumber:
+    //       paramsData?.phoneNumber ||
+    //       applicationDetails?.Phone_Number_Emergency__c,
+    //     email: paramsData?.email || applicationDetails?.Email__c,
+    //     gusApplicationId: paramsData?.id,
+    //     universityOrCollegeInfo: [],
+    //     AAMCMCATReporting: [],
+    //     clinicalOrHospitalExperienceDetails: [],
+    //     researchExperience: [],
+    //     recommenders: [],
+    //     firstChoiceSchool: submittedData.sections[1].fields[0]?.selectedValue,
+    //     secondChoiceSchool: submittedData.sections[1].fields[1]?.selectedValue,
+    //     thirdChoiceSchool: submittedData.sections[1].fields[2]?.selectedValue,
+    //     isCommonApplication: submittedData.sections[0].fields[2]?.selectedValue,
+    //     applicationStatus: 'In Progress',
+    //   }
+    //   response = await useInitialForm({
+    //     userData: data,
+    //     initialPayload,
+    //     formData,
+    //   })
+    //   if (response?.message?.[0]?.message) {
+    //     setValidationError(`* ${response?.message?.[0]?.message}`)
+    //     setShowLoader(false)
+    //     return
+    //   }
+    // }
 
-    if (type === 'Submit') {
-      const updateResponse = await useFormSave({
-        submittedData,
-        email: paramsData?.email || applicationDetails?.Email__c,
-        applicationStatus: 'Submitted',
-      })
-      if (updateResponse?.message[0]?.message) {
-        setValidationError(`* ${updateResponse?.message[0]?.message}`)
-        setShowLoader(false)
-        return
-      }
-      setShowLoader(false)
-      return navigation.navigate('success', {
-        programName: formData.step1.sections[0].fields[0]?.selectedValue || '',
-      })
-    }
-    if (type === 'modalSave') {
-      response = await useModalSave({
-        email: paramsData?.email || applicationDetails?.Email__c,
-        submittedData,
-        sessionName,
-      })
-      if (response?.message[0]?.message) {
-        setValidationError(`* ${response?.message[0]?.message}`)
-        setShowLoader(false)
-        return
-      }
-      // refetch updated Data
-      await refetch()
-      const sections = submittedData.sections
-      let sectionIndex = -1
-      for (let i = 0; i < sections.length; i++) {
-        if (sections[i].title === sessionName) {
-          sectionIndex = i // Update the index if the title matches
-          break // Exit the loop when the first match is found
-        }
-      }
+    // if (type === 'Submit') {
+    //   const updateResponse = await useFormSave({
+    //     submittedData,
+    //     email: paramsData?.email || applicationDetails?.Email__c,
+    //     applicationStatus: 'Submitted',
+    //   })
+    //   if (updateResponse?.message[0]?.message) {
+    //     setValidationError(`* ${updateResponse?.message[0]?.message}`)
+    //     setShowLoader(false)
+    //     return
+    //   }
+    //   setShowLoader(false)
+    //   return navigation.navigate('success', {
+    //     programName: formData.step1.sections[0].fields[0]?.selectedValue || '',
+    //   })
+    // }
+    // if (type === 'modalSave') {
+    //   response = await useModalSave({
+    //     email: paramsData?.email || applicationDetails?.Email__c,
+    //     submittedData,
+    //     sessionName,
+    //   })
+    //   if (response?.message[0]?.message) {
+    //     setValidationError(`* ${response?.message[0]?.message}`)
+    //     setShowLoader(false)
+    //     return
+    //   }
+    //   // refetch updated Data
+    //   await refetch()
+    //   const sections = submittedData.sections
+    //   let sectionIndex = -1
+    //   for (let i = 0; i < sections.length; i++) {
+    //     if (sections[i].title === sessionName) {
+    //       sectionIndex = i // Update the index if the title matches
+    //       break // Exit the loop when the first match is found
+    //     }
+    //   }
 
-      const currentSection =
-        formData[`step${activeTab}`]?.sections[sectionIndex]
-      currentSection.selectedValue = ''
-      currentSection?.modalFields?.map((fieldValues) => {
-        fieldValues.selectedValue = ''
-        fieldValues.error = {}
-      })
-      const updatedFieldData = {
-        ...formData,
-        [`step${activeTab}`]: {
-          ...formData[`step${activeTab}`],
-          sections: [
-            ...formData[`step${activeTab}`]?.sections.slice(0, sectionIndex),
-            { ...currentSection },
-            ...formData[`step${activeTab}`]?.sections.slice(sectionIndex + 1),
-          ],
-        },
-      }
-      setFormData(updatedFieldData)
+    //   const currentSection =
+    //     formData[`step${activeTab}`]?.sections[sectionIndex]
+    //   currentSection.selectedValue = ''
+    //   currentSection?.modalFields?.map((fieldValues) => {
+    //     fieldValues.selectedValue = ''
+    //     fieldValues.error = {}
+    //   })
+    //   const updatedFieldData = {
+    //     ...formData,
+    //     [`step${activeTab}`]: {
+    //       ...formData[`step${activeTab}`],
+    //       sections: [
+    //         ...formData[`step${activeTab}`]?.sections.slice(0, sectionIndex),
+    //         { ...currentSection },
+    //         ...formData[`step${activeTab}`]?.sections.slice(sectionIndex + 1),
+    //       ],
+    //     },
+    //   }
+    //   setFormData(updatedFieldData)
 
-      // Reset modalFields.
-      setModalFields({
-        isModalVisible: false,
-        items: [],
-        title: '',
-        direction: 'row',
-        sectionIndex: -1,
-        error: '',
-      })
-      setShowLoader(false)
-      return
-    }
+    //   // Reset modalFields.
+    //   setModalFields({
+    //     isModalVisible: false,
+    //     items: [],
+    //     title: '',
+    //     direction: 'row',
+    //     sectionIndex: -1,
+    //     error: '',
+    //   })
+    //   setShowLoader(false)
+    //   return
+    // }
 
-    // Update the application with the payload.
-    response = await useFormSave({
-      submittedData,
-      email: paramsData?.email || applicationDetails?.Email__c,
-    })
+    // // Update the application with the payload.
+    // response = await useFormSave({
+    //   submittedData,
+    //   email: paramsData?.email || applicationDetails?.Email__c,
+    // })
 
-    if (response?.message[0]?.message) {
-      setValidationError(`* ${response?.message[0]?.message}`)
-      setShowLoader(false)
+    // if (response?.message[0]?.message) {
+    //   setValidationError(`* ${response?.message[0]?.message}`)
+    //   setShowLoader(false)
 
-      return
-    }
+    //   return
+    // }
 
-    if (type === 'TabSaveAndNext' || type === 'initialTab') {
-      setActiveTab(tabIndex)
-    }
+    // if (type === 'TabSaveAndNext' || type === 'initialTab') {
+    //   setActiveTab(tabIndex)
+    // }
 
-    // Handle 'saveAndNext' and other types.
-    if (type === 'saveAndNext' || type === 'initial') {
-      setActiveTab(activeTab + 1)
-    }
+    // // Handle 'saveAndNext' and other types.
+    // if (type === 'saveAndNext' || type === 'initial') {
+    //   setActiveTab(activeTab + 1)
+    // }
 
-    // refetch updated Data
-    await refetch()
+    // // refetch updated Data
+    // await refetch()
     // set loader false
     setShowLoader(false)
   }
