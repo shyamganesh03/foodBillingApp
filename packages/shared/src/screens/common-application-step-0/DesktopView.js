@@ -42,11 +42,8 @@ const DesktopView = ({
                     descriptionStyle={styles.description}
                     handleValueChanged={(value) => {
                       handleValueChanged({
-                        selectedValue: value,
-                        type: 'form',
-                        step: `step${activeTab}`,
-                        fieldIndex,
-                        sectionIndex,
+                        fieldItem,
+                        value,
                       })
                     }}
                   />

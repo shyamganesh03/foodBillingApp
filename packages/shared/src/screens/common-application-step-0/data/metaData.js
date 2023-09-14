@@ -35,7 +35,6 @@ export const fieldData = {
           mandatory: true,
           type: 'PickList',
           pickListValues: [],
-          selectedValue: '',
         },
         {
           label: 'Second Choice School',
@@ -43,7 +42,6 @@ export const fieldData = {
           name: 'schools',
           type: 'PickList',
           pickListValues: [],
-          selectedValue: '',
         },
         {
           label: 'Third Choice School',
@@ -51,7 +49,6 @@ export const fieldData = {
           name: 'schools',
           type: 'PickList',
           pickListValues: [],
-          selectedValue: '',
         },
       ],
     },
