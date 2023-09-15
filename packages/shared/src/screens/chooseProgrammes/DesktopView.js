@@ -9,6 +9,8 @@ import { fieldData } from './data/metaData'
 const DesktopView = ({
   programmes,
   handleValueChange,
+  validationError,
+  checkCTAStatus,
   handleSubmit,
   isLoading,
 }) => {
@@ -28,7 +30,7 @@ const DesktopView = ({
           return (
             <View key={fieldIndex}>
               <DynamicFields
-                error={fieldItem?.error}
+                error={validationError}
                 fieldType={fieldItem?.type}
                 isMandatory={fieldItem?.mandatory}
                 label={fieldItem?.label}
@@ -56,6 +58,7 @@ const DesktopView = ({
             onPress={() => {
               handleSubmit({ type: 'save', buttonVariant: 'primary' })
             }}
+            disable={checkCTAStatus()}
           />
           <Button
             label="Save and Next"
@@ -64,6 +67,7 @@ const DesktopView = ({
             onPress={() => {
               handleSubmit({ type: 'saveAndNext', buttonVariant: 'secondary' })
             }}
+            disable={checkCTAStatus()}
           />
         </View>
       </ScrollView>

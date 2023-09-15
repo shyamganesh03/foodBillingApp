@@ -1,3 +1,5 @@
+import { getCurrentDate } from './dateFunction'
+
 export const fieldValidation = ({ type, validationValue }) => {
   switch (type) {
     case 'email':
@@ -39,7 +41,40 @@ export const fieldValidation = ({ type, validationValue }) => {
           isValid: true,
         }
       }
+    case 'dob':
+      const birthDate = new Date(validationValue)
+      const currentDate = getCurrentDate({ type: 'Date' })
+
+      if (currentDate < birthDate) {
+        return {
+          isValid: false,
+          error: 'Birth Date cannot be in future',
+        }
+      } else {
+        return {
+          isValid: true,
+        }
+      }
     default:
-      break
+      return {
+        isValid: true,
+      }
   }
+}
+
+export const mandatoryValidation = (fieldData, filedItemValues) => {
+  const mandatoryFields = fieldData
+    ?.filter(
+      (fieldItem) =>
+        fieldItem?.mandatory && filedItemValues[fieldItem?.fieldName] === '',
+    )
+    ?.map((fieldItem) => fieldItem?.fieldName)
+  return mandatoryFields
+}
+
+export const canNonEmptyObject = (validationValue) => {
+  const hasNonEmptyValue = Object.values(validationValue).some(
+    (value) => !!value,
+  )
+  return hasNonEmptyValue
 }

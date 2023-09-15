@@ -92,7 +92,7 @@ const DropDown = (props) => {
         { position: 'relative' },
         {
           width: hasFullWidth ? '100%' : 325,
-          height: error?.hasError ? '' : 32,
+          height: error ? '' : 32,
         },
         style,
       ]}
@@ -118,7 +118,7 @@ const DropDown = (props) => {
                 borderWidth: 0,
               }
             : {},
-          { borderColor: error?.hasError ? colors.onAlert : '#E0E0E0' },
+          { borderColor: error ? colors.onAlert : '#E0E0E0' },
         ]}
         disabled={disable}
       >
@@ -193,9 +193,9 @@ const DropDown = (props) => {
           </TouchableOpacity>
         </Modal>
       ) : null}
-      {error?.hasError ? (
+      {error ? (
         <Text variant="body2" color={colors.onAlert}>
-          {error?.message}
+          {error}
         </Text>
       ) : null}
     </View>
