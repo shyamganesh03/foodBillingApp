@@ -81,7 +81,6 @@ const Application = (props) => {
     useQuery({
       queryKey: ['getApplicationDetails'],
       queryFn: async () => {
-        console.log('first')
         const response = await getApplicationByID({
           applicationId: paramsData?.id,
         })
@@ -375,8 +374,6 @@ const Application = (props) => {
       const tabs = tabsTitle.map((item) => {
         return { title: formData[item]?.title }
       })
-
-      console.log(tabs)
 
       setTabItems(tabs)
     })()

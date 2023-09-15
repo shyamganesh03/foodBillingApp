@@ -68,7 +68,7 @@ const DynamicFields = ({
         <DropDown
           toggleDropdown={handleDropDown}
           dropdownWidth={dropdownWidth}
-          error={error}
+          error={error ? error[fieldName] : ''}
           items={getDropdownData(fieldItem)}
           // hasFullWidth={fieldItem.hasFullWidth}
           position={{ top: dropdownTop, left: dropdownLeft }}
@@ -128,7 +128,7 @@ const DynamicFields = ({
       <DateInput
         title={label}
         key={index}
-        error={error}
+        error={error ? error[fieldName] : ''}
         inputType={inputType}
         style={{}}
         isMandatory={isMandatory}

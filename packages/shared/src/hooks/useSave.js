@@ -50,8 +50,6 @@ export const useSave = () => {
             navigation.setParams({ steps: steps + 1 })
           }
         }
-
-        console.log('success', context)
       },
     },
   )

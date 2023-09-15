@@ -121,11 +121,11 @@ const DateInput = (props) => {
   const openDropdown = () => {
     DropdownButton.current.measure((_fx, _fy, _w, h, _px, py) => {
       if (isModal) {
-        setDropdownTop(py + 60)
+        setDropdownTop(py)
         setDropDownLeft(_px)
         setDropDownWidth(_w)
       } else {
-        setDropdownTop(py)
+        setDropdownTop(py + 60)
         setDropDownLeft(_px - _fx)
         setDropDownWidth(_w)
       }
@@ -179,7 +179,6 @@ const DateInput = (props) => {
             <TextInput
               value={selectedYear.toString()}
               style={{
-                height: 24,
                 paddingTop: 0,
               }}
               textInputWidth={100}
@@ -196,7 +195,7 @@ const DateInput = (props) => {
                 width: 20,
                 position: 'absolute',
                 right: spacing.spacing3,
-                top: Platform.OS === 'web' ? '10%' : '20%',
+                top: Platform.OS === 'web' ? '25%' : '20%',
                 transform: [{ rotate: '180deg' }],
               }}
             />
@@ -208,7 +207,7 @@ const DateInput = (props) => {
                 width: 20,
                 position: 'absolute',
                 right: spacing.spacing3,
-                top: Platform.OS === 'web' ? '30%' : '20%',
+                top: Platform.OS === 'web' ? '40%' : '20%',
               }}
             />
           </View>
@@ -349,7 +348,8 @@ const DateInput = (props) => {
           disable
             ? { opacity: 0.6 }
             : {
-                borderColor: error?.hasError ? colors.onAlert : '#E0E0E0',
+                borderColor: error ? colors.onAlert : '#E0E0E0',
+                width: textInputWidth || 325,
               },
         ]}
       >
@@ -366,6 +366,7 @@ const DateInput = (props) => {
         <TextInput
           label={label}
           placeholder={placeholder}
+          style={{ width: 325 }}
           right={<TextInput.Affix />}
           value={value || selectedDate}
           maxLength={data?.maxLength}

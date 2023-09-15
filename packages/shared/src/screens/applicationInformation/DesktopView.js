@@ -7,9 +7,12 @@ import { DynamicFields } from '../../components'
 import { fieldData } from './data/metaData'
 
 const DesktopView = ({
+  validationError,
+  checkCTAStatus,
   applicationInformation,
   handleValueChange,
-  handleSave,
+  isLoading,
+  handleSubmit,
 }) => {
   const { colors } = useTheme()
   return (
@@ -21,18 +24,19 @@ const DesktopView = ({
         }}
       >
         <Text variant="heading2" style={{ marginBottom: 20 }}>
-          {fieldData.title}
+          Application Information
         </Text>
-        {fieldData.fields.map((fieldItem, fieldIndex) => {
+        {fieldData.map((fieldItem, fieldIndex) => {
           return (
             <View key={fieldIndex}>
               <DynamicFields
-                error={fieldItem?.error}
-                fieldType={fieldItem?.type}
-                isMandatory={fieldItem?.mandatory}
-                label={fieldItem?.label}
+                error={validationError}
+                fieldType={fieldItem.type}
+                fieldName={fieldItem.fieldName}
+                isMandatory={fieldItem.mandatory}
+                label={fieldItem.label}
                 selectedValue={applicationInformation[fieldItem.fieldName]}
-                inputType={fieldItem?.inputType}
+                inputType={fieldItem.inputType}
                 index={fieldIndex}
                 fieldItem={fieldItem}
                 descriptionStyle={styles.description}
@@ -51,20 +55,20 @@ const DesktopView = ({
             label="Save"
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
+            isLoading={isLoading.primary}
             onPress={() => {
-              handleSave({ type: 'save', fieldData: applicationInformation })
+              handleSubmit({ type: 'save', buttonVariant: 'primary' })
             }}
+            disable={checkCTAStatus()}
           />
           <Button
             label="Save and Next"
             labelColors={colors.white}
+            isLoading={isLoading.secondary}
             onPress={() => {
-              handleSave({
-                fieldData,
-                type: 'saveAndNext',
-                fieldData: applicationInformation,
-              })
+              handleSubmit({ type: 'saveAndNext', buttonVariant: 'secondary' })
             }}
+            disable={checkCTAStatus()}
           />
         </View>
       </ScrollView>
