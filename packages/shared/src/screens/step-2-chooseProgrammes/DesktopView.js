@@ -6,7 +6,12 @@ import { ScrollView } from 'react-native'
 import { DynamicFields } from '../../components'
 import { fieldData } from './data/metaData'
 
-const DesktopView = ({ programmes, handleValueChange, handleSave }) => {
+const DesktopView = ({
+  programmes,
+  handleValueChange,
+  handleSubmit,
+  isLoading,
+}) => {
   const { colors } = useTheme()
   return (
     <View style={{ flex: 1 }}>
@@ -47,19 +52,17 @@ const DesktopView = ({ programmes, handleValueChange, handleSave }) => {
             label="Save"
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
+            isLoading={isLoading.primary}
             onPress={() => {
-              handleSave({ type: 'save', fieldData: programmes })
+              handleSubmit({ type: 'save', buttonVariant: 'primary' })
             }}
           />
           <Button
             label="Save and Next"
             labelColors={colors.white}
+            isLoading={isLoading.secondary}
             onPress={() => {
-              handleSave({
-                fieldData,
-                type: 'saveAndNext',
-                fieldData: programmes,
-              })
+              handleSubmit({ type: 'saveAndNext', buttonVariant: 'secondary' })
             }}
           />
         </View>
