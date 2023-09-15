@@ -5,6 +5,7 @@ import DesktopView from './DesktopView'
 import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
+import { fieldValidation } from '../../utils/fieldValidation'
 
 const ContactInformation = (props) => {
   const [contactInformation, setContactInformation] = useState({
@@ -17,6 +18,8 @@ const ContactInformation = (props) => {
     mailingCountryCode: '',
     canTextToMobile: '',
   })
+
+  const [validationError, setValidationError] = useState()
 
   const { mutate: handleSave } = useSave()
   const isFocused = useIsFocused()
@@ -42,10 +45,27 @@ const ContactInformation = (props) => {
   }, [isFocused, applicationDetails])
 
   const handleValueChange = ({ fieldItem, selectedValue }) => {
-    setContactInformation((prevValue) => ({
-      ...prevValue,
-      [fieldItem.fieldName]: selectedValue?.name || selectedValue,
-    }))
+    const validation = fieldValidation({
+      type: fieldItem.inputType,
+      validationValue: selectedValue,
+    })
+    if (!validation.isValid && fieldItem.inputType !== 'number') {
+      setValidationError((prevValidationError) => ({
+        ...prevValidationError,
+        [fieldItem.fieldName]: validation.error,
+      }))
+    } else {
+      setValidationError((prevValidationError) => ({
+        ...prevValidationError,
+        [fieldItem.fieldName]: '',
+      }))
+    }
+    if (validation.isValid) {
+      setContactInformation((prevValue) => ({
+        ...prevValue,
+        [fieldItem.fieldName]: selectedValue?.name || selectedValue,
+      }))
+    }
   }
   const LayoutView = useCallback(
     ScreenLayout.withLayoutView(DesktopView, DesktopView, DesktopView),
@@ -53,6 +73,7 @@ const ContactInformation = (props) => {
   )
 
   const viewProps = {
+    validationError,
     contactInformation,
     handleValueChange,
     handleSave,

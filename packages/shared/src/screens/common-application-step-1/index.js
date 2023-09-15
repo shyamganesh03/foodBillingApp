@@ -5,37 +5,50 @@ import DesktopView from './DesktopView'
 import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
+import { fieldData } from './data/metaData'
 
 const CommonApplication = (props) => {
-  const [school, setSchool] = useState({
-    firstChoiceSchool: '',
-    secondChoiceSchool: '',
-    thirdChoiceSchool: '',
-    isCommonApplication: '',
+  const [school, setSchool] = useState({})
+  const [isLoading, setIsLoading] = useState({
+    primary: false,
+    secondary: false,
   })
 
-  const { mutate: handleSave } = useSave()
+  const { mutate: mutation } = useSave()
   const isFocused = useIsFocused()
   const queryClient = useQueryClient()
 
   const applicationDetails = queryClient.getQueryData(['getApplicationData'])
 
+  const handleSubmit = async ({ type, buttonVariant }) => {
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      [buttonVariant]: true,
+    }))
+    await mutation.mutateAsync({
+      type,
+      fieldData: school,
+    })
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      [buttonVariant]: false,
+    }))
+  }
+
   useEffect(() => {
     if (!isFocused) return
-    if (applicationDetails) {
-      setSchool({
-        firstChoiceSchool: applicationDetails['firstChoiceSchool'] || '',
-        secondChoiceSchool: applicationDetails['secondChoiceSchool'] || '',
-        thirdChoiceSchool: applicationDetails['thirdChoiceSchool'] || '',
-        isCommonApplication: applicationDetails['isCommonApplication'] || false,
-      })
-    }
+    fieldData.forEach((fieldItem) => {
+      setSchool((prevValue) => ({
+        ...prevValue,
+        [fieldItem.fieldName]: applicationDetails?.[fieldItem?.fieldName] || '',
+      }))
+    })
   }, [isFocused, applicationDetails])
 
   const handleValueChange = ({ fieldItem, selectedValue }) => {
     setSchool((prevValue) => ({
       ...prevValue,
-      [fieldItem.fieldName]: selectedValue?.name,
+      [fieldItem.fieldName]: selectedValue?.name || selectedValue,
     }))
   }
   const LayoutView = useCallback(
@@ -43,7 +56,14 @@ const CommonApplication = (props) => {
     [],
   )
 
-  const viewProps = { school, handleValueChange, handleSave }
+  const viewProps = {
+    fieldData,
+    school,
+    isLoading,
+    mutation,
+    handleValueChange,
+    handleSubmit,
+  }
 
   return (
     <Suspense fallback={<Text>Loading</Text>}>

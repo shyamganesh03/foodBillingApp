@@ -10,6 +10,7 @@ import { getDropdownData } from '../../utils/dropDownData'
 import DateInput from '../DateInput'
 
 const DynamicFields = ({
+  fieldName,
   index,
   handleValueChanged,
   descriptionStyle,
@@ -31,7 +32,6 @@ const DynamicFields = ({
 
   const handleDropDown = (visible, ref) => {
     toggleDropdown(visible, ref, (dropdownAlignment) => {
-      console.log({ dropdownAlignment, ref })
       setDropdownTop(dropdownAlignment.top)
       setDropdownLeft(dropdownAlignment.left)
       setDropDownWidth(dropdownAlignment.width)
@@ -85,7 +85,7 @@ const DynamicFields = ({
         isMandatory={isMandatory}
         style={{ marginBottom: 30 }}
         value={selectedValue}
-        error={error}
+        error={error ? error[fieldName] : ''}
         onChangeText={(value) => {
           handleValueChanged(value)
         }}

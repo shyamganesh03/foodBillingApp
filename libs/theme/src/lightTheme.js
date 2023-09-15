@@ -17,5 +17,6 @@ export const LightTheme = {
     backgroundVariant: colors.neutral.neutral100,
     primaryIconColor: colors.neutral.neutral400,
     success: colors.success.green700,
+    loaderColor: colors.secondary.blueShade300,
   },
 }

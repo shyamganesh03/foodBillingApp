@@ -53,7 +53,7 @@ const TextInput = (props) => {
           {
             backgroundColor: editable ? 'transparent' : colors.background,
             width: textInputWidth || 325,
-            borderColor: error?.hasError ? colors.onAlert : '#E0E0E0',
+            borderColor: error ? colors.onAlert : '#E0E0E0',
           },
           hasFullWidth
             ? {
@@ -80,9 +80,9 @@ const TextInput = (props) => {
           <View style={{ justifyContent: 'center' }}>{trailingIcon}</View>
         )}
       </Row>
-      {error?.hasError ? (
+      {error ? (
         <Text variant="body2" color={colors.onAlert}>
-          {error?.message}
+          {error}
         </Text>
       ) : null}
     </View>

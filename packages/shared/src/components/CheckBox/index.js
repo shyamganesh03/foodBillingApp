@@ -77,6 +77,7 @@ const styles = (props) =>
     checkBoxContainer: {
       flexDirection: 'row',
       paddingVertical: spacing.spacing3,
+      marginBottom: 20,
     },
     labelStyle: {
       // marginLeft: 2,

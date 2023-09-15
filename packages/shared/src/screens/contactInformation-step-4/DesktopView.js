@@ -6,7 +6,12 @@ import { ScrollView } from 'react-native'
 import { DynamicFields } from '../../components'
 import { fieldData } from './data/metaData'
 
-const DesktopView = ({ contactInformation, handleValueChange, handleSave }) => {
+const DesktopView = ({
+  contactInformation,
+  handleValueChange,
+  handleSave,
+  validationError,
+}) => {
   const { colors } = useTheme()
   return (
     <View style={{ flex: 1 }}>
@@ -23,9 +28,10 @@ const DesktopView = ({ contactInformation, handleValueChange, handleSave }) => {
           return (
             <View key={fieldIndex}>
               <DynamicFields
-                error={fieldItem?.error}
+                error={validationError}
                 fieldType={fieldItem?.type}
                 isMandatory={fieldItem?.mandatory}
+                fieldName={fieldItem.fieldName}
                 label={fieldItem?.label}
                 selectedValue={contactInformation[fieldItem.fieldName]}
                 inputType={fieldItem?.inputType}
@@ -48,7 +54,7 @@ const DesktopView = ({ contactInformation, handleValueChange, handleSave }) => {
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
             onPress={() => {
-              handleSave({ type: 'create', fieldData: contactInformation })
+              handleSave({ type: 'save', fieldData: applicationInformation })
             }}
           />
           <Button
@@ -57,8 +63,8 @@ const DesktopView = ({ contactInformation, handleValueChange, handleSave }) => {
             onPress={() => {
               handleSave({
                 fieldData,
-                type: 'initial',
-                fieldData: contactInformation,
+                type: 'saveAndNext',
+                fieldData: applicationInformation,
               })
             }}
           />

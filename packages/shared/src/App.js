@@ -11,6 +11,7 @@ import {
 import { Provider as PaperProvider } from 'react-native-paper'
 import 'react-native-gesture-handler'
 import { Provider as JotaiProvider } from 'jotai'
+import Toast from 'react-native-toast-notifications'
 import {
   DarkTheme as DarkThemeColors,
   LightTheme as LightThemeColors,
@@ -104,6 +105,16 @@ const App = () => {
               </JotaiProvider>
             </PaperProvider>
           </ThemeContext.Provider>
+          <Toast
+            ref={(ref) => (global.toast = ref)}
+            duration={5000}
+            animationType="zoom-in"
+            animationDuration={0}
+            textStyle={{ fontSize: 16 }}
+            renderType={{
+              error: (toast) => <ErrorToast toast={toast} />,
+            }}
+          />
         </NavigationContainer>
       </QueryClientProvider>
     </SafeAreaProvider>

@@ -21,9 +21,9 @@ const DesktopView = ({
         }}
       >
         <Text variant="heading2" style={{ marginBottom: 20 }}>
-          {fieldData.title}
+          {'Additional Information'}
         </Text>
-        {fieldData.fields.map((fieldItem, fieldIndex) => {
+        {fieldData.map((fieldItem, fieldIndex) => {
           return (
             <View key={fieldIndex}>
               <DynamicFields
@@ -52,7 +52,7 @@ const DesktopView = ({
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
             onPress={() => {
-              handleSave({ type: 'create', fieldData: additionalInformation })
+              handleSave({ type: 'save', fieldData: applicationInformation })
             }}
           />
           <Button
@@ -61,8 +61,8 @@ const DesktopView = ({
             onPress={() => {
               handleSave({
                 fieldData,
-                type: 'initial',
-                fieldData: additionalInformation,
+                type: 'saveAndNext',
+                fieldData: applicationInformation,
               })
             }}
           />

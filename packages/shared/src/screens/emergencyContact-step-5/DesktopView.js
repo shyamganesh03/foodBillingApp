@@ -48,7 +48,7 @@ const DesktopView = ({ emergencyContact, handleValueChange, handleSave }) => {
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
             onPress={() => {
-              handleSave({ type: 'create', fieldData: emergencyContact })
+              handleSave({ type: 'save', fieldData: applicationInformation })
             }}
           />
           <Button
@@ -57,8 +57,8 @@ const DesktopView = ({ emergencyContact, handleValueChange, handleSave }) => {
             onPress={() => {
               handleSave({
                 fieldData,
-                type: 'initial',
-                fieldData: emergencyContact,
+                type: 'saveAndNext',
+                fieldData: applicationInformation,
               })
             }}
           />

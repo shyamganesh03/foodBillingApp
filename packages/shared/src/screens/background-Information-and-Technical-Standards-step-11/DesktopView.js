@@ -52,10 +52,7 @@ const DesktopView = ({
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
             onPress={() => {
-              handleSave({
-                type: 'create',
-                fieldData: backgroundInformation,
-              })
+              handleSave({ type: 'save', fieldData: applicationInformation })
             }}
           />
           <Button
@@ -64,8 +61,8 @@ const DesktopView = ({
             onPress={() => {
               handleSave({
                 fieldData,
-                type: 'initial',
-                fieldData: backgroundInformation,
+                type: 'saveAndNext',
+                fieldData: applicationInformation,
               })
             }}
           />

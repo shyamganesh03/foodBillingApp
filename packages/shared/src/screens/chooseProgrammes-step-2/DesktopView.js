@@ -17,9 +17,9 @@ const DesktopView = ({ programmes, handleValueChange, handleSave }) => {
         }}
       >
         <Text variant="heading2" style={{ marginBottom: 20 }}>
-          {fieldData.title}
+          Program
         </Text>
-        {fieldData.fields.map((fieldItem, fieldIndex) => {
+        {fieldData.map((fieldItem, fieldIndex) => {
           return (
             <View key={fieldIndex}>
               <DynamicFields
@@ -48,14 +48,18 @@ const DesktopView = ({ programmes, handleValueChange, handleSave }) => {
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
             onPress={() => {
-              handleSave({ type: 'create', fieldData: programmes })
+              handleSave({ type: 'save', fieldData: programmes })
             }}
           />
           <Button
             label="Save and Next"
             labelColors={colors.white}
             onPress={() => {
-              handleSave({ fieldData, type: 'initial', fieldData: programmes })
+              handleSave({
+                fieldData,
+                type: 'saveAndNext',
+                fieldData: programmes,
+              })
             }}
           />
         </View>

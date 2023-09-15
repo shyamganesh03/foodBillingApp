@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import Text from '../Text'
+import { View } from 'react-native'
 
 const Button = (props) => {
   const { colors } = useTheme()
@@ -9,16 +10,17 @@ const Button = (props) => {
 
   const {
     appearance = 'filled',
-    buttonStyle,
     buttonColor = colors.buttonVariant1,
+    buttonStyle,
     disable,
-    leftIcon,
-    rightIcon,
-    label,
-    labelStyle,
-    labelColors = colors.onNeutral,
-    onPress = () => {},
     hoverColor,
+    isLoading,
+    label,
+    labelColors = colors.onNeutral,
+    labelStyle,
+    leftIcon,
+    onPress = () => {},
+    rightIcon,
   } = props
 
   return (
@@ -36,7 +38,11 @@ const Button = (props) => {
       onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
     >
-      {leftIcon}
+      {isLoading ? (
+        <View style={{ marginRight: 5 }}>
+          <ActivityIndicator color={colors.white} size={10} />
+        </View>
+      ) : null}
       <Text
         variant="display3"
         style={[
