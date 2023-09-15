@@ -6,13 +6,17 @@ import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
 
-const EmergencyContact = (props) => {
-  const [emergencyContact, setEmergencyContact] = useState({
-    emergencyContactFirstName: '',
-    emergencyContactLastName: '',
-    emergencyContactRelationship: '',
-    emergencyContactPrimaryPhone: '',
-    emergencyContactEmail: '',
+const PrerequisiteCourseworkInformation = (props) => {
+  const [
+    prerequisiteCourseworkInformation,
+    setPrerequisiteCourseworkInformation,
+  ] = useState({
+    biology1: '',
+    biology2: '',
+    generalOrInorganicChemistry1: '',
+    generalOrInorganicChemistry2: '',
+    organicChemistry1: '',
+    organicChemistry2OrBiochemistry: '',
   })
 
   const { mutate: handleSave } = useSave()
@@ -24,23 +28,22 @@ const EmergencyContact = (props) => {
   useEffect(() => {
     if (!isFocused) return
     if (applicationDetails) {
-      setEmergencyContact({
-        emergencyContactFirstName:
-          applicationDetails['emergencyContactFirstName'] || '',
-        emergencyContactLastName:
-          applicationDetails['emergencyContactLastName'] || '',
-        emergencyContactRelationship:
-          applicationDetails['emergencyContactRelationship'] || '',
-        emergencyContactPrimaryPhone:
-          applicationDetails['emergencyContactPrimaryPhone'] || '',
-        emergencyContactEmail:
-          applicationDetails['emergencyContactEmail'] || '',
+      setPrerequisiteCourseworkInformation({
+        biology1: applicationDetails['biology1'] || '',
+        biology2: applicationDetails['biology2'] || '',
+        generalOrInorganicChemistry1:
+          applicationDetails['generalOrInorganicChemistry1'] || '',
+        generalOrInorganicChemistry2:
+          applicationDetails['generalOrInorganicChemistry2'] || '',
+        organicChemistry1: applicationDetails['organicChemistry1'] || '',
+        organicChemistry2OrBiochemistry:
+          applicationDetails['organicChemistry2OrBiochemistry'] || '',
       })
     }
   }, [isFocused, applicationDetails])
 
   const handleValueChange = ({ fieldItem, selectedValue }) => {
-    setEmergencyContact((prevValue) => ({
+    setPrerequisiteCourseworkInformation((prevValue) => ({
       ...prevValue,
       [fieldItem.fieldName]: selectedValue?.name || selectedValue,
     }))
@@ -51,7 +54,7 @@ const EmergencyContact = (props) => {
   )
 
   const viewProps = {
-    emergencyContact,
+    prerequisiteCourseworkInformation,
     handleValueChange,
     handleSave,
   }
@@ -63,4 +66,4 @@ const EmergencyContact = (props) => {
   )
 }
 
-export default EmergencyContact
+export default PrerequisiteCourseworkInformation

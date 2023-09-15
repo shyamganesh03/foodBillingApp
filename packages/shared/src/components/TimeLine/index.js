@@ -62,6 +62,7 @@ const Label = ({
   const { colors } = useTheme()
   const navigation = useNavigation()
   const isActive = index + 1 === activeTab
+
   return (
     <View
       style={{
@@ -90,7 +91,7 @@ const Label = ({
           }}
           key={index}
           onPress={() => {
-            setActiveTab(index)
+            setActiveTab(index + 1)
             navigation.setParams({ steps: index + 1 })
           }}
         >

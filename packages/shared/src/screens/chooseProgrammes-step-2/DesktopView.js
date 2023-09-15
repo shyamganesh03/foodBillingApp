@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native'
 import { DynamicFields } from '../../components'
 import { fieldData } from './data/metaData'
 
-const DesktopView = ({ school, handleValueChange, handleSave }) => {
+const DesktopView = ({ programmes, handleValueChange, handleSave }) => {
   const { colors } = useTheme()
   return (
     <View style={{ flex: 1 }}>
@@ -27,7 +27,7 @@ const DesktopView = ({ school, handleValueChange, handleSave }) => {
                 fieldType={fieldItem?.type}
                 isMandatory={fieldItem?.mandatory}
                 label={fieldItem?.label}
-                selectedValue={school[fieldItem.fieldName]}
+                selectedValue={programmes[fieldItem.fieldName]}
                 inputType={fieldItem?.inputType}
                 index={fieldIndex}
                 fieldItem={fieldItem}
@@ -42,13 +42,13 @@ const DesktopView = ({ school, handleValueChange, handleSave }) => {
             </View>
           )
         })}
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row',marginVertical: 40 }}>
           <Button
             label="Save"
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
             onPress={() => {
-              handleSave({ type: 'create', fieldData: school })
+              handleSave({ type: 'create', fieldData: programmes })
             }}
           />
           <Button
@@ -56,7 +56,7 @@ const DesktopView = ({ school, handleValueChange, handleSave }) => {
             labelColors={colors.white}
             buttonColor={colors.primary}
             onPress={() => {
-              handleSave({ fieldData, type: 'initial', fieldData: school })
+              handleSave({ fieldData, type: 'initial', fieldData: programmes })
             }}
           />
         </View>

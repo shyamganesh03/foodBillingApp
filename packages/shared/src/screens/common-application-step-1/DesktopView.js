@@ -52,7 +52,7 @@ const DesktopView = ({
             </View>
           )
         })}
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row' ,marginVertical: 40}}>
           <Button
             label="Save"
             buttonStyle={{ marginRight: 30 }}

@@ -7,7 +7,7 @@ import { DynamicFields } from '../../components'
 import { fieldData } from './data/metaData'
 
 const DesktopView = ({
-  personalInformation,
+  backgroundInformation,
   handleValueChange,
   handleSave,
 }) => {
@@ -31,7 +31,7 @@ const DesktopView = ({
                 fieldType={fieldItem?.type}
                 isMandatory={fieldItem?.mandatory}
                 label={fieldItem?.label}
-                selectedValue={personalInformation[fieldItem.fieldName]}
+                selectedValue={backgroundInformation[fieldItem.fieldName]}
                 inputType={fieldItem?.inputType}
                 index={fieldIndex}
                 fieldItem={fieldItem}
@@ -52,7 +52,10 @@ const DesktopView = ({
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
             onPress={() => {
-              handleSave({ type: 'create', fieldData: personalInformation })
+              handleSave({
+                type: 'create',
+                fieldData: backgroundInformation,
+              })
             }}
           />
           <Button
@@ -63,7 +66,7 @@ const DesktopView = ({
               handleSave({
                 fieldData,
                 type: 'initial',
-                fieldData: personalInformation,
+                fieldData: backgroundInformation,
               })
             }}
           />

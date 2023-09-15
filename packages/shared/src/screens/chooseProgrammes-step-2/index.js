@@ -37,7 +37,7 @@ const ChooseProgrammes = (props) => {
     [],
   )
 
-  const viewProps = { school: programmes, handleValueChange, handleSave }
+  const viewProps = { programmes, handleValueChange, handleSave }
 
   return (
     <Suspense fallback={<Text>Loading</Text>}>

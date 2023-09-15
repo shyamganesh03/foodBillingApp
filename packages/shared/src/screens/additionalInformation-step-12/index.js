@@ -6,13 +6,10 @@ import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
 
-const EmergencyContact = (props) => {
-  const [emergencyContact, setEmergencyContact] = useState({
-    emergencyContactFirstName: '',
-    emergencyContactLastName: '',
-    emergencyContactRelationship: '',
-    emergencyContactPrimaryPhone: '',
-    emergencyContactEmail: '',
+const AdditionalInformation = (props) => {
+  const [additionalInformation, setAdditionalInformation] = useState({
+    howDidYouHearAboutSABA: '',
+    otherSchoolsApplyingTo: '',
   })
 
   const { mutate: handleSave } = useSave()
@@ -24,25 +21,19 @@ const EmergencyContact = (props) => {
   useEffect(() => {
     if (!isFocused) return
     if (applicationDetails) {
-      setEmergencyContact({
-        emergencyContactFirstName:
-          applicationDetails['emergencyContactFirstName'] || '',
-        emergencyContactLastName:
-          applicationDetails['emergencyContactLastName'] || '',
-        emergencyContactRelationship:
-          applicationDetails['emergencyContactRelationship'] || '',
-        emergencyContactPrimaryPhone:
-          applicationDetails['emergencyContactPrimaryPhone'] || '',
-        emergencyContactEmail:
-          applicationDetails['emergencyContactEmail'] || '',
+      setAdditionalInformation({
+        howDidYouHearAboutSABA:
+          applicationDetails['howDidYouHearAboutSABA'] || '',
+        otherSchoolsApplyingTo:
+          applicationDetails['otherSchoolsApplyingTo'] || '',
       })
     }
   }, [isFocused, applicationDetails])
 
   const handleValueChange = ({ fieldItem, selectedValue }) => {
-    setEmergencyContact((prevValue) => ({
+    setAdditionalInformation((prevValue) => ({
       ...prevValue,
-      [fieldItem.fieldName]: selectedValue?.name || selectedValue,
+      [fieldItem.fieldName]: selectedValue?.name,
     }))
   }
   const LayoutView = useCallback(
@@ -51,7 +42,7 @@ const EmergencyContact = (props) => {
   )
 
   const viewProps = {
-    emergencyContact,
+    additionalInformation,
     handleValueChange,
     handleSave,
   }
@@ -63,4 +54,4 @@ const EmergencyContact = (props) => {
   )
 }
 
-export default EmergencyContact
+export default AdditionalInformation
