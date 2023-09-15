@@ -58,7 +58,6 @@ const DesktopView = ({
           <Button
             label="Save and Next"
             labelColors={colors.white}
-            buttonColor={colors.primary}
             onPress={() => {
               handleSave({
                 fieldData,

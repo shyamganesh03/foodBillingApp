@@ -10,7 +10,7 @@ const Button = (props) => {
   const {
     appearance = 'filled',
     buttonStyle,
-    buttonColor = colors.primary,
+    buttonColor = colors.buttonVariant1,
     disable,
     leftIcon,
     rightIcon,

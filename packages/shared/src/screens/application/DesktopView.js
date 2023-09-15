@@ -92,11 +92,7 @@ const styles = (props) =>
     container: {
       height: '100vh',
       flexDirection: 'row',
-    },
-    rightContainer: {
-      flex: 1,
-      flexDirection: 'column',
-      position: 'relative',
+      backgroundColor: props.colors.backgroundVariant,
     },
   })
 

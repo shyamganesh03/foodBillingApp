@@ -2,16 +2,16 @@ import { colors } from './tokens'
 
 export const LightTheme = {
   colors: {
-    primary: colors.primary.red500,
+    primary: colors.primary.blue800,
     white: colors.neutral.white,
     neutral: colors.neutral.neutral900,
     onPrimary: colors.neutral.white,
-    onNeutral: colors.neutral.neutral800,
+    onNeutral: colors.neutral.neutral900,
     fieldBorder: colors.neutral.neutral300,
     placeHolder: colors.neutral.neutral500,
     text: colors.neutral.neutral700,
     textSecondary: colors.neutral.neutral600,
-    buttonVariant1: colors.secondary.yellow100,
+    buttonVariant1: colors.secondary.purple,
     onAlert: colors.functionalError.error500,
     background: colors.secondary.blue100,
     backgroundVariant: colors.neutral.neutral100,

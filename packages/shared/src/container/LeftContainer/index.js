@@ -3,7 +3,7 @@ import { ProgressBar } from '@libs/components'
 import TimeLine from '../../components/TimeLine'
 import { Image, ScrollView, StyleSheet, View } from 'react-native'
 import { useTheme } from '@react-navigation/native'
-import { universityLogo } from '@oap/assets'
+import { SabaLogo } from '@oap/assets'
 
 const LeftContainer = ({ tabItems }) => {
   const { colors } = useTheme()
@@ -12,7 +12,7 @@ const LeftContainer = ({ tabItems }) => {
     <View style={styles({ colors }).leftContainer}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
         <Image
-          source={universityLogo}
+          source={SabaLogo}
           style={{
             height: 102,
             width: 302,

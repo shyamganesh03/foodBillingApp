@@ -50,7 +50,7 @@ Text.propTypes = {
 }
 
 Text.defaultProps = {
-  color: '#424242',
+  color: '#282A2D',
   textAlign: 'left',
   variant: 'body1',
 }

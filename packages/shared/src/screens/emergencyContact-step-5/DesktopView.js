@@ -54,7 +54,6 @@ const DesktopView = ({ emergencyContact, handleValueChange, handleSave }) => {
           <Button
             label="Save and Next"
             labelColors={colors.white}
-            buttonColor={colors.primary}
             onPress={() => {
               handleSave({
                 fieldData,

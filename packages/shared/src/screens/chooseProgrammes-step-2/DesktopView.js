@@ -42,7 +42,7 @@ const DesktopView = ({ programmes, handleValueChange, handleSave }) => {
             </View>
           )
         })}
-        <View style={{ flexDirection: 'row',marginVertical: 40 }}>
+        <View style={{ flexDirection: 'row', marginVertical: 40 }}>
           <Button
             label="Save"
             buttonStyle={{ marginRight: 30 }}
@@ -54,7 +54,6 @@ const DesktopView = ({ programmes, handleValueChange, handleSave }) => {
           <Button
             label="Save and Next"
             labelColors={colors.white}
-            buttonColor={colors.primary}
             onPress={() => {
               handleSave({ fieldData, type: 'initial', fieldData: programmes })
             }}
