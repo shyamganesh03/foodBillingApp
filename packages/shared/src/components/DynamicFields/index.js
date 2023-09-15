@@ -1,9 +1,9 @@
 import { View } from 'react-native'
 import React, { useState } from 'react'
-import { FilePicker, Text, TextInput } from '@libs/components'
+import { FilePicker, MobileInput, Text, TextInput } from '@libs/components'
 import { getCurrentDate } from '../../utils/dateFunction'
 import CheckBox from '../CheckBox'
-import DropDown from '../DropDown'
+import DropDown from '@libs/components/src/DropDown'
 import { toggleDropdown } from './helpers'
 import { useTheme } from '@react-navigation/native'
 import { getDropdownData } from '../../utils/dropDownData'
@@ -13,6 +13,7 @@ const DynamicFields = ({
   fieldName,
   index,
   handleValueChanged,
+  handleCountrySelection,
   descriptionStyle,
   fieldItem,
   error,
@@ -105,6 +106,23 @@ const DynamicFields = ({
       />
     )
   }
+  if (fieldType === 'mobile') {
+    return (
+      <MobileInput
+        value={selectedValue}
+        isMandatory={isMandatory}
+        error={error ? error[fieldName] : ''}
+        label={label}
+        textInputWidth={325}
+        onChangeText={(value) => {
+          handleValueChanged(value)
+        }}
+        handleCountrySelection={(selectedCountry) =>
+          handleCountrySelection(selectedCountry)
+        }
+      />
+    )
+  }
   if (fieldType === 'attachDocument') {
     return (
       <FilePicker
@@ -116,13 +134,7 @@ const DynamicFields = ({
       />
     )
   }
-  if (fieldType === 'description') {
-    return (
-      <Text variant="body2" style={descriptionStyle} key={index}>
-        {label}
-      </Text>
-    )
-  }
+
   if (fieldType === 'date') {
     return (
       <DateInput

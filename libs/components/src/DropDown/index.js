@@ -11,13 +11,13 @@ import { useIsFocused, useTheme } from '@react-navigation/native'
 import { Icon } from '@r3-oaf/native-icons'
 import { styles } from './styles'
 import { Text } from '@libs/components'
+import { countryCodes } from '@libs/utils'
 
 const DropDown = (props) => {
   const {
     error,
-    isEditMode,
+    dialCode,
     disable,
-    label,
     items = [],
     itemIndex,
     onPress = () => {},
@@ -78,10 +78,24 @@ const DropDown = (props) => {
 
   useEffect(() => {
     if (!isFocused) return
-    if (selectedItem) {
-      setSelectedOption(selectedItem)
+    if (isCountryCode) {
+      console.log({ items })
+      const selectedCountryCode = countryCodes.filter(
+        (item) => item.dial_code === dialCode,
+      )
+      const selectedCountry = {
+        name:
+          selectedCountryCode?.length > 0
+            ? `${selectedCountryCode[0].flag} ${selectedCountryCode[0].dial_code}`
+            : `${items[0].flag}   ${items[0].dial_code}`,
+      }
+      setSelectedOption(selectedCountry)
     } else {
-      setSelectedOption({ name: 'Select an option' })
+      if (selectedItem) {
+        setSelectedOption(selectedItem)
+      } else {
+        setSelectedOption({ name: 'Select an option' })
+      }
     }
   }, [isFocused, selectedItem])
 
@@ -216,7 +230,7 @@ const DropDownItem = ({
   const handleOptionSelected = (selectedOption) => {
     if (isCountryCode) {
       const selectedCountry = {
-        label: `${selectedOption.flag} ${selectedOption.dial_code}`,
+        name: `${selectedOption.flag} ${selectedOption.dial_code}`,
       }
       setSelectedOption(selectedCountry)
       onPress(selectedCountry)
@@ -232,17 +246,48 @@ const DropDownItem = ({
     <TouchableOpacity
       key={index}
       style={[
-        styles.dropDownListContainer,
+        [
+          styles.dropDownListContainer,
+          { paddingVertical: isCountryCode ? 0 : '' },
+        ],
         { backgroundColor: isHovered ? colors.primaryVariant1 : '' },
       ]}
       onPress={() => handleOptionSelected(item)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseOut={() => setIsHovered(false)}
     >
-      <View style={styles.item}>
-        <Text variant="display3" color={colors.onNeutral}>
-          {item?.name}
-        </Text>
+      <View
+        style={[
+          styles.item,
+          {
+            // justifyContent: isCountryCode ? 'center' : '',
+            borderBottomWidth: isCountryCode ? 1 : 0,
+            borderColor: colors.placeHolder,
+          },
+        ]}
+      >
+        {isCountryCode ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              flex: 1,
+              maxWidth: '50%',
+              paddingVertical: 10,
+            }}
+          >
+            <Text variant="display3" color={colors.onNeutral}>
+              {item.flag}
+            </Text>
+            <Text variant="display3" color={colors.onNeutral}>
+              {item.dial_code}
+            </Text>
+          </View>
+        ) : (
+          <Text variant="display3" color={colors.onNeutral}>
+            {item.name}
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   )

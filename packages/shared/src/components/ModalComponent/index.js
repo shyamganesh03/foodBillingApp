@@ -1,6 +1,6 @@
 import { View, Modal } from 'react-native'
 import React from 'react'
-import DropDown from '../DropDown'
+import { DropDown } from '@libs/components'
 import DateInput from '../DateInput'
 import { useTheme } from '@react-navigation/native'
 import { Divider, Button, Text, TextInput } from '@libs/components'

@@ -51,7 +51,7 @@ const TextInput = (props) => {
         style={[
           styles.inputRow,
           {
-            backgroundColor: editable ? 'transparent' : colors.background,
+            backgroundColor: colors.background,
             width: textInputWidth || 325,
             borderColor: error ? colors.onAlert : '#E0E0E0',
           },

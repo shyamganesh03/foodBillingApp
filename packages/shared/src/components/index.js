@@ -1,4 +1,4 @@
-import DropDown from './DropDown'
+import DropDown from '@libs/components/src/DropDown'
 import DateInput from './DateInput'
 import CheckBox from './CheckBox'
 import ModalComponent from './ModalComponent'

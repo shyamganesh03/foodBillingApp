@@ -4,12 +4,15 @@ import { Button, Text } from '@libs/components'
 import { useTheme } from '@react-navigation/native'
 import { ScrollView } from 'react-native'
 import { DynamicFields } from '../../components'
-import { fieldData } from './data/metaData'
 
 const DesktopView = ({
   contactInformation,
+  checkCTAStatus,
+  fieldData,
+  handleSubmit,
   handleValueChange,
-  handleSave,
+  handleCountrySelection,
+  isLoading,
   validationError,
 }) => {
   const { colors } = useTheme()
@@ -22,9 +25,9 @@ const DesktopView = ({
         }}
       >
         <Text variant="heading2" style={{ marginBottom: 20 }}>
-          {fieldData.title}
+          Contact Information
         </Text>
-        {fieldData.fields.map((fieldItem, fieldIndex) => {
+        {fieldData.map((fieldItem, fieldIndex) => {
           return (
             <View key={fieldIndex}>
               <DynamicFields
@@ -44,6 +47,12 @@ const DesktopView = ({
                     selectedValue: value,
                   })
                 }}
+                handleCountrySelection={(value) =>
+                  handleCountrySelection({
+                    fieldItem,
+                    selectedValue: value,
+                  })
+                }
               />
             </View>
           )
@@ -53,20 +62,20 @@ const DesktopView = ({
             label="Save"
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
+            isLoading={isLoading.primary}
             onPress={() => {
-              handleSave({ type: 'save', fieldData: applicationInformation })
+              handleSubmit({ type: 'save', buttonVariant: 'primary' })
             }}
+            disable={checkCTAStatus()}
           />
           <Button
             label="Save and Next"
             labelColors={colors.white}
+            isLoading={isLoading.secondary}
             onPress={() => {
-              handleSave({
-                fieldData,
-                type: 'saveAndNext',
-                fieldData: applicationInformation,
-              })
+              handleSubmit({ type: 'saveAndNext', buttonVariant: 'secondary' })
             }}
+            disable={checkCTAStatus()}
           />
         </View>
       </ScrollView>

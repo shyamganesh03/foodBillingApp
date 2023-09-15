@@ -18,6 +18,7 @@ export const fieldValidation = ({ type, validationValue }) => {
     case 'phone':
       const phoneNumberRegex = /^(\+\d{1,3}-?)?(\d{5}-?)?\d{5}$/
       const isValidPhoneNumber = phoneNumberRegex.test(validationValue)
+
       if (!isValidPhoneNumber) {
         return {
           isValid: false,
