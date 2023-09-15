@@ -60,7 +60,6 @@ const ChooseProgrammes = (props) => {
     fieldData,
     programmes,
     isLoading,
-    mutation,
     handleValueChange,
     handleSubmit,
   }
