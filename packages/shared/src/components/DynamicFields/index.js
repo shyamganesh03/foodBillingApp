@@ -24,6 +24,7 @@ const DynamicFields = ({
   uploadDocs,
   inputType,
 }) => {
+  console.log({ error })
   const [dropdownTop, setDropdownTop] = useState(0)
   const [dropdownLeft, setDropdownLeft] = useState(0)
   const [dropdownWidth, setDropDownWidth] = useState(0)

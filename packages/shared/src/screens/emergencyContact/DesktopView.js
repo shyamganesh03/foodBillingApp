@@ -4,9 +4,17 @@ import { Button, Text } from '@libs/components'
 import { useTheme } from '@react-navigation/native'
 import { ScrollView } from 'react-native'
 import { DynamicFields } from '../../components'
-import { fieldData } from './data/metaData'
 
-const DesktopView = ({ emergencyContact, handleValueChange, handleSave }) => {
+const DesktopView = ({
+  fieldData,
+  emergencyContact,
+  isLoading,
+  validationError,
+  checkCTAStatus,
+  handleCountrySelection,
+  handleValueChange,
+  handleSubmit,
+}) => {
   const { colors } = useTheme()
   return (
     <View style={{ flex: 1 }}>
@@ -17,15 +25,16 @@ const DesktopView = ({ emergencyContact, handleValueChange, handleSave }) => {
         }}
       >
         <Text variant="heading2" style={{ marginBottom: 20 }}>
-          {fieldData.title}
+          Emergency Contact Information
         </Text>
-        {fieldData.fields.map((fieldItem, fieldIndex) => {
+        {fieldData.map((fieldItem, fieldIndex) => {
           return (
             <View key={fieldIndex}>
               <DynamicFields
-                error={fieldItem?.error}
+                error={validationError}
                 fieldType={fieldItem?.type}
                 isMandatory={fieldItem?.mandatory}
+                fieldName={fieldItem.fieldName}
                 label={fieldItem?.label}
                 selectedValue={emergencyContact[fieldItem.fieldName]}
                 inputType={fieldItem?.inputType}
@@ -38,6 +47,12 @@ const DesktopView = ({ emergencyContact, handleValueChange, handleSave }) => {
                     selectedValue: value,
                   })
                 }}
+                handleCountrySelection={(value) =>
+                  handleCountrySelection({
+                    fieldItem,
+                    selectedValue: value,
+                  })
+                }
               />
             </View>
           )
@@ -47,20 +62,20 @@ const DesktopView = ({ emergencyContact, handleValueChange, handleSave }) => {
             label="Save"
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
+            isLoading={isLoading.primary}
             onPress={() => {
-              handleSave({ type: 'save', fieldData: applicationInformation })
+              handleSubmit({ type: 'save', buttonVariant: 'primary' })
             }}
+            disable={checkCTAStatus()}
           />
           <Button
             label="Save and Next"
             labelColors={colors.white}
+            isLoading={isLoading.secondary}
             onPress={() => {
-              handleSave({
-                fieldData,
-                type: 'saveAndNext',
-                fieldData: emergencyContact,
-              })
+              handleSubmit({ type: 'saveAndNext', buttonVariant: 'secondary' })
             }}
+            disable={checkCTAStatus()}
           />
         </View>
       </ScrollView>
