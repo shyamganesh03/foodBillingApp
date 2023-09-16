@@ -6,10 +6,10 @@ import ChooseProgrammes from '../chooseProgrammes'
 import ApplicationInformation from '../applicationInformation'
 import ContactInformation from '../contactInformation'
 import EmergencyContact from '../emergencyContact'
-import PersonalInformation from '../personalInformation-step-6'
+import PersonalInformation from '../personalInformation'
 import PrerequisiteCourseworkInformation from '../prerequisiteCourseworkInformation'
 import BackgroundInformation from '../background-Information-and-Technical-Standards'
-import AdditionalInformation from '../additionalInformation-step-12'
+import AdditionalInformation from '../additionalInformation'
 
 const DesktopView = ({
   steps,
