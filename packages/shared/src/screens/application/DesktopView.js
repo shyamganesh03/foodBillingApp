@@ -8,7 +8,7 @@ import ContactInformation from '../contactInformation'
 import EmergencyContact from '../emergencyContact'
 import PersonalInformation from '../personalInformation-step-6'
 import PrerequisiteCourseworkInformation from '../prerequisiteCourseworkInformation'
-import BackgroundInformation from '../background-Information-and-Technical-Standards-step-11'
+import BackgroundInformation from '../background-Information-and-Technical-Standards'
 import AdditionalInformation from '../additionalInformation-step-12'
 
 const DesktopView = ({
