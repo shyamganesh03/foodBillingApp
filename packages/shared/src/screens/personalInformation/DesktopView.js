@@ -7,9 +7,14 @@ import { DynamicFields } from '../../components'
 import { fieldData } from './data/metaData'
 
 const DesktopView = ({
+  fieldData,
   personalInformation,
+  isLoading,
+  validationError,
+  checkCTAStatus,
+  handleCountrySelection,
   handleValueChange,
-  handleSave,
+  handleSubmit,
 }) => {
   const { colors } = useTheme()
   return (
@@ -21,15 +26,16 @@ const DesktopView = ({
         }}
       >
         <Text variant="heading2" style={{ marginBottom: 20 }}>
-          {fieldData.title}
+          Personal Information
         </Text>
-        {fieldData.fields.map((fieldItem, fieldIndex) => {
+        {fieldData.map((fieldItem, fieldIndex) => {
           return (
             <View key={fieldIndex}>
               <DynamicFields
-                error={fieldItem?.error}
+                error={validationError}
                 fieldType={fieldItem?.type}
                 isMandatory={fieldItem?.mandatory}
+                fieldName={fieldItem.fieldName}
                 label={fieldItem?.label}
                 selectedValue={personalInformation[fieldItem.fieldName]}
                 inputType={fieldItem?.inputType}
@@ -51,20 +57,20 @@ const DesktopView = ({
             label="Save"
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
+            isLoading={isLoading.primary}
             onPress={() => {
-              handleSave({ type: 'save', fieldData: applicationInformation })
+              handleSubmit({ type: 'save', buttonVariant: 'primary' })
             }}
+            disable={checkCTAStatus()}
           />
           <Button
             label="Save and Next"
             labelColors={colors.white}
+            isLoading={isLoading.secondary}
             onPress={() => {
-              handleSave({
-                fieldData,
-                type: 'saveAndNext',
-                fieldData: applicationInformation,
-              })
+              handleSubmit({ type: 'saveAndNext', buttonVariant: 'secondary' })
             }}
+            disable={checkCTAStatus()}
           />
         </View>
       </ScrollView>
