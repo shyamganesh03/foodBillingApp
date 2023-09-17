@@ -208,7 +208,7 @@ const DropDown = (props) => {
         </Modal>
       ) : null}
       {error ? (
-        <Text variant="body2" color={colors.onAlert}>
+        <Text variant="body1" color={colors.onAlert}>
           {error}
         </Text>
       ) : null}
@@ -260,9 +260,9 @@ const DropDownItem = ({
         style={[
           styles.item,
           {
-            // justifyContent: isCountryCode ? 'center' : '',
             borderBottomWidth: isCountryCode ? 1 : 0,
             borderColor: colors.placeHolder,
+            marginVertical: 10,
           },
         ]}
       >
@@ -276,15 +276,15 @@ const DropDownItem = ({
               paddingVertical: 10,
             }}
           >
-            <Text variant="display3" color={colors.onNeutral}>
+            <Text variant="body1" color={colors.onNeutral}>
               {item.flag}
             </Text>
-            <Text variant="display3" color={colors.onNeutral}>
+            <Text variant="body1" color={colors.onNeutral}>
               {item.dial_code}
             </Text>
           </View>
         ) : (
-          <Text variant="display3" color={colors.onNeutral}>
+          <Text variant="body1" color={colors.onNeutral}>
             {item.name}
           </Text>
         )}

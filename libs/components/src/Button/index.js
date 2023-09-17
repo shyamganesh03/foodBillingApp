@@ -44,7 +44,7 @@ const Button = (props) => {
         </View>
       ) : null}
       <Text
-        variant="display3"
+        variant="subHeading2"
         style={[
           styles.label,
           {

@@ -36,7 +36,7 @@ const ErrorToast = ({ toast }) => {
           >
             <Icon name="Close" color={colors.primary} width={20} height={20} />
             <Text
-              variant="body2"
+              variant="body1"
               color={colors.backgroundSurface3}
               style={{ marginLeft: spacing.spacing4 }}
             >

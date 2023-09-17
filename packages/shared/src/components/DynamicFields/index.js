@@ -1,7 +1,6 @@
 import { View } from 'react-native'
 import React, { useState } from 'react'
 import { FilePicker, MobileInput, Text, TextInput } from '@libs/components'
-import { getCurrentDate } from '../../utils/dateFunction'
 import CheckBox from '../CheckBox'
 import DropDown from '@libs/components/src/DropDown'
 import { toggleDropdown } from './helpers'
@@ -14,7 +13,6 @@ const DynamicFields = ({
   index,
   handleValueChanged,
   handleCountrySelection,
-  descriptionStyle,
   fieldItem,
   error,
   fieldType,
@@ -49,7 +47,7 @@ const DynamicFields = ({
       >
         <View style={{ flexDirection: 'row' }}>
           <Text
-            variant="display4"
+            variant="body1"
             style={{
               marginBottom: 10,
             }}
@@ -58,7 +56,7 @@ const DynamicFields = ({
           </Text>
           {isMandatory ? (
             <Text
-              variant="display4"
+              variant="body1"
               color={colors.onAlert}
               style={{ marginLeft: 5 }}
             >

@@ -1,69 +1,45 @@
-const ROBOTO = 'Roboto-Black'
+const ATLANTIQUE_MIAMI_REGULAR = 'AtlantiqueMiami-Regular'
+const FAVORIT_BOOK = 'Favorit-Book'
+const FAVORIT_MEDIUM = 'Favorit-Medium'
 
 export const typography = {
   heading1: {
-    fontFamily: `${ROBOTO}`,
-    fontSize: 45,
-    fontWeight: 800,
+    fontFamily: `${ATLANTIQUE_MIAMI_REGULAR}`,
+    fontSize: 25,
+    fontWeight: 500,
   },
   heading2: {
-    fontFamily: `${ROBOTO}`,
-    fontSize: 28,
-    fontWeight: 700,
+    fontFamily: `${ATLANTIQUE_MIAMI_REGULAR}`,
+    fontSize: 20,
+    fontWeight: 500,
   },
   heading3: {
-    fontFamily: `${ROBOTO}`,
-    fontSize: 24,
-    fontWeight: 700,
-  },
-  heading4: {
-    fontFamily: `${ROBOTO}`,
-    fontSize: 18,
-    fontWeight: 700,
-  },
-  heading5: {
-    fontFamily: `${ROBOTO}`,
-    fontSize: 16,
-    fontWeight: 700,
-  },
-  bodyBold1: { fontFamily: `${ROBOTO}`, fontSize: 15, fontWeight: 500 },
-  display1: {
-    fontFamily: `${ROBOTO}`,
-    fontSize: 22,
-    fontWeight: 400,
-  },
-  display2: {
-    fontFamily: `${ROBOTO}`,
-    fontSize: 18,
-    fontWeight: 400,
-  },
-  display3: {
-    fontFamily: `${ROBOTO}`,
+    fontFamily: `${ATLANTIQUE_MIAMI_REGULAR}`,
     fontSize: 16,
     fontWeight: 400,
   },
-  display4: {
-    fontFamily: `${ROBOTO}`,
-    fontSize: 13,
-    fontWeight: 400,
+  subHeading1: {
+    fontFamily: `${FAVORIT_MEDIUM}`,
+    fontSize: 18,
+    fontWeight: 500,
   },
-  display5: {
-    fontFamily: `${ROBOTO}`,
-    fontSize: 12,
-    fontWeight: 400,
+  subHeading2: {
+    fontFamily: `${FAVORIT_MEDIUM}`,
+    fontSize: 16,
+    fontWeight: 500,
+  },
+  subHeading3: {
+    fontFamily: `${FAVORIT_MEDIUM}`,
+    fontSize: 14,
+    fontWeight: 500,
   },
   body1: {
-    fontFamily: `${ROBOTO}`,
-    fontSize: 16,
-    fontWeight: 300,
-  },
-  body2: {
-    fontFamily: `${ROBOTO}`,
+    fontFamily: `${FAVORIT_BOOK}`,
     fontSize: 14,
     fontWeight: 300,
   },
-  body3: {
-    fontFamily: `${ROBOTO}`,
+  body2: {
+    fontFamily: `${FAVORIT_BOOK}`,
     fontSize: 12,
     fontWeight: 300,
   },

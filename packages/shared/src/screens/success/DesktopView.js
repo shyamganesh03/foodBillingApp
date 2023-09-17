@@ -45,7 +45,7 @@ const DesktopView = ({ tabName, programName }) => {
                   width={20}
                   color={colors.onAlert}
                 />
-                <Text style={{ marginLeft: 10 }} variant="display2">
+                <Text style={{ marginLeft: 10 }} variant="body1">
                   {item?.title}
                 </Text>
               </View>

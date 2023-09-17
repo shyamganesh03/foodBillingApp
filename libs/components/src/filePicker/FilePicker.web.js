@@ -69,10 +69,10 @@ const FilePicker = ({
 
   return (
     <View key={key}>
-      <Text variant="display5">
+      <Text variant="subHeading1">
         {heading}{' '}
         {isMandatory ? (
-          <Text variant="display5" color={colors.onAlert}>
+          <Text variant="subHeading1" color={colors.onAlert}>
             *
           </Text>
         ) : null}
@@ -120,7 +120,7 @@ const FilePicker = ({
                   color={colors.primary}
                 />
                 <Text
-                  variant="display4"
+                  variant="body1"
                   color={colors.primary}
                   style={{ marginLeft: 10 }}
                 >
@@ -128,7 +128,7 @@ const FilePicker = ({
                 </Text>
               </TouchableOpacity>
               <Text
-                variant="display4"
+                variant="body1"
                 style={{ marginLeft: 10, marginRight: 20, alignSelf: 'center' }}
               >
                 Or drag files
@@ -183,7 +183,7 @@ const FileModal = ({
           }}
         >
           <View style={{ padding: 16, alignItems: 'center' }}>
-            <Text variant="display1">Upload Files</Text>
+            <Text variant="body1">Upload Files</Text>
           </View>
           <Divider />
           <View
@@ -196,8 +196,8 @@ const FileModal = ({
             }}
           >
             <View style={{ flexDirection: 'column' }}>
-              <Text variant="body2">{modalDetails.name}</Text>
-              <Text variant="body2">{modalDetails.fileSize}</Text>
+              <Text variant="body1">{modalDetails.name}</Text>
+              <Text variant="body1">{modalDetails.fileSize}</Text>
             </View>
             <View
               style={{
@@ -239,7 +239,7 @@ const FileModal = ({
               paddingHorizontal: 16,
             }}
           >
-            <Text variant="body2">{`${
+            <Text variant="body1">{`${
               isSuccess ? 1 : 0
             } of 1 file upload`}</Text>
             <Button

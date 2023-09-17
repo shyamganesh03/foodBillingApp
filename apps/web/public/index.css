@@ -1,102 +1,22 @@
 @font-face {
-  font-family: 'EK-Mukta';
-  src: url(/fonts/EK-Mukta.ttf) format('opentype');
+  font-family: 'AtlantiqueMiami-Regular';
+  src: url(/fonts/AtlantiqueMiami-Regular.otf) format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Roboto-Black';
-  src: url(/fonts/Roboto-Black.ttf) format('opentype');
+  font-family: 'Favorit-Book';
+  src: url(/fonts/Favorit-Book.otf) format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Roboto-BlackItalic';
-  src: url(/fonts/Roboto-BlackItalic.ttf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto-Bold';
-  src: url(/fonts/Roboto-Bold.ttf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto-BoldItalic';
-  src: url(/fonts/Roboto-BoldItalic.ttf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto-Italic';
-  src: url(/fonts/Roboto-Italic.ttf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto-Light';
-  src: url(/fonts/Roboto-Light.ttf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto-LightItalic';
-  src: url(/fonts/Roboto-LightItalic.ttf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto-Medium';
-  src: url(/fonts/Roboto-Medium.ttf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto-MediumItalic';
-  src: url(/fonts/Roboto-MediumItalic.ttf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto-Regular';
-  src: url(/fonts/Roboto-Regular.ttf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto-Thin';
-  src: url(/fonts/Roboto-Thin.ttf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto-ThinItalic';
-  src: url(/fonts/Roboto-ThinItalic.ttf) format('opentype');
+  font-family: 'Favorit-Medium';
+  src: url(/fonts/Favorit-Medium.otf) format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -114,7 +34,7 @@ html {
   overflow: hidden;
 }
 body {
-  font-family: 'Roboto-Black', sans-serif;
+  font-family: 'Favorit-Medium', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -152,7 +72,7 @@ input {
   /* font-size: 20px; */
   color: white;
   font-style: normal;
-  font-family: 'Roboto-Black', sans-serif;
+  font-family: 'Favorit-Medium', sans-serif;
 }
 
 .ql-toolbar.ql-snow,

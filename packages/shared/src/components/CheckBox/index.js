@@ -51,7 +51,7 @@ const CheckBox = ({
         {isChecked && <Icon name="Check" color={colors.white} />}
       </TouchableOpacity>
       <Text
-        variant="display4"
+        variant="body1"
         color={labelColor}
         style={[styles(colors).labelStyle, labelStyle]}
       >

@@ -39,9 +39,9 @@ const TextInput = (props) => {
   return (
     <View style={[{ marginBottom: 10 }, style]} key={key}>
       <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-        <Text variant="display4">{label}</Text>
+        <Text variant="body1">{label}</Text>
         {isMandatory ? (
-          <Text variant="display5" color={colors.onAlert}>
+          <Text variant="body1" color={colors.onAlert}>
             {' '}
             *
           </Text>
@@ -81,7 +81,7 @@ const TextInput = (props) => {
         )}
       </Row>
       {error ? (
-        <Text variant="body2" color={colors.onAlert}>
+        <Text variant="body1" color={colors.onAlert}>
           {error}
         </Text>
       ) : null}

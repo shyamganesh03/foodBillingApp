@@ -165,7 +165,9 @@ const DateInput = (props) => {
           alignItems: 'center',
         }}
       >
-        <Text>{month?.find((item, index) => selectedMonth - 1 === index)}</Text>
+        <Text variant="body1">
+          {month?.find((item, index) => selectedMonth - 1 === index)}
+        </Text>
         <TouchableOpacity
           onPress={() => toggleYearDropdown()}
           ref={yearDropDown}
@@ -254,7 +256,7 @@ const DateInput = (props) => {
                         }}
                         id={_item}
                       >
-                        <Text>{_item}</Text>
+                        <Text variant="body1">{_item}</Text>
                       </TouchableRipple>
                     </Fragment>
                   )
@@ -321,7 +323,7 @@ const DateInput = (props) => {
             style={{ alignSelf: 'center' }}
           >
             <Text
-              variant="display5"
+              variant="body1"
               style={{
                 textDecoration: isHovered ? 'underline' : 'none',
               }}
@@ -354,9 +356,9 @@ const DateInput = (props) => {
         ]}
       >
         <View style={{ flexDirection: 'row' }}>
-          <Text variant="display4">{title}</Text>
+          <Text variant="body1">{title}</Text>
           {isMandatory ? (
-            <Text variant="display5" color={colors.onAlert}>
+            <Text variant="body1" color={colors.onAlert}>
               {' '}
               *
             </Text>

@@ -4,13 +4,17 @@ import { Button, Text } from '@libs/components'
 import { useTheme } from '@react-navigation/native'
 import { ScrollView } from 'react-native'
 import { DynamicFields } from '../../components'
+import { fieldData } from './data/metaData'
 
 const DesktopView = ({
   fieldData,
+  prerequisiteCourseworkInformation,
   isLoading,
-  handleSubmit,
+  validationError,
+  checkCTAStatus,
+  handleCountrySelection,
   handleValueChange,
-  school,
+  handleSubmit,
 }) => {
   const { colors } = useTheme()
   return (
@@ -22,28 +26,20 @@ const DesktopView = ({
         }}
       >
         <Text variant="heading2" style={{ marginBottom: 20 }}>
-          One Dream, Three Schools, One Free Application
+          Prerequisite Coursework Information
         </Text>
-        <Text variant="body2" style={{ marginBottom: 20 }}>
-          Saba University School of Medicine, along with its sister schools
-          Medical University of the Americas and St. Matthew’s University, offer
-          the unprecedented opportunity to apply to up to three top Caribbean
-          medical schools at once! By submitting just one set of documents and
-          participating in one interview, you can receive admissions decisions
-          from any or all of the three medical schools. And there is no
-          application fee! Tell us to which of the three medical schools you
-          would like to apply, and in what order. And, it is just as easy (and
-          free) to apply only to Saba, if that is what you prefer.
-        </Text>
-        {fieldData?.map((fieldItem, fieldIndex) => {
+        {fieldData.map((fieldItem, fieldIndex) => {
           return (
             <View key={fieldIndex}>
               <DynamicFields
-                error={fieldItem?.error}
+                error={validationError}
                 fieldType={fieldItem?.type}
                 isMandatory={fieldItem?.mandatory}
+                fieldName={fieldItem.fieldName}
                 label={fieldItem?.label}
-                selectedValue={school[fieldItem.fieldName]}
+                selectedValue={
+                  prerequisiteCourseworkInformation[fieldItem.fieldName]
+                }
                 inputType={fieldItem?.inputType}
                 index={fieldIndex}
                 fieldItem={fieldItem}
@@ -62,22 +58,21 @@ const DesktopView = ({
           <Button
             label="Save"
             buttonStyle={{ marginRight: 30 }}
-            isLoading={isLoading.primary}
             labelColors={colors.white}
-            onPress={() =>
-              handleSubmit({ type: 'create', buttonVariant: 'primary' })
-            }
+            isLoading={isLoading.primary}
+            onPress={() => {
+              handleSubmit({ type: 'save', buttonVariant: 'primary' })
+            }}
+            disable={checkCTAStatus()}
           />
           <Button
             label="Save and Next"
             labelColors={colors.white}
             isLoading={isLoading.secondary}
-            onPress={async () =>
-              handleSubmit({
-                type: 'createAndNext',
-                buttonVariant: 'secondary',
-              })
-            }
+            onPress={() => {
+              handleSubmit({ type: 'saveAndNext', buttonVariant: 'secondary' })
+            }}
+            disable={checkCTAStatus()}
           />
         </View>
       </ScrollView>

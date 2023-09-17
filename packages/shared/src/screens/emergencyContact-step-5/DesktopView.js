@@ -58,7 +58,7 @@ const DesktopView = ({ emergencyContact, handleValueChange, handleSave }) => {
               handleSave({
                 fieldData,
                 type: 'saveAndNext',
-                fieldData: applicationInformation,
+                fieldData: emergencyContact,
               })
             }}
           />

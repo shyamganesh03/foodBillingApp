@@ -175,7 +175,7 @@ const ModalComponent = ({
           >
             {data?.error && (
               <Text
-                variant="body2"
+                variant="body1"
                 style={{ marginTop: 20, paddingLeft: 12 }}
                 color={colors.onAlert}
               >

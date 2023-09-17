@@ -33,7 +33,7 @@ const Header = ({ title }) => {
           color={colors.onNeutral}
         />
         <Text
-          variant="display2"
+          variant="heading1"
           style={{ paddingLeft: 20 }}
           color={colors.onNeutral}
         >
