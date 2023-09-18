@@ -2,7 +2,6 @@ import { View, StyleSheet } from 'react-native'
 import React from 'react'
 import { useTheme } from '@react-navigation/native'
 import CommonApplication from '../common-application'
-import ChooseProgrammes from '../chooseProgrammes'
 import ApplicationInformation from '../applicationInformation'
 import ContactInformation from '../contactInformation'
 import EmergencyContact from '../emergencyContact'
@@ -36,60 +35,53 @@ const DesktopView = ({
   if (Number(steps) === 2) {
     return (
       <View style={styles({ colors }).container}>
-        <ChooseProgrammes />
+        <ApplicationInformation />
       </View>
     )
   }
   if (Number(steps) === 3) {
     return (
       <View style={styles({ colors }).container}>
-        <ApplicationInformation />
+        <ContactInformation />
       </View>
     )
   }
   if (Number(steps) === 4) {
     return (
       <View style={styles({ colors }).container}>
-        <ContactInformation />
+        <EmergencyContact />
       </View>
     )
   }
   if (Number(steps) === 5) {
     return (
       <View style={styles({ colors }).container}>
-        <EmergencyContact />
+        <PersonalInformation />
       </View>
     )
   }
   if (Number(steps) === 6) {
     return (
       <View style={styles({ colors }).container}>
-        <PersonalInformation />
+        <UniversityInformation />
       </View>
     )
   }
   if (Number(steps) === 7) {
     return (
       <View style={styles({ colors }).container}>
-        <UniversityInformation />
-      </View>
-    )
-  }
-  if (Number(steps) === 8) {
-    return (
-      <View style={styles({ colors }).container}>
         <PrerequisiteCourseworkInformation />
       </View>
     )
   }
-  if (Number(steps) === 11) {
+  if (Number(steps) === 10) {
     return (
       <View style={styles({ colors }).container}>
         <BackgroundInformation />
       </View>
     )
   }
-  if (Number(steps) === 12) {
+  if (Number(steps) === 11) {
     return (
       <View style={styles({ colors }).container}>
         <AdditionalInformation />

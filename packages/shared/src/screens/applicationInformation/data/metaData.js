@@ -78,6 +78,17 @@ export const fieldData = [
     placeholder: 'Select any Option',
   },
   {
+    label: 'Choose your Program',
+    lookUpName: 'programmes',
+    fieldName: 'programmeName',
+    type: FieldType.DROPDOWN,
+    pickListValues: [],
+    placeholder: 'Select any Option',
+    rules: {
+      required: 'programmes should not be empty',
+    },
+  },
+  {
     label: 'Start Term Applying For',
     lookUpName: 'intakes',
     fieldName: 'startTermApplyingFor',

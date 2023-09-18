@@ -75,6 +75,9 @@ const Application = (props) => {
   useEffect(() => {
     if (!isFocused) return
     const steps = route.params?.steps ?? 0
+    if (!steps) {
+      navigation.setParams({ steps: 1 })
+    }
     setSteps(steps)
     setParams({ steps: steps })
   }, [isFocused, route])

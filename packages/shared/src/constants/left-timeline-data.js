@@ -5,11 +5,6 @@ export const LeftTimeLineData = [
     order: 1,
   },
   {
-    displayName: 'Choose your Program',
-    fieldName: 'choose-your-Program-step-2',
-    order: 2,
-  },
-  {
     displayName: 'Application Information',
     order: 3,
   },

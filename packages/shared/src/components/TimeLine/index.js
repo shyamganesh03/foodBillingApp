@@ -28,7 +28,7 @@ const TimeLine = ({ categoryData = [] }) => {
       <View
         style={{
           width: '100%',
-          height: 680,
+          height: 635,
           borderColor: colors.white,
           borderLeftWidth: 1,
           top: 24,
