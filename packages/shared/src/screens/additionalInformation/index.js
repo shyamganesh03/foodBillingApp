@@ -6,111 +6,69 @@ import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
 import { fieldData } from './data/metaData'
-import {
-  canNonEmptyObject,
-  fieldValidation,
-  mandatoryValidation,
-} from '../../utils/fieldValidation'
+import { useForm } from 'react-hook-form'
 
 const AdditionalInformation = (props) => {
-  const [additionalInformation, setAdditionalInformation] = useState({})
   const [isLoading, setIsLoading] = useState({
     primary: false,
     secondary: false,
   })
-
   const { mutate: mutation } = useSave()
   const isFocused = useIsFocused()
   const queryClient = useQueryClient()
-  const [validationError, setValidationError] = useState()
 
   const applicationDetails = queryClient.getQueryData(['getApplicationData'])
 
-  const checkCTAStatus = () => {
-    let hasNonEmptyValue = false
+  const {
+    handleSubmit: handleFormSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm()
 
-    if (validationError) {
-      hasNonEmptyValue = canNonEmptyObject(validationError)
-    }
+  const handlePrimary = async (data) => {
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      primary: true,
+    }))
 
-    if (isLoading.primary || isLoading.secondary || hasNonEmptyValue) {
-      return true
-    }
+    await mutation.mutateAsync({
+      type: 'save',
+      fieldData: data,
+    })
 
-    return hasNonEmptyValue
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      primary: false,
+    }))
   }
 
-  const handleSubmit = async ({ type, buttonVariant }) => {
-    const mandatoryFields = mandatoryValidation(
-      fieldData,
-      additionalInformation,
-    )
-    if (mandatoryFields?.length > 0) {
-      mandatoryFields.forEach((mandatoryFieldItem) => {
-        setValidationError((prevError) => ({
-          ...prevError,
-          [mandatoryFieldItem]: 'Please fill the Field',
-        }))
-      })
+  const handleSecondary = async (data) => {
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      secondary: true,
+    }))
 
-      toast.show('Please fill the mandatory Fields', {
-        type: 'danger',
-      })
-    } else {
-      setIsLoading((prevValue) => ({
-        ...prevValue,
-        [buttonVariant]: true,
-      }))
+    await mutation.mutateAsync({
+      type: 'saveAndNext',
+      fieldData: data,
+    })
 
-      const updatedContactInformation = {
-        ...additionalInformation,
-        AltPhoneNumber: `${additionalInformation['alternativePhoneNumberCountryCode']}-${additionalInformation['AltPhoneNumber']}`,
-        mobileOrPrimaryNumber: `${additionalInformation['mobileOrPrimaryNumberCountryCode']}-${additionalInformation['mobileOrPrimaryNumber']}`,
-      }
-
-      await mutation.mutateAsync({
-        type,
-        fieldData: updatedContactInformation,
-      })
-
-      setIsLoading((prevValue) => ({
-        ...prevValue,
-        [buttonVariant]: false,
-      }))
-    }
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      secondary: false,
+    }))
   }
 
   useEffect(() => {
     if (!isFocused) return
     fieldData.forEach((fieldItem) => {
-      setAdditionalInformation((prevValue) => ({
-        ...prevValue,
-        [fieldItem.fieldName]: applicationDetails?.[fieldItem?.fieldName] || '',
-      }))
+      setValue(
+        fieldItem?.fieldName,
+        applicationDetails?.[fieldItem?.fieldName] || '',
+      )
     })
   }, [isFocused, applicationDetails])
-
-  const handleValueChange = ({ fieldItem, selectedValue }) => {
-    const validation = fieldValidation({
-      type: fieldItem.inputType,
-      validationValue: selectedValue,
-    })
-    if (!validation.isValid && fieldItem.inputType !== 'number') {
-      setValidationError((prevValidationError) => ({
-        ...prevValidationError,
-        [fieldItem.fieldName]: validation.error,
-      }))
-    } else {
-      setValidationError((prevValidationError) => ({
-        ...prevValidationError,
-        [fieldItem.fieldName]: '',
-      }))
-    }
-    setAdditionalInformation((prevValue) => ({
-      ...prevValue,
-      [fieldItem.fieldName]: selectedValue?.name || selectedValue,
-    }))
-  }
 
   const LayoutView = useCallback(
     ScreenLayout.withLayoutView(DesktopView, DesktopView, DesktopView),
@@ -118,13 +76,12 @@ const AdditionalInformation = (props) => {
   )
 
   const viewProps = {
-    fieldData,
-    additionalInformation,
+    control,
+    errors,
+    handleFormSubmit,
+    handlePrimary,
+    handleSecondary,
     isLoading,
-    validationError,
-    checkCTAStatus,
-    handleValueChange,
-    handleSubmit,
   }
 
   return (

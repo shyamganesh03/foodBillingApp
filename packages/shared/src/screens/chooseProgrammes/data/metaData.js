@@ -1,10 +1,17 @@
+const FieldType = {
+  DROPDOWN: 'PickList',
+}
+
 export const fieldData = [
   {
     label: 'Choose your Program',
     name: 'programmes',
     fieldName: 'programmeName',
-    type: 'PickList',
+    type: FieldType.DROPDOWN,
     pickListValues: [],
-    mandatory: true,
+    placeholder: 'Select any Option',
+    rules: {
+      required: 'programmes should not be empty',
+    },
   },
 ]

@@ -6,95 +6,82 @@ import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
 import { fieldData } from './data/metaData'
+import { useForm } from 'react-hook-form'
 
 const ChooseProgrammes = (props) => {
-  const [programmes, setProgrammes] = useState({})
   const [isLoading, setIsLoading] = useState({
     primary: false,
     secondary: false,
   })
-
   const { mutate: mutation } = useSave()
   const isFocused = useIsFocused()
   const queryClient = useQueryClient()
-  const [validationError, setValidationError] = useState()
 
   const applicationDetails = queryClient.getQueryData(['getApplicationData'])
 
-  const checkCTAStatus = () => {
-    let hasNonEmptyValue = false // Initialize to false initially
+  const {
+    handleSubmit: handleFormSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm()
 
-    if (validationError) {
-      hasNonEmptyValue = canNonEmptyObject(validationError)
-    }
+  const handlePrimary = async (data) => {
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      primary: true,
+    }))
 
-    if (isLoading.primary || isLoading.secondary || hasNonEmptyValue) {
-      return true
-    }
+    await mutation.mutateAsync({
+      type: 'save',
+      fieldData: data,
+    })
 
-    return hasNonEmptyValue
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      primary: false,
+    }))
   }
 
-  const handleSubmit = async ({ type, buttonVariant }) => {
-    const mandatoryFields = mandatoryValidation(fieldData, programmes)
-    if (mandatoryFields?.length > 0) {
-      mandatoryFields.forEach((mandatoryFieldItem) => {
-        setValidationError((prevError) => ({
-          ...prevError,
-          [mandatoryFieldItem]: 'Please fill the Field',
-        }))
-      })
+  const handleSecondary = async (data) => {
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      secondary: true,
+    }))
 
-      toast.show('Please fill the mandatory Fields', {
-        type: 'danger',
-      })
-    } else {
-      setIsLoading((prevValue) => ({
-        ...prevValue,
-        [buttonVariant]: true,
-      }))
+    await mutation.mutateAsync({
+      type: 'saveAndNext',
+      fieldData: data,
+    })
 
-      await mutation.mutateAsync({
-        type,
-        fieldData: programmes,
-      })
-
-      setIsLoading((prevValue) => ({
-        ...prevValue,
-        [buttonVariant]: false,
-      }))
-    }
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      secondary: false,
+    }))
   }
 
   useEffect(() => {
     if (!isFocused) return
     fieldData.forEach((fieldItem) => {
-      setProgrammes((prevValue) => ({
-        ...prevValue,
-        [fieldItem.fieldName]: applicationDetails?.[fieldItem?.fieldName] || '',
-      }))
+      setValue(
+        fieldItem?.fieldName,
+        applicationDetails?.[fieldItem?.fieldName] || '',
+      )
     })
   }, [isFocused, applicationDetails])
 
-  const handleValueChange = ({ fieldItem, selectedValue }) => {
-    setProgrammes((prevValue) => ({
-      ...prevValue,
-      [fieldItem.fieldName]: selectedValue?.name || selectedValue,
-    }))
-  }
   const LayoutView = useCallback(
     ScreenLayout.withLayoutView(DesktopView, DesktopView, DesktopView),
     [],
   )
 
   const viewProps = {
-    fieldData,
-    programmes,
+    control,
+    errors,
+    handleFormSubmit,
+    handlePrimary,
+    handleSecondary,
     isLoading,
-    validationError,
-    checkCTAStatus,
-    handleValueChange,
-    handleSubmit,
   }
 
   return (

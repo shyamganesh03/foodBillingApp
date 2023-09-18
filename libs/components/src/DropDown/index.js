@@ -73,7 +73,6 @@ function DropDown(props) {
   useEffect(() => {
     if (!isFocused) return
     if (isCountryCode) {
-      console.log({ items })
       const selectedCountryCode = countryCodes.filter(
         (item) => item.dial_code === dialCode,
       )
@@ -232,7 +231,7 @@ function DropDownItem({
       onPress(selectedCountry)
     } else {
       setSelectedOption(selectedOption)
-      onPress(selectedOption)
+      onPress(selectedOption?.name || selectedOption)
     }
 
     handleDropDownClose()

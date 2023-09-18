@@ -3,16 +3,19 @@ import React from 'react'
 import { Button, Text } from '@libs/components'
 import { useTheme } from '@react-navigation/native'
 import { ScrollView } from 'react-native'
-import { DynamicFields } from '../../components'
+import { fieldData } from './data/metaData'
+import { FormContainer } from '../../components/FormContainer'
 
 const DesktopView = ({
-  fieldData,
+  control,
+  errors,
+  handleFormSubmit,
+  handlePrimary,
+  handleSecondary,
   isLoading,
-  handleSubmit,
-  handleValueChange,
-  school,
 }) => {
   const { colors } = useTheme()
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
@@ -24,7 +27,7 @@ const DesktopView = ({
         <Text variant="heading2" style={{ marginBottom: 20 }}>
           One Dream, Three Schools, One Free Application
         </Text>
-        <Text variant="body1" style={{ marginBottom: 20 }}>
+        <Text variant="body2" style={{ marginBottom: 20 }}>
           Saba University School of Medicine, along with its sister schools
           Medical University of the Americas and St. Matthew’s University, offer
           the unprecedented opportunity to apply to up to three top Caribbean
@@ -35,49 +38,24 @@ const DesktopView = ({
           would like to apply, and in what order. And, it is just as easy (and
           free) to apply only to Saba, if that is what you prefer.
         </Text>
-        {fieldData?.map((fieldItem, fieldIndex) => {
-          return (
-            <View key={fieldIndex}>
-              <DynamicFields
-                error={fieldItem?.error}
-                fieldType={fieldItem?.type}
-                isMandatory={fieldItem?.mandatory}
-                label={fieldItem?.label}
-                selectedValue={school[fieldItem.fieldName]}
-                inputType={fieldItem?.inputType}
-                index={fieldIndex}
-                fieldItem={fieldItem}
-                descriptionStyle={styles.description}
-                handleValueChanged={(value) => {
-                  handleValueChange({
-                    fieldItem,
-                    selectedValue: value,
-                  })
-                }}
-              />
-            </View>
-          )
-        })}
+        <FormContainer
+          control={control}
+          errors={errors}
+          fieldData={fieldData}
+        />
         <View style={{ flexDirection: 'row', marginVertical: 40 }}>
           <Button
             label="Save"
             buttonStyle={{ marginRight: 30 }}
-            isLoading={isLoading.primary}
             labelColors={colors.white}
-            onPress={() =>
-              handleSubmit({ type: 'create', buttonVariant: 'primary' })
-            }
+            isLoading={isLoading.primary}
+            onPress={handleFormSubmit(handlePrimary)}
           />
           <Button
             label="Save and Next"
             labelColors={colors.white}
             isLoading={isLoading.secondary}
-            onPress={async () =>
-              handleSubmit({
-                type: 'createAndNext',
-                buttonVariant: 'secondary',
-              })
-            }
+            onPress={handleFormSubmit(handleSecondary)}
           />
         </View>
       </ScrollView>

@@ -6,63 +6,82 @@ import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
 import { fieldData } from './data/metaData'
+import { useForm } from 'react-hook-form'
 
 const CommonApplication = (props) => {
-  const [school, setSchool] = useState({})
   const [isLoading, setIsLoading] = useState({
     primary: false,
     secondary: false,
   })
-
   const { mutate: mutation } = useSave()
   const isFocused = useIsFocused()
   const queryClient = useQueryClient()
 
   const applicationDetails = queryClient.getQueryData(['getApplicationData'])
 
-  const handleSubmit = async ({ type, buttonVariant }) => {
+  const {
+    handleSubmit: handleFormSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm()
+
+  const handlePrimary = async (data) => {
     setIsLoading((prevValue) => ({
       ...prevValue,
-      [buttonVariant]: true,
+      primary: true,
     }))
+
     await mutation.mutateAsync({
-      type,
-      fieldData: school,
+      type: 'create',
+      fieldData: data,
     })
+
     setIsLoading((prevValue) => ({
       ...prevValue,
-      [buttonVariant]: false,
+      primary: false,
+    }))
+  }
+
+  const handleSecondary = async (data) => {
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      secondary: true,
+    }))
+
+    await mutation.mutateAsync({
+      type: 'createAndNext',
+      fieldData: data,
+    })
+
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      secondary: false,
     }))
   }
 
   useEffect(() => {
     if (!isFocused) return
     fieldData.forEach((fieldItem) => {
-      setSchool((prevValue) => ({
-        ...prevValue,
-        [fieldItem.fieldName]: applicationDetails?.[fieldItem?.fieldName] || '',
-      }))
+      setValue(
+        fieldItem?.fieldName,
+        applicationDetails?.[fieldItem?.fieldName] || '',
+      )
     })
   }, [isFocused, applicationDetails])
 
-  const handleValueChange = ({ fieldItem, selectedValue }) => {
-    setSchool((prevValue) => ({
-      ...prevValue,
-      [fieldItem.fieldName]: selectedValue?.name || selectedValue,
-    }))
-  }
   const LayoutView = useCallback(
     ScreenLayout.withLayoutView(DesktopView, DesktopView, DesktopView),
     [],
   )
 
   const viewProps = {
-    fieldData,
-    school,
+    control,
+    errors,
+    handleFormSubmit,
+    handlePrimary,
+    handleSecondary,
     isLoading,
-    mutation,
-    handleValueChange,
-    handleSubmit,
   }
 
   return (

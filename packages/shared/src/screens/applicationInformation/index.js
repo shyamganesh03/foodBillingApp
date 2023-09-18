@@ -60,16 +60,6 @@ const ApplicationInformation = (props) => {
     }))
   }
 
-  const getInitialData = (data) => {
-    const updatedInfo = {}
-    data.forEach((fieldItem) => {
-      updatedInfo[fieldItem.fieldName] =
-        applicationDetails?.[fieldItem?.fieldName] || ''
-    })
-
-    return updatedInfo
-  }
-
   useEffect(() => {
     if (!isFocused) return
     fieldData.forEach((fieldItem) => {
