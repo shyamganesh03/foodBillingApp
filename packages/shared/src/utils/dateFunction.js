@@ -9,3 +9,13 @@ export const getCurrentDate = ({ type = '' }) => {
   }
   return new Date(`${year}-${month}-${day}`)
 }
+
+export const validateForFutureDate = ({ dateToValidate, dateName }) => {
+  const selectedDate = new Date(dateToValidate)
+  const currentDate = getCurrentDate({ type: 'Date' })
+  if (selectedDate >= currentDate) {
+    return `${dateName} cannot be in the future`
+  } else {
+    return true
+  }
+}

@@ -108,7 +108,7 @@ const DynamicFields = ({
   if (fieldType === 'mobile') {
     return (
       <MobileInput
-        value={selectedValue}
+        value={selectedValue?.split('-')[1] || selectedValue}
         isMandatory={isMandatory}
         error={error ? error[fieldName] : ''}
         label={label}

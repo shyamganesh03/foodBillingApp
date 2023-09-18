@@ -31,6 +31,12 @@ export const fieldData = [
     type: FieldType.TEXT_INPUT,
     inputType: 'number',
     placeholder: 'Enter your Number of Dependents',
+    rules: {
+      pattern: {
+        value: /^[0-9]+$/,
+        message: 'Invalid Number format',
+      },
+    },
   },
   {
     label: 'Is English your Primary Language',

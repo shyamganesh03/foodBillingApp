@@ -1,3 +1,5 @@
+import { validateForFutureDate } from '../../../utils/dateFunction'
+
 const FieldType = {
   TEXT_INPUT: 'textField',
   DATE: 'date',
@@ -54,6 +56,11 @@ export const fieldData = [
     placeholder: 'Select your dob',
     rules: {
       required: 'Birthdate cannot be empty',
+      validate: (value) =>
+        validateForFutureDate({
+          dateToValidate: value,
+          dateName: 'Birthdate',
+        }),
     },
   },
   {
