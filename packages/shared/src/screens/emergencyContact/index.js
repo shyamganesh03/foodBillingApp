@@ -33,7 +33,7 @@ const EmergencyContact = (props) => {
     }))
 
     await mutation.mutateAsync({
-      type: 'create',
+      type: 'save',
       fieldData: data,
     })
 
@@ -50,7 +50,7 @@ const EmergencyContact = (props) => {
     }))
 
     await mutation.mutateAsync({
-      type: 'createAndNext',
+      type: 'saveAndNext',
       fieldData: data,
     })
 

@@ -10,6 +10,7 @@ import PersonalInformation from '../personalInformation'
 import PrerequisiteCourseworkInformation from '../prerequisiteCourseworkInformation'
 import BackgroundInformation from '../background-Information-and-Technical-Standards'
 import AdditionalInformation from '../additionalInformation'
+import UniversityInformation from '../universityInformation'
 
 const DesktopView = ({
   steps,
@@ -64,6 +65,13 @@ const DesktopView = ({
     return (
       <View style={styles({ colors }).container}>
         <PersonalInformation />
+      </View>
+    )
+  }
+  if (Number(steps) === 7) {
+    return (
+      <View style={styles({ colors }).container}>
+        <UniversityInformation />
       </View>
     )
   }

@@ -4,6 +4,7 @@ import { Controller } from 'react-hook-form'
 import DynamicFields from '../DynamicFields'
 
 export const FormContainer = ({ fieldData, control, errors }) => {
+  console.log({ fieldData })
   return (
     <>
       {fieldData.map((fieldItem, fieldIndex) => {
