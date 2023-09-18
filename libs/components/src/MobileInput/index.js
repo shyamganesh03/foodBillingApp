@@ -4,6 +4,7 @@ import { useTheme } from '@react-navigation/native'
 import { countryCodes } from '@libs/utils'
 import DropDown from '../DropDown'
 import Text from '../Text'
+import { typography } from '@libs/theme'
 
 function MobileInput({
   dialCode,
@@ -67,7 +68,7 @@ function MobileInput({
           inputMode="tel"
           placeholder="Phone Number"
           placeholderTextColor={colors.placeHolder}
-          style={{ flex: 1 }}
+          style={[{ flex: 1 }, typography['body2']]}
           onChangeText={(text) => onChangeText(text)}
           value={value}
         />

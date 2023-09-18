@@ -8,7 +8,7 @@ const FieldType = {
 export const fieldData = [
   {
     label: 'Emergency Contact First Name',
-    ype: FieldType.TEXT_INPUT,
+    type: FieldType.TEXT_INPUT,
     fieldName: 'emergencyContactFirstName',
     inputType: 'string',
     placeholder: 'Enter your Emergency Contact First Name',
@@ -19,7 +19,7 @@ export const fieldData = [
   {
     label: 'Emergency Contact Last Name',
     fieldName: 'emergencyContactLastName',
-    ype: FieldType.TEXT_INPUT,
+    type: FieldType.TEXT_INPUT,
     inputType: 'string',
     placeholder: 'Enter your Emergency Contact Last Name',
     rules: {
@@ -50,7 +50,7 @@ export const fieldData = [
   {
     label: 'Emergency Contact Email',
     fieldName: 'emergencyContactEmail',
-    ype: FieldType.TEXT_INPUT,
+    type: FieldType.TEXT_INPUT,
     inputType: 'email',
     placeholder: 'Enter your Emergency Contact Email',
     rules: {

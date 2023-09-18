@@ -271,15 +271,15 @@ function DropDownItem({
               paddingVertical: 10,
             }}
           >
-            <Text variant="body1" color={colors.onNeutral}>
+            <Text variant="body2" color={colors.onNeutral}>
               {item.flag}
             </Text>
-            <Text variant="body1" color={colors.onNeutral}>
+            <Text variant="body2" color={colors.onNeutral}>
               {item.dial_code}
             </Text>
           </View>
         ) : (
-          <Text variant="body1" color={colors.onNeutral}>
+          <Text variant="body2" color={colors.onNeutral}>
             {item.name}
           </Text>
         )}

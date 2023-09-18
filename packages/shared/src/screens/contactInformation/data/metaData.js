@@ -71,6 +71,7 @@ export const fieldData = [
   {
     label: 'Mailing Country Code',
     fieldName: 'mailingCountryCode',
+    lookUpName: 'mailingCountryCode',
     type: FieldType.DROPDOWN,
     dropdownValues: [],
     placeholder: 'Select any Option',

@@ -8,7 +8,7 @@ import {
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Calendar } from 'react-native-calendars'
 import { Icon } from '@r3-oaf/native-icons'
-import { spacing } from '@libs/theme'
+import { spacing, typography } from '@libs/theme'
 import { useTheme } from '@react-navigation/native'
 import { TouchableRipple } from 'react-native-paper'
 import { TextInput, Text } from '@libs/components'
@@ -369,7 +369,7 @@ const DateInput = (props) => {
         <TextInput
           label={label}
           placeholder={placeholder}
-          style={{ width: 325 }}
+          style={[{ width: 325 }, typography['body2']]}
           right={<TextInput.Affix />}
           value={value || selectedDate}
           maxLength={data?.maxLength}

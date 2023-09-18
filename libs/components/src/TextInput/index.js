@@ -3,6 +3,7 @@ import React from 'react'
 import { useTheme } from '@react-navigation/native'
 import Row from '../Row'
 import Text from '../Text'
+import { typography } from '@libs/theme'
 
 function TextInput(props) {
   const { colors } = useTheme()
@@ -72,7 +73,7 @@ function TextInput(props) {
           ref={inputRef}
           required={required}
           secureTextEntry={secureTextEntry}
-          style={[styles.inputField, inputFieldStyle]}
+          style={[styles.inputField, inputFieldStyle, typography['body2']]}
           value={value || ''}
         />
         {trailingIcon && (

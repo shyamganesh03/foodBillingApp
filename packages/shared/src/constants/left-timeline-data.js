@@ -63,15 +63,7 @@ export const LeftTimeLineData = [
     order: 15,
   },
   {
-    displayName: 'Supplemental Requirements',
-    order: 16,
-  },
-  {
-    displayName: 'Supplemental Requirements',
-    order: 17,
-  },
-  {
     displayName: 'Application Submission',
-    order: 18,
+    order: 16,
   },
 ]

@@ -28,7 +28,7 @@ const TimeLine = ({ categoryData = [] }) => {
       <View
         style={{
           width: '100%',
-          height: 750,
+          height: 680,
           borderColor: colors.white,
           borderLeftWidth: 1,
           top: 24,
@@ -78,7 +78,7 @@ const Label = ({
       >
         <IconContainer
           status={status}
-          currentActiveIndex={currentSteps}
+          currentActiveIndex={activeTab}
           index={index}
           colors={colors}
         />

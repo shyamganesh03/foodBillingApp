@@ -8,7 +8,7 @@ export const IconContainer = ({
   index,
   colors,
 }) => {
-  if (currentActiveIndex === index) {
+  if (currentActiveIndex === index + 1) {
     return (
       <View style={{ width: 25 }}>
         <View
@@ -22,7 +22,7 @@ export const IconContainer = ({
       </View>
     )
   }
-  if (currentActiveIndex !== index && status !== 'completed') {
+  if (currentActiveIndex !== index + 1 && status !== 'completed') {
     return (
       <View style={{ width: 25 }}>
         <View

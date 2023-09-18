@@ -10,6 +10,8 @@ export const useDropDownData = ({ dropDownName }) => {
       }
       return { name: item }
     })
+
+    console.log({ newData })
     return newData
   }
   const { data: dropdownValue } = useQuery({
