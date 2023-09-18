@@ -9,27 +9,26 @@ import {
 import { Text } from '@libs/components'
 import { TouchableOpacity } from 'react-native'
 import { IconContainer } from './icon-container'
+import { useParams } from '@libs/utils'
 
 const TimeLine = ({ categoryData = [] }) => {
   const { colors } = useTheme()
   const [activeTab, setActiveTab] = useState(1)
   const isFocused = useIsFocused()
+  const { params } = useParams()
+  const { steps } = params
 
   useEffect(() => {
     if (!isFocused) return
 
-    if (Platform.OS === 'web') {
-      const searchParams = new URLSearchParams(window.location.search)
-      const paramValue = searchParams.get('steps')
-      setActiveTab(Number(paramValue))
-    }
-  }, [isFocused])
+    setActiveTab(Number(steps) || 0)
+  }, [isFocused, steps])
   return (
     <View>
       <View
         style={{
           width: '100%',
-          height: 700,
+          height: 750,
           borderColor: colors.white,
           borderLeftWidth: 1,
           top: 24,
@@ -96,7 +95,7 @@ const Label = ({
           }}
         >
           <Text
-            variant={'body2'}
+            variant={'body1'}
             color={colors.white}
             style={{ opacity: isActive ? 1.0 : 0.5, marginLeft: 10 }}
           >

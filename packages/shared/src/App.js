@@ -24,6 +24,7 @@ import awsConfig from './awsConfig'
 import { sentryUrl } from './config'
 import { LeftContainer } from './components'
 import { LeftTimeLineData } from './constants/left-timeline-data'
+import { ParamsProvider } from '@libs/utils'
 // import './translations/i18n'
 
 Sentry.init({
@@ -98,10 +99,12 @@ const App = () => {
           <ThemeContext.Provider value={theme}>
             <PaperProvider>
               <JotaiProvider>
-                <View style={{ minHeight: height, flexDirection: 'row' }}>
-                  <LeftContainer tabItems={LeftTimeLineData} />
-                  <AppNavigator />
-                </View>
+                <ParamsProvider>
+                  <View style={{ minHeight: height, flexDirection: 'row' }}>
+                    <LeftContainer tabItems={LeftTimeLineData} />
+                    <AppNavigator />
+                  </View>
+                </ParamsProvider>
               </JotaiProvider>
             </PaperProvider>
           </ThemeContext.Provider>

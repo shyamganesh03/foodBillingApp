@@ -5,13 +5,16 @@ import * as SecureStore from './src/secureStore'
 import useDebounce from './src/debounce/useDebounce'
 import testProps from './src/testingId/testProps'
 import { countryCodes } from './src/constants/countryCodes'
+import { ParamsProvider, useParams } from './src/context/paramsContext'
 
 export {
-  ScreenLayout,
-  FileHandler,
-  CustomAuth,
   countryCodes,
+  CustomAuth,
+  FileHandler,
+  ScreenLayout,
   SecureStore,
+  ParamsProvider,
   testProps,
   useDebounce,
+  useParams,
 }

@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { ScreenLayout } from '@libs/utils'
+import { ScreenLayout, useParams } from '@libs/utils'
 import DesktopView from './DesktopView'
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import { fieldData } from '../../utils/fields'
@@ -31,6 +31,7 @@ import { useAtom } from 'jotai'
 import { studentDetails } from '../../utils/atom'
 
 const Application = (props) => {
+  const { setParams } = useParams()
   const [dropdownTop, setDropdownTop] = useState(0)
   const [dropdownLeft, setDropdownLeft] = useState(0)
   const [dropdownWidth, setDropDownWidth] = useState(0)
@@ -75,6 +76,7 @@ const Application = (props) => {
     if (!isFocused) return
     const steps = route.params?.steps ?? 0
     setSteps(steps)
+    setParams({ steps: steps })
   }, [isFocused, route])
 
   const { data: applicationDetails, isFetching: isApplicationFetching } =

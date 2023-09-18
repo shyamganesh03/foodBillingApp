@@ -2,7 +2,7 @@ import { colors } from './tokens'
 
 export const LightTheme = {
   colors: {
-    primary: colors.primary.blue800,
+    primary: colors.primary.blue600,
     white: colors.neutral.white,
     neutral: colors.neutral.neutral900,
     onPrimary: colors.neutral.white,
