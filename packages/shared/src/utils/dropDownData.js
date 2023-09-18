@@ -6,7 +6,7 @@ export const getDropdownData = (fieldValue) => {
     return values
   } else {
     const { dropdownValue } = useDropDownData({
-      dropDownName: fieldValue?.name,
+      dropDownName: fieldValue?.lookUpName,
     })
     return dropdownValue
   }

@@ -1,91 +1,101 @@
+const FieldType = {
+  TEXT_INPUT: 'textField',
+  DROPDOWN: 'PickList',
+}
+
 export const fieldData = [
   {
     label:
-      'All candidates for admission must meet the school’s Technical Standards, which describe the essential abilities and characteristics for the study and practice of medicine, including the abilities which relate to observation; communication; motor function; intellectual-conceptual (integrative and quantitative) abilities; and behavioral and social skills. By submitting this application, the candidate affirms that he or she has read the Technical Standards, which are available at www.saba.edu.',
-    type: 'description',
-  },
-  {
-    label:
       'Have you withdrawn, been dismissed, suspended, or placed on probation from an academic institution for academic reasons?',
-    name: 'isUsCitizen',
-    type: 'PickList',
+    lookUpName: 'isUsCitizen',
+    type: FieldType.DROPDOWN,
     pickListValues: [{ name: 'Yes' }, { name: 'No' }],
-    mandatory: true,
-    hasFullWidth: true,
     fieldName: 'academicWithdrawal',
+    placeholder: 'Select any Option',
+    rules: {
+      required: 'This field should not be empty',
+    },
   },
   {
     label: 'If yes, then please explain',
-    name: 'Previous Research Experience',
-    type: 'textField',
+    lookUpName: 'Previous Research Experience',
+    type: FieldType.TEXT_INPUT,
     fieldName: 'academicWithdrawalReason',
     inputType: 'string',
   },
   {
     label:
       'Have you been arrested, charged or convicted of a felony, misdemeanor or other crime?',
-    name: 'isUsCitizen',
-    type: 'PickList',
+    lookUpName: 'isUsCitizen',
+    type: FieldType.DROPDOWN,
     pickListValues: [{ name: 'Yes' }, { name: 'No' }],
-    mandatory: true,
-    hasFullWidth: true,
     fieldName: 'arrestedChargedOrConvictedOfCrime',
+    placeholder: 'Select any Option',
+    rules: {
+      required: 'This field should not be empty',
+    },
   },
   {
     label: 'If yes, then please explain',
-    name: 'crimeReason',
-    type: 'textField',
+    lookUpName: 'crimeReason',
+    type: FieldType.TEXT_INPUT,
     inputType: 'string',
     fieldName: 'crimeReason',
   },
   {
     label:
       'Do you require any accommodation relating to a medical, mental, emotional, or other condition in order to meet the Technical Standards?',
-    name: 'isUsCitizen',
-    type: 'PickList',
+    lookUpName: 'isUsCitizen',
+    type: FieldType.DROPDOWN,
     pickListValues: [{ name: 'Yes' }, { name: 'No' }],
-    mandatory: true,
-    hasFullWidth: true,
     fieldName: 'technicalStandardAccommodationNeeded',
+    placeholder: 'Select any Option',
+    rules: {
+      required: 'This field should not be empty',
+    },
   },
   {
     label: 'If yes, then please explain',
-    name: 'Previous Research Experience',
-    type: 'textField',
+    lookUpName: 'Previous Research Experience',
+    type: FieldType.TEXT_INPUT,
     inputType: 'string',
     fieldName: 'technicalStandardAccommodationReason',
   },
   {
     label:
       'Do you have any medical, mental, emotional, or other condition that may prevent you from meeting the Technical Standards?',
-    name: 'isUsCitizen',
-    type: 'PickList',
+    lookUpName: 'isUsCitizen',
+    type: FieldType.DROPDOWN,
     pickListValues: [{ name: 'Yes' }, { name: 'No' }],
-    mandatory: true,
-    hasFullWidth: true,
     fieldName: 'technicalStandardsMedicalConditions',
+    placeholder: 'Select any Option',
+    rules: {
+      required: 'This field should not be empty',
+    },
   },
   {
     label: 'If yes, then please explain',
     name: 'Previous Research Experience',
-    type: 'textField',
+    type: FieldType.TEXT_INPUT,
     inputType: 'string',
     fieldName: 'technicalStandardsMedicalReason',
   },
   {
     label:
       'Have you withdrawn, been dismissed, suspended, or placed on probation from an academic institution for non-academic reasons?',
-    name: 'isUsCitizen',
-    type: 'PickList',
+    lookUpName: 'isUsCitizen',
+    type: FieldType.DROPDOWN,
     pickListValues: [{ name: 'Yes' }, { name: 'No' }],
-    mandatory: true,
-    hasFullWidth: true,
     fieldName: 'nonAcademicSuspendedDismissWithdrawn',
+    placeholder: 'Select any Option',
+    rules: {
+      required: 'This field should not be empty',
+    },
   },
   {
     label: 'If yes, then please explain',
     name: 'Previous Research Experience',
-    type: 'textField',
+    type: FieldType.TEXT_INPUT,
     inputType: 'string',
     fieldName: 'nonAcademicWithdrawalReason',
   },

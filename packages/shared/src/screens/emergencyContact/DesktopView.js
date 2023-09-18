@@ -3,19 +3,19 @@ import React from 'react'
 import { Button, Text } from '@libs/components'
 import { useTheme } from '@react-navigation/native'
 import { ScrollView } from 'react-native'
-import { DynamicFields } from '../../components'
+import { fieldData } from './data/metaData'
+import { FormContainer } from '../../components/FormContainer'
 
 const DesktopView = ({
-  fieldData,
-  emergencyContact,
+  control,
+  errors,
+  handleFormSubmit,
+  handlePrimary,
+  handleSecondary,
   isLoading,
-  validationError,
-  checkCTAStatus,
-  handleCountrySelection,
-  handleValueChange,
-  handleSubmit,
 }) => {
   const { colors } = useTheme()
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
@@ -27,55 +27,24 @@ const DesktopView = ({
         <Text variant="heading2" style={{ marginBottom: 20 }}>
           Emergency Contact Information
         </Text>
-        {fieldData.map((fieldItem, fieldIndex) => {
-          return (
-            <View key={fieldIndex}>
-              <DynamicFields
-                error={validationError}
-                fieldType={fieldItem?.type}
-                isMandatory={fieldItem?.mandatory}
-                fieldName={fieldItem.fieldName}
-                label={fieldItem?.label}
-                selectedValue={emergencyContact[fieldItem.fieldName]}
-                inputType={fieldItem?.inputType}
-                index={fieldIndex}
-                fieldItem={fieldItem}
-                descriptionStyle={styles.description}
-                handleValueChanged={(value) => {
-                  handleValueChange({
-                    fieldItem,
-                    selectedValue: value,
-                  })
-                }}
-                handleCountrySelection={(value) =>
-                  handleCountrySelection({
-                    fieldItem,
-                    selectedValue: value,
-                  })
-                }
-              />
-            </View>
-          )
-        })}
+        <FormContainer
+          control={control}
+          errors={errors}
+          fieldData={fieldData}
+        />
         <View style={{ flexDirection: 'row', marginVertical: 40 }}>
           <Button
             label="Save"
             buttonStyle={{ marginRight: 30 }}
             labelColors={colors.white}
             isLoading={isLoading.primary}
-            onPress={() => {
-              handleSubmit({ type: 'save', buttonVariant: 'primary' })
-            }}
-            disable={checkCTAStatus()}
+            onPress={handleFormSubmit(handlePrimary)}
           />
           <Button
             label="Save and Next"
             labelColors={colors.white}
             isLoading={isLoading.secondary}
-            onPress={() => {
-              handleSubmit({ type: 'saveAndNext', buttonVariant: 'secondary' })
-            }}
-            disable={checkCTAStatus()}
+            onPress={handleFormSubmit(handleSecondary)}
           />
         </View>
       </ScrollView>

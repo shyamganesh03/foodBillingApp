@@ -6,7 +6,7 @@ const FieldType = {
 export const fieldData = [
   {
     label: 'How did you hear about SABA',
-    name: 'referralsource',
+    lookUpName: 'referralsource',
     type: FieldType.DROPDOWN,
     pickListValues: [],
     fieldName: 'howDidYouHearAboutSABA',
@@ -17,7 +17,7 @@ export const fieldData = [
   },
   {
     label: 'Other Schools Applying To',
-    name: 'otherSchoolsApplyingTo',
+    lookUpName: 'otherSchoolsApplyingTo',
     type: FieldType.TEXT_INPUT,
     fieldName: 'otherSchoolsApplyingTo', //
     inputType: 'string',

@@ -1,42 +1,60 @@
+const FieldType = {
+  TEXT_INPUT: 'textField',
+  DROPDOWN: 'PickList',
+  Mobile_INPUT: 'mobile',
+  CHECKBOX: 'checkbox',
+}
+
 export const fieldData = [
   {
     label: 'Emergency Contact First Name',
-    name: 'Emergency Contact First Name',
-    type: 'textField',
+    ype: FieldType.TEXT_INPUT,
     fieldName: 'emergencyContactFirstName',
     inputType: 'string',
-    mandatory: true,
+    placeholder: 'Enter your Emergency Contact First Name',
+    rules: {
+      required: 'Emergency Contact First Name cannot be empty',
+    },
   },
   {
     label: 'Emergency Contact Last Name',
-    name: 'Emergency Contact Last Name',
     fieldName: 'emergencyContactLastName',
-    type: 'textField',
+    ype: FieldType.TEXT_INPUT,
     inputType: 'string',
-    mandatory: true,
+    placeholder: 'Enter your Emergency Contact Last Name',
+    rules: {
+      required: 'Emergency Contact Last Name cannot be empty',
+    },
   },
   {
     label: 'Emergency Contact Relationship',
-    name: 'studentrelationships',
+    lookUpName: 'studentrelationships',
     fieldName: 'emergencyContactRelationship',
-    type: 'PickList',
+    type: FieldType.DROPDOWN,
     pickListValues: [],
-    mandatory: true,
+    placeholder: 'Select any Option',
+    rules: {
+      required: 'Emergency Contact Relationship cannot be empty',
+    },
   },
   {
     label: 'Emergency Contact Primary Phone',
-    name: 'Emergency Contact Primary Phone',
     fieldName: 'emergencyContactPrimaryPhone',
-    type: 'mobile',
+    type: FieldType.Mobile_INPUT,
     inputType: 'phone',
-    mandatory: true,
+    placeholder: 'Enter your Emergency Contact Primary Phone',
+    rules: {
+      required: 'Emergency Contact Primary Phone cannot be empty',
+    },
   },
   {
     label: 'Emergency Contact Email',
-    name: 'Emergency Contact Email',
     fieldName: 'emergencyContactEmail',
-    type: 'textField',
+    ype: FieldType.TEXT_INPUT,
     inputType: 'email',
-    mandatory: true,
+    placeholder: 'Enter your Emergency Contact Email',
+    rules: {
+      required: 'Emergency Contact Email cannot be empty',
+    },
   },
 ]

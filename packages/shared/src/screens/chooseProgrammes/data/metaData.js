@@ -5,7 +5,7 @@ const FieldType = {
 export const fieldData = [
   {
     label: 'Choose your Program',
-    name: 'programmes',
+    lookUpName: 'programmes',
     fieldName: 'programmeName',
     type: FieldType.DROPDOWN,
     pickListValues: [],
