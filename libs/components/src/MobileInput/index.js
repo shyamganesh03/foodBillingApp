@@ -5,7 +5,7 @@ import { countryCodes } from '@libs/utils'
 import DropDown from '../DropDown'
 import Text from '../Text'
 
-const MobileInput = ({
+function MobileInput({
   dialCode,
   error,
   isMandatory,
@@ -14,7 +14,7 @@ const MobileInput = ({
   value,
   handleCountrySelection = () => {},
   onChangeText = () => {},
-}) => {
+}) {
   const { colors } = useTheme()
   const [dropdownTop, setDropdownTop] = useState(0)
   const [dropdownLeft, setDropdownLeft] = useState(0)

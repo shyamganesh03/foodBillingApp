@@ -1,21 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
-import {
-  Animated,
-  Image,
-  Modal,
-  TouchableOpacity,
-  View,
-  ScrollView,
-} from 'react-native'
+import { Animated, Image, Modal, TouchableOpacity, View } from 'react-native'
 import { useIsFocused, useTheme } from '@react-navigation/native'
 import { Icon } from '@r3-oaf/native-icons'
-import { styles } from './styles'
 import { Text } from '@libs/components'
 import { countryCodes } from '@libs/utils'
+import { styles } from './styles'
 
-const DropDown = (props) => {
+function DropDown(props) {
   const {
-    error,
+    onError,
+    errorMessage,
     dialCode,
     disable,
     items = [],
@@ -90,12 +84,10 @@ const DropDown = (props) => {
             : `${items[0].flag}   ${items[0].dial_code}`,
       }
       setSelectedOption(selectedCountry)
+    } else if (selectedItem) {
+      setSelectedOption(selectedItem)
     } else {
-      if (selectedItem) {
-        setSelectedOption(selectedItem)
-      } else {
-        setSelectedOption({ name: 'Select an option' })
-      }
+      setSelectedOption({ name: 'Select an option' })
     }
   }, [isFocused, selectedItem])
 
@@ -106,7 +98,7 @@ const DropDown = (props) => {
         { position: 'relative' },
         {
           width: hasFullWidth ? '100%' : 325,
-          height: error ? '' : 32,
+          height: onError ? '' : 32,
         },
         style,
       ]}
@@ -132,7 +124,7 @@ const DropDown = (props) => {
                 borderWidth: 0,
               }
             : {},
-          { borderColor: error ? colors.onAlert : '#E0E0E0' },
+          { borderColor: onError ? colors.onAlert : '#E0E0E0' },
         ]}
         disabled={disable}
       >
@@ -148,7 +140,7 @@ const DropDown = (props) => {
         )}
         {!hideLabel && (
           <Text
-            variant={'body2'}
+            variant="body2"
             color={colors.onNeutral}
             style={{ marginRight: 6, marginLeft: isCountryCode ? 0 : 6 }}
           >
@@ -207,23 +199,27 @@ const DropDown = (props) => {
           </TouchableOpacity>
         </Modal>
       ) : null}
-      {error ? (
-        <Text variant="body1" color={colors.onAlert}>
-          {error}
+      {onError ? (
+        <Text
+          variant="body1"
+          color={colors.onAlert}
+          style={{ marginTop: 4, fontSize: 12 }}
+        >
+          {errorMessage}
         </Text>
       ) : null}
     </View>
   )
 }
 
-const DropDownItem = ({
+function DropDownItem({
   item,
   index,
   isCountryCode,
   setSelectedOption,
   onPress,
   handleDropDownClose,
-}) => {
+}) {
   const [isHovered, setIsHovered] = useState(false)
   const { colors } = useTheme()
 

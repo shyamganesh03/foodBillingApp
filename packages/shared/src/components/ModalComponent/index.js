@@ -96,7 +96,8 @@ const ModalComponent = ({
                           </View>
                           <DropDown
                             toggleDropdown={toggleDropdown}
-                            error={fieldItem.error || ''}
+                            onError={fieldItem.error}
+                            errorMessage={fieldItem.error}
                             dropdownWidth={dropdownWidth}
                             isEditMode={isEditMode}
                             items={getDropdownData(fieldItem)}

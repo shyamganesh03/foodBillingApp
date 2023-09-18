@@ -1,11 +1,10 @@
-import { TextInput as Input, View } from 'react-native'
+import { TextInput as Input, View, StyleSheet } from 'react-native'
 import React from 'react'
 import { useTheme } from '@react-navigation/native'
 import Row from '../Row'
-import { StyleSheet } from 'react-native'
 import Text from '../Text'
 
-const TextInput = (props) => {
+function TextInput(props) {
   const { colors } = useTheme()
   const {
     trailingIcon,
@@ -16,7 +15,6 @@ const TextInput = (props) => {
     onBlur = () => {},
     onChangeText = () => {},
     onFocus = () => {},
-    password,
     placeholder = '',
     required,
     secureTextEntry,
@@ -24,9 +22,10 @@ const TextInput = (props) => {
     label = '',
     value,
     style,
-    editable = true,
     error,
     key,
+    onError,
+    errorMessage,
   } = props
 
   const handleInputOnFocus = async () => {
@@ -80,9 +79,14 @@ const TextInput = (props) => {
           <View style={{ justifyContent: 'center' }}>{trailingIcon}</View>
         )}
       </Row>
-      {error ? (
-        <Text variant="body1" color={colors.onAlert}>
-          {error}
+
+      {onError ? (
+        <Text
+          variant="body1"
+          color={colors.onAlert}
+          style={{ marginTop: 4, fontSize: 12 }}
+        >
+          {errorMessage}
         </Text>
       ) : null}
     </View>

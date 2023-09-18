@@ -9,22 +9,23 @@ import { getDropdownData } from '../../utils/dropDownData'
 import DateInput from '../DateInput'
 
 const DynamicFields = ({
-  fieldName,
-  index,
-  handleValueChanged,
-  handleCountrySelection,
-  fieldItem,
   error,
+  errorMessage,
+  fieldItem,
+  fieldName,
   fieldType,
+  handleCountrySelection,
+  handleValueChanged,
+  inputType,
   isFileSuccess,
   isMandatory,
   label,
+  onError,
+  placeholder,
   selectedValue,
   setIsFileSuccess,
   uploadDocs,
-  inputType,
 }) => {
-  console.log({ error })
   const [dropdownTop, setDropdownTop] = useState(0)
   const [dropdownLeft, setDropdownLeft] = useState(0)
   const [dropdownWidth, setDropDownWidth] = useState(0)
@@ -44,7 +45,6 @@ const DynamicFields = ({
         style={{
           marginBottom: 30,
         }}
-        key={index}
       >
         <View style={{ flexDirection: 'row' }}>
           <Text
@@ -66,14 +66,14 @@ const DynamicFields = ({
           ) : null}
         </View>
         <DropDown
-          toggleDropdown={handleDropDown}
           dropdownWidth={dropdownWidth}
-          error={error ? error[fieldName] : ''}
+          errorMessage={errorMessage}
           items={getDropdownData(fieldItem)}
-          // hasFullWidth={fieldItem.hasFullWidth}
-          position={{ top: dropdownTop, left: dropdownLeft }}
+          onError={onError}
           onPress={(selectedValue) => handleValueChanged(selectedValue)}
+          position={{ top: dropdownTop, left: dropdownLeft }}
           selectedItem={selectedValue}
+          toggleDropdown={handleDropDown}
         />
       </View>
     )
@@ -81,15 +81,16 @@ const DynamicFields = ({
   if (fieldType === 'textField') {
     return (
       <TextInput
-        label={label}
+        errorMessage={errorMessage}
         isMandatory={isMandatory}
+        label={label}
+        onError={onError}
+        placeholder={placeholder}
         style={{ marginBottom: 30 }}
         value={selectedValue}
-        error={error ? error[fieldName] : ''}
         onChangeText={(value) => {
           handleValueChanged(value)
         }}
-        key={index}
       />
     )
   }
@@ -97,7 +98,6 @@ const DynamicFields = ({
     return (
       <CheckBox
         label={label}
-        itemIndex={index}
         handleCheck={(isChecked) => handleValueChanged(isChecked)}
         // handleWidth={getContainerWidth}
         checkedStatus={selectedValue}
@@ -126,7 +126,6 @@ const DynamicFields = ({
     return (
       <FilePicker
         heading={label}
-        key={index}
         uploadFile={uploadDocs}
         isSuccess={isFileSuccess}
         setIsFileSuccess={setIsFileSuccess}
@@ -138,8 +137,8 @@ const DynamicFields = ({
     return (
       <DateInput
         title={label}
-        key={index}
-        error={error ? error[fieldName] : ''}
+        onError={onError}
+        errorMessage={errorMessage}
         inputType={inputType}
         style={{}}
         isMandatory={isMandatory}

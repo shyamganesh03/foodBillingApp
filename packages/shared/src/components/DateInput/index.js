@@ -25,11 +25,12 @@ const DateInput = (props) => {
     data,
     onChangeText = () => {},
     isModal,
-    error,
     title = '',
     isMandatory,
     textInputWidth,
     style,
+    onError,
+    errorMessage,
   } = props
 
   const [isHovered, setIsHovered] = useState(false)
@@ -350,7 +351,7 @@ const DateInput = (props) => {
           disable
             ? { opacity: 0.6 }
             : {
-                borderColor: error ? colors.onAlert : '#E0E0E0',
+                borderColor: onError ? colors.onAlert : '#E0E0E0',
                 width: textInputWidth || 325,
               },
         ]}
@@ -380,7 +381,8 @@ const DateInput = (props) => {
               color={colors.placeHolder}
             />
           }
-          error={error}
+          onError={onError}
+          errorMessage={errorMessage}
           onFocus={() => {
             props?.onFocus?.()
           }}
