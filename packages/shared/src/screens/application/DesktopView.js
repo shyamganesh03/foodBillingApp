@@ -24,6 +24,14 @@ const DesktopView = ({
 }) => {
   const { colors } = useTheme()
 
+  if (Number(steps) === 1) {
+    return (
+      <View style={styles({ colors }).container}>
+        <CommonApplication />
+      </View>
+    )
+  }
+
   if (Number(steps) === 2) {
     return (
       <View style={styles({ colors }).container}>
@@ -80,11 +88,7 @@ const DesktopView = ({
       </View>
     )
   }
-  return (
-    <View style={styles({ colors }).container}>
-      <CommonApplication />
-    </View>
-  )
+  return null
 }
 
 const styles = (props) =>
