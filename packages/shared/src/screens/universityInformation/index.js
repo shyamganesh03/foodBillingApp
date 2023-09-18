@@ -5,23 +5,14 @@ import { Text } from '@libs/components'
 import { fieldData } from './data/metaData'
 import { useIsFocused } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
-import {
-  canNonEmptyObject,
-  fieldValidation,
-  mandatoryValidation,
-} from '../../utils/fieldValidation'
 import { useSave } from '../../hooks/useSave'
 import { useDelete } from '../../hooks/useDelete'
-import { useForm } from 'react-hook-form'
+import { useForm, useFieldArray } from 'react-hook-form'
+import { isValidateInstitutionDate } from '../../utils/dateFunction'
 
 const UniversityInformation = () => {
-  const [universityInformation, setUniversityInformation] = useState()
   const isFocused = useIsFocused()
   const queryClient = useQueryClient()
-  const [validationError, setValidationError] = useState()
-  const [mandatoryValidationError, setMandatoryValidationError] = useState()
-  const [updatedValueIndex, setUpdatedValueIndex] = useState([])
-  const [fieldArray, setFieldArray] = useState()
   const [isLoading, setIsLoading] = useState({
     primary: false,
     secondary: false,
@@ -36,31 +27,119 @@ const UniversityInformation = () => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
+    watch,
     formState: { errors },
   } = useForm()
+
+  const { fields, append, remove, insert } = useFieldArray({
+    control,
+    name: 'universityInformation',
+  })
+
+  console.log({ errors })
+
+  const updateFieldRules = (fieldItem, fieldIndex) => {
+    if (fieldItem.fieldName === 'endTermApplyingFor') {
+      fieldItem.rules = {
+        ...fieldItem.rules,
+        validate: (value) =>
+          isValidateInstitutionDate({
+            dateToValidate: value,
+            dateName: 'End Date',
+            inputType: fieldItem.inputType,
+            fieldIndex,
+            watch: watch,
+          }),
+      }
+    } else if (fieldItem.fieldName === 'degreeEarnedDate') {
+      fieldItem.rules = {
+        ...fieldItem.rules,
+        validate: (value) =>
+          isValidateInstitutionDate({
+            dateToValidate: value,
+            dateName: 'Degree Earned',
+            inputType: fieldItem.inputType,
+            fieldIndex,
+            watch: watch,
+          }),
+      }
+    }
+  }
+
+  const processFieldData = (fieldData, fieldIndex) => {
+    let wrappedFieldData = [fieldData]
+    wrappedFieldData?.forEach((fieldItems) => {
+      fieldItems?.forEach((fieldItem) => {
+        updateFieldRules(fieldItem, fieldIndex)
+      })
+    })
+    return wrappedFieldData
+  }
+
+  const handleFieldInsertion = (index, wrappedFieldData) => {
+    if (fields?.length === 0) {
+      insert(index, [wrappedFieldData])
+    }
+  }
+
+  const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
+    fieldData?.forEach((fieldValue) => {
+      setValue(
+        `universityInformation.${fieldIndex}.${fieldValue?.fieldName}`,
+        fieldItem[fieldValue?.fieldName] || '',
+      )
+    })
+  }
 
   useEffect(() => {
     if (!isFocused) return
 
-    let newFieldData = []
+    if (applicationDetails?.universityOrCollegeInfo?.length > 0) {
+      remove(0)
 
-    if (applicationDetails?.['universityOrCollegeInfo']?.length > 0) {
-      applicationDetails['universityOrCollegeInfo'].forEach(
+      applicationDetails.universityOrCollegeInfo.forEach(
         (fieldItem, fieldIndex) => {
-          Object.keys(fieldItem).forEach((key) => {
-            setValue(`${key}[${fieldIndex}]`, item[key])
-          })
+          let wrappedFieldData = processFieldData(fieldData, fieldIndex)
+          let newFieldData = []
           newFieldData.push(fieldData)
+          insert(fieldIndex, [wrappedFieldData])
+          updateFieldValues(fieldIndex, fieldData, fieldItem)
         },
       )
-      setFieldArray(newFieldData)
     } else {
-      setFieldArray([fieldData])
+      let wrappedFieldData = processFieldData(fieldData, 0)
+      handleFieldInsertion(0, wrappedFieldData)
     }
   }, [isFocused, applicationDetails])
 
+  const getPayload = ({ data }) => {
+    const updatedData = data
+      ?.map((value, dataIndex) => {
+        const matchingField = applicationDetails.universityOrCollegeInfo.find(
+          (fieldValue) => {
+            const keyNames = Object.keys(fieldValue)
+            return keyNames.every((key) => value[key] !== fieldValue[key])
+          },
+        )
+        if (matchingField) {
+          return value
+        }
+      })
+      .filter((updatedValues) => updatedValues !== undefined)
+
+    let newUpdatePayload = []
+    updatedData?.map((data) => {
+      const newData = data
+      newData.shift()
+      const newObjectData = { ...newData }
+      newUpdatePayload.push(newObjectData)
+    })
+    return newUpdatePayload
+  }
+
   const handlePrimary = async (data) => {
-    // console.log({ data })
+    const payload = getPayload({ data: data.universityInformation })
+
     setIsLoading((prevValue) => ({
       ...prevValue,
       primary: true,
@@ -68,7 +147,7 @@ const UniversityInformation = () => {
 
     await mutation.mutateAsync({
       type: 'save',
-      fieldData: data,
+      fieldData: { universityOrCollegeInfo: payload },
     })
 
     setIsLoading((prevValue) => ({
@@ -78,6 +157,7 @@ const UniversityInformation = () => {
   }
 
   const handleSecondary = async (data) => {
+    const payload = getPayload({ data: data.universityInformation })
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: true,
@@ -85,7 +165,7 @@ const UniversityInformation = () => {
 
     await mutation.mutateAsync({
       type: 'saveAndNext',
-      fieldData: data,
+      fieldData: { universityOrCollegeInfo: payload },
     })
 
     setIsLoading((prevValue) => ({
@@ -95,114 +175,8 @@ const UniversityInformation = () => {
   }
 
   const handleAddEducation = () => {
-    let universityData = []
-    const updatedFieldArray = [...fieldArray, fieldData]
-    const mappedData = {}
-    updatedFieldArray?.map((filedItem, fieldIndex) => {
-      console.log({ filedItem })
-      Object.keys(filedItem).forEach((key) => {
-        console.log(
-          {
-            [key]:
-              applicationDetails?.['universityOrCollegeInfo']?.[fieldIndex]?.[
-                key
-              ],
-          },
-          fieldIndex,
-        )
-        setValue(
-          `${key}[${fieldIndex}]`,
-          applicationDetails?.['universityOrCollegeInfo']?.[fieldIndex]?.[
-            key
-          ] || '',
-        )
-      })
-    })
-
-    fieldData.forEach((fieldItem) => {
-      mappedData[fieldItem.fieldName] = ''
-    })
-    universityData = [mappedData]
-    setFieldArray(updatedFieldArray)
-  }
-
-  const checkCTAStatus = () => {
-    let hasNonEmptyMandatoryValidationErrorValue = false
-    let hasNonEmptyValidationErrorValue = false
-    let validationErrorCopy
-    if (mandatoryValidationError) {
-      validationErrorCopy = mandatoryValidationError
-
-      hasNonEmptyMandatoryValidationErrorValue =
-        canNonEmptyObject(validationErrorCopy)
-    }
-    if (validationError) {
-      validationErrorCopy = validationError
-
-      hasNonEmptyValidationErrorValue = canNonEmptyObject(validationErrorCopy)
-    }
-
-    if (
-      isLoading.primary ||
-      isLoading.secondary ||
-      hasNonEmptyMandatoryValidationErrorValue ||
-      hasNonEmptyValidationErrorValue
-    ) {
-      return true
-    }
-
-    return false
-  }
-
-  const handleSubmit = async ({ type, buttonVariant, fieldIndex }) => {
-    const updateUniversityInformationData = updatedValueIndex.map(
-      (fieldIndexValue) => universityInformation[fieldIndexValue],
-    )
-
-    const mandatoryFields = mandatoryValidation(
-      fieldData,
-      updateUniversityInformationData?.length > 0
-        ? updateUniversityInformationData
-        : universityInformation,
-      true,
-    )
-    if (mandatoryFields?.length > 0) {
-      mandatoryFields.forEach((mandatoryFieldItem) => {
-        let newValue = {}
-        let keyName = ''
-        Object.entries(mandatoryFieldItem).map(([key, values]) => {
-          keyName = key
-          values?.map((value) => {
-            newValue = {
-              ...newValue,
-              [value]: 'Please fill the Field',
-            }
-          })
-        })
-        setMandatoryValidationError((prevValidationError) => ({
-          ...prevValidationError,
-          [keyName]: newValue,
-        }))
-      })
-
-      toast.show('Please fill the mandatory Fields', {
-        type: 'danger',
-      })
-    } else {
-      setIsLoading((prevValue) => ({
-        ...prevValue,
-        [buttonVariant]: true,
-      }))
-      await mutation.mutateAsync({
-        type,
-        fieldData: { universityOrCollegeInfo: updateUniversityInformationData },
-      })
-
-      setIsLoading((prevValue) => ({
-        ...prevValue,
-        [buttonVariant]: false,
-      }))
-    }
+    const wrappedFieldData = [fieldData]
+    append([wrappedFieldData])
   }
 
   const handleRemove = async (indexOfItemToRemove) => {
@@ -214,80 +188,8 @@ const UniversityInformation = () => {
       })
     }
     const fieldArrayCopy = [...fieldArray]
+    remove(indexOfItemToRemove)
     fieldArrayCopy.splice(indexOfItemToRemove, 1)
-    setFieldArray(fieldArrayCopy)
-  }
-
-  const handleValueChange = ({ fieldItem, selectedValue, fieldIndex }) => {
-    const validation = fieldValidation({
-      type: fieldItem.inputType,
-      validationValue: selectedValue,
-      fieldItem: universityInformation[fieldIndex],
-    })
-    let validationErrorCopy = validationError
-    let mandatoryValidationErrorCopy = mandatoryValidationError
-
-    mandatoryValidationErrorCopy = {
-      [fieldIndex]: {
-        ...mandatoryValidationErrorCopy?.[fieldIndex],
-        [fieldItem.fieldName]: '',
-      },
-    }
-    if (!validation.isValid) {
-      validationErrorCopy[fieldIndex] = {
-        ...validationErrorCopy?.[fieldIndex],
-        [fieldItem.fieldName]: validation.error,
-      }
-      setValidationError(validationErrorCopy)
-    } else {
-      validationErrorCopy = {
-        [fieldIndex]: {
-          ...validationErrorCopy?.[fieldIndex],
-          [fieldItem.fieldName]: '',
-        },
-      }
-      setValidationError((prevValidationError) => ({
-        ...prevValidationError,
-        ...validationErrorCopy,
-      }))
-    }
-    const universityInformationCopy = universityInformation
-
-    universityInformationCopy[fieldIndex] = {
-      ...universityInformationCopy[fieldIndex],
-      [fieldItem.fieldName]: selectedValue?.name || selectedValue,
-    }
-    const updatedValueIndexCopy = updatedValueIndex
-    updatedValueIndexCopy.push(fieldIndex)
-    const newUpdatedValueIndexCopy = [...new Set([...updatedValueIndexCopy])]
-    setUpdatedValueIndex(newUpdatedValueIndexCopy)
-    setUniversityInformation(universityInformationCopy)
-    setMandatoryValidationError(mandatoryValidationErrorCopy)
-  }
-
-  const getValidationError = (fieldIndex) => {
-    if (mandatoryValidationError) {
-      const keys = Object.keys(mandatoryValidationError)
-      const validationData = keys
-        .map((key) => {
-          if (key === fieldIndex.toString()) {
-            return mandatoryValidationError[key]
-          }
-        })
-        ?.filter((validationValue) => !!validationValue)
-      return validationData[0]
-    }
-    if (validationError) {
-      const keys = Object.keys(validationError)
-      const validationData = keys
-        .map((key) => {
-          if (key === fieldIndex.toString()) {
-            return validationError[key]
-          }
-        })
-        ?.filter((validationValue) => !!validationValue)
-      return validationData[0]
-    }
   }
 
   const LayoutView = useCallback(
@@ -296,21 +198,15 @@ const UniversityInformation = () => {
   )
 
   const viewProps = {
+    fields,
     control,
     errors,
-    fieldArray,
     isLoading,
-    universityInformation,
-    validationError,
     handlePrimary,
     handleSecondary,
-    checkCTAStatus,
-    getValidationError,
     handleAddEducation,
     handleFormSubmit,
     handleRemove,
-    handleSubmit,
-    handleValueChange,
   }
   return (
     <Suspense fallback={<Text>Loading</Text>}>

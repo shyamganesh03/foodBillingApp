@@ -3,8 +3,13 @@ import { View } from 'react-native'
 import { Controller } from 'react-hook-form'
 import DynamicFields from '../DynamicFields'
 
-export const FormContainer = ({ fieldData, control, errors }) => {
-  console.log({ fieldData })
+export const FormContainer = ({
+  fieldData,
+  control,
+  errors,
+  formName = '',
+  arrayIndex,
+}) => {
   return (
     <>
       {fieldData.map((fieldItem, fieldIndex) => {
@@ -29,12 +34,28 @@ export const FormContainer = ({ fieldData, control, errors }) => {
                     handleValueChanged={(value) => {
                       onChange(value)
                     }}
-                    onError={errors?.[fieldItem?.fieldName] ? true : false}
-                    errorMessage={errors?.[fieldItem?.fieldName]?.message}
+                    onError={
+                      formName
+                        ? !!errors?.[formName]?.[arrayIndex]?.[
+                            fieldItem?.fieldName
+                          ]
+                        : !!errors?.[fieldItem?.fieldName]
+                    }
+                    errorMessage={
+                      formName
+                        ? errors?.[formName]?.[arrayIndex]?.[
+                            fieldItem?.fieldName
+                          ]?.message
+                        : errors?.[fieldItem?.fieldName]?.message
+                    }
                   />
                 )
               }}
-              name={fieldItem.fieldName}
+              name={
+                formName
+                  ? `${formName}.${arrayIndex}.${fieldItem?.fieldName}`
+                  : fieldItem?.fieldName
+              }
               rules={fieldItem.rules}
             />
           </View>

@@ -7,7 +7,7 @@ import { TouchableOpacity } from 'react-native'
 import { FormContainer } from '../../components/FormContainer'
 
 const DesktopView = ({
-  checkCTAStatus,
+  fields,
   control,
   errors,
   fieldArray,
@@ -32,7 +32,7 @@ const DesktopView = ({
           University/College Information
         </Text>
 
-        {fieldArray?.map((fields, fieldsIndex) => {
+        {fields?.map((fieldItems, fieldsIndex) => {
           return (
             <View
               style={{
@@ -58,10 +58,13 @@ const DesktopView = ({
                   </Text>
                 </TouchableOpacity>
               ) : null}
+
               <FormContainer
                 control={control}
                 errors={errors}
-                fieldData={fields}
+                fieldData={fieldItems[0]}
+                formName="universityInformation"
+                arrayIndex={fieldsIndex}
               />
             </View>
           )
@@ -72,7 +75,6 @@ const DesktopView = ({
           buttonStyle={{ marginRight: 30, maxWidth: 390 }}
           labelColors={colors.white}
           onPress={() => handleAddEducation()}
-          disable={checkCTAStatus()}
         />
         <View style={{ flexDirection: 'row', marginVertical: 40 }}>
           <Button

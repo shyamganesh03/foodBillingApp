@@ -1,3 +1,5 @@
+import { validateForFutureDate } from '../../../utils/dateFunction'
+
 const FieldType = {
   TEXT_INPUT: 'textField',
   DROPDOWN: 'PickList',
@@ -39,6 +41,11 @@ export const fieldData = [
     placeholder: 'Select any Option',
     rules: {
       required: 'Academic Institution Estimated Start cannot be empty',
+      validate: (value) =>
+        validateForFutureDate({
+          dateToValidate: value,
+          dateName: 'Start Date',
+        }),
     },
   },
   {
