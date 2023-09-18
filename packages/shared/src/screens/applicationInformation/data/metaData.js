@@ -69,9 +69,6 @@ export const fieldData = [
     type: FieldType.TEXT_INPUT,
     inputType: 'string',
     placeholder: 'Enter your previous name',
-    rules: {
-      required: 'Previous Names cannot be empty',
-    },
   },
   {
     label: 'Previously Applied to this Institution?',
@@ -82,6 +79,7 @@ export const fieldData = [
   },
   {
     label: 'Start Term Applying For',
+    lookUpName: 'intakes',
     fieldName: 'startTermApplyingFor',
     type: FieldType.DROPDOWN,
     pickListValues: [],
