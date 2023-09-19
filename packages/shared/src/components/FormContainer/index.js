@@ -12,7 +12,7 @@ export const FormContainer = ({
 }) => {
   return (
     <>
-      {fieldData.map((fieldItem, fieldIndex) => {
+      {fieldData?.map((fieldItem, fieldIndex) => {
         return (
           <View key={fieldIndex}>
             <Controller

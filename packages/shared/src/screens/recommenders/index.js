@@ -17,7 +17,7 @@ const Recommenders = () => {
     primary: false,
     secondary: false,
   })
-
+  const [waiveCheck, setWaiveCheck] = useState()
   const { mutate: mutation } = useSave()
   const { mutate: deleteMutation } = useDelete()
 
@@ -27,7 +27,6 @@ const Recommenders = () => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
-    watch,
     formState: { errors },
   } = useForm()
 
@@ -53,10 +52,11 @@ const Recommenders = () => {
 
   useEffect(() => {
     if (!isFocused) return
-
+    const waiveCheck =
+      applicationDetails?.['WaiveAccessToRecommendation'] || false
+    setWaiveCheck(waiveCheck)
     if (applicationDetails?.recommenders?.length > 0) {
       remove(0)
-
       applicationDetails.recommenders.forEach((fieldItem, fieldIndex) => {
         let wrappedFieldData = [fieldData]
         let newFieldData = []
@@ -71,21 +71,23 @@ const Recommenders = () => {
   }, [isFocused, applicationDetails])
 
   const handlePrimary = async (data) => {
-    const payload = getPayload({
-      data: data.recommenders,
-      applicationDetails,
-      fieldName: 'recommenders',
-    })
-
     setIsLoading((prevValue) => ({
       ...prevValue,
       primary: true,
     }))
 
+    let payload = getPayload({
+      data: data.recommenders,
+      applicationDetails,
+      fieldName: 'recommenders',
+    })
+    let newPayload = { WaiveAccessToRecommendation: waiveCheck }
+
     if (payload?.length > 0) {
+      newPayload = { ...newPayload, recommenders: payload }
       await mutation.mutateAsync({
         type: 'save',
-        fieldData: { recommenders: payload },
+        fieldData: newPayload,
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -100,7 +102,7 @@ const Recommenders = () => {
   }
 
   const handleSecondary = async (data) => {
-    const payload = getPayload({
+    let payload = getPayload({
       data: data.recommenders,
       applicationDetails,
       fieldName: 'recommenders',
@@ -111,10 +113,13 @@ const Recommenders = () => {
       secondary: true,
     }))
 
+    let newPayload = { WaiveAccessToRecommendation: waiveCheck }
+
     if (payload?.length > 0) {
+      newPayload = { ...newPayload, recommenders: payload }
       await mutation.mutateAsync({
         type: 'saveAndNext',
-        fieldData: { recommenders: payload },
+        fieldData: newPayload,
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -125,6 +130,10 @@ const Recommenders = () => {
       ...prevValue,
       secondary: false,
     }))
+  }
+
+  const handleWaveCheck = (checkBoxStatus) => {
+    setWaiveCheck(checkBoxStatus)
   }
 
   const handleAddEducation = () => {
@@ -154,10 +163,12 @@ const Recommenders = () => {
     control,
     errors,
     isLoading,
+    waiveCheck,
     handlePrimary,
     handleSecondary,
     handleAddEducation,
     handleFormSubmit,
+    handleWaveCheck,
     handleRemove,
   }
   return (

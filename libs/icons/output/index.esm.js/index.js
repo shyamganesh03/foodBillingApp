@@ -2,7 +2,7 @@ import * as React from 'react'
 import React__default from 'react'
 import PropTypes from 'prop-types'
 import _extends from '@babel/runtime/helpers/extends'
-import Svg, { Path } from 'react-native-svg'
+import Svg, { Path, Rect } from 'react-native-svg'
 
 const SvgAddFile = (props) =>
   /*#__PURE__*/ React.createElement(
@@ -172,6 +172,52 @@ const SvgClose = (props) =>
     }),
   )
 
+const SvgDeleteIcon = (props) =>
+  /*#__PURE__*/ React.createElement(
+    Svg,
+    _extends(
+      {
+        width: 24,
+        height: 24,
+        viewBox: '0 0 11 14',
+        fill: 'none',
+        xmlns: 'http://www.w3.org/2000/svg',
+      },
+      props,
+    ),
+    /*#__PURE__*/ React.createElement(Path, {
+      d: 'M7.563 5.156v6.188M5.5 5.156v6.188M3.438 5.156v6.188',
+      stroke: '#212A33',
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+    }),
+    /*#__PURE__*/ React.createElement(Rect, {
+      x: 3.25,
+      y: 0.5,
+      width: 4.5,
+      height: 1.75,
+      rx: 0.875,
+      stroke: '#212A33',
+    }),
+    /*#__PURE__*/ React.createElement(Rect, {
+      x: 1.188,
+      y: 2.563,
+      width: 8.625,
+      height: 10.688,
+      rx: 1.5,
+      stroke: '#212A33',
+    }),
+    /*#__PURE__*/ React.createElement(Rect, {
+      x: 0.5,
+      y: 1.875,
+      width: 10,
+      height: 1.75,
+      rx: 0.875,
+      fill: '#fff',
+      stroke: '#212A33',
+    }),
+  )
+
 const SvgDownload = (props) =>
   /*#__PURE__*/ React.createElement(
     Svg,
@@ -273,6 +319,25 @@ const SvgFileEdit = (props) =>
     }),
   )
 
+const SvgImageIcon = (props) =>
+  /*#__PURE__*/ React.createElement(
+    Svg,
+    _extends(
+      {
+        width: 24,
+        height: 24,
+        viewBox: '0 0 19 18',
+        fill: 'none',
+        xmlns: 'http://www.w3.org/2000/svg',
+      },
+      props,
+    ),
+    /*#__PURE__*/ React.createElement(Path, {
+      d: 'M1.948 17.142h15.104A1.947 1.947 0 0 0 19 15.194V1.948A1.948 1.948 0 0 0 17.052 0H1.948A1.948 1.948 0 0 0 0 1.948v13.246a1.947 1.947 0 0 0 1.948 1.948Zm0-16.086h15.104a.893.893 0 0 1 .892.892v7.256l-3.606-3.606a.556.556 0 0 0-.785 0l-5.44 5.44 1.815 1.816a.422.422 0 0 1-.597.597L5.3 9.418a.555.555 0 0 0-.785 0l-3.458 3.458V1.948a.893.893 0 0 1 .892-.892ZM3.8 4.49a1.374 1.374 0 1 1 2.749 0 1.374 1.374 0 0 1-2.749 0Z',
+      fill: props.color || '#212A33',
+    }),
+  )
+
 const SvgParliamentBuilding = (props) =>
   /*#__PURE__*/ React.createElement(
     Svg,
@@ -317,6 +382,9 @@ const Icon = (props) => {
   if (props.name === 'Close') {
     return /*#__PURE__*/ React__default.createElement(SvgClose, props)
   }
+  if (props.name === 'DeleteIcon') {
+    return /*#__PURE__*/ React__default.createElement(SvgDeleteIcon, props)
+  }
   if (props.name === 'Download') {
     return /*#__PURE__*/ React__default.createElement(SvgDownload, props)
   }
@@ -328,6 +396,9 @@ const Icon = (props) => {
   }
   if (props.name === 'FileEdit') {
     return /*#__PURE__*/ React__default.createElement(SvgFileEdit, props)
+  }
+  if (props.name === 'ImageIcon') {
+    return /*#__PURE__*/ React__default.createElement(SvgImageIcon, props)
   }
   if (props.name === 'ParliamentBuilding') {
     return /*#__PURE__*/ React__default.createElement(
@@ -346,10 +417,12 @@ Icon.propTypes = {
     'CalenderFilled',
     'Check',
     'Close',
+    'DeleteIcon',
     'Download',
     'EyeOff',
     'Eye',
     'FileEdit',
+    'ImageIcon',
     'ParliamentBuilding',
   ]),
 }

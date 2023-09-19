@@ -34,18 +34,28 @@ const ContactInformation = (props) => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
+    watch,
     formState: { errors },
   } = useForm()
 
   const handlePrimary = async (data) => {
+    let payload = data
     setIsLoading((prevValue) => ({
       ...prevValue,
       primary: true,
     }))
+    const mailingCountryCode = watch('mailingCountryCode')
+    if (mailingCountryCode) {
+      const selectedData = dropdown?.filter(
+        (item) => item?.Label === mailingCountryCode,
+      )
+      payload['mailingCountryCode'] = selectedData?.[0]?.Value
+      payload['mailingCountry'] = selectedData?.[0]?.Label
+    }
 
     await mutation.mutateAsync({
       type: 'create',
-      fieldData: data,
+      fieldData: payload,
     })
 
     setIsLoading((prevValue) => ({
@@ -61,14 +71,14 @@ const ContactInformation = (props) => {
       secondary: true,
     }))
 
-    Object.entries(payload).map(([fieldKey, filedValues]) => {
-      if (fieldKey === 'mailingCountryCode') {
-        const selectedData = dropdown?.filter(
-          (item) => item?.Value === applicationDetails[fieldItem?.fieldName],
-        )
-        payload[fieldKey] = selectedData[0]?.Value
-      }
-    })
+    const mailingCountryCode = watch('mailingCountryCode')
+    if (mailingCountryCode) {
+      const selectedData = dropdown?.filter(
+        (item) => item?.Label === mailingCountryCode,
+      )
+      payload['mailingCountryCode'] = selectedData?.[0]?.Value
+      payload['mailingCountry'] = selectedData?.[0]?.Label
+    }
 
     await mutation.mutateAsync({
       type: 'createAndNext',
@@ -89,7 +99,7 @@ const ContactInformation = (props) => {
           const selectedData = dropdown?.filter(
             (item) => item?.Value === applicationDetails[fieldItem?.fieldName],
           )
-          setValue(fieldItem?.fieldName, selectedData[0]?.Label || '')
+          setValue(fieldItem?.fieldName, selectedData?.[0]?.Label || '')
         } else {
           setValue(
             fieldItem?.fieldName,

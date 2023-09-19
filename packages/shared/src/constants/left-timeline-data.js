@@ -53,15 +53,11 @@ export const LeftTimeLineData = [
     order: 13,
   },
   {
-    displayName: 'Supplemental Requirements',
+    displayName: 'Recommenders',
     order: 14,
   },
   {
-    displayName: 'Recommenders',
-    order: 15,
-  },
-  {
     displayName: 'Application Submission',
-    order: 16,
+    order: 15,
   },
 ]

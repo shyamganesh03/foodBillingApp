@@ -19,7 +19,7 @@ export const fieldData = [
     type: FieldType.DROPDOWN,
     placeholder: 'Select any Option',
     rules: {
-      required: 'Title cannot be empty',
+      required: 'First Choice cannot be empty',
     },
   },
   {
@@ -28,6 +28,9 @@ export const fieldData = [
     lookUpName: 'schools',
     type: FieldType.DROPDOWN,
     pickListValues: [],
+    rules: {
+      required: 'Second Choice cannot be empty',
+    },
   },
   {
     label: 'Third Choice School',
@@ -35,5 +38,8 @@ export const fieldData = [
     lookUpName: 'schools',
     type: FieldType.DROPDOWN,
     pickListValues: [],
+    rules: {
+      required: 'Third Choice cannot be empty',
+    },
   },
 ]

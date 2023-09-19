@@ -61,7 +61,7 @@ export const createApplication = async (payload) =>
   })
 
 export const getApplicationFileByID = async (payload) =>
-  apiCall(`application/file/${payload.Id}`, {
+  apiCall(`application/file/${payload.Id}/${payload.type}`, {
     method: 'GET',
   })
 
@@ -78,6 +78,7 @@ export const deleteListItem = async (payload) =>
   })
 
 export const deleteDocument = async (payload) =>
-  apiCall(`application/file/${payload.id}`, {
+  apiCall(`application/file`, {
     method: 'DELETE',
+    payload,
   })

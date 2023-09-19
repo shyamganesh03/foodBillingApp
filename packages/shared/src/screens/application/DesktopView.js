@@ -121,7 +121,7 @@ const DesktopView = ({
       </View>
     )
   }
-  if (Number(steps) === 15) {
+  if (Number(steps) === 14) {
     return (
       <View style={styles({ colors }).container}>
         <Recommenders />

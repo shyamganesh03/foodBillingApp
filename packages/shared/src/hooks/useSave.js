@@ -11,7 +11,7 @@ export const useSave = () => {
   const route = useRoute()
   const params = route.params
   const steps = params?.steps || 0
-  const applicationDetails = queryClient.getQueryData(['getApplicationData'])
+  let applicationDetails = queryClient.getQueryData(['getApplicationData'])
   const gusApplicationData = queryClient.getQueryData(['getApplicationDetails'])
 
   const removeNullData = (dataToBeCheck) => {
@@ -23,6 +23,12 @@ export const useSave = () => {
   }
   const mutate = useMutation(
     async (data) => {
+      if (!applicationDetails) {
+        applicationDetails = await getApplicationByEmailID({
+          gusApplicationId: studentDetail?.gusApplicationId,
+          email: studentDetail?.email,
+        })
+      }
       if (
         (data.type === 'create' || data.type === 'createAndNext') &&
         !applicationDetails?.email
@@ -30,13 +36,19 @@ export const useSave = () => {
         let createPayload = {
           ...data?.fieldData,
           ...studentDetail,
+          universityOrCollegeInfo: [],
+          AAMCMCATReporting: [],
+          clinicalOrHospitalExperienceDetails: [],
+          researchExperience: [],
+          recommenders: [],
+          applicationStatus: 'In Progress',
         }
         removeNullData(createPayload)
         const response = await createApplication(createPayload)
         return response
       } else {
         let payload = data?.fieldData
-        console.log({ payload })
+
         removeNullData(payload)
         const response = await updateApplication({
           ...data?.fieldData,
@@ -61,7 +73,7 @@ export const useSave = () => {
             context.type === 'createAndNext' ||
             context.type === 'saveAndNext'
           ) {
-            navigation.setParams({ steps: steps + 1 })
+            navigation.setParams({ steps: Number(steps) + 1 })
           }
         }
       },

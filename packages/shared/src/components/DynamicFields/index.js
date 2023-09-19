@@ -99,9 +99,7 @@ const DynamicFields = ({
       <CheckBox
         label={label}
         handleCheck={(isChecked) => handleValueChanged(isChecked)}
-        // handleWidth={getContainerWidth}
         checkedStatus={selectedValue}
-        // style={{ marginBottom: 30 }}
       />
     )
   }

@@ -1,43 +1,58 @@
 import { Icon } from '@r3-oaf/native-icons'
-import { Button, Divider, ProgressBar, Text } from '@libs/components'
-import { useTheme } from '@react-navigation/native'
-import React, { useRef, useState } from 'react'
-import { ActivityIndicator, TouchableOpacity, Modal, View } from 'react-native'
+import { Text } from '@libs/components'
+import { useIsFocused, useTheme } from '@react-navigation/native'
+import React, { useEffect, useRef, useState } from 'react'
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native'
 
 const FilePicker = ({
-  setIsFileSuccess,
+  documentType,
   heading = '',
   isMandatory,
   uploadFile = () => {},
-  isSuccess,
+  successState,
+  isMultiUpload,
+  uploadedFiles,
+  handleDelete,
   key,
 }) => {
   const { colors } = useTheme()
-  const [fileModalDetails, setFileModalDetails] = useState({
-    isVisible: false,
-    image: '',
-    name: '',
-    fileSize: '',
-  })
+  const [files, setFiles] = useState([])
+  const [isDeleteCallFetching, setIsDeleteCallFetching] = useState()
+  const [error, setError] = useState()
+  const isFocused = useIsFocused()
   const documentRef = useRef()
+  useEffect(() => {
+    if (!isFocused) return
+
+    if (uploadedFiles?.length > 0) {
+      let files = []
+      uploadedFiles?.map((file) => {
+        file.documentLinkedId &&
+          files.push({ documentName: file.Title, id: file.documentLinkedId })
+      })
+      setFiles(files)
+    } else {
+      setFiles([])
+    }
+    setIsDeleteCallFetching(false)
+  }, [isFocused, uploadedFiles])
 
   const handleDragOver = (event) => {
     event.preventDefault()
   }
+
   const handleDrop = async (event) => {
+    setError('')
     event.preventDefault()
-    const file = event.dataTransfer.files[0]
-    setFileModalDetails({
-      isVisible: true,
-      image: '',
-      name: file.name,
-      fileSize: `${file.size} b`,
-    })
-    const base64Docs = await getBase64(file)
+    const uploadedFile = event.dataTransfer.files[0]
+    let filesCopy = [...files, { documentName: uploadedFile.name }]
+    setFiles(filesCopy)
+    const base64Docs = await getBase64(uploadedFile)
     uploadFile({
       file: base64Docs.split(',')[1],
-      path: file.name,
-      pathName: file.name.split('.')[0],
+      path: uploadedFile.name,
+      pathName: uploadedFile.name.split('.')[0],
+      fileType: documentType,
     })
   }
 
@@ -49,25 +64,36 @@ const FilePicker = ({
       reader.onerror = (error) => reject(error)
     })
 
+  const handleFileDelete = async (fileData) => {
+    setIsDeleteCallFetching(true)
+    await handleDelete({ id: fileData.id, fileType: documentType })
+  }
+
   const handleFilePicker = async (event) => {
-    const file = event.target.files[0]
-    setFileModalDetails({
-      isVisible: true,
-      image: '',
-      name: file.name,
-      fileSize: `${file.size} b`,
-    })
-    const base64Docs = await getBase64(file)
-    uploadFile({
-      file: base64Docs.split(',')[1],
-      path: file.name,
-      pathName: file.name.split('.')[0],
-    })
+    setError('')
+    const uploadedFile = event.target.files[0]
+    let filesCopy = [...files, { documentName: uploadedFile.name }]
+    setFiles(filesCopy)
+    const duplicateFile = filesCopy.filter(
+      (file) => file.documentName === uploadedFile.name,
+    )
+    if (duplicateFile.length === 0) {
+      const base64Docs = await getBase64(uploadedFile)
+      await uploadFile({
+        file: base64Docs.split(',')[1],
+        path: uploadedFile.name,
+        pathName: uploadedFile.name.split('.')[0],
+        fileType: documentType,
+      })
+    } else {
+      setError('DuplicateFile not allowed')
+    }
   }
 
   return (
-    <View key={key}>
-      <Text variant="heading2">
+    <View style={{ marginBottom: 30 }}>
+      {' '}
+      <Text variant="heading2" style={{ marginBottom: 10 }}>
         {heading}{' '}
         {isMandatory ? (
           <Text variant="heading2" color={colors.onAlert}>
@@ -75,176 +101,127 @@ const FilePicker = ({
           </Text>
         ) : null}
       </Text>
-      <form
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-        onSubmit={(e) => {
-          handleFilePicker(e)
+      <View
+        key={key}
+        style={{
+          borderRadius: 4,
+          borderWidth: 2,
+          marginTop: 2,
+          borderColor: colors.fieldBorder,
+          borderStyle: 'dashed',
+          maxWidth: '50%',
         }}
       >
-        <View
-          style={{
-            borderRadius: 4,
-            borderWidth: 2,
-            marginTop: 2,
-            borderColor: colors.fieldBorder,
-            borderStyle: 'dashed',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            maxWidth: '50%',
-          }}
-        >
-          <View
-            style={{
-              height: 81,
-              borderRadius: 4,
-              padding: 5,
-              marginTop: 10,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
+        {(files?.length === 0 && !isMultiUpload) || isMultiUpload ? (
+          <form
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            onSubmit={(e) => {
+              handleFilePicker(e)
             }}
           >
-            <Icon name="AddFile" height={41} width={41} />
-            <View style={{ marginLeft: 10 }}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text variant="display4">Drop file to attach, or </Text>
-                <TouchableOpacity
-                  style={{}}
-                  onPress={() => documentRef.current.click()}
-                >
-                  <Text
-                    variant="display4"
-                    color={colors.onAlert}
-                    style={{ textDecoration: 'underline' }}
-                  >
-                    browse
+            <View>
+              <View
+                style={{
+                  height: 81,
+                  borderRadius: 4,
+                  padding: 5,
+                  marginTop: 10,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <Icon name="AddFile" height={41} width={41} />
+                <View style={{ marginLeft: 10, flexWrap: 'wrap', flex: 1 }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text variant="display4">Drop file to attach, or </Text>
+                    <TouchableOpacity
+                      style={{}}
+                      onPress={() => documentRef.current.click()}
+                    >
+                      <Text
+                        variant="display4"
+                        color={colors.onAlert}
+                        style={{ textDecoration: 'underline' }}
+                      >
+                        browse
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Text variant="display4" color={colors.primaryIconColor}>
+                    doc, docx, jpg, jpeg, png, gif, pdf, svg, bmp, odt
                   </Text>
+                </View>
+              </View>
+            </View>
+            <input
+              type="file"
+              ref={documentRef}
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                handleFilePicker(e)
+              }}
+            />
+          </form>
+        ) : null}
+        <View>
+          {files?.map((fileItem) => {
+            return (
+              <View
+                style={{
+                  padding: 20,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <View style={{ flexDirection: 'row' }}>
+                  <Icon name="ImageIcon" height={18} width={18} />
+                  <Text variant="body2" style={{ marginHorizontal: 10 }}>
+                    {fileItem.documentName}
+                  </Text>
+                  {fileItem.documentName !== successState?.path ? (
+                    <View
+                      style={{
+                        height: 10,
+                        width: 10,
+                        borderRadius: 10,
+                        backgroundColor: 'green',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                      }}
+                    >
+                      <Icon
+                        name="Check"
+                        height={8}
+                        width={8}
+                        color={colors.white}
+                      />
+                    </View>
+                  ) : (
+                    <ActivityIndicator size={10} />
+                  )}
+                </View>
+                <TouchableOpacity onPress={() => handleFileDelete(fileItem)}>
+                  {isDeleteCallFetching ? (
+                    <ActivityIndicator size={18} />
+                  ) : (
+                    <Icon name="DeleteIcon" height={18} width={18} />
+                  )}
                 </TouchableOpacity>
               </View>
-              <Text variant="display4" color={colors.primaryIconColor}>
-                doc, docx, jpg, jpeg, png, gif, pdf, svg, bmp, odt
-              </Text>
-            </View>
-          </View>
-        </View>
-        <input
-          type="file"
-          ref={documentRef}
-          style={{ display: 'none' }}
-          onChange={(e) => {
-            handleFilePicker(e)
-          }}
-        />
-      </form>
-    </View>
-  )
-}
-
-const FileModal = ({
-  count,
-  setShowModalDetails,
-  modalDetails,
-  isSuccess,
-  setIsFileSuccess,
-}) => {
-  const { colors } = useTheme()
-  return (
-    <Modal transparent visible={modalDetails.isVisible}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'rgba(107,106,106, 0.6)',
-          position: 'relative',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <View
-          style={{
-            position: 'absolute',
-            backgroundColor: colors.white,
-            width: '40%',
-            paddingBottom: 16,
-          }}
-        >
-          <View style={{ padding: 16, alignItems: 'center' }}>
-            <Text variant="body1">Upload Files</Text>
-          </View>
-          <Divider />
-          <View
-            style={{
-              flexDirection: 'row',
-              flex: 1,
-              padding: 16,
-              position: 'relative',
-              justifyContent: 'space-between',
-            }}
-          >
-            <View style={{ flexDirection: 'column' }}>
-              <Text variant="body1">{modalDetails.name}</Text>
-              <Text variant="body1">{modalDetails.fileSize}</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {isSuccess ? (
-                <View
-                  style={{
-                    height: 20,
-                    width: 20,
-                    borderRadius: 10,
-                    backgroundColor: 'green',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginLeft: 10,
-                  }}
-                >
-                  <Icon
-                    name="Check"
-                    height={15}
-                    width={15}
-                    color={colors.white}
-                  />
-                </View>
-              ) : (
-                <ActivityIndicator />
-              )}
-            </View>
-          </View>
-          <Divider />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingTop: 16,
-              paddingHorizontal: 16,
-            }}
-          >
-            <Text variant="body1">{`${
-              isSuccess ? 1 : 0
-            } of 1 file upload`}</Text>
-            <Button
-              label="Done"
-              buttonStyle={{ marginLeft: 10 }}
-              onPress={() => {
-                setShowModalDetails({
-                  ...modalDetails,
-                  isVisible: false,
-                })
-                setIsFileSuccess(false)
-              }}
-              labelColors={colors.white}
-            />
-          </View>
+            )
+          })}
         </View>
       </View>
-    </Modal>
+      {error ? (
+        <Text variant="body1" color={colors.onAlert} style={{ marginTop: 5 }}>
+          {error}
+        </Text>
+      ) : null}
+    </View>
   )
 }
 

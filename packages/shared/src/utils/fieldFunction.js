@@ -27,16 +27,35 @@ export const getPayload = ({ data, applicationDetails, fieldName }) => {
   if (updatedData?.length > 0) {
     updatedData?.map((data) => {
       const newData = data
-      newData.shift()
+      if (newData[0]) {
+        newData.shift()
+      }
       const newObjectData = { ...newData }
-      newUpdatePayload.push(newObjectData)
+      newUpdatePayload?.push(newObjectData)
     })
   } else {
-    data.map((values) => {
+    data?.map((values) => {
       const newData = values
-      newData.shift()
-      const newObjectData = { ...newData }
-      newUpdatePayload.push(newObjectData)
+      if (newData[0]) {
+        newData.shift()
+      }
+
+      let filteredData = {}
+      Object.entries(newData?.[0] || newData).map(([key, newDataValues]) => {
+        if (newDataValues !== undefined) {
+          filteredData = {
+            ...filteredData,
+            [key]: newData?.[0]?.[key] || newData?.[key],
+          }
+        }
+      })
+      if (
+        Object.values(filteredData).some(
+          (filteredDataValue) => !!filteredDataValue,
+        )
+      ) {
+        newUpdatePayload?.push(filteredData)
+      }
     })
   }
   return newUpdatePayload
