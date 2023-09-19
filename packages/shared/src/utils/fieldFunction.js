@@ -9,7 +9,7 @@ export const getPayload = ({ data, applicationDetails, fieldName }) => {
       )
       const key = Object.entries(value)
         ?.map(([key, dataValue]) => {
-          if (dataValue === '') {
+          if (dataValue) {
             return key
           }
         })
