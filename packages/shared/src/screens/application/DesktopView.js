@@ -10,6 +10,7 @@ import PrerequisiteCourseworkInformation from '../prerequisiteCourseworkInformat
 import BackgroundInformation from '../background-Information-and-Technical-Standards'
 import AdditionalInformation from '../additionalInformation'
 import UniversityInformation from '../universityInformation'
+import MCATReporting from '../aamc-mcat-Reporting'
 
 const DesktopView = ({
   steps,
@@ -71,6 +72,13 @@ const DesktopView = ({
     return (
       <View style={styles({ colors }).container}>
         <PrerequisiteCourseworkInformation />
+      </View>
+    )
+  }
+  if (Number(steps) === 8) {
+    return (
+      <View style={styles({ colors }).container}>
+        <MCATReporting />
       </View>
     )
   }

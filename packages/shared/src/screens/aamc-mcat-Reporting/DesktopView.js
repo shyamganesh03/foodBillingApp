@@ -28,7 +28,7 @@ const DesktopView = ({
         }}
       >
         <Text variant="heading2" style={{ marginBottom: 20 }}>
-          University/College Information
+          AAMC-MCAT Reporting
         </Text>
 
         {fields?.map((fieldItems, fieldsIndex) => {
@@ -62,7 +62,7 @@ const DesktopView = ({
                 control={control}
                 errors={errors}
                 fieldData={fieldItems[0]}
-                formName="universityInformation"
+                formName="aamcmcatReporting"
                 arrayIndex={fieldsIndex}
               />
             </View>

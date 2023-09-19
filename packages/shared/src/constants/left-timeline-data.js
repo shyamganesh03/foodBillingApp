@@ -6,26 +6,30 @@ export const LeftTimeLineData = [
   },
   {
     displayName: 'Application Information',
-    order: 3,
+    order: 2,
   },
   {
     displayName: 'Contact Information',
-    order: 4,
+    order: 3,
   },
   {
     displayName: 'Emergency Contact Information',
-    order: 5,
+    order: 3,
   },
   {
     displayName: 'Personal Information',
-    order: 6,
+    order: 5,
   },
   {
     displayName: 'University/College Information',
-    order: 7,
+    order: 6,
   },
   {
     displayName: 'Prerequisite Coursework Information',
+    order: 7,
+  },
+  {
+    displayName: 'AAMC-MCAT Reporting',
     order: 8,
   },
   {

@@ -8,10 +8,9 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useSave } from '../../hooks/useSave'
 import { useDelete } from '../../hooks/useDelete'
 import { useForm, useFieldArray } from 'react-hook-form'
-import { isValidateInstitutionDate } from '../../utils/dateFunction'
 import { getPayload } from '../../utils/fieldFunction'
 
-const UniversityInformation = () => {
+const MCATReporting = () => {
   const isFocused = useIsFocused()
   const queryClient = useQueryClient()
   const [isLoading, setIsLoading] = useState({
@@ -34,48 +33,8 @@ const UniversityInformation = () => {
 
   const { fields, append, remove, insert } = useFieldArray({
     control,
-    name: 'universityInformation',
+    name: 'aamcmcatReporting',
   })
-
-  console.log({ errors })
-
-  const updateFieldRules = (fieldItem, fieldIndex) => {
-    if (fieldItem.fieldName === 'endTermApplyingFor') {
-      fieldItem.rules = {
-        ...fieldItem.rules,
-        validate: (value) =>
-          isValidateInstitutionDate({
-            dateToValidate: value,
-            dateName: 'End Date',
-            inputType: fieldItem.inputType,
-            fieldIndex,
-            watch: watch,
-          }),
-      }
-    } else if (fieldItem.fieldName === 'degreeEarnedDate') {
-      fieldItem.rules = {
-        ...fieldItem.rules,
-        validate: (value) =>
-          isValidateInstitutionDate({
-            dateToValidate: value,
-            dateName: 'Degree Earned',
-            inputType: fieldItem.inputType,
-            fieldIndex,
-            watch: watch,
-          }),
-      }
-    }
-  }
-
-  const processFieldData = (fieldData, fieldIndex) => {
-    let wrappedFieldData = [fieldData]
-    wrappedFieldData?.forEach((fieldItems) => {
-      fieldItems?.forEach((fieldItem) => {
-        updateFieldRules(fieldItem, fieldIndex)
-      })
-    })
-    return wrappedFieldData
-  }
 
   const handleFieldInsertion = (index, wrappedFieldData) => {
     if (fields?.length === 0) {
@@ -86,7 +45,7 @@ const UniversityInformation = () => {
   const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
     fieldData?.forEach((fieldValue) => {
       setValue(
-        `universityInformation.${fieldIndex}.${fieldValue?.fieldName}`,
+        `aamcmcatReporting.${fieldIndex}.${fieldValue?.fieldName}`,
         fieldItem[fieldValue?.fieldName] || '',
       )
     })
@@ -95,20 +54,18 @@ const UniversityInformation = () => {
   useEffect(() => {
     if (!isFocused) return
 
-    if (applicationDetails?.universityOrCollegeInfo?.length > 0) {
+    if (applicationDetails?.AAMCMCATReporting?.length > 0) {
       remove(0)
 
-      applicationDetails.universityOrCollegeInfo.forEach(
-        (fieldItem, fieldIndex) => {
-          let wrappedFieldData = processFieldData(fieldData, fieldIndex)
-          let newFieldData = []
-          newFieldData.push(fieldData)
-          insert(fieldIndex, [wrappedFieldData])
-          updateFieldValues(fieldIndex, fieldData, fieldItem)
-        },
-      )
+      applicationDetails.AAMCMCATReporting.forEach((fieldItem, fieldIndex) => {
+        let wrappedFieldData = [fieldData]
+        let newFieldData = []
+        newFieldData.push(fieldData)
+        handleFieldInsertion(fieldIndex, wrappedFieldData)
+        updateFieldValues(fieldIndex, fieldData, fieldItem)
+      })
     } else {
-      let wrappedFieldData = processFieldData(fieldData, 0)
+      let wrappedFieldData = [fieldData]
       handleFieldInsertion(0, wrappedFieldData)
     }
   }, [isFocused, applicationDetails])
@@ -117,7 +74,7 @@ const UniversityInformation = () => {
     const payload = getPayload({
       data: data.aamcmcatReporting,
       applicationDetails,
-      fieldName: 'universityOrCollegeInfo',
+      fieldName: 'AAMCMCATReporting',
     })
 
     setIsLoading((prevValue) => ({
@@ -127,7 +84,7 @@ const UniversityInformation = () => {
 
     await mutation.mutateAsync({
       type: 'save',
-      fieldData: { universityOrCollegeInfo: payload },
+      fieldData: { AAMCMCATReporting: payload },
     })
 
     setIsLoading((prevValue) => ({
@@ -140,12 +97,16 @@ const UniversityInformation = () => {
     const payload = getPayload({
       data: data.aamcmcatReporting,
       applicationDetails,
-      fieldName: 'universityOrCollegeInfo',
+      fieldName: 'AAMCMCATReporting',
     })
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      secondary: true,
+    }))
 
     await mutation.mutateAsync({
       type: 'saveAndNext',
-      fieldData: { universityOrCollegeInfo: payload },
+      fieldData: { AAMCMCATReporting: payload },
     })
 
     setIsLoading((prevValue) => ({
@@ -161,7 +122,7 @@ const UniversityInformation = () => {
 
   const handleRemove = async (indexOfItemToRemove) => {
     const recordId =
-      applicationDetails?.['universityOrCollegeInfo']?.[indexOfItemToRemove]?.id
+      applicationDetails?.['AAMCMCATReporting']?.[indexOfItemToRemove]?.id
     if (recordId) {
       await deleteMutation.mutateAsync({
         id: recordId,
@@ -193,4 +154,4 @@ const UniversityInformation = () => {
   )
 }
 
-export default UniversityInformation
+export default MCATReporting
