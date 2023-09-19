@@ -8,7 +8,7 @@ import { typography } from '@libs/theme'
 
 function MobileInput({
   dialCode,
-  error,
+  errorMessage,
   isMandatory,
   label = '',
   textInputWidth = '',
@@ -48,7 +48,7 @@ function MobileInput({
           {
             width: textInputWidth,
             alignItems: 'center',
-            borderColor: error ? colors.onAlert : '#E0E0E0',
+            borderColor: errorMessage ? colors.onAlert : '#E0E0E0',
             padding: 5,
           },
         ]}
@@ -73,9 +73,9 @@ function MobileInput({
           value={value}
         />
       </View>
-      {error ? (
+      {errorMessage ? (
         <Text variant="body1" color={colors.onAlert}>
-          {error}
+          {errorMessage}
         </Text>
       ) : null}
     </View>

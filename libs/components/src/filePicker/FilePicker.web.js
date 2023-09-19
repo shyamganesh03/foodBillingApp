@@ -17,7 +17,6 @@ const FilePicker = ({
 }) => {
   const { colors } = useTheme()
   const [files, setFiles] = useState([])
-  const [isDeleteCallFetching, setIsDeleteCallFetching] = useState()
   const [error, setError] = useState()
   const isFocused = useIsFocused()
   const documentRef = useRef()
@@ -34,7 +33,6 @@ const FilePicker = ({
     } else {
       setFiles([])
     }
-    setIsDeleteCallFetching(false)
   }, [isFocused, uploadedFiles])
 
   const handleDragOver = (event) => {
@@ -65,7 +63,6 @@ const FilePicker = ({
     })
 
   const handleFileDelete = async (fileData) => {
-    setIsDeleteCallFetching(true)
     await handleDelete({ id: fileData.id, fileType: documentType })
   }
 
@@ -73,11 +70,14 @@ const FilePicker = ({
     setError('')
     const uploadedFile = event.target.files[0]
     let filesCopy = [...files, { documentName: uploadedFile.name }]
+
     setFiles(filesCopy)
     const duplicateFile = filesCopy.filter(
-      (file) => file.documentName === uploadedFile.name,
+      (file) => file.documentName === uploadedFile.name?.split('.')[0],
     )
-    if (duplicateFile.length === 0) {
+    if (duplicateFile.length > 1 && files?.length > 1) {
+      setError('DuplicateFile not allowed')
+    } else {
       const base64Docs = await getBase64(uploadedFile)
       await uploadFile({
         file: base64Docs.split(',')[1],
@@ -85,8 +85,6 @@ const FilePicker = ({
         pathName: uploadedFile.name.split('.')[0],
         fileType: documentType,
       })
-    } else {
-      setError('DuplicateFile not allowed')
     }
   }
 
@@ -136,9 +134,10 @@ const FilePicker = ({
                 <Icon name="AddFile" height={41} width={41} />
                 <View style={{ marginLeft: 10, flexWrap: 'wrap', flex: 1 }}>
                   <View style={{ flexDirection: 'row' }}>
-                    <Text variant="display4">Drop file to attach, or </Text>
+                    <Text variant="display4">{`Drop ${
+                      isMultiUpload ? 'files' : 'file'
+                    } to attach, or `}</Text>
                     <TouchableOpacity
-                      style={{}}
                       onPress={() => documentRef.current.click()}
                     >
                       <Text
@@ -167,51 +166,14 @@ const FilePicker = ({
           </form>
         ) : null}
         <View>
-          {files?.map((fileItem) => {
+          {files?.map((fileItem, index) => {
             return (
-              <View
-                style={{
-                  padding: 20,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <View style={{ flexDirection: 'row' }}>
-                  <Icon name="ImageIcon" height={18} width={18} />
-                  <Text variant="body2" style={{ marginHorizontal: 10 }}>
-                    {fileItem.documentName}
-                  </Text>
-                  {fileItem.documentName !== successState?.path ? (
-                    <View
-                      style={{
-                        height: 10,
-                        width: 10,
-                        borderRadius: 10,
-                        backgroundColor: 'green',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        alignSelf: 'center',
-                      }}
-                    >
-                      <Icon
-                        name="Check"
-                        height={8}
-                        width={8}
-                        color={colors.white}
-                      />
-                    </View>
-                  ) : (
-                    <ActivityIndicator size={10} />
-                  )}
-                </View>
-                <TouchableOpacity onPress={() => handleFileDelete(fileItem)}>
-                  {isDeleteCallFetching ? (
-                    <ActivityIndicator size={18} />
-                  ) : (
-                    <Icon name="DeleteIcon" height={18} width={18} />
-                  )}
-                </TouchableOpacity>
-              </View>
+              <UploadedFileContainer
+                fileItem={fileItem}
+                handleFileDelete={handleFileDelete}
+                successState={successState}
+                showBorder={files?.length > 1 && files?.length - 1 !== index}
+              />
             )
           })}
         </View>
@@ -221,6 +183,65 @@ const FilePicker = ({
           {error}
         </Text>
       ) : null}
+    </View>
+  )
+}
+
+const UploadedFileContainer = ({
+  fileItem,
+  handleFileDelete,
+  successState,
+  showBorder,
+}) => {
+  const [isDeleteCallFetching, setIsDeleteCallFetching] = useState()
+  const { colors } = useTheme()
+  return (
+    <View style={{ paddingHorizontal: 20 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          borderColor: colors.border,
+          borderBottomWidth: showBorder ? 2 : 0,
+          paddingVertical: 20,
+        }}
+      >
+        <View style={{ flexDirection: 'row' }}>
+          <Icon name="ImageIcon" height={18} width={18} />
+          <Text variant="body2" style={{ marginHorizontal: 10 }}>
+            {fileItem.documentName}
+          </Text>
+          {fileItem.documentName !== successState?.path ? (
+            <View
+              style={{
+                height: 10,
+                width: 10,
+                borderRadius: 10,
+                backgroundColor: 'green',
+                alignItems: 'center',
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}
+            >
+              <Icon name="Check" height={8} width={8} color={colors.white} />
+            </View>
+          ) : (
+            <ActivityIndicator size={10} />
+          )}
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            setIsDeleteCallFetching(true)
+            handleFileDelete(fileItem)
+          }}
+        >
+          {isDeleteCallFetching ? (
+            <ActivityIndicator size={18} />
+          ) : (
+            <Icon name="DeleteIcon" height={18} width={18} />
+          )}
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }

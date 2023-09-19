@@ -108,7 +108,7 @@ const DynamicFields = ({
       <MobileInput
         value={selectedValue?.split('-')[1] || selectedValue}
         isMandatory={isMandatory}
-        error={error ? error[fieldName] : ''}
+        errorMessage={errorMessage}
         label={label}
         textInputWidth={325}
         onChangeText={(value) => {

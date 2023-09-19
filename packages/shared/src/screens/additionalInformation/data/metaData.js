@@ -5,7 +5,7 @@ const FieldType = {
 
 export const fieldData = [
   {
-    label: 'How did you hear about SABA',
+    label: 'How did you hear about GUS Medical Universities',
     lookUpName: 'referralsource',
     type: FieldType.DROPDOWN,
     pickListValues: [],

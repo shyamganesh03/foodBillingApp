@@ -59,10 +59,11 @@ const WorkExperience = () => {
 
       applicationDetails.clinicalOrHospitalExperienceDetails.forEach(
         (fieldItem, fieldIndex) => {
+          console.log({ fieldItem, fieldIndex })
           let wrappedFieldData = [fieldData]
           let newFieldData = []
           newFieldData.push(fieldData)
-          handleFieldInsertion(fieldIndex, wrappedFieldData)
+          insert(fieldIndex, [wrappedFieldData])
           updateFieldValues(fieldIndex, fieldData, fieldItem)
         },
       )
@@ -71,6 +72,8 @@ const WorkExperience = () => {
       handleFieldInsertion(0, wrappedFieldData)
     }
   }, [isFocused, applicationDetails])
+
+  console.log({ fields })
 
   const handlePrimary = async (data) => {
     const payload = getPayload({

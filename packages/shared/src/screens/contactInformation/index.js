@@ -97,7 +97,8 @@ const ContactInformation = (props) => {
       fieldData.forEach((fieldItem) => {
         if (fieldItem?.fieldName === 'mailingCountryCode') {
           const selectedData = dropdown?.filter(
-            (item) => item?.Value === applicationDetails[fieldItem?.fieldName],
+            (item) =>
+              item?.Value === applicationDetails?.[fieldItem?.fieldName],
           )
           setValue(fieldItem?.fieldName, selectedData?.[0]?.Label || '')
         } else {

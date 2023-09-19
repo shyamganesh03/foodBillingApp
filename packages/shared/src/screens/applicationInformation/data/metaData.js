@@ -85,7 +85,7 @@ export const fieldData = [
     pickListValues: [],
     placeholder: 'Select any Option',
     rules: {
-      required: 'programmes should not be empty',
+      required: 'Programmes should not be empty',
     },
   },
   {

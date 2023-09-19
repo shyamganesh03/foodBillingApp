@@ -28,7 +28,7 @@ export const fieldData = [
     pickListValues: [],
     placeholder: 'Select any Option',
     rules: {
-      required: 'DegreeLevel cannot be empty',
+      required: 'Degree Level cannot be empty',
     },
   },
   {

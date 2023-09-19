@@ -53,7 +53,7 @@ function TextInput(props) {
           {
             backgroundColor: colors.background,
             width: textInputWidth || 325,
-            borderColor: error ? colors.onAlert : '#E0E0E0',
+            borderColor: errorMessage ? colors.onAlert : '#E0E0E0',
           },
           hasFullWidth
             ? {

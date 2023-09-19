@@ -46,7 +46,7 @@ const MCATReporting = () => {
         let wrappedFieldData = [fieldData]
         let newFieldData = []
         newFieldData.push(fieldData)
-        handleFieldInsertion(fieldIndex, wrappedFieldData)
+        insert(fieldIndex, [wrappedFieldData])
         updateFieldValues(fieldIndex, fieldData, fieldItem)
       })
     } else {
@@ -60,6 +60,8 @@ const MCATReporting = () => {
       insert(index, [wrappedFieldData])
     }
   }
+
+  console.log({ fields })
 
   const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
     fieldData?.forEach((fieldValue) => {

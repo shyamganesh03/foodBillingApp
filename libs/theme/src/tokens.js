@@ -3,6 +3,7 @@ export const colors = {
     blue600: '#014E8A',
     blue800: '#0930D3',
     blue900: '#072182',
+    border: '#ececec',
   },
   neutral: {
     white: '#FFFFFF',

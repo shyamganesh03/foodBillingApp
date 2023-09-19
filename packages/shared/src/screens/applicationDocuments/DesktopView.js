@@ -47,7 +47,7 @@ const DesktopView = ({
           documentType="Applicant_Photo"
         />
         <FilePicker
-          heading="Personal Medical School Statement"
+          heading="Personal Medical School Statements"
           uploadFile={uploadDocs}
           successState={fileData}
           handleDelete={handleDelete}

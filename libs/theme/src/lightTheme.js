@@ -7,6 +7,7 @@ export const LightTheme = {
     neutral: colors.neutral.neutral900,
     onPrimary: colors.neutral.white,
     onNeutral: colors.neutral.neutral900,
+    border: colors.primary.border,
     fieldBorder: colors.neutral.neutral300,
     placeHolder: colors.neutral.neutral500,
     text: colors.neutral.neutral700,
