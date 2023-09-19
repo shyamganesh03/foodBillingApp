@@ -59,7 +59,7 @@ const Application = (props) => {
   const isFocused = useIsFocused()
   const navigation = useNavigation()
   const route = useRoute()
-  const [, setStudentDetail] = useAtom(studentDetails)
+  const [studentDetail, setStudentDetail] = useAtom(studentDetails)
 
   useEffect(() => {
     if (isEditMode) return
@@ -92,9 +92,10 @@ const Application = (props) => {
         if (response?.statusCode === 500) {
           setValidationError('* Invalid Application id')
         }
+        console.log({ response })
         const formDataCopy = formData
         setStudentDetail({
-          gusApplicationId: '',
+          gusApplicationId: paramsData?.id,
           email: response.Email__c || paramsData?.email,
           firstName: response.First_Name__c || paramsData?.firstName,
           lastName: response.Last_Name__c || paramsData?.lastName,
@@ -127,10 +128,16 @@ const Application = (props) => {
       })
 
       setStudentDetail({
-        gusApplicationId: '',
-        email: responseData.email || paramsData?.email,
-        firstName: responseData.firstName || paramsData?.firstName,
-        lastName: responseData.lastName || paramsData?.lastName,
+        gusApplicationId: paramsData?.id,
+        email: studentDetail.email || responseData.email || paramsData?.email,
+        firstName:
+          studentDetail.firstName ||
+          responseData.firstName ||
+          paramsData?.firstName,
+        lastName:
+          studentDetail.lastName ||
+          responseData.lastName ||
+          paramsData?.lastName,
       })
       formDataCopy.step6.sections[0].fields[1].selectedValue = getCurrentDate({
         type: 'string',

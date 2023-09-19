@@ -28,7 +28,7 @@ export const useSave = () => {
       } else {
         const response = await updateApplication({
           ...data?.fieldData,
-          ...studentDetail,
+          gusApplicationId: studentDetail?.gusApplicationId,
         })
         return response
       }
