@@ -88,7 +88,7 @@ const MCATReporting = () => {
         fieldData: { AAMCMCATReporting: payload },
       })
     } else {
-      toast.show('Empty data can not be store', {
+      toast.show('Please fill all the fields', {
         type: 'danger',
       })
     }
@@ -116,7 +116,7 @@ const MCATReporting = () => {
         fieldData: { AAMCMCATReporting: payload },
       })
     } else {
-      toast.show('Empty data can not be store', {
+      toast.show('Please fill all the fields', {
         type: 'danger',
       })
     }

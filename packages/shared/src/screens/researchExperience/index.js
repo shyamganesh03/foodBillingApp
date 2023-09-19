@@ -10,7 +10,7 @@ import { useDelete } from '../../hooks/useDelete'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { getPayload } from '../../utils/fieldFunction'
 
-const WorkExperience = () => {
+const ResearchExperience = () => {
   const isFocused = useIsFocused()
   const queryClient = useQueryClient()
   const [isLoading, setIsLoading] = useState({
@@ -33,7 +33,7 @@ const WorkExperience = () => {
 
   const { fields, append, remove, insert } = useFieldArray({
     control,
-    name: 'workExperience',
+    name: 'researchExperience',
   })
 
   const handleFieldInsertion = (index, wrappedFieldData) => {
@@ -45,7 +45,7 @@ const WorkExperience = () => {
   const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
     fieldData?.forEach((fieldValue) => {
       setValue(
-        `workExperience.${fieldIndex}.${fieldValue?.fieldName}`,
+        `researchExperience.${fieldIndex}.${fieldValue?.fieldName}`,
         fieldItem[fieldValue?.fieldName] || '',
       )
     })
@@ -54,18 +54,16 @@ const WorkExperience = () => {
   useEffect(() => {
     if (!isFocused) return
 
-    if (applicationDetails?.clinicalOrHospitalExperienceDetails?.length > 0) {
+    if (applicationDetails?.researchExperience?.length > 0) {
       remove(0)
 
-      applicationDetails.clinicalOrHospitalExperienceDetails.forEach(
-        (fieldItem, fieldIndex) => {
-          let wrappedFieldData = [fieldData]
-          let newFieldData = []
-          newFieldData.push(fieldData)
-          handleFieldInsertion(fieldIndex, wrappedFieldData)
-          updateFieldValues(fieldIndex, fieldData, fieldItem)
-        },
-      )
+      applicationDetails.researchExperience.forEach((fieldItem, fieldIndex) => {
+        let wrappedFieldData = [fieldData]
+        let newFieldData = []
+        newFieldData.push(fieldData)
+        handleFieldInsertion(fieldIndex, wrappedFieldData)
+        updateFieldValues(fieldIndex, fieldData, fieldItem)
+      })
     } else {
       let wrappedFieldData = [fieldData]
       handleFieldInsertion(0, wrappedFieldData)
@@ -74,9 +72,9 @@ const WorkExperience = () => {
 
   const handlePrimary = async (data) => {
     const payload = getPayload({
-      data: data.workExperience,
+      data: data.researchExperience,
       applicationDetails,
-      fieldName: 'clinicalOrHospitalExperienceDetails',
+      fieldName: 'researchExperience',
     })
 
     setIsLoading((prevValue) => ({
@@ -87,7 +85,7 @@ const WorkExperience = () => {
     if (payload?.length > 0) {
       await mutation.mutateAsync({
         type: 'save',
-        fieldData: { clinicalOrHospitalExperienceDetails: payload },
+        fieldData: { researchExperience: payload },
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -103,9 +101,9 @@ const WorkExperience = () => {
 
   const handleSecondary = async (data) => {
     const payload = getPayload({
-      data: data.workExperience,
+      data: data.researchExperience,
       applicationDetails,
-      fieldName: 'clinicalOrHospitalExperienceDetails',
+      fieldName: 'researchExperience',
     })
 
     setIsLoading((prevValue) => ({
@@ -116,7 +114,7 @@ const WorkExperience = () => {
     if (payload?.length > 0) {
       await mutation.mutateAsync({
         type: 'saveAndNext',
-        fieldData: { clinicalOrHospitalExperienceDetails: payload },
+        fieldData: { researchExperience: payload },
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -136,9 +134,7 @@ const WorkExperience = () => {
 
   const handleRemove = async (indexOfItemToRemove) => {
     const recordId =
-      applicationDetails?.['clinicalOrHospitalExperienceDetails']?.[
-        indexOfItemToRemove
-      ]?.id
+      applicationDetails?.['researchExperience']?.[indexOfItemToRemove]?.id
     if (recordId) {
       await deleteMutation.mutateAsync({
         id: recordId,
@@ -170,4 +166,4 @@ const WorkExperience = () => {
   )
 }
 
-export default WorkExperience
+export default ResearchExperience

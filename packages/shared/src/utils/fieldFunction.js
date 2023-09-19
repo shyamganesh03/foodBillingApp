@@ -7,11 +7,13 @@ export const getPayload = ({ data, applicationDetails, fieldName }) => {
           return keyNames.every((key) => value[key] !== fieldValue[key])
         },
       )
-      const key = Object.entries(value)?.map(([key, dataValue]) => {
-        if (dataValue === '') {
-          return key
-        }
-      })
+      const key = Object.entries(value)
+        ?.map(([key, dataValue]) => {
+          if (dataValue === '') {
+            return key
+          }
+        })
+        ?.filter((keyName) => keyName !== undefined)
       if (
         (unMatchingField || !applicationDetails?.[fieldName]?.length) &&
         key?.length === 0
