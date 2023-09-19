@@ -15,6 +15,7 @@ import WorkExperience from '../workExperience'
 import ResearchExperience from '../researchExperience'
 import Recommenders from '../recommenders'
 import ApplicationDocuments from '../applicationDocuments'
+import ApplicationSubmission from '../applicationSubmission'
 
 const DesktopView = ({
   steps,
@@ -125,6 +126,13 @@ const DesktopView = ({
     return (
       <View style={styles({ colors }).container}>
         <Recommenders />
+      </View>
+    )
+  }
+  if (Number(steps) === 15) {
+    return (
+      <View style={styles({ colors }).container}>
+        <ApplicationSubmission />
       </View>
     )
   }

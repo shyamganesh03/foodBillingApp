@@ -69,6 +69,7 @@ export const useSave = () => {
           })
         } else {
           await queryClient.refetchQueries(['getApplicationData'])
+          // context.fieldData.map(())
           if (
             context.type === 'createAndNext' ||
             context.type === 'saveAndNext'
