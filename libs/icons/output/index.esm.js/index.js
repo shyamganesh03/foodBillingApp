@@ -4,6 +4,28 @@ import PropTypes from 'prop-types'
 import _extends from '@babel/runtime/helpers/extends'
 import Svg, { Path } from 'react-native-svg'
 
+const SvgAddFile = (props) =>
+  /*#__PURE__*/ React.createElement(
+    Svg,
+    _extends(
+      {
+        width: 24,
+        height: 24,
+        viewBox: '0 0 41 42',
+        fill: 'none',
+        xmlns: 'http://www.w3.org/2000/svg',
+      },
+      props,
+    ),
+    /*#__PURE__*/ React.createElement(Path, {
+      d: 'M23.917 7.708H10.251a3.417 3.417 0 0 0-3.417 3.416v17.084m0 0v3.416a3.417 3.417 0 0 0 3.417 3.417h20.5a3.417 3.417 0 0 0 3.416-3.417v-6.833M6.834 28.208l7.834-7.835a3.416 3.416 0 0 1 4.832 0l4.417 4.418m10.25-6.833v6.833m0 0-2.71-2.71a3.417 3.417 0 0 0-4.83 0l-2.71 2.71m0 0 3.417 3.417m3.417-20.5h6.833M34.167 4.29v6.833m-10.25 3.417h.017',
+      stroke: props.color || '#C2C2C2',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+    }),
+  )
+
 const SvgArrowNarrowLeft = (props) =>
   /*#__PURE__*/ React.createElement(
     Svg,
@@ -271,6 +293,9 @@ const SvgParliamentBuilding = (props) =>
   )
 
 const Icon = (props) => {
+  if (props.name === 'AddFile') {
+    return /*#__PURE__*/ React__default.createElement(SvgAddFile, props)
+  }
   if (props.name === 'ArrowNarrowLeft') {
     return /*#__PURE__*/ React__default.createElement(SvgArrowNarrowLeft, props)
   }
@@ -313,6 +338,7 @@ const Icon = (props) => {
 }
 Icon.propTypes = {
   name: PropTypes.oneOf([
+    'AddFile',
     'ArrowNarrowLeft',
     'ArrowDown',
     'CalendarOutline',

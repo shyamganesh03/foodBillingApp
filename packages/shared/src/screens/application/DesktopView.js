@@ -14,6 +14,7 @@ import MCATReporting from '../aamc-mcat-Reporting'
 import WorkExperience from '../workExperience'
 import ResearchExperience from '../researchExperience'
 import Recommenders from '../recommenders'
+import ApplicationDocuments from '../applicationDocuments'
 
 const DesktopView = ({
   steps,
@@ -110,6 +111,13 @@ const DesktopView = ({
     return (
       <View style={styles({ colors }).container}>
         <AdditionalInformation />
+      </View>
+    )
+  }
+  if (Number(steps) === 13) {
+    return (
+      <View style={styles({ colors }).container}>
+        <ApplicationDocuments />
       </View>
     )
   }

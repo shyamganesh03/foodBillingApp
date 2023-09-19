@@ -2,9 +2,7 @@ import { Icon } from '@r3-oaf/native-icons'
 import { Button, Divider, ProgressBar, Text } from '@libs/components'
 import { useTheme } from '@react-navigation/native'
 import React, { useRef, useState } from 'react'
-import { ActivityIndicator, TouchableOpacity } from 'react-native'
-import { View } from 'react-native'
-import { Modal } from 'react-native'
+import { ActivityIndicator, TouchableOpacity, Modal, View } from 'react-native'
 
 const FilePicker = ({
   setIsFileSuccess,
@@ -69,10 +67,10 @@ const FilePicker = ({
 
   return (
     <View key={key}>
-      <Text variant="subHeading1">
+      <Text variant="heading2">
         {heading}{' '}
         {isMandatory ? (
-          <Text variant="subHeading1" color={colors.onAlert}>
+          <Text variant="heading2" color={colors.onAlert}>
             *
           </Text>
         ) : null}
@@ -92,46 +90,41 @@ const FilePicker = ({
             borderColor: colors.fieldBorder,
             borderStyle: 'dashed',
             flexDirection: 'row',
-            justifyContent: 'center',
             alignItems: 'center',
+            justifyContent: 'center',
+            maxWidth: '50%',
           }}
         >
-          <View style={{ marginLeft: 2, marginVertical: 2 }}>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: colors.white,
-                  borderRadius: 4,
-                  borderColor: '#D4D4D4',
-                  borderWidth: 1,
-                  paddingHorizontal: 16,
-                  paddingVertical: 3,
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                }}
-                onPress={() => {
-                  documentRef.current.click()
-                }}
-              >
-                <Icon
-                  name="Download"
-                  height={15}
-                  width={15}
-                  color={colors.primary}
-                />
-                <Text
-                  variant="body1"
-                  color={colors.primary}
-                  style={{ marginLeft: 10 }}
+          <View
+            style={{
+              height: 81,
+              borderRadius: 4,
+              padding: 5,
+              marginTop: 10,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Icon name="AddFile" height={41} width={41} />
+            <View style={{ marginLeft: 10 }}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text variant="display4">Drop file to attach, or </Text>
+                <TouchableOpacity
+                  style={{}}
+                  onPress={() => documentRef.current.click()}
                 >
-                  Upload Files
-                </Text>
-              </TouchableOpacity>
-              <Text
-                variant="body1"
-                style={{ marginLeft: 10, marginRight: 20, alignSelf: 'center' }}
-              >
-                Or drag files
+                  <Text
+                    variant="display4"
+                    color={colors.onAlert}
+                    style={{ textDecoration: 'underline' }}
+                  >
+                    browse
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <Text variant="display4" color={colors.primaryIconColor}>
+                doc, docx, jpg, jpeg, png, gif, pdf, svg, bmp, odt
               </Text>
             </View>
           </View>
@@ -145,12 +138,6 @@ const FilePicker = ({
           }}
         />
       </form>
-      <FileModal
-        setShowModalDetails={setFileModalDetails}
-        modalDetails={fileModalDetails}
-        isSuccess={isSuccess}
-        setIsFileSuccess={setIsFileSuccess}
-      />
     </View>
   )
 }
