@@ -10,7 +10,7 @@ import { useDelete } from '../../hooks/useDelete'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { getPayload } from '../../utils/fieldFunction'
 
-const MCATReporting = () => {
+const WorkExperience = () => {
   const isFocused = useIsFocused()
   const queryClient = useQueryClient()
   const [isLoading, setIsLoading] = useState({
@@ -33,7 +33,7 @@ const MCATReporting = () => {
 
   const { fields, append, remove, insert } = useFieldArray({
     control,
-    name: 'aamcmcatReporting',
+    name: 'workExperience',
   })
 
   const handleFieldInsertion = (index, wrappedFieldData) => {
@@ -45,7 +45,7 @@ const MCATReporting = () => {
   const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
     fieldData?.forEach((fieldValue) => {
       setValue(
-        `aamcmcatReporting.${fieldIndex}.${fieldValue?.fieldName}`,
+        `workExperience.${fieldIndex}.${fieldValue?.fieldName}`,
         fieldItem[fieldValue?.fieldName] || '',
       )
     })
@@ -54,16 +54,18 @@ const MCATReporting = () => {
   useEffect(() => {
     if (!isFocused) return
 
-    if (applicationDetails?.AAMCMCATReporting?.length > 0) {
+    if (applicationDetails?.clinicalOrHospitalExperienceDetails?.length > 0) {
       remove(0)
 
-      applicationDetails.AAMCMCATReporting.forEach((fieldItem, fieldIndex) => {
-        let wrappedFieldData = [fieldData]
-        let newFieldData = []
-        newFieldData.push(fieldData)
-        handleFieldInsertion(fieldIndex, wrappedFieldData)
-        updateFieldValues(fieldIndex, fieldData, fieldItem)
-      })
+      applicationDetails.clinicalOrHospitalExperienceDetails.forEach(
+        (fieldItem, fieldIndex) => {
+          let wrappedFieldData = [fieldData]
+          let newFieldData = []
+          newFieldData.push(fieldData)
+          handleFieldInsertion(fieldIndex, wrappedFieldData)
+          updateFieldValues(fieldIndex, fieldData, fieldItem)
+        },
+      )
     } else {
       let wrappedFieldData = [fieldData]
       handleFieldInsertion(0, wrappedFieldData)
@@ -72,9 +74,9 @@ const MCATReporting = () => {
 
   const handlePrimary = async (data) => {
     const payload = getPayload({
-      data: data.aamcmcatReporting,
+      data: data.workExperience,
       applicationDetails,
-      fieldName: 'AAMCMCATReporting',
+      fieldName: 'clinicalOrHospitalExperienceDetails',
     })
 
     setIsLoading((prevValue) => ({
@@ -85,7 +87,7 @@ const MCATReporting = () => {
     if (payload?.length > 0) {
       await mutation.mutateAsync({
         type: 'save',
-        fieldData: { AAMCMCATReporting: payload },
+        fieldData: { clinicalOrHospitalExperienceDetails: payload },
       })
     } else {
       toast.show('Empty data can not be store', {
@@ -101,10 +103,11 @@ const MCATReporting = () => {
 
   const handleSecondary = async (data) => {
     const payload = getPayload({
-      data: data.aamcmcatReporting,
+      data: data.workExperience,
       applicationDetails,
-      fieldName: 'AAMCMCATReporting',
+      fieldName: 'clinicalOrHospitalExperienceDetails',
     })
+
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: true,
@@ -113,14 +116,13 @@ const MCATReporting = () => {
     if (payload?.length > 0) {
       await mutation.mutateAsync({
         type: 'saveAndNext',
-        fieldData: { AAMCMCATReporting: payload },
+        fieldData: { clinicalOrHospitalExperienceDetails: payload },
       })
     } else {
       toast.show('Empty data can not be store', {
         type: 'danger',
       })
     }
-
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: false,
@@ -134,7 +136,9 @@ const MCATReporting = () => {
 
   const handleRemove = async (indexOfItemToRemove) => {
     const recordId =
-      applicationDetails?.['AAMCMCATReporting']?.[indexOfItemToRemove]?.id
+      applicationDetails?.['clinicalOrHospitalExperienceDetails']?.[
+        indexOfItemToRemove
+      ]?.id
     if (recordId) {
       await deleteMutation.mutateAsync({
         id: recordId,
@@ -166,4 +170,4 @@ const MCATReporting = () => {
   )
 }
 
-export default MCATReporting
+export default WorkExperience

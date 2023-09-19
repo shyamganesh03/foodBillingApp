@@ -11,6 +11,7 @@ import BackgroundInformation from '../background-Information-and-Technical-Stand
 import AdditionalInformation from '../additionalInformation'
 import UniversityInformation from '../universityInformation'
 import MCATReporting from '../aamc-mcat-Reporting'
+import WorkExperience from '../workExperience'
 
 const DesktopView = ({
   steps,
@@ -79,6 +80,13 @@ const DesktopView = ({
     return (
       <View style={styles({ colors }).container}>
         <MCATReporting />
+      </View>
+    )
+  }
+  if (Number(steps) === 9) {
+    return (
+      <View style={styles({ colors }).container}>
+        <WorkExperience />
       </View>
     )
   }

@@ -26,5 +26,11 @@ export const fieldData = [
     inputType: 'number',
     type: FieldType.TEXT_INPUT,
     fieldName: 'MCATTotalScore',
+    rules: {
+      pattern: {
+        value: /^[0-9]+$/,
+        message: 'Invalid Number format',
+      },
+    },
   },
 ]

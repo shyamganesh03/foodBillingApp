@@ -33,8 +33,7 @@ export const LeftTimeLineData = [
     order: 8,
   },
   {
-    displayName:
-      'Clinical/Hospital Experience (Volunteer, Shadowing, Observation or Otherwise)',
+    displayName: 'Clinical and Research Experience',
     order: 9,
   },
   {
