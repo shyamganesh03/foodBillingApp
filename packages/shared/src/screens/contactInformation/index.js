@@ -4,9 +4,10 @@ import { ScreenLayout } from '@libs/utils'
 import DesktopView from './DesktopView'
 import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { fieldData } from './data/metaData'
 import { useForm } from 'react-hook-form'
+import { getDropdownValue } from '../../api'
 
 const ContactInformation = (props) => {
   const [isLoading, setIsLoading] = useState({
@@ -18,6 +19,16 @@ const ContactInformation = (props) => {
   const queryClient = useQueryClient()
 
   const applicationDetails = queryClient.getQueryData(['getApplicationData'])
+
+  const { data: dropdown } = useQuery({
+    queryKey: ['getMailingCountryCode'],
+    queryFn: async () => {
+      const dropdownResponse = await getDropdownValue({
+        apiName: 'mailingCountryCode',
+      })
+      return dropdownResponse
+    },
+  })
 
   const {
     handleSubmit: handleFormSubmit,
@@ -44,14 +55,24 @@ const ContactInformation = (props) => {
   }
 
   const handleSecondary = async (data) => {
+    let payload = data
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: true,
     }))
 
+    Object.entries(payload).map(([fieldKey, filedValues]) => {
+      if (fieldKey === 'mailingCountryCode') {
+        const selectedData = dropdown?.filter(
+          (item) => item?.Value === applicationDetails[fieldItem?.fieldName],
+        )
+        payload[fieldKey] = selectedData[0]?.Value
+      }
+    })
+
     await mutation.mutateAsync({
       type: 'createAndNext',
-      fieldData: data,
+      fieldData: payload,
     })
 
     setIsLoading((prevValue) => ({
@@ -62,12 +83,21 @@ const ContactInformation = (props) => {
 
   useEffect(() => {
     if (!isFocused) return
-    fieldData.forEach((fieldItem) => {
-      setValue(
-        fieldItem?.fieldName,
-        applicationDetails?.[fieldItem?.fieldName] || '',
-      )
-    })
+    ;(async () => {
+      fieldData.forEach((fieldItem) => {
+        if (fieldItem?.fieldName === 'mailingCountryCode') {
+          const selectedData = dropdown?.filter(
+            (item) => item?.Value === applicationDetails[fieldItem?.fieldName],
+          )
+          setValue(fieldItem?.fieldName, selectedData[0]?.Label || '')
+        } else {
+          setValue(
+            fieldItem?.fieldName,
+            applicationDetails?.[fieldItem?.fieldName] || '',
+          )
+        }
+      })
+    })()
   }, [isFocused, applicationDetails])
 
   const LayoutView = useCallback(

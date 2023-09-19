@@ -7,6 +7,8 @@ import { useIsFocused } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
 import { fieldData } from './data/metaData'
 import { useForm } from 'react-hook-form'
+import { studentDetails } from '../../utils/atom'
+import { useAtom } from 'jotai'
 
 const ApplicationInformation = (props) => {
   const [isLoading, setIsLoading] = useState({
@@ -16,6 +18,7 @@ const ApplicationInformation = (props) => {
   const { mutate: mutation } = useSave()
   const isFocused = useIsFocused()
   const queryClient = useQueryClient()
+  const [studentDetail] = useAtom(studentDetails)
 
   const applicationDetails = queryClient.getQueryData(['getApplicationData'])
 
@@ -63,6 +66,22 @@ const ApplicationInformation = (props) => {
   useEffect(() => {
     if (!isFocused) return
     fieldData.forEach((fieldItem) => {
+      if (fieldItem?.fieldName === 'firstName') {
+        setValue(
+          fieldItem?.fieldName,
+          applicationDetails?.[fieldItem?.fieldName] ||
+            studentDetail.firstName ||
+            '',
+        )
+      }
+      if (fieldItem?.fieldName === 'lastName') {
+        setValue(
+          fieldItem?.fieldName,
+          applicationDetails?.[fieldItem?.fieldName] ||
+            studentDetail.lastName ||
+            '',
+        )
+      }
       setValue(
         fieldItem?.fieldName,
         applicationDetails?.[fieldItem?.fieldName] || '',

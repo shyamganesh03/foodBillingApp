@@ -138,6 +138,7 @@ const Recommenders = () => {
     if (recordId) {
       await deleteMutation.mutateAsync({
         id: recordId,
+        type: 'recommenders',
       })
     }
     remove(indexOfItemToRemove)

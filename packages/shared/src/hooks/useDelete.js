@@ -7,15 +7,15 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 export const useDelete = () => {
   const [studentDetail] = useAtom(studentDetails)
   const queryClient = useQueryClient()
-  const navigation = useNavigation()
-  const route = useRoute()
-  const params = route.params
-  const steps = params?.steps || 0
-  const applicationDetails = queryClient.getQueryData(['getApplicationData'])
-  const gusApplicationData = queryClient.getQueryData(['getApplicationDetails'])
+
   const mutate = useMutation(
     async (data) => {
-      await deleteListItem({ id: data?.id })
+      await deleteListItem({
+        id: data?.id,
+        type: data?.type,
+        gusApplicationId: studentDetail?.gusApplicationId,
+        email: studentDetail?.email,
+      })
     },
     {
       onError: (data) => {

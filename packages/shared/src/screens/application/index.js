@@ -92,7 +92,7 @@ const Application = (props) => {
         if (response?.statusCode === 500) {
           setValidationError('* Invalid Application id')
         }
-        console.log({ response })
+
         const formDataCopy = formData
         setStudentDetail({
           gusApplicationId: paramsData?.id,
@@ -122,8 +122,11 @@ const Application = (props) => {
     queryKey: ['getApplicationData'],
     queryFn: async () => {
       const formDataCopy = { ...formData }
-      const dropdown = await getDropdownValue({ apiName: 'mailingCountryCode' })
+     
+      const dropdown = []
+
       const responseData = await getApplicationByEmailID({
+        gusApplicationId: paramsData?.id,
         email: paramsData?.email || applicationDetails?.Email__c,
       })
 
@@ -243,7 +246,9 @@ const Application = (props) => {
       return responseData
     },
     enabled:
-      (!!paramsData?.email || !!applicationDetails?.Email__c) && isFocused,
+      (!!paramsData?.email || !!applicationDetails?.Email__c) &&
+      isFocused &&
+      !!paramsData?.id,
     initialData: [],
   })
 

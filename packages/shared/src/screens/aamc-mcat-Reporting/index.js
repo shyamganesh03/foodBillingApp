@@ -36,21 +36,6 @@ const MCATReporting = () => {
     name: 'aamcmcatReporting',
   })
 
-  const handleFieldInsertion = (index, wrappedFieldData) => {
-    if (fields?.length === 0) {
-      insert(index, [wrappedFieldData])
-    }
-  }
-
-  const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
-    fieldData?.forEach((fieldValue) => {
-      setValue(
-        `aamcmcatReporting.${fieldIndex}.${fieldValue?.fieldName}`,
-        fieldItem[fieldValue?.fieldName] || '',
-      )
-    })
-  }
-
   useEffect(() => {
     if (!isFocused) return
 
@@ -69,6 +54,21 @@ const MCATReporting = () => {
       handleFieldInsertion(0, wrappedFieldData)
     }
   }, [isFocused, applicationDetails])
+
+  const handleFieldInsertion = (index, wrappedFieldData) => {
+    if (fields?.length === 0) {
+      insert(index, [wrappedFieldData])
+    }
+  }
+
+  const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
+    fieldData?.forEach((fieldValue) => {
+      setValue(
+        `aamcmcatReporting.${fieldIndex}.${fieldValue?.fieldName}`,
+        fieldItem[fieldValue?.fieldName] || '',
+      )
+    })
+  }
 
   const handlePrimary = async (data) => {
     const payload = getPayload({
@@ -138,6 +138,7 @@ const MCATReporting = () => {
     if (recordId) {
       await deleteMutation.mutateAsync({
         id: recordId,
+        type: 'AAMCMCATReporting',
       })
     }
     remove(indexOfItemToRemove)

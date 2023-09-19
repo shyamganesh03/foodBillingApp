@@ -39,12 +39,12 @@ export const getDropdownValue = async (payload) =>
   })
 
 export const getApplicationByEmailID = async (payload) =>
-  apiCall(`application/${payload.email}`, {
+  apiCall(`application?email=${payload.email}&id=${payload.gusApplicationId}`, {
     method: 'GET',
   })
 
 export const getApplicationByID = async (payload) =>
-  apiCall(`application?id=${payload.applicationId}`, {
+  apiCall(`gus/application?id=${payload.applicationId}`, {
     method: 'GET',
   })
 

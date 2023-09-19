@@ -42,7 +42,7 @@ const DesktopView = ({
                   style={{ alignSelf: 'flex-end' }}
                 >
                   <Text variant="body2" style={{ textDecoration: 'underline' }}>
-                    Remove
+                    Delete
                   </Text>
                 </TouchableOpacity>
               ) : null}

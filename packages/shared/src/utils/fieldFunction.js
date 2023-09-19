@@ -24,11 +24,20 @@ export const getPayload = ({ data, applicationDetails, fieldName }) => {
     .filter((updatedValues) => updatedValues !== undefined)
 
   let newUpdatePayload = []
-  updatedData?.map((data) => {
-    const newData = data
-    newData.shift()
-    const newObjectData = { ...newData }
-    newUpdatePayload.push(newObjectData)
-  })
+  if (updatedData?.length > 0) {
+    updatedData?.map((data) => {
+      const newData = data
+      newData.shift()
+      const newObjectData = { ...newData }
+      newUpdatePayload.push(newObjectData)
+    })
+  } else {
+    data.map((values) => {
+      const newData = values
+      newData.shift()
+      const newObjectData = { ...newData }
+      newUpdatePayload.push(newObjectData)
+    })
+  }
   return newUpdatePayload
 }

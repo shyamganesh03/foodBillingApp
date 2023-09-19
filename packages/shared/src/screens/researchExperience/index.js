@@ -138,6 +138,7 @@ const ResearchExperience = () => {
     if (recordId) {
       await deleteMutation.mutateAsync({
         id: recordId,
+        type: 'researchExperience',
       })
     }
     remove(indexOfItemToRemove)

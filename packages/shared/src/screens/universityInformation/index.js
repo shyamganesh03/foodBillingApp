@@ -37,8 +37,6 @@ const UniversityInformation = () => {
     name: 'universityInformation',
   })
 
-  console.log({ errors })
-
   const updateFieldRules = (fieldItem, fieldIndex) => {
     if (fieldItem.fieldName === 'endTermApplyingFor') {
       fieldItem.rules = {
@@ -115,7 +113,7 @@ const UniversityInformation = () => {
 
   const handlePrimary = async (data) => {
     const payload = getPayload({
-      data: data.aamcmcatReporting,
+      data: data.universityInformation,
       applicationDetails,
       fieldName: 'universityOrCollegeInfo',
     })
@@ -138,7 +136,7 @@ const UniversityInformation = () => {
 
   const handleSecondary = async (data) => {
     const payload = getPayload({
-      data: data.aamcmcatReporting,
+      data: data.universityInformation,
       applicationDetails,
       fieldName: 'universityOrCollegeInfo',
     })
@@ -165,6 +163,7 @@ const UniversityInformation = () => {
     if (recordId) {
       await deleteMutation.mutateAsync({
         id: recordId,
+        type: 'universityOrCollegeInfo',
       })
     }
     remove(indexOfItemToRemove)

@@ -142,6 +142,7 @@ const WorkExperience = () => {
     if (recordId) {
       await deleteMutation.mutateAsync({
         id: recordId,
+        type: 'clinicalOrHospitalExperienceDetails',
       })
     }
     remove(indexOfItemToRemove)

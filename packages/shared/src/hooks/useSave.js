@@ -13,22 +13,35 @@ export const useSave = () => {
   const steps = params?.steps || 0
   const applicationDetails = queryClient.getQueryData(['getApplicationData'])
   const gusApplicationData = queryClient.getQueryData(['getApplicationDetails'])
+
+  const removeNullData = (dataToBeCheck) => {
+    Object.entries(dataToBeCheck).map(([key, fieldValue]) => {
+      if (!fieldValue) {
+        delete dataToBeCheck[key]
+      }
+    })
+  }
   const mutate = useMutation(
     async (data) => {
       if (
         (data.type === 'create' || data.type === 'createAndNext') &&
         !applicationDetails?.email
       ) {
-        const createPayload = {
+        let createPayload = {
           ...data?.fieldData,
           ...studentDetail,
         }
+        removeNullData(createPayload)
         const response = await createApplication(createPayload)
         return response
       } else {
+        let payload = data?.fieldData
+        console.log({ payload })
+        removeNullData(payload)
         const response = await updateApplication({
           ...data?.fieldData,
           gusApplicationId: studentDetail?.gusApplicationId,
+          email: studentDetail?.email,
         })
         return response
       }

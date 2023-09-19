@@ -28,11 +28,11 @@ export const fieldData = [
     pickListValues: [],
     placeholder: 'Select any Option',
     rules: {
-      required: 'degreeLevel cannot be empty',
+      required: 'DegreeLevel cannot be empty',
     },
   },
   {
-    label: 'Academic Institution Estimated Start',
+    label: 'Academic Institution Estimated Start Date',
     name: 'startTermApplyingFor',
     fieldName: 'startTermApplyingFor',
     type: FieldType.DATE,
@@ -40,7 +40,7 @@ export const fieldData = [
     inputType: 'startAcademicDate',
     placeholder: 'Select any Option',
     rules: {
-      required: 'Academic Institution Estimated Start cannot be empty',
+      required: 'Academic Institution Estimated Start Date cannot be empty',
       validate: (value) =>
         validateForFutureDate({
           dateToValidate: value,
@@ -56,7 +56,7 @@ export const fieldData = [
     type: FieldType.DATE,
     placeholder: 'Select any Option',
     rules: {
-      required: 'Academic Institution Estimated End Date Start cannot be empty',
+      required: 'Academic Institution Estimated End Date cannot be empty',
     },
   },
   {
