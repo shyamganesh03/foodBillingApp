@@ -7,8 +7,10 @@ import Header from './Header'
 import DynamicFields from './DynamicFields'
 import Tabs from './TimeLine'
 import LeftContainer from '../container/LeftContainer'
+import Card from './Card'
 
 export {
+  Card,
   CheckBox,
   DateInput,
   DropDown,

@@ -14,6 +14,10 @@ export const fieldData = [
     placeholder: 'Enter your Alternative Email Address',
     rules: {
       required: 'Alternative Email Address cannot be empty',
+      pattern: {
+        value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+        message: 'Invalid Email',
+      },
     },
   },
   {

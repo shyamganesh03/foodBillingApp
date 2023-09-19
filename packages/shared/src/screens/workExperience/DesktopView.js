@@ -5,6 +5,7 @@ import { useTheme } from '@react-navigation/native'
 import { ScrollView } from 'react-native'
 import { TouchableOpacity } from 'react-native'
 import { FormContainer } from '../../components/FormContainer'
+import { Card } from '../../components'
 
 const DesktopView = ({
   fields,
@@ -34,20 +35,7 @@ const DesktopView = ({
 
         {fields?.map((fieldItems, fieldsIndex) => {
           return (
-            <View
-              style={{
-                flexDirection: 'column',
-                maxWidth: 390,
-                borderRadius: 10,
-                shadowColor: 'rgba(3, 30, 125, 0.05)',
-                shadowOffset: { width: 0, height: 2 },
-                elevation: 5,
-                shadowOpacity: 1,
-                shadowRadius: 10,
-                padding: 20,
-                marginBottom: 30,
-              }}
-            >
+            <Card>
               {fieldsIndex > 0 ? (
                 <TouchableOpacity
                   onPress={() => handleRemove(fieldsIndex)}
@@ -66,7 +54,7 @@ const DesktopView = ({
                 formName="workExperience"
                 arrayIndex={fieldsIndex}
               />
-            </View>
+            </Card>
           )
         })}
 

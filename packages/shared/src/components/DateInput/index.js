@@ -353,6 +353,7 @@ const DateInput = (props) => {
             : {
                 borderColor: onError ? colors.onAlert : '#E0E0E0',
                 width: textInputWidth || 325,
+                marginBottom: 20,
               },
         ]}
       >
