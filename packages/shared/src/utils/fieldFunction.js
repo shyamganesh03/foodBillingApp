@@ -1,57 +1,27 @@
-import { canNonEmptyObject } from './fieldValidation'
-
 export const getPayload = ({ data, applicationDetails, fieldName }) => {
   const updatedData = data?.map((updateValue, updateValueIndex) => {
-    if (applicationDetails?.[fieldName]?.length > 0) {
-      return applicationDetails?.[fieldName]?.map(
-        (savedValue, savedValueIndex) => {
-          if (updateValueIndex === savedValueIndex) {
-            if (savedValue?.recordTypeId) {
-              return {
-                ...updateValue,
-                id: savedValue?.id,
-                recordTypeId: savedValue?.recordTypeId,
-              }
-            } else {
-              return {
-                ...updateValue,
-                id: savedValue?.id,
-              }
-            }
-          } else {
-            return { ...updateValue }
-          }
-        },
-      )
-    } else {
-      return { ...updateValue }
+    const savedValues = applicationDetails?.[fieldName] || []
+    const savedValue = savedValues[updateValueIndex] || {}
+
+    let finalUpdateData = { ...updateValue }
+
+    if (savedValue.id) {
+      finalUpdateData.id = savedValue.id
     }
-  })
-
-  let finalUpdatedData = []
-
-  updatedData?.map((data) => {
-    let copyData
-    let mappedValues = {}
-
-    if (Array.isArray(data)) {
-      copyData = data[0]
-    } else {
-      copyData = data
+    if (savedValue.recordTypeId) {
+      finalUpdateData.recordTypeId = savedValue.recordTypeId
     }
-    Object.entries(copyData || {}).map(([key, filedValues]) => {
-      if (key !== '0') {
-        mappedValues = { ...mappedValues, [key]: filedValues }
-      }
-    })
-
-    if (mappedValues) {
-      const hasNonEmptyValue = canNonEmptyObject(mappedValues)
-      if (hasNonEmptyValue) {
-        finalUpdatedData.push(mappedValues)
+    for (const key in finalUpdateData) {
+      if (Array.isArray(finalUpdateData[key])) {
+        delete finalUpdateData[key]
       }
     }
+    return finalUpdateData
   })
+
+  const finalUpdatedData = updatedData.filter((item) =>
+    Object.values(item).some((value) => !!value),
+  )
 
   return finalUpdatedData
 }

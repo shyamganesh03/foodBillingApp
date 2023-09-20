@@ -27,6 +27,7 @@ const ResearchExperience = () => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
+    reset,
     watch,
     formState: { errors },
   } = useForm()
@@ -55,6 +56,7 @@ const ResearchExperience = () => {
     if (!isFocused) return
 
     if (applicationDetails?.researchExperience?.length > 0) {
+      reset()
       remove(0)
 
       applicationDetails.researchExperience.forEach((fieldItem, fieldIndex) => {

@@ -27,6 +27,7 @@ const WorkExperience = () => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
+    reset,
     watch,
     formState: { errors },
   } = useForm()
@@ -55,11 +56,11 @@ const WorkExperience = () => {
     if (!isFocused) return
 
     if (applicationDetails?.clinicalOrHospitalExperienceDetails?.length > 0) {
+      reset()
       remove(0)
 
       applicationDetails.clinicalOrHospitalExperienceDetails.forEach(
         (fieldItem, fieldIndex) => {
-          
           let wrappedFieldData = [fieldData]
           let newFieldData = []
           newFieldData.push(fieldData)
@@ -72,8 +73,6 @@ const WorkExperience = () => {
       handleFieldInsertion(0, wrappedFieldData)
     }
   }, [isFocused, applicationDetails])
-
-  
 
   const handlePrimary = async (data) => {
     const payload = getPayload({

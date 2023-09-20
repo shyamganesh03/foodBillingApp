@@ -27,6 +27,7 @@ const Recommenders = () => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
+    reset,
     formState: { errors },
   } = useForm()
 
@@ -56,6 +57,7 @@ const Recommenders = () => {
       applicationDetails?.['WaiveAccessToRecommendation'] || false
     setWaiveCheck(waiveCheck)
     if (applicationDetails?.recommenders?.length > 0) {
+      reset()
       remove(0)
       applicationDetails.recommenders.forEach((fieldItem, fieldIndex) => {
         let wrappedFieldData = [fieldData]

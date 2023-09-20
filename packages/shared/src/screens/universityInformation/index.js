@@ -40,6 +40,7 @@ const UniversityInformation = () => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
+    reset,
     watch,
     formState: { errors },
   } = useForm()
@@ -106,8 +107,8 @@ const UniversityInformation = () => {
     if (!isFocused) return
 
     if (applicationDetails?.universityOrCollegeInfo?.length > 0) {
+      reset()
       remove(0)
-
       applicationDetails.universityOrCollegeInfo.forEach(
         (fieldItem, fieldIndex) => {
           let wrappedFieldData = processFieldData(fieldData, fieldIndex)
@@ -140,6 +141,7 @@ const UniversityInformation = () => {
       fieldData: { universityOrCollegeInfo: payload },
       metaData: fieldData,
       sessionName: 'University/College_Information',
+      isList: true,
     })
 
     setIsLoading((prevValue) => ({

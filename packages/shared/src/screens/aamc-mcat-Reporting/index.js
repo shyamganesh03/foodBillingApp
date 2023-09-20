@@ -27,6 +27,7 @@ const MCATReporting = () => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
+    reset,
     watch,
     formState: { errors },
   } = useForm()
@@ -40,6 +41,7 @@ const MCATReporting = () => {
     if (!isFocused) return
 
     if (applicationDetails?.AAMCMCATReporting?.length > 0) {
+      reset()
       remove(0)
 
       applicationDetails.AAMCMCATReporting.forEach((fieldItem, fieldIndex) => {
@@ -60,8 +62,6 @@ const MCATReporting = () => {
       insert(index, [wrappedFieldData])
     }
   }
-
-  
 
   const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
     fieldData?.forEach((fieldValue) => {
