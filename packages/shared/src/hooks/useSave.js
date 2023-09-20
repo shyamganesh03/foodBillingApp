@@ -1,5 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createApplication, updateApplication } from '../api'
+import {
+  createApplication,
+  getApplicationByEmailID,
+  updateApplication,
+} from '../api'
 import { applicationProgressDetails, studentDetails } from '../utils/atom'
 import { useAtom } from 'jotai'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -57,7 +61,7 @@ export const useSave = () => {
           payload = { ...payload, applicationStatus: 'Submitted' }
         }
         const response = await updateApplication({
-          ...data?.fieldData,
+          ...payload,
           gusApplicationId: studentDetail?.gusApplicationId,
           email: studentDetail?.email,
         })
@@ -139,9 +143,10 @@ export const useSave = () => {
           ) {
             navigation.setParams({ steps: Number(steps) + 1 })
           }
-          if (data.type === 'submit') {
+
+          if (context.type === 'submit') {
             navigation.navigate('success', {
-              programName: applicationDetails['programmeName'],
+              programName: applicationDetails['programmeName'] || '',
             })
           }
         }

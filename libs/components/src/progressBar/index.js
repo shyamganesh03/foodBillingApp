@@ -24,6 +24,7 @@ const ProgressBar = ({
         style={{
           height: 8,
           backgroundColor: colors.fieldBorder,
+          opacity: 0.5,
           borderRadius: 5,
           overflow: 'hidden',
         }}

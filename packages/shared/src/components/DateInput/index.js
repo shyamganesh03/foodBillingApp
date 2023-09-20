@@ -54,9 +54,9 @@ const DateInput = (props) => {
   const defaultValue =
     value || `${currentYear}-${new Date().toISOString().slice(5, 10)}`
 
-  const [selectedYear, setSelectedYear] = useState(defaultValue.slice(0, 4))
-  const [selectedMonth, setSelectedMonth] = useState(defaultValue.slice(5, 7))
-  const [selectedDay, setSelectedDay] = useState(defaultValue.slice(8, 10))
+  const [selectedYear, setSelectedYear] = useState()
+  const [selectedMonth, setSelectedMonth] = useState()
+  const [selectedDay, setSelectedDay] = useState()
   const yearDropDown = useRef()
 
   const yearScrollViewRef = useRef(null)
@@ -340,6 +340,15 @@ const DateInput = (props) => {
 
   return (
     <View key={key}>
+      <View style={{ flexDirection: 'row' }}>
+        <Text variant="body1">{title}</Text>
+        {isMandatory ? (
+          <Text variant="body1" color={colors.onAlert}>
+            {' '}
+            *
+          </Text>
+        ) : null}
+      </View>
       <TouchableOpacity
         ref={DropdownButton}
         onPress={() => {
@@ -357,15 +366,6 @@ const DateInput = (props) => {
               },
         ]}
       >
-        <View style={{ flexDirection: 'row' }}>
-          <Text variant="body1">{title}</Text>
-          {isMandatory ? (
-            <Text variant="body1" color={colors.onAlert}>
-              {' '}
-              *
-            </Text>
-          ) : null}
-        </View>
         {renderDropdown()}
         <TextInput
           label={label}

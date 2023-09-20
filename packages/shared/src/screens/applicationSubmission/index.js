@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import DesktopView from './DesktopView'
 import { fieldData } from './data/metaData'
 import { useSave } from '../../hooks/useSave'
+import { getCurrentDate } from '../../utils/dateFunction'
 
 const ApplicationSubmission = () => {
   const [applicationProgressData] = useAtom(applicationProgressDetails)
@@ -60,7 +61,12 @@ const ApplicationSubmission = () => {
       },
     )
     fieldData.forEach((fieldItem) => {
-      setValue(fieldItem?.fieldName, '')
+      if (fieldItem?.inputType === 'signatureDate') {
+        const currentDate = getCurrentDate({ type: 'string' })
+        setValue(fieldItem?.fieldName, currentDate)
+      } else {
+        setValue(fieldItem?.fieldName, '')
+      }
     })
     setRequiredFields(newData)
   }, [isFocused, applicationProgressData])
