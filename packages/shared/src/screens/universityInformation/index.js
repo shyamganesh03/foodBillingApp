@@ -10,6 +10,8 @@ import { useDelete } from '../../hooks/useDelete'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { isValidateInstitutionDate } from '../../utils/dateFunction'
 import { getPayload } from '../../utils/fieldFunction'
+import { applicationProgressDetails } from '../../utils/atom'
+import { useAtom } from 'jotai'
 
 const UniversityInformation = () => {
   const isFocused = useIsFocused()
@@ -18,7 +20,9 @@ const UniversityInformation = () => {
     primary: false,
     secondary: false,
   })
-
+  const [applicationProgressDetail, setApplicationProgressDetail] = useAtom(
+    applicationProgressDetails,
+  )
   const { mutate: mutation } = useSave()
   const { mutate: deleteMutation } = useDelete()
 
@@ -160,6 +164,27 @@ const UniversityInformation = () => {
 
   const handleAddEducation = () => {
     const wrappedFieldData = [fieldData]
+    let mandatoryFieldsData = { ...applicationProgressDetail }
+    let universityInformation =
+      mandatoryFieldsData?.mandatoryFields?.['University/College_Information']
+    let list = universityInformation?.list || {}
+
+    const newIndex = Object.keys(list).length
+    const newList = []
+    fieldData.map((item, index) => {
+      newList.push({
+        label: item?.label,
+        isSaved: false,
+        fieldName: item?.fieldName,
+      })
+    })
+
+    universityInformation.list = { ...list, [newIndex]: newList }
+
+    mandatoryFieldsData.mandatoryFields['University/College_Information'] =
+      universityInformation
+
+    setApplicationProgressDetail(mandatoryFieldsData)
     append([wrappedFieldData])
   }
 

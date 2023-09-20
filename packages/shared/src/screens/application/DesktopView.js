@@ -8,7 +8,6 @@ import EmergencyContact from '../emergencyContact'
 import PersonalInformation from '../personalInformation'
 import PrerequisiteCourseworkInformation from '../prerequisiteCourseworkInformation'
 import BackgroundInformation from '../background-Information-and-Technical-Standards'
-import AdditionalInformation from '../additionalInformation'
 import UniversityInformation from '../universityInformation'
 import MCATReporting from '../aamc-mcat-Reporting'
 import WorkExperience from '../workExperience'
@@ -111,25 +110,18 @@ const DesktopView = ({
   if (Number(steps) === 12) {
     return (
       <View style={styles({ colors }).container}>
-        <AdditionalInformation />
+        <ApplicationDocuments />
       </View>
     )
   }
   if (Number(steps) === 13) {
     return (
       <View style={styles({ colors }).container}>
-        <ApplicationDocuments />
-      </View>
-    )
-  }
-  if (Number(steps) === 14) {
-    return (
-      <View style={styles({ colors }).container}>
         <Recommenders />
       </View>
     )
   }
-  if (Number(steps) === 15) {
+  if (Number(steps) === 14) {
     return (
       <View style={styles({ colors }).container}>
         <ApplicationSubmission />

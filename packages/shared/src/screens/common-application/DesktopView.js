@@ -35,8 +35,7 @@ const DesktopView = ({
           participating in one interview, you can receive admissions decisions
           from any or all of the three medical schools. And there is no
           application fee! Tell us to which of the three medical schools you
-          would like to apply, and in what order. And, it is just as easy (and
-          free) to apply only to Saba, if that is what you prefer.
+          would like to apply, and in what order.
         </Text>
         <FormContainer
           control={control}

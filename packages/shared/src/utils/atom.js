@@ -31,6 +31,11 @@ export const applicationProgressDetails = atom({
         isSaved: false,
         fieldName: 'programmeName',
       },
+      {
+        label: 'How did you hear about GUS Medical Universities',
+        isSaved: false,
+        fieldName: 'howDidYouHearAboutSABA',
+      },
     ],
     Contact_Information: [
       {
@@ -191,13 +196,6 @@ export const applicationProgressDetails = atom({
           'Have you withdrawn, been dismissed, suspended, or placed on probation from an academic institution for non-academic reasons?',
         isSaved: false,
         fieldName: 'nonAcademicSuspendedDismissWithdrawn',
-      },
-    ],
-    Additional_Information: [
-      {
-        label: 'How did you hear about GUS Medical Universities',
-        isSaved: false,
-        fieldName: 'howDidYouHearAboutSABA',
       },
     ],
     Application_Document_Requirements: [
