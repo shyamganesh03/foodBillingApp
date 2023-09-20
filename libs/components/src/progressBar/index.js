@@ -14,7 +14,7 @@ const ProgressBar = ({
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: percentage,
-      duration: 500,
+      duration: 1000,
       useNativeDriver: false,
     }).start()
   }, [percentage])
@@ -22,17 +22,16 @@ const ProgressBar = ({
     <View style={progressBarStyle}>
       <View
         style={{
-          height: 10,
+          height: 8,
           backgroundColor: colors.fieldBorder,
           borderRadius: 5,
-          width: 100,
           overflow: 'hidden',
         }}
       >
         <Animated.View
           style={{
             height: 10,
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
             width: animatedValue.interpolate({
               inputRange: [0, 100],
               outputRange: ['0%', '100%'],

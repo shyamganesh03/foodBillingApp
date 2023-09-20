@@ -28,6 +28,14 @@ const UniversityInformation = () => {
 
   const applicationDetails = queryClient.getQueryData(['getApplicationData'])
 
+  useEffect(() => {
+    if (!isFocused) return
+
+    if (!applicationDetails) {
+      queryClient.refetchQueries(['getApplicationData'])
+    }
+  }, [isFocused, applicationDetails])
+
   const {
     handleSubmit: handleFormSubmit,
     control,

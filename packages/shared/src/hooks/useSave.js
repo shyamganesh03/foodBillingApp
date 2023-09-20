@@ -69,6 +69,7 @@ export const useSave = () => {
         console.log('fail:', data)
       },
       onSuccess: async (data, context) => {
+        let updatedMandatoryFieldCount = 0
         if (data?.statusCode === 500) {
           toast.show(data.message[0].message, {
             type: 'danger',
@@ -81,9 +82,10 @@ export const useSave = () => {
             const mandatoryFields =
               updatedProgressDetail?.mandatoryFields?.[context.sessionName]
 
-            if (mandatoryFields) {
+            if (mandatoryFields && !context.isList) {
               mandatoryFields.forEach((mandatoryItem, mandatoryIndex) => {
                 if (mandatoryItem?.fieldName === fieldItem?.fieldName) {
+                  updatedMandatoryFieldCount += 1
                   mandatoryFields[mandatoryIndex] = {
                     ...mandatoryItem,
                     isSaved: true,
@@ -103,10 +105,10 @@ export const useSave = () => {
                 updatedProgressDetail.mandatoryFields?.[context.sessionName]
                   ?.mandatoryFieldDetail || []
               mandatoryFieldDetailCopy = mandatoryFieldDetailCopy?.map(
-                (mandatoryFieldDetailCopyFields) => ({
-                  ...mandatoryFieldDetailCopyFields,
-                  isSaved: true,
-                }),
+                (mandatoryFieldDetailCopyFields) => {
+                  updatedMandatoryFieldCount += 1
+                  return { ...mandatoryFieldDetailCopyFields, isSaved: true }
+                },
               )
 
               updatedProgressDetail.mandatoryFields[context.sessionName].list =
@@ -118,6 +120,16 @@ export const useSave = () => {
                 }
             })
           }
+          const totalMandatoryFieldCount =
+            updatedProgressDetail.totalProgress.totalMandatoryFieldCount
+          const newSavedFieldCount =
+            updatedProgressDetail.totalProgress.savedFieldCount +
+            updatedMandatoryFieldCount
+
+          updatedProgressDetail.totalProgress.savedFieldCount =
+            newSavedFieldCount
+          updatedProgressDetail.totalProgress.progress =
+            (newSavedFieldCount / totalMandatoryFieldCount) * 100
 
           setApplicationProgressDetail(updatedProgressDetail)
 

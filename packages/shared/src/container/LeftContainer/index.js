@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { ProgressBar } from '@libs/components'
+import { ProgressBar, Text } from '@libs/components'
 import TimeLine from '../../components/TimeLine'
 import { Image, ScrollView, StyleSheet, View } from 'react-native'
-import { useTheme } from '@react-navigation/native'
+import { useIsFocused, useTheme } from '@react-navigation/native'
 import { gesMedicalCollegeLogo } from '@oap/assets'
+import { applicationProgressDetails } from '../../utils/atom'
+import { useAtom } from 'jotai'
 
 const LeftContainer = ({ tabItems }) => {
   const { colors } = useTheme()
+  const [applicationProgressDetail] = useAtom(applicationProgressDetails)
+  const [progress, setProgress] = useState(0)
+  const isFocused = useIsFocused()
+  useEffect(() => {
+    if (!isFocused) return
+
+    setProgress(applicationProgressDetail?.totalProgress?.progress)
+  }, [isFocused, applicationProgressDetail?.totalProgress?.progress])
 
   return (
     <View style={styles({ colors }).leftContainer}>
@@ -22,7 +32,22 @@ const LeftContainer = ({ tabItems }) => {
           resizeMode="contain"
         />
       </View>
-      {/* <ProgressBar progressBarStyle={{ paddingTop: 40 }} /> */}
+      <View style={{ marginVertical: 20 }}>
+        <Text
+          variant="body1"
+          color={colors.white}
+          style={{ marginLeft: 10, marginBottom: 10 }}
+        >
+          {`${progress}% completed `}
+        </Text>
+        <ProgressBar
+          progressBarStyle={{
+            maxWidth: '80%',
+            marginLeft: 10,
+          }}
+          percentage={progress}
+        />
+      </View>
       <ScrollView
         contentContainerStyle={{ flex: 1 }}
         showsVerticalScrollIndicator={false}

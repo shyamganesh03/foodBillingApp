@@ -166,7 +166,7 @@ export const canNonEmptyObject = (validationValue) => {
   let hasNonEmptyValue
 
   hasNonEmptyValue = Object.values(validationValue).some((validationItem) => {
-    const keys = Object.keys(validationItem)
+    const keys = Object.keys(validationItem || {})
     if (keys.length > 0) {
       return Object.values(validationItem).some(
         (validationKeyItem) => !!validationKeyItem,

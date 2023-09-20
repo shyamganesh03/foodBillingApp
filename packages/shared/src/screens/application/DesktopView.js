@@ -16,17 +16,7 @@ import Recommenders from '../recommenders'
 import ApplicationDocuments from '../applicationDocuments'
 import ApplicationSubmission from '../applicationSubmission'
 
-const DesktopView = ({
-  steps,
-  activeTab,
-  formData,
-  handleSave,
-  handleValueChanged,
-  isLoading,
-  setActiveTab,
-  tabItems,
-  validationError,
-}) => {
+const DesktopView = ({ steps }) => {
   const { colors } = useTheme()
 
   if (Number(steps) === 1) {
