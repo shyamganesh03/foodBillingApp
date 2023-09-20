@@ -72,7 +72,7 @@ const ApplicationSubmission = () => {
     }))
 
     await mutation.mutateAsync({
-      type: 'Submit',
+      type: 'submit',
       fieldData: data,
       metaData: fieldData,
       sessionName: 'Application_Submission',

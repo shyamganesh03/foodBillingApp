@@ -218,4 +218,9 @@ export const applicationProgressDetails = atom({
       },
     ],
   },
+  totalProgress: {
+    totalMandatoryFieldCount: 43,
+    savedFieldCount: 0,
+    progress: 0,
+  },
 })
