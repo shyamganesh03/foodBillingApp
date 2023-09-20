@@ -11,13 +11,15 @@ export const useDocuments = ({ queryKey, type, enabled }) => {
       Id: studentDetail?.gusApplicationId,
       type: type,
     })
+
     return response
   }
   const { data, refetch, isFetching } = useQuery({
     queryKey: [queryKey],
-    queryFn: getDocuments(),
-    enabled: enabled,
+    queryFn: getDocuments,
+    enabled: enabled && !!studentDetail?.gusApplicationId,
     initialData: [],
   })
+
   return { data, refetch, isFetching }
 }

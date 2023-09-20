@@ -29,6 +29,10 @@ export const fieldData = [
     placeholder: 'Enter your Mobile/Primary Number',
     rules: {
       required: 'Mobile/Primary Number cannot be empty',
+      pattern: {
+        value: /^[0-9]+$/,
+        message: 'Invalid Mobile Number',
+      },
     },
   },
   {
@@ -40,6 +44,10 @@ export const fieldData = [
     placeholder: 'Enter your Alternative Phone Number',
     rules: {
       required: 'Alternative Phone Number cannot be empty',
+      pattern: {
+        value: /^[0-9]+$/,
+        message: 'Invalid Mobile Number',
+      },
     },
   },
   {

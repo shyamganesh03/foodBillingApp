@@ -101,29 +101,29 @@ export const useSave = () => {
             }
           })
 
-          if (context.isList) {
-            const listValues = context?.fieldData?.[context.listKey] || []
+          // if (context.isList) {
+          //   const listValues = context?.fieldData?.[context.listKey] || []
 
-            listValues.forEach((listValue, listIndex) => {
-              let mandatoryFieldDetailCopy =
-                updatedProgressDetail.mandatoryFields?.[context.sessionName]
-                  ?.mandatoryFieldDetail || []
-              mandatoryFieldDetailCopy = mandatoryFieldDetailCopy?.map(
-                (mandatoryFieldDetailCopyFields) => {
-                  updatedMandatoryFieldCount += 1
-                  return { ...mandatoryFieldDetailCopyFields, isSaved: true }
-                },
-              )
+          //   listValues.forEach((listValue, listIndex) => {
+          //     let mandatoryFieldDetailCopy =
+          //       updatedProgressDetail.mandatoryFields?.[context.sessionName]
+          //         ?.mandatoryFieldDetail || []
+          //     mandatoryFieldDetailCopy = mandatoryFieldDetailCopy?.map(
+          //       (mandatoryFieldDetailCopyFields) => {
+          //         updatedMandatoryFieldCount += 1
+          //         return { ...mandatoryFieldDetailCopyFields, isSaved: true }
+          //       },
+          //     )
 
-              updatedProgressDetail.mandatoryFields[context.sessionName].list =
-                {
-                  ...updatedProgressDetail.mandatoryFields?.[
-                    context.sessionName
-                  ].list,
-                  [listIndex]: mandatoryFieldDetailCopy,
-                }
-            })
-          }
+          //     updatedProgressDetail.mandatoryFields[context.sessionName].list =
+          //       {
+          //         ...updatedProgressDetail.mandatoryFields?.[
+          //           context.sessionName
+          //         ].list,
+          //         [listIndex]: mandatoryFieldDetailCopy,
+          //       }
+          //   })
+          // }
           const totalMandatoryFieldCount =
             updatedProgressDetail.totalProgress.totalMandatoryFieldCount
           const newSavedFieldCount =
@@ -132,8 +132,9 @@ export const useSave = () => {
 
           updatedProgressDetail.totalProgress.savedFieldCount =
             newSavedFieldCount
-          updatedProgressDetail.totalProgress.progress =
-            (newSavedFieldCount / totalMandatoryFieldCount) * 100
+          updatedProgressDetail.totalProgress.progress = Math.round(
+            (newSavedFieldCount / totalMandatoryFieldCount) * 100,
+          )
 
           setApplicationProgressDetail(updatedProgressDetail)
 

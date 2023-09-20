@@ -4,23 +4,19 @@ import { ScreenLayout } from '@libs/utils'
 import DesktopView from './DesktopView'
 import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
-import { useQueryClient } from '@tanstack/react-query'
 import { fieldData } from './data/metaData'
 import { useForm } from 'react-hook-form'
 import { studentDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
 
-const ApplicationInformation = (props) => {
+const ApplicationInformation = ({ applicationDetails }) => {
   const [isLoading, setIsLoading] = useState({
     primary: false,
     secondary: false,
   })
   const { mutate: mutation } = useSave()
   const isFocused = useIsFocused()
-  const queryClient = useQueryClient()
   const [studentDetail] = useAtom(studentDetails)
-
-  const applicationDetails = queryClient.getQueryData(['getApplicationData'])
 
   const {
     handleSubmit: handleFormSubmit,

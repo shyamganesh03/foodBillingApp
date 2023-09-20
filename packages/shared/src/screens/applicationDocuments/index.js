@@ -2,17 +2,22 @@ import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import { ScreenLayout, useParams } from '@libs/utils'
 import { Text } from '@libs/components'
 import DesktopView from './DesktopView'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { deleteDocument, getApplicationFileByID, uploadFile } from '../../api'
+import { useQueryClient } from '@tanstack/react-query'
+import { deleteDocument, uploadFile } from '../../api'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { applicationProgressDetails, studentDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
+import { updateMandatoryData } from '../../utils/fieldFunction'
 
-const ApplicationDocuments = (props) => {
+const ApplicationDocuments = ({
+  applicantPhotoDocs,
+  applicationDetails,
+  cvDocuments,
+  medicalStatementDocs,
+}) => {
   const [fileData, setFileData] = useState()
   const queryClient = useQueryClient()
   const isFocused = useIsFocused()
-  const applicationDetails = queryClient.getQueryData(['getApplicationData'])
   const [studentDetail] = useAtom(studentDetails)
   const navigation = useNavigation()
   const { params } = useParams()
@@ -21,109 +26,50 @@ const ApplicationDocuments = (props) => {
     applicationProgressDetails,
   )
 
-  const {
-    data: cvDocuments,
-    refetch: refetchCVDocumentsDocument,
-    isFetching: isCVDocumentFetching,
-  } = useQuery({
-    queryKey: ['getCVDocuments'],
-    queryFn: async () => {
-      // Assuming response contains the 'data' property with the array of data
-      const response = await getApplicationFileByID({
-        Id: studentDetail?.gusApplicationId,
-        type: 'CV',
-      })
-
-      return response
-    },
-    initialData: [],
-    enabled: isFocused && !!studentDetail?.gusApplicationId,
-  })
-
-  const {
-    data: applicantPhotoDocs,
-    refetch: refetchApplicantPhotoDocs,
-    isFetching: isApplicantPhotoDocs,
-  } = useQuery({
-    queryKey: ['geApplicantPhotoDocs'],
-    queryFn: async () => {
-      // Assuming response contains the 'data' property with the array of data
-      const response = await getApplicationFileByID({
-        Id: studentDetail?.gusApplicationId,
-        type: 'Applicant_Photo',
-      })
-
-      return response
-    },
-    initialData: [],
-    enabled: isFocused && !!studentDetail?.gusApplicationId,
-  })
-
-  const {
-    data: medicalStatementDocs,
-    refetch: refetchMedicalStatementDocs,
-    isFetching: isMedicalStatementDocs,
-  } = useQuery({
-    queryKey: ['getMedicalStatementDocs'],
-    queryFn: async () => {
-      // Assuming response contains the 'data' property with the array of data
-      const response = await getApplicationFileByID({
-        Id: studentDetail?.gusApplicationId,
-        type: 'Medical_Statement',
-      })
-
-      return response
-    },
-    initialData: [],
-    enabled: isFocused && !!studentDetail?.gusApplicationId,
-  })
-
   useEffect(() => {
     if (!isFocused) return
-
-    if (!applicationDetails) {
-      queryClient.refetchQueries(['getApplicationData'])
-    }
-  }, [isFocused, applicationDetails])
-
-  useEffect(() => {
-    if (!isFocused) return
-
+    let updatedData
     if (cvDocuments?.length === 0) {
-      updateMandatoryData({ fileType: 'CV', isSaved: false })
+      updatedData = updateMandatoryData({
+        fileType: 'CV',
+        isSaved: false,
+        applicationProgressDetail,
+      })
     } else {
-      updateMandatoryData({ fileType: 'CV' })
+      updatedData = updateMandatoryData({
+        fileType: 'CV',
+        applicationProgressDetail,
+      })
     }
     if (applicantPhotoDocs?.length === 0) {
-      updateMandatoryData({ fileType: 'Applicant_Photo', isSaved: false })
+      updatedData = updateMandatoryData({
+        fileType: 'Applicant_Photo',
+        isSaved: false,
+        applicationProgressDetail,
+      })
     } else {
-      updateMandatoryData({ fileType: 'Applicant_Photo' })
+      updatedData = updateMandatoryData({
+        fileType: 'Applicant_Photo',
+        applicationProgressDetail,
+      })
     }
     if (medicalStatementDocs?.length === 0) {
-      updateMandatoryData({ fileType: 'Medical_Statement', isSaved: false })
+      updatedData = updateMandatoryData({
+        fileType: 'Medical_Statement',
+        isSaved: false,
+        applicationProgressDetail,
+      })
     } else {
-      updateMandatoryData({ fileType: 'Medical_Statement' })
+      updatedData = updateMandatoryData({
+        fileType: 'Medical_Statement',
+        applicationProgressDetail,
+      })
     }
+    setApplicationProgressDetail(updatedData)
   }, [isFocused, cvDocuments, applicantPhotoDocs, medicalStatementDocs])
 
-  const updateMandatoryData = ({ fileType, isSaved = true }) => {
-    const applicationProgressDetailCopy = { ...applicationProgressDetail }
-
-    const documentsData =
-      applicationProgressDetail.mandatoryFields
-        .Application_Document_Requirements
-
-    const filteredDocuments = documentsData.map((item) =>
-      item.fileType === fileType ? { ...item, isSaved: isSaved } : item,
-    )
-
-    applicationProgressDetailCopy.mandatoryFields.Application_Document_Requirements =
-      filteredDocuments
-
-    setApplicationProgressDetail(applicationProgressDetailCopy)
-  }
-
   const uploadDocs = async (fileData) => {
+    let updatedData
     setFileData(fileData)
     await uploadFile({
       ...fileData,
@@ -131,38 +77,66 @@ const ApplicationDocuments = (props) => {
       gusApplicationId: studentDetail.gusApplicationId,
     })
 
-    if (fileData?.type === 'CV') {
-      await refetchCVDocumentsDocument()
-      updateMandatoryData({ fileType })
+    if (fileData?.fileType === 'CV') {
+      await queryClient.refetchQueries(['getCVDocuments'])
+      updatedData = updateMandatoryData({
+        fileType: fileData?.fileType,
+        applicationProgressDetail,
+      })
     }
-    if (fileData?.type === 'Applicant_Photo') {
-      await refetchApplicantPhotoDocs()
-      updateMandatoryData({ fileType })
+    if (fileData?.fileType === 'Applicant_Photo') {
+      await queryClient.refetchQueries(['getApplicantPhoto'])
+      updatedData = updateMandatoryData({
+        fileType: fileData?.type,
+        applicationProgressDetail,
+      })
     }
-    if (fileData?.type === 'Medical_Statement') {
-      await refetchMedicalStatementDocs()
-      updateMandatoryData({ fileType })
+    if (fileData?.fileType === 'Medical_Statement') {
+      await queryClient.refetchQueries(['getMedicalDocuments'])
+      updatedData = updateMandatoryData({
+        fileType: fileData?.fileType,
+        applicationProgressDetail,
+      })
     }
+
+    setApplicationProgressDetail(updatedData)
     setFileData({})
   }
 
   const handleDelete = async ({ id, fileType }) => {
+    let updatedData
     await deleteDocument({
       id,
       fileType,
       gusApplicationId: studentDetail.gusApplicationId,
     })
-    setTimeout(async () => {
-      if (fileType === 'CV') {
-        await refetchCVDocumentsDocument()
-      }
-      if (fileType === 'Applicant_Photo') {
-        await refetchApplicantPhotoDocs()
-      }
-      if (fileType === 'Medical_Statement') {
-        await refetchMedicalStatementDocs()
-      }
-    }, 1000)
+
+    if (fileType === 'CV') {
+      await queryClient.refetchQueries(['getCVDocuments'])
+      updatedData = updateMandatoryData({
+        fileType,
+        isSaved: false,
+        applicationProgressDetail,
+      })
+    }
+    if (fileType === 'Applicant_Photo') {
+      await queryClient.refetchQueries(['getApplicantPhoto'])
+      updatedData = updateMandatoryData({
+        fileType,
+        isSaved: false,
+        applicationProgressDetail,
+      })
+    }
+    if (fileType === 'Medical_Statement') {
+      await queryClient.refetchQueries(['getMedicalDocuments'])
+      updatedData = updateMandatoryData({
+        fileType,
+        isSaved: false,
+        applicationProgressDetail,
+      })
+    }
+
+    setApplicationProgressDetail(updatedData)
   }
 
   const handleNextStep = () => {

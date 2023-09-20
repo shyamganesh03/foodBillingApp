@@ -16,13 +16,19 @@ import Recommenders from '../recommenders'
 import ApplicationDocuments from '../applicationDocuments'
 import ApplicationSubmission from '../applicationSubmission'
 
-const DesktopView = ({ steps }) => {
+const DesktopView = ({
+  applicantPhoto,
+  cvDocument,
+  medicalDocuments,
+  r3ApplicationDetails,
+  steps,
+}) => {
   const { colors } = useTheme()
 
   if (Number(steps) === 1) {
     return (
       <View style={styles({ colors }).container}>
-        <CommonApplication />
+        <CommonApplication applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }
@@ -30,91 +36,98 @@ const DesktopView = ({ steps }) => {
   if (Number(steps) === 2) {
     return (
       <View style={styles({ colors }).container}>
-        <ApplicationInformation />
+        <ApplicationInformation applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }
   if (Number(steps) === 3) {
     return (
       <View style={styles({ colors }).container}>
-        <ContactInformation />
+        <ContactInformation applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }
   if (Number(steps) === 4) {
     return (
       <View style={styles({ colors }).container}>
-        <EmergencyContact />
+        <EmergencyContact applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }
   if (Number(steps) === 5) {
     return (
       <View style={styles({ colors }).container}>
-        <PersonalInformation />
+        <PersonalInformation applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }
   if (Number(steps) === 6) {
     return (
       <View style={styles({ colors }).container}>
-        <UniversityInformation />
+        <UniversityInformation applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }
   if (Number(steps) === 7) {
     return (
       <View style={styles({ colors }).container}>
-        <PrerequisiteCourseworkInformation />
+        <PrerequisiteCourseworkInformation
+          applicationDetails={r3ApplicationDetails}
+        />
       </View>
     )
   }
   if (Number(steps) === 8) {
     return (
       <View style={styles({ colors }).container}>
-        <MCATReporting />
+        <MCATReporting applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }
   if (Number(steps) === 9) {
     return (
       <View style={styles({ colors }).container}>
-        <WorkExperience />
+        <WorkExperience applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }
   if (Number(steps) === 10) {
     return (
       <View style={styles({ colors }).container}>
-        <ResearchExperience />
+        <ResearchExperience applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }
   if (Number(steps) === 11) {
     return (
       <View style={styles({ colors }).container}>
-        <BackgroundInformation />
+        <BackgroundInformation applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }
   if (Number(steps) === 12) {
     return (
       <View style={styles({ colors }).container}>
-        <ApplicationDocuments />
+        <ApplicationDocuments
+          applicationDetails={r3ApplicationDetails}
+          cvDocuments={cvDocument}
+          applicantPhotoDocs={applicantPhoto}
+          medicalStatementDocs={medicalDocuments}
+        />
       </View>
     )
   }
   if (Number(steps) === 13) {
     return (
       <View style={styles({ colors }).container}>
-        <Recommenders />
+        <Recommenders applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }
   if (Number(steps) === 14) {
     return (
       <View style={styles({ colors }).container}>
-        <ApplicationSubmission />
+        <ApplicationSubmission applicationDetails={r3ApplicationDetails} />
       </View>
     )
   }

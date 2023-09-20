@@ -4,21 +4,18 @@ import { ScreenLayout } from '@libs/utils'
 import DesktopView from './DesktopView'
 import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { fieldData } from './data/metaData'
 import { useForm } from 'react-hook-form'
 import { getDropdownValue } from '../../api'
 
-const ContactInformation = (props) => {
+const ContactInformation = ({ applicationDetails }) => {
   const [isLoading, setIsLoading] = useState({
     primary: false,
     secondary: false,
   })
   const { mutate: mutation } = useSave()
   const isFocused = useIsFocused()
-  const queryClient = useQueryClient()
-
-  const applicationDetails = queryClient.getQueryData(['getApplicationData'])
 
   const { data: dropdown } = useQuery({
     queryKey: ['getMailingCountryCode'],

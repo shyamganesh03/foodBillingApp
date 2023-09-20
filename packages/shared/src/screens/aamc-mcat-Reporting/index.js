@@ -4,15 +4,13 @@ import DesktopView from './DesktopView'
 import { Text } from '@libs/components'
 import { fieldData } from './data/metaData'
 import { useIsFocused } from '@react-navigation/native'
-import { useQueryClient } from '@tanstack/react-query'
 import { useSave } from '../../hooks/useSave'
 import { useDelete } from '../../hooks/useDelete'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { getPayload } from '../../utils/fieldFunction'
 
-const MCATReporting = () => {
+const MCATReporting = ({ applicationDetails }) => {
   const isFocused = useIsFocused()
-  const queryClient = useQueryClient()
   const [isLoading, setIsLoading] = useState({
     primary: false,
     secondary: false,
@@ -20,8 +18,6 @@ const MCATReporting = () => {
 
   const { mutate: mutation } = useSave()
   const { mutate: deleteMutation } = useDelete()
-
-  const applicationDetails = queryClient.getQueryData(['getApplicationData'])
 
   const {
     handleSubmit: handleFormSubmit,
@@ -73,16 +69,15 @@ const MCATReporting = () => {
   }
 
   const handlePrimary = async (data) => {
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      primary: true,
+    }))
     const payload = getPayload({
       data: data.aamcmcatReporting,
       applicationDetails,
       fieldName: 'AAMCMCATReporting',
     })
-
-    setIsLoading((prevValue) => ({
-      ...prevValue,
-      primary: true,
-    }))
 
     if (payload?.length > 0) {
       await mutation.mutateAsync({

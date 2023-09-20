@@ -4,20 +4,16 @@ import { ScreenLayout } from '@libs/utils'
 import DesktopView from './DesktopView'
 import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
-import { useQueryClient } from '@tanstack/react-query'
 import { fieldData } from './data/metaData'
 import { useForm } from 'react-hook-form'
 
-const PersonalInformation = (props) => {
+const PersonalInformation = ({ applicationDetails }) => {
   const [isLoading, setIsLoading] = useState({
     primary: false,
     secondary: false,
   })
   const { mutate: mutation } = useSave()
   const isFocused = useIsFocused()
-  const queryClient = useQueryClient()
-
-  const applicationDetails = queryClient.getQueryData(['getApplicationData'])
 
   const {
     handleSubmit: handleFormSubmit,
@@ -36,7 +32,7 @@ const PersonalInformation = (props) => {
       type: 'create',
       fieldData: data,
       metaData: fieldData,
-      sessionName: 'personal_Information',
+      sessionName: 'Personal_Information',
     })
 
     setIsLoading((prevValue) => ({
@@ -55,7 +51,7 @@ const PersonalInformation = (props) => {
       type: 'createAndNext',
       fieldData: data,
       metaData: fieldData,
-      sessionName: 'personal_Information',
+      sessionName: 'Personal_Information',
     })
 
     setIsLoading((prevValue) => ({

@@ -13,7 +13,7 @@ import { getPayload } from '../../utils/fieldFunction'
 import { applicationProgressDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
 
-const UniversityInformation = () => {
+const UniversityInformation = ({ applicationDetails }) => {
   const isFocused = useIsFocused()
   const queryClient = useQueryClient()
   const [isLoading, setIsLoading] = useState({
@@ -25,8 +25,6 @@ const UniversityInformation = () => {
   )
   const { mutate: mutation } = useSave()
   const { mutate: deleteMutation } = useDelete()
-
-  const applicationDetails = queryClient.getQueryData(['getApplicationData'])
 
   useEffect(() => {
     if (!isFocused) return
@@ -125,16 +123,15 @@ const UniversityInformation = () => {
   }, [isFocused, applicationDetails])
 
   const handlePrimary = async (data) => {
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      primary: true,
+    }))
     const payload = getPayload({
       data: data.universityInformation,
       applicationDetails,
       fieldName: 'universityOrCollegeInfo',
     })
-
-    setIsLoading((prevValue) => ({
-      ...prevValue,
-      primary: true,
-    }))
 
     await mutation.mutateAsync({
       type: 'save',
@@ -151,6 +148,10 @@ const UniversityInformation = () => {
   }
 
   const handleSecondary = async (data) => {
+    setIsLoading((prevValue) => ({
+      ...prevValue,
+      secondary: true,
+    }))
     const payload = getPayload({
       data: data.universityInformation,
       applicationDetails,

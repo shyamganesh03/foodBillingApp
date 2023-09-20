@@ -139,9 +139,9 @@ const Application = (props) => {
       })
 
       const totalMandatoryFieldCount =
-        [...new Set([...totalMandatoryField])].length + 3
+        totalProgressStatus.totalMandatoryFieldCount
       const newSavedFieldCount = [...new Set([...updatedMandatoryField])].length
-      totalProgressStatus.totalMandatoryFieldCount = totalMandatoryFieldCount
+
       totalProgressStatus.savedFieldCount = newSavedFieldCount
       totalProgressStatus.progress = Math.round(
         (newSavedFieldCount / totalMandatoryFieldCount) * 100,
@@ -255,7 +255,13 @@ const Application = (props) => {
     setParams({ steps: steps })
   }, [isFocused, route])
 
-  const viewProps = { steps }
+  const viewProps = {
+    applicantPhoto,
+    cvDocument,
+    medicalDocuments,
+    r3ApplicationDetails,
+    steps,
+  }
 
   const LayoutView = useCallback(
     ScreenLayout.withLayoutView(DesktopView, DesktopView, DesktopView),

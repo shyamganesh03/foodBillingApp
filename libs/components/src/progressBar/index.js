@@ -23,8 +23,7 @@ const ProgressBar = ({
       <View
         style={{
           height: 8,
-          backgroundColor: colors.fieldBorder,
-          opacity: 0.5,
+          backgroundColor: colors.backgroundVariant1,
           borderRadius: 5,
           overflow: 'hidden',
         }}

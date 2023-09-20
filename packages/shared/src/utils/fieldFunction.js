@@ -31,40 +31,34 @@ export const updateMandatoryData = ({
   isSaved = true,
   applicationProgressDetail,
 }) => {
-  const applicationProgressDetailCopy = { ...applicationProgressDetail }
-
-  const documentsData =
-    applicationProgressDetail.mandatoryFields.Application_Document_Requirements
+  const { mandatoryFields, totalProgress } = { ...applicationProgressDetail }
+  const { Application_Document_Requirements: documentsData } = mandatoryFields
 
   const filteredDocuments = documentsData.map((item) => {
-    const totalMandatoryFieldCount =
-      applicationProgressDetailCopy.totalProgress.totalMandatoryFieldCount
-    if (item.fileType === fileType) {
-      if (isSaved && !item.isSaved) {
-        const savedFieldCount =
-          applicationProgressDetailCopy.totalProgress.savedFieldCount + 1
-        applicationProgressDetailCopy.totalProgress.savedFieldCount =
-          savedFieldCount
-        applicationProgressDetailCopy.totalProgress.progress = Math.round(
-          (savedFieldCount / totalMandatoryFieldCount) * 100,
-        )
-      }
-      if (!isSaved && item.isSaved) {
-        const savedFieldCount =
-          applicationProgressDetailCopy.totalProgress.savedFieldCount - 1
-        applicationProgressDetailCopy.totalProgress.savedFieldCount =
-          savedFieldCount
-        applicationProgressDetailCopy.totalProgress.progress = Math.round(
-          (savedFieldCount / totalMandatoryFieldCount) * 100,
-        )
-      }
-      return { ...item, isSaved: isSaved }
+    const { fileType: itemFileType, isSaved: itemIsSaved } = item
+
+    if (itemFileType === fileType) {
+      const savedFieldCountDiff = isSaved ? 1 : -1
+      totalProgress.savedFieldCount += savedFieldCountDiff
+
+      const progress = Math.round(
+        (totalProgress.savedFieldCount /
+          totalProgress.totalMandatoryFieldCount) *
+          100,
+      )
+      totalProgress.progress = progress
+
+      return { ...item, isSaved }
     } else {
       return item
     }
   })
 
-  applicationProgressDetailCopy.mandatoryFields.Application_Document_Requirements =
-    filteredDocuments
-  return applicationProgressDetailCopy
+  return {
+    ...applicationProgressDetail,
+    mandatoryFields: {
+      ...mandatoryFields,
+      Application_Document_Requirements: filteredDocuments,
+    },
+  }
 }
