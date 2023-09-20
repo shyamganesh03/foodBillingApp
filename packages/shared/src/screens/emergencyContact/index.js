@@ -35,6 +35,8 @@ const EmergencyContact = (props) => {
     await mutation.mutateAsync({
       type: 'save',
       fieldData: data,
+      metaData: fieldData,
+      sessionName: 'Emergency_Information',
     })
 
     setIsLoading((prevValue) => ({
@@ -52,6 +54,8 @@ const EmergencyContact = (props) => {
     await mutation.mutateAsync({
       type: 'saveAndNext',
       fieldData: data,
+      metaData: fieldData,
+      sessionName: 'Emergency_Information',
     })
 
     setIsLoading((prevValue) => ({

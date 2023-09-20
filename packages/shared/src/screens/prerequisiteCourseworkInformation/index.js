@@ -35,6 +35,8 @@ const PrerequisiteCourseworkInformation = (props) => {
     await mutation.mutateAsync({
       type: 'create',
       fieldData: data,
+      metaData: fieldData,
+      sessionName: 'Prerequisite_Coursework_Information',
     })
 
     setIsLoading((prevValue) => ({
@@ -52,6 +54,8 @@ const PrerequisiteCourseworkInformation = (props) => {
     await mutation.mutateAsync({
       type: 'createAndNext',
       fieldData: data,
+      metaData: fieldData,
+      sessionName: 'Prerequisite_Coursework_Information',
     })
 
     setIsLoading((prevValue) => ({

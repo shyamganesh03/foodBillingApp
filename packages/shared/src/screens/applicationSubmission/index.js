@@ -32,19 +32,38 @@ const ApplicationSubmission = () => {
     Object.entries(applicationProgressData.mandatoryFields).map(
       ([key, mandatoryFields]) => {
         let requiredField = []
-        mandatoryFields?.map((mandatoryFieldItem) => {
-          if (!mandatoryFieldItem.isSaved) {
-            requiredField.push(mandatoryFieldItem.label)
-          }
-        })
-        newData = { ...newData, [key]: requiredField }
+        if (Array.isArray(mandatoryFields)) {
+          mandatoryFields?.map((mandatoryFieldItem) => {
+            if (!mandatoryFieldItem.isSaved) {
+              requiredField.push(mandatoryFieldItem.label)
+            }
+          })
+        } else {
+          Object.entries(mandatoryFields.list).map(([listKey, listValue]) => {
+            const unSavedValue = listValue.filter(
+              (listItem) => !listItem.isSaved,
+            )
+
+            if (unSavedValue.length > 0) {
+              unSavedValue.map((unSavedItem) => {
+                requiredField.push({
+                  id: `list-${listKey}`,
+                  label: unSavedItem.label,
+                })
+              })
+            }
+          })
+        }
+        if (requiredField?.length > 0) {
+          newData = { ...newData, [key]: requiredField }
+        }
       },
     )
     fieldData.forEach((fieldItem) => {
       setValue(fieldItem?.fieldName, '')
     })
     setRequiredFields(newData)
-  }, [isFocused])
+  }, [isFocused, applicationProgressData])
 
   const handlePrimary = async (data) => {
     setIsLoading((prevValue) => ({
@@ -55,6 +74,8 @@ const ApplicationSubmission = () => {
     await mutation.mutateAsync({
       type: 'Submit',
       fieldData: data,
+      metaData: fieldData,
+      sessionName: 'Application_Submission',
     })
 
     setIsLoading((prevValue) => ({

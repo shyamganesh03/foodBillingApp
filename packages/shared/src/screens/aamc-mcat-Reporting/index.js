@@ -61,7 +61,7 @@ const MCATReporting = () => {
     }
   }
 
-  console.log({ fields })
+  
 
   const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
     fieldData?.forEach((fieldValue) => {
@@ -88,6 +88,8 @@ const MCATReporting = () => {
       await mutation.mutateAsync({
         type: 'save',
         fieldData: { AAMCMCATReporting: payload },
+        metaData: fieldData,
+        sessionName: 'AAMC-MCAT_Reporting',
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -116,6 +118,8 @@ const MCATReporting = () => {
       await mutation.mutateAsync({
         type: 'saveAndNext',
         fieldData: { AAMCMCATReporting: payload },
+        metaData: fieldData,
+        sessionName: 'AAMC-MCAT_Reporting',
       })
     } else {
       toast.show('Please fill all the fields', {

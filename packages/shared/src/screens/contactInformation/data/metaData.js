@@ -85,7 +85,7 @@ export const fieldData = [
   },
   {
     label:
-      'Text messages sent by the Admissions Office will not be used for "spam." By checking the confirmation box, you grant permission to Saba University School of Medicine to send text messages to your personal mobile phone number.',
+      'Text messages sent by the Admissions Office will not be used for "spam." By checking the confirmation box, you grant permission to GUS Medical Universities to send text messages to your personal mobile phone number.',
     fieldName: 'canTextToMobile',
     type: FieldType.CHECKBOX,
     checkboxValues: [true, false],

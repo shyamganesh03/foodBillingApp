@@ -24,9 +24,7 @@ const DesktopView = ({
           paddingHorizontal: 40,
         }}
       >
-        {Object.values(requiredFields).some(
-          (values) => values?.length === 0,
-        ) ? (
+        {Object.values(requiredFields).some((values) => values?.length > 0) ? (
           <View style={{ padding: 12 }}>
             <View
               style={{
@@ -64,6 +62,22 @@ const DesktopView = ({
                     </Text>
                   </View>
                   {value.map((item, index) => {
+                    if (item?.id) {
+                      return (
+                        <View style={{ flexDirection: 'row' }}>
+                          <Text
+                            key={index}
+                            variant="body2"
+                            style={{ fontWeight: 600 }}
+                          >
+                            {item.id} :{' '}
+                          </Text>
+                          <Text key={index} variant="body2">
+                            {item.label}
+                          </Text>
+                        </View>
+                      )
+                    }
                     return (
                       <Text key={index} variant="body2">
                         {item}
@@ -80,24 +94,24 @@ const DesktopView = ({
               CERTIFICATION STATEMENT
             </Text>
             <Text variant="body3" style={{ marginBottom: 24 }}>
-              I hereby authorize Saba University School of Medicine to report
-              information concerning my MCAT scores to the U.S. Department of
-              Education, other regulatory bodies, and accrediting bodies.
+              I hereby authorize GUS Medical Universities to report information
+              concerning my MCAT scores to the U.S. Department of Education,
+              other regulatory bodies, and accrediting bodies.
             </Text>
             <Text variant="body3" style={{ marginBottom: 24 }}>
               The filling out and electronic submission of this form
               acknowledges that I understand that withholding any information
               requested in this application or giving false information may make
-              me ineligible for admission to/or subject to dismissal from Saba
-              University School of Medicine. With this in mind, I certify that
-              the above statements are correct and complete.
+              me ineligible for admission to/or subject to dismissal from GUS
+              Medical Universities. With this in mind, I certify that the above
+              statements are correct and complete.
             </Text>
             <Text variant="body3" style={{ marginBottom: 24 }}>
               No person shall be excluded from participation in, denied benefits
               of, or be subject to discrimination under any program or activity
-              sponsored or conducted by Saba University School of Medicine, on
-              any basis prohibited by applicable law, including but not limited
-              to race, color, national origin, sex, age, or handicap.
+              sponsored or conducted by GUS Medical Universities, on any basis
+              prohibited by applicable law, including but not limited to race,
+              color, national origin, sex, age, or handicap.
             </Text>
             <Text variant="body3" style={{ marginBottom: 24 }}>
               Please note: Information on sex, age, ethnic origin, and
@@ -106,8 +120,8 @@ const DesktopView = ({
               Rights Acts of 1964, Executive Order 11375 and Title IX of the
               Education Amendments and Part 86. 45 C.F.R., and will not be used
               to discriminate in admission to or participation in any
-              educational programs or activities offered by Saba University
-              School of Medicine.
+              educational programs or activities offered by GUS Medical
+              Universities.
             </Text>
             <Text variant="body3" style={{ marginBottom: 24 }}>
               {
@@ -131,28 +145,6 @@ const DesktopView = ({
           </View>
         )}
       </ScrollView>
-      {/* <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          // paddingVertical: 12,
-          backgroundColor: colors.white,
-          shadowOffset: { width: 0, height: -5 },
-          shadowRadius: 20,
-          shadowColor: 'rgba(3, 30, 125, 0.15)',
-          shadowOpacity: 1,
-          elevation: 2,
-        }}
-      >
-        <Button
-          label="Save"
-          // buttonStyle={{ marginRight: 30 }}
-          labelColors={colors.white}
-          // isLoading={isLoading.primary}
-          // onPress={handleFormSubmit(handlePrimary)}
-        />
-      </View> */}
     </View>
   )
 }

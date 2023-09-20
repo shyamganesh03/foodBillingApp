@@ -86,6 +86,8 @@ const ResearchExperience = () => {
       await mutation.mutateAsync({
         type: 'save',
         fieldData: { researchExperience: payload },
+        metaData: fieldData,
+        sessionName: 'Research_Experience',
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -115,6 +117,8 @@ const ResearchExperience = () => {
       await mutation.mutateAsync({
         type: 'saveAndNext',
         fieldData: { researchExperience: payload },
+        metaData: fieldData,
+        sessionName: 'Research_Experience',
       })
     } else {
       toast.show('Please fill all the fields', {

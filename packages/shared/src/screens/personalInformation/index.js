@@ -35,6 +35,8 @@ const PersonalInformation = (props) => {
     await mutation.mutateAsync({
       type: 'create',
       fieldData: data,
+      metaData: fieldData,
+      sessionName: 'personal_Information',
     })
 
     setIsLoading((prevValue) => ({
@@ -52,6 +54,8 @@ const PersonalInformation = (props) => {
     await mutation.mutateAsync({
       type: 'createAndNext',
       fieldData: data,
+      metaData: fieldData,
+      sessionName: 'personal_Information',
     })
 
     setIsLoading((prevValue) => ({

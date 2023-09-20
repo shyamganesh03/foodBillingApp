@@ -5,7 +5,7 @@ import DesktopView from './DesktopView'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { deleteDocument, getApplicationFileByID, uploadFile } from '../../api'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
-import { studentDetails } from '../../utils/atom'
+import { applicationProgressDetails, studentDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
 
 const ApplicationDocuments = (props) => {
@@ -17,14 +17,9 @@ const ApplicationDocuments = (props) => {
   const navigation = useNavigation()
   const { params } = useParams()
   const { steps } = params
-
-  useEffect(() => {
-    if (!isFocused) return
-
-    if (!applicationDetails) {
-      queryClient.refetchQueries(['getApplicationData'])
-    }
-  }, [isFocused, applicationDetails])
+  const [applicationProgressDetail, setApplicationProgressDetail] = useAtom(
+    applicationProgressDetails,
+  )
 
   const {
     data: cvDocuments,
@@ -83,10 +78,50 @@ const ApplicationDocuments = (props) => {
     enabled: isFocused && !!studentDetail?.gusApplicationId,
   })
 
-  const LayoutView = useCallback(
-    ScreenLayout.withLayoutView(DesktopView, DesktopView, DesktopView),
-    [],
-  )
+  useEffect(() => {
+    if (!isFocused) return
+
+    if (!applicationDetails) {
+      queryClient.refetchQueries(['getApplicationData'])
+    }
+  }, [isFocused, applicationDetails])
+
+  useEffect(() => {
+    if (!isFocused) return
+
+    if (cvDocuments?.length === 0) {
+      updateMandatoryData({ fileType: 'CV', isSaved: false })
+    } else {
+      updateMandatoryData({ fileType: 'CV' })
+    }
+    if (applicantPhotoDocs?.length === 0) {
+      updateMandatoryData({ fileType: 'Applicant_Photo', isSaved: false })
+    } else {
+      updateMandatoryData({ fileType: 'Applicant_Photo' })
+    }
+    if (medicalStatementDocs?.length === 0) {
+      updateMandatoryData({ fileType: 'Medical_Statement', isSaved: false })
+    } else {
+      updateMandatoryData({ fileType: 'Medical_Statement' })
+    }
+  }, [isFocused, cvDocuments, applicantPhotoDocs, medicalStatementDocs])
+
+  const updateMandatoryData = ({ fileType, isSaved = true }) => {
+    const applicationProgressDetailCopy = { ...applicationProgressDetail }
+
+    const documentsData =
+      applicationProgressDetail.mandatoryFields
+        .Application_Document_Requirements
+
+    const filteredDocuments = documentsData.map((item) =>
+      item.fileType === fileType ? { ...item, isSaved: isSaved } : item,
+    )
+
+    applicationProgressDetailCopy.mandatoryFields.Application_Document_Requirements =
+      filteredDocuments
+
+    setApplicationProgressDetail(applicationProgressDetailCopy)
+  }
 
   const uploadDocs = async (fileData) => {
     setFileData(fileData)
@@ -98,12 +133,15 @@ const ApplicationDocuments = (props) => {
 
     if (fileData?.type === 'CV') {
       await refetchCVDocumentsDocument()
+      updateMandatoryData({ fileType })
     }
     if (fileData?.type === 'Applicant_Photo') {
       await refetchApplicantPhotoDocs()
+      updateMandatoryData({ fileType })
     }
     if (fileData?.type === 'Medical_Statement') {
       await refetchMedicalStatementDocs()
+      updateMandatoryData({ fileType })
     }
     setFileData({})
   }
@@ -128,8 +166,23 @@ const ApplicationDocuments = (props) => {
   }
 
   const handleNextStep = () => {
-    navigation.setParams({ steps: Number(steps) + 1 })
+    if (
+      cvDocuments?.length === 0 ||
+      applicantPhotoDocs?.length === 0 ||
+      medicalStatementDocs?.length === 0
+    ) {
+      toast.show('Please add the required documents', {
+        type: 'danger',
+      })
+    } else {
+      navigation.setParams({ steps: Number(steps) + 1 })
+    }
   }
+
+  const LayoutView = useCallback(
+    ScreenLayout.withLayoutView(DesktopView, DesktopView, DesktopView),
+    [],
+  )
 
   const viewProps = {
     applicantPhotoDocs,

@@ -88,6 +88,8 @@ const Recommenders = () => {
       await mutation.mutateAsync({
         type: 'save',
         fieldData: newPayload,
+        metaData: fieldData,
+        sessionName: 'Recommenders',
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -120,6 +122,8 @@ const Recommenders = () => {
       await mutation.mutateAsync({
         type: 'saveAndNext',
         fieldData: newPayload,
+        metaData: fieldData,
+        sessionName: 'Recommenders',
       })
     } else {
       toast.show('Please fill all the fields', {

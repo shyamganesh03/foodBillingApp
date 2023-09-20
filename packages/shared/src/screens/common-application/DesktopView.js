@@ -28,9 +28,9 @@ const DesktopView = ({
           One Dream, Three Schools, One Free Application
         </Text>
         <Text variant="body2" style={{ marginBottom: 20 }}>
-          Saba University School of Medicine, along with its sister schools
-          Medical University of the Americas and St. Matthew’s University, offer
-          the unprecedented opportunity to apply to up to three top Caribbean
+          GUS Medical Universities, along with its sister schools Medical
+          University of the Americas and St. Matthew’s University, offer the
+          unprecedented opportunity to apply to up to three top Caribbean
           medical schools at once! By submitting just one set of documents and
           participating in one interview, you can receive admissions decisions
           from any or all of the three medical schools. And there is no

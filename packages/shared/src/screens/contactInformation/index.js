@@ -56,6 +56,8 @@ const ContactInformation = (props) => {
     await mutation.mutateAsync({
       type: 'create',
       fieldData: payload,
+      metaData: fieldData,
+      sessionName: 'Contact_Information',
     })
 
     setIsLoading((prevValue) => ({
@@ -83,6 +85,8 @@ const ContactInformation = (props) => {
     await mutation.mutateAsync({
       type: 'createAndNext',
       fieldData: payload,
+      metaData: fieldData,
+      sessionName: 'Contact_Information',
     })
 
     setIsLoading((prevValue) => ({

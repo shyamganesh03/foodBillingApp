@@ -59,7 +59,7 @@ const WorkExperience = () => {
 
       applicationDetails.clinicalOrHospitalExperienceDetails.forEach(
         (fieldItem, fieldIndex) => {
-          console.log({ fieldItem, fieldIndex })
+          
           let wrappedFieldData = [fieldData]
           let newFieldData = []
           newFieldData.push(fieldData)
@@ -73,7 +73,7 @@ const WorkExperience = () => {
     }
   }, [isFocused, applicationDetails])
 
-  console.log({ fields })
+  
 
   const handlePrimary = async (data) => {
     const payload = getPayload({
@@ -91,6 +91,8 @@ const WorkExperience = () => {
       await mutation.mutateAsync({
         type: 'save',
         fieldData: { clinicalOrHospitalExperienceDetails: payload },
+        metaData: fieldData,
+        sessionName: 'Clinical/Hospital_Experience',
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -120,6 +122,8 @@ const WorkExperience = () => {
       await mutation.mutateAsync({
         type: 'saveAndNext',
         fieldData: { clinicalOrHospitalExperienceDetails: payload },
+        metaData: fieldData,
+        sessionName: 'Clinical/Hospital_Experience',
       })
     } else {
       toast.show('Please fill all the fields', {

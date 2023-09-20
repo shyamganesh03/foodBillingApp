@@ -126,6 +126,8 @@ const UniversityInformation = () => {
     await mutation.mutateAsync({
       type: 'save',
       fieldData: { universityOrCollegeInfo: payload },
+      metaData: fieldData,
+      sessionName: 'University/College_Information',
     })
 
     setIsLoading((prevValue) => ({
@@ -144,6 +146,10 @@ const UniversityInformation = () => {
     await mutation.mutateAsync({
       type: 'saveAndNext',
       fieldData: { universityOrCollegeInfo: payload },
+      metaData: fieldData,
+      sessionName: 'University/College_Information',
+      listKey: 'universityOrCollegeInfo',
+      isList: true,
     })
 
     setIsLoading((prevValue) => ({

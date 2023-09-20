@@ -37,6 +37,7 @@ const DesktopView = ({
           handleDelete={handleDelete}
           uploadedFiles={cvDocuments}
           documentType="CV"
+          isMandatory
         />
         <FilePicker
           heading="Applicant Photo"
@@ -45,6 +46,7 @@ const DesktopView = ({
           handleDelete={handleDelete}
           uploadedFiles={applicantPhotoDocs}
           documentType="Applicant_Photo"
+          isMandatory
         />
         <FilePicker
           heading="Personal Medical School Statements"
@@ -54,6 +56,7 @@ const DesktopView = ({
           uploadedFiles={medicalStatementDocs}
           documentType="Medical_Statement"
           isMultiUpload
+          isMandatory
         />
         <Button
           label="Next"

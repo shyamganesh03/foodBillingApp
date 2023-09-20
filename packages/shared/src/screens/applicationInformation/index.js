@@ -38,6 +38,8 @@ const ApplicationInformation = (props) => {
     await mutation.mutateAsync({
       type: 'save',
       fieldData: data,
+      metaData: fieldData,
+      sessionName: 'Application_Information',
     })
 
     setIsLoading((prevValue) => ({
@@ -55,6 +57,8 @@ const ApplicationInformation = (props) => {
     await mutation.mutateAsync({
       type: 'saveAndNext',
       fieldData: data,
+      metaData: fieldData,
+      sessionName: 'Application_Information',
     })
 
     setIsLoading((prevValue) => ({

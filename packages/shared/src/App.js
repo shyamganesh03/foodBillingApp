@@ -100,8 +100,7 @@ const App = () => {
             <PaperProvider>
               <JotaiProvider>
                 <ParamsProvider>
-                  <View style={{ minHeight: height, flexDirection: 'row' }}>
-                    <LeftContainer tabItems={LeftTimeLineData} />
+                  <View style={{ minHeight: height }}>
                     <AppNavigator />
                   </View>
                 </ParamsProvider>

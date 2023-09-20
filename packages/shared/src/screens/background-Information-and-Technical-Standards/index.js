@@ -35,6 +35,8 @@ const BackgroundInformation = (props) => {
     await mutation.mutateAsync({
       type: 'save',
       fieldData: data,
+      metaData: fieldData,
+      sessionName: 'Background_Information_and_Technical_Standards',
     })
 
     setIsLoading((prevValue) => ({
@@ -52,6 +54,8 @@ const BackgroundInformation = (props) => {
     await mutation.mutateAsync({
       type: 'saveAndNext',
       fieldData: data,
+      metaData: fieldData,
+      sessionName: 'Background_Information_and_Technical_Standards',
     })
 
     setIsLoading((prevValue) => ({

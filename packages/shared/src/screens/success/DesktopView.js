@@ -22,7 +22,7 @@ const DesktopView = ({ tabName, programName }) => {
         }}
       >
         <Text
-          variant="heading2"
+          variant="heading1"
           style={{ textAlign: 'center', marginBottom: 30 }}
           color={colors.onAlert}
         >
@@ -31,7 +31,7 @@ const DesktopView = ({ tabName, programName }) => {
         <Text
           variant="heading2"
           style={{ textAlign: 'center', marginBottom: 30 }}
-          color={colors.onNeutral}
+          color={colors.primary}
         >
           {programName}
         </Text>

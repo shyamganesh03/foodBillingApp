@@ -28,7 +28,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Text } from '@libs/components'
 import { getCurrentDate } from '../../utils/dateFunction'
 import { useAtom } from 'jotai'
-import { studentDetails } from '../../utils/atom'
+import { applicationProgressDetails, studentDetails } from '../../utils/atom'
 
 const Application = (props) => {
   const { setParams } = useParams()
@@ -60,6 +60,9 @@ const Application = (props) => {
   const navigation = useNavigation()
   const route = useRoute()
   const [studentDetail, setStudentDetail] = useAtom(studentDetails)
+  const [applicationProgressDetail, setApplicationProgressDetail] = useAtom(
+    applicationProgressDetails,
+  )
 
   useEffect(() => {
     if (isEditMode) return
@@ -122,13 +125,78 @@ const Application = (props) => {
     queryKey: ['getApplicationData'],
     queryFn: async () => {
       const formDataCopy = { ...formData }
-     
       const dropdown = []
 
       const responseData = await getApplicationByEmailID({
         gusApplicationId: paramsData?.id,
         email: paramsData?.email || applicationDetails?.Email__c,
       })
+
+      let updatedMandatoryFields = {
+        ...applicationProgressDetail.mandatoryFields,
+      }
+
+      Object.entries(responseData).forEach(([key, responseDataItem]) => {
+        const fieldKey = Object.keys(updatedMandatoryFields).find(
+          (applicationDetailKey) => {
+            const applicationFieldData =
+              updatedMandatoryFields?.[applicationDetailKey]
+            if (Array.isArray(applicationFieldData)) {
+              return applicationFieldData.some((item) => item.fieldName === key)
+            }
+            return false
+          },
+        )
+        if (fieldKey) {
+          updatedMandatoryFields[fieldKey] = updatedMandatoryFields[
+            fieldKey
+          ].map((applicationFieldData) => {
+            if (applicationFieldData.fieldName === key) {
+              return {
+                ...applicationFieldData,
+                isSaved: true,
+              }
+            }
+            return {
+              ...applicationFieldData,
+            }
+          })
+        } else {
+          const listValues = responseDataItem || []
+
+          if (Array.isArray(listValues)) {
+            listValues?.forEach((listValue, listIndex) => {
+              let keyName = ''
+              if (key === 'universityOrCollegeInfo') {
+                keyName = 'University/College_Information'
+              }
+
+              let mandatoryFieldDetailCopy =
+                updatedMandatoryFields?.[keyName]?.mandatoryFieldDetail || []
+
+              mandatoryFieldDetailCopy = mandatoryFieldDetailCopy?.map(
+                (mandatoryFieldDetailCopyFields) => ({
+                  ...mandatoryFieldDetailCopyFields,
+                  isSaved: true,
+                }),
+              )
+              if (!!updatedMandatoryFields[keyName]) {
+                updatedMandatoryFields[keyName].list = {
+                  ...updatedMandatoryFields?.[keyName]?.list,
+                  [listIndex]: mandatoryFieldDetailCopy,
+                }
+              }
+            })
+          }
+        }
+      })
+
+      const updatedApplicationProgressDetail = {
+        ...applicationProgressDetail,
+        mandatoryFields: updatedMandatoryFields,
+      }
+
+      setApplicationProgressDetail(updatedApplicationProgressDetail)
 
       setStudentDetail({
         gusApplicationId: paramsData?.id,
