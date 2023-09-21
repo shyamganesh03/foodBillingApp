@@ -20,7 +20,13 @@ const FilePicker = ({
   const [error, setError] = useState()
   const isFocused = useIsFocused()
   const documentRef = useRef()
-  const fileTypes = ['application/pdf', 'image/png', 'application/msword']
+  const fileTypes = [
+    'application/pdf',
+    'image/jpg',
+    'image/jpeg',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  ]
   useEffect(() => {
     if (!isFocused) return
 
@@ -44,15 +50,34 @@ const FilePicker = ({
     setError('')
     event.preventDefault()
     const uploadedFile = event.dataTransfer.files[0]
-    let filesCopy = [...files, { documentName: uploadedFile.name }]
-    setFiles(filesCopy)
-    const base64Docs = await getBase64(uploadedFile)
-    uploadFile({
-      file: base64Docs.split(',')[1],
-      path: uploadedFile.name,
-      pathName: uploadedFile.name.split('.')[0],
-      fileType: documentType,
-    })
+    const isValidFile = isFileValid(uploadedFile)
+    if (isValidFile) {
+      let filesCopy = [...files, { documentName: uploadedFile?.name || '' }]
+      setFiles(filesCopy)
+      const base64Docs = await getBase64(uploadedFile)
+      uploadFile({
+        file: base64Docs.split(',')[1],
+        path: uploadedFile.name,
+        pathName: uploadedFile.name.split('.')[0],
+        fileType: documentType,
+      })
+    }
+  }
+
+  const isFileValid = (uploadedFile) => {
+    if (uploadedFile.size > 5e6) {
+      toast.show('Please upload a file that is less than 5 MB.', {
+        type: 'danger',
+      })
+      return false
+    }
+    if (!fileTypes.includes(uploadedFile.type)) {
+      toast.show('Please upload an allowed file type.', {
+        type: 'danger',
+      })
+      return false
+    }
+    return true
   }
 
   const getBase64 = async (f) =>
@@ -72,35 +97,25 @@ const FilePicker = ({
   const handleFilePicker = async (event) => {
     setError('')
     const uploadedFile = event.target.files[0]
+    const isValidFile = isFileValid(uploadedFile)
+    if (isValidFile) {
+      let filesCopy = [...files, { documentName: uploadedFile?.name || '' }]
 
-    let filesCopy = [...files, { documentName: uploadedFile.name }]
-    if (uploadedFile.size > 5e6) {
-      toast.show('Please upload a file that is less than 5 MB.', {
-        type: 'danger',
-      })
-      return
-    }
-    // if (!fileTypes.includes(uploadedFile.type)) {
-    //   toast.show('please upload the valid file type', {
-    //     type: 'danger',
-    //   })
-    //   return
-    // }
-
-    setFiles(filesCopy)
-    const duplicateFile = filesCopy.filter(
-      (file) => file.documentName === uploadedFile.name?.split('.')[0],
-    )
-    if (duplicateFile.length > 1 && files?.length > 1) {
-      setError('DuplicateFile not allowed')
-    } else {
-      const base64Docs = await getBase64(uploadedFile)
-      await uploadFile({
-        file: base64Docs.split(',')[1],
-        path: uploadedFile.name,
-        pathName: uploadedFile.name.split('.')[0],
-        fileType: documentType,
-      })
+      setFiles(filesCopy)
+      const duplicateFile = filesCopy.filter(
+        (file) => file.documentName === uploadedFile.name?.split('.')[0],
+      )
+      if (duplicateFile.length > 1 && files?.length > 1) {
+        setError('DuplicateFile not allowed')
+      } else {
+        const base64Docs = await getBase64(uploadedFile)
+        await uploadFile({
+          file: base64Docs.split(',')[1],
+          path: uploadedFile.name,
+          pathName: uploadedFile.name.split('.')[0],
+          fileType: documentType,
+        })
+      }
     }
   }
 
@@ -166,7 +181,10 @@ const FilePicker = ({
                     </TouchableOpacity>
                   </View>
                   <Text variant="display4" color={colors.primaryIconColor}>
-                    doc, docx, jpg, jpeg, png, gif, pdf, svg, bmp, odt
+                    doc, docx, jpg, jpeg, pdf
+                  </Text>
+                  <Text variant="display4" color={colors.primaryIconColor}>
+                    Please upload a file that is less than 5 MB.
                   </Text>
                 </View>
               </View>

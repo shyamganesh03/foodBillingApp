@@ -44,7 +44,7 @@ export const LeftTimeLineData = [
     order: 8,
   },
   {
-    displayName: 'Clinical and Research Experience',
+    displayName: 'Clinical Experience',
     sessionName: 'Clinical/Hospital_Experience',
     screenType: 'list',
     fieldName: 'clinicalOrHospitalExperienceDetails',

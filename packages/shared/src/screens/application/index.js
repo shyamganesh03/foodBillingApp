@@ -59,7 +59,7 @@ const Application = (props) => {
   const {
     data: r3ApplicationDetails,
     refetch,
-    isFetching,
+    isFetching: isR3ApplicationDetails,
   } = useQuery({
     queryKey: ['getApplicationData'],
     queryFn: async () => {
@@ -184,19 +184,19 @@ const Application = (props) => {
   const { data: cvDocument, isFetching: isCVDocumentFetching } = useDocuments({
     queryKey: 'getCVDocuments',
     type: 'CV',
-    enabled: isFocused && !!r3ApplicationDetails?.programmeName && isEditMode,
+    enabled: isFocused && !!r3ApplicationDetails?.PK && isEditMode,
   })
   const { data: applicantPhoto, isFetching: isApplicantPhotoFetching } =
     useDocuments({
       queryKey: 'getApplicantPhoto',
       type: 'Applicant_Photo',
-      enabled: isFocused && !!r3ApplicationDetails?.programmeName && isEditMode,
+      enabled: isFocused && !!r3ApplicationDetails?.PK && isEditMode,
     })
   const { data: medicalDocuments, isFetching: isMedicalDocumentFetching } =
     useDocuments({
       queryKey: 'getMedicalDocuments',
       type: 'Medical_Statement',
-      enabled: isFocused && !!r3ApplicationDetails?.programmeName && isEditMode,
+      enabled: isFocused && !!r3ApplicationDetails?.PK && isEditMode,
     })
 
   let updatedData
@@ -290,6 +290,12 @@ const Application = (props) => {
     medicalDocuments,
     r3ApplicationDetails,
     steps,
+    isLoading:
+      isApplicationFetching ||
+      isR3ApplicationDetails ||
+      isCVDocumentFetching ||
+      isApplicantPhotoFetching ||
+      isMedicalDocumentFetching,
   }
 
   const LayoutView = useCallback(

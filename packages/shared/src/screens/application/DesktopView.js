@@ -15,6 +15,7 @@ import ResearchExperience from '../researchExperience'
 import Recommenders from '../recommenders'
 import ApplicationDocuments from '../applicationDocuments'
 import ApplicationSubmission from '../applicationSubmission'
+import { Loader } from '../../components'
 
 const DesktopView = ({
   applicantPhoto,
@@ -22,8 +23,17 @@ const DesktopView = ({
   medicalDocuments,
   r3ApplicationDetails,
   steps,
+  isLoading,
 }) => {
   const { colors } = useTheme()
+
+  if (isLoading) {
+    return (
+      <View style={styles({ colors }).container}>
+        <Loader />
+      </View>
+    )
+  }
 
   if (Number(steps) === 1) {
     return (

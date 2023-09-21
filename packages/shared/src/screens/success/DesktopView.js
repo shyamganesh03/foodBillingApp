@@ -1,4 +1,4 @@
-import { Image, View } from 'react-native'
+import { FlatList, Image, View } from 'react-native'
 import React from 'react'
 import { Text } from '@libs/components'
 import { Icon } from '@r3-oaf/native-icons'
@@ -10,8 +10,8 @@ const DesktopView = ({ tabName, programName }) => {
   return (
     <View
       style={{
-        flexDirection: 'row',
-        paddingLeft: '25%',
+        flexDirection: 'column',
+        justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
         backgroundColor: colors.primary,
@@ -24,7 +24,7 @@ const DesktopView = ({ tabName, programName }) => {
       />
       <View
         style={{
-          maxWidth: 800,
+          width: 800,
           padding: 20,
           backgroundColor: colors.white,
           borderRadius: 10,
@@ -45,32 +45,38 @@ const DesktopView = ({ tabName, programName }) => {
         >
           {programName}
         </Text>
-        <View style={{ flexDirection: 'column' }}>
-          {tabName?.map((item) => {
-            return (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}
-              >
-                <Icon
-                  name="Check"
-                  height={20}
-                  width={20}
-                  color={colors.onAlert}
-                />
-                <Text
-                  style={{ marginLeft: 10 }}
-                  color={colors.onNeutral}
-                  variant="body1"
+        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+          <FlatList
+            data={tabName}
+            numColumns={2}
+            keyExtractor={(_, index) => index}
+            renderItem={({ item }) => {
+              return (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: 10,
+                    width: 380,
+                  }}
                 >
-                  {item?.title}
-                </Text>
-              </View>
-            )
-          })}
+                  <Icon
+                    name="Check"
+                    height={20}
+                    width={20}
+                    color={colors.onAlert}
+                  />
+                  <Text
+                    style={{ marginLeft: 10 }}
+                    color={colors.onNeutral}
+                    variant="body1"
+                  >
+                    {item?.title}
+                  </Text>
+                </View>
+              )
+            }}
+          />
         </View>
       </View>
     </View>
