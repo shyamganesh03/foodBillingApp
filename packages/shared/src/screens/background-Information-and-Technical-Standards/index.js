@@ -6,6 +6,7 @@ import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { fieldData } from './data/metaData'
 import { useFormContext } from 'react-hook-form'
+import { getRequiredPayload } from '../../utils/fieldFunction'
 
 const BackgroundInformation = ({ applicationDetails }) => {
   const [isLoading, setIsLoading] = useState({
@@ -28,9 +29,13 @@ const BackgroundInformation = ({ applicationDetails }) => {
       primary: true,
     }))
 
+    let requiredPayload = getRequiredPayload(fieldData, data)
+
+    let payload = { ...requiredPayload }
+
     await mutation.mutateAsync({
       type: 'save',
-      fieldData: data,
+      fieldData: payload,
       metaData: fieldData,
       sessionName: 'Background_Information_and_Technical_Standards',
     })
@@ -46,10 +51,13 @@ const BackgroundInformation = ({ applicationDetails }) => {
       ...prevValue,
       secondary: true,
     }))
+    let requiredPayload = getRequiredPayload(fieldData, data)
+
+    let payload = { ...requiredPayload }
 
     await mutation.mutateAsync({
       type: 'saveAndNext',
-      fieldData: data,
+      fieldData: payload,
       metaData: fieldData,
       sessionName: 'Background_Information_and_Technical_Standards',
     })

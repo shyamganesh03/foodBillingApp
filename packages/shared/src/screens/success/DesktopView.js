@@ -1,8 +1,9 @@
-import { View } from 'react-native'
+import { Image, View } from 'react-native'
 import React from 'react'
 import { Text } from '@libs/components'
 import { Icon } from '@r3-oaf/native-icons'
 import { useTheme } from '@react-navigation/native'
+import { gesMedicalCollegeLogo } from '@oap/assets'
 
 const DesktopView = ({ tabName, programName }) => {
   const { colors } = useTheme()
@@ -10,29 +11,37 @@ const DesktopView = ({ tabName, programName }) => {
     <View
       style={{
         flexDirection: 'row',
-        justifyContent: 'center',
+        paddingLeft: '25%',
         alignItems: 'center',
         flex: 1,
         backgroundColor: colors.primary,
       }}
     >
+      <Image
+        source={gesMedicalCollegeLogo}
+        style={{ height: 150, width: 300 }}
+        resizeMode="contain"
+      />
       <View
         style={{
           maxWidth: 800,
           padding: 20,
+          backgroundColor: colors.white,
+          borderRadius: 10,
+          marginLeft: 20,
         }}
       >
         <Text
           variant="heading1"
-          style={{ textAlign: 'center', marginBottom: 30 }}
+          style={{ textAlign: 'center', fontWight: 700, marginBottom: 20 }}
           color={colors.onAlert}
         >
           Thank You for applying!
         </Text>
         <Text
           variant="heading2"
-          style={{ textAlign: 'center', marginBottom: 20 }}
-          color={colors.white}
+          style={{ textAlign: 'center', marginBottom: 10, fontWight: 700 }}
+          color={colors.onNeutral}
         >
           {programName}
         </Text>
@@ -54,7 +63,7 @@ const DesktopView = ({ tabName, programName }) => {
                 />
                 <Text
                   style={{ marginLeft: 10 }}
-                  color={colors.white}
+                  color={colors.onNeutral}
                   variant="body1"
                 >
                   {item?.title}

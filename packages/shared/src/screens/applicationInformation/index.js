@@ -8,6 +8,7 @@ import { fieldData } from './data/metaData'
 import { useFormContext } from 'react-hook-form'
 import { studentDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
+import { getRequiredPayload } from '../../utils/fieldFunction'
 
 const ApplicationInformation = ({ applicationDetails }) => {
   const [isLoading, setIsLoading] = useState({
@@ -31,9 +32,13 @@ const ApplicationInformation = ({ applicationDetails }) => {
       primary: true,
     }))
 
+    let requiredPayload = getRequiredPayload(fieldData, data)
+
+    let payload = { ...requiredPayload }
+
     await mutation.mutateAsync({
       type: 'save',
-      fieldData: data,
+      fieldData: payload,
       metaData: fieldData,
       sessionName: 'Application_Information',
     })
@@ -50,9 +55,13 @@ const ApplicationInformation = ({ applicationDetails }) => {
       secondary: true,
     }))
 
+    let requiredPayload = getRequiredPayload(fieldData, data)
+
+    let payload = { ...requiredPayload }
+
     await mutation.mutateAsync({
       type: 'saveAndNext',
-      fieldData: data,
+      fieldData: payload,
       metaData: fieldData,
       sessionName: 'Application_Information',
     })

@@ -9,6 +9,7 @@ import DesktopView from './DesktopView'
 import { fieldData } from './data/metaData'
 import { useSave } from '../../hooks/useSave'
 import { getCurrentDate } from '../../utils/dateFunction'
+import { getRequiredPayload } from '../../utils/fieldFunction'
 
 const ApplicationSubmission = () => {
   const [applicationProgressData] = useAtom(applicationProgressDetails)
@@ -77,9 +78,13 @@ const ApplicationSubmission = () => {
       primary: true,
     }))
 
+    let requiredPayload = getRequiredPayload(fieldData, data)
+
+    let payload = { ...requiredPayload }
+
     await mutation.mutateAsync({
       type: 'submit',
-      fieldData: data,
+      fieldData: payload,
       metaData: fieldData,
       sessionName: 'Application_Submission',
     })

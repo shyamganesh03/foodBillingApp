@@ -93,12 +93,12 @@ const DesktopView = ({
             <Text variant="body1" style={{ marginBottom: 24 }}>
               CERTIFICATION STATEMENT
             </Text>
-            <Text variant="body3" style={{ marginBottom: 24 }}>
+            <Text variant="body2" style={{ marginBottom: 24 }}>
               I hereby authorize GUS Medical Universities to report information
               concerning my MCAT scores to the U.S. Department of Education,
               other regulatory bodies, and accrediting bodies.
             </Text>
-            <Text variant="body3" style={{ marginBottom: 24 }}>
+            <Text variant="body2" style={{ marginBottom: 24 }}>
               The filling out and electronic submission of this form
               acknowledges that I understand that withholding any information
               requested in this application or giving false information may make
@@ -106,14 +106,14 @@ const DesktopView = ({
               Medical Universities. With this in mind, I certify that the above
               statements are correct and complete.
             </Text>
-            <Text variant="body3" style={{ marginBottom: 24 }}>
+            <Text variant="body2" style={{ marginBottom: 24 }}>
               No person shall be excluded from participation in, denied benefits
               of, or be subject to discrimination under any program or activity
               sponsored or conducted by GUS Medical Universities, on any basis
               prohibited by applicable law, including but not limited to race,
               color, national origin, sex, age, or handicap.
             </Text>
-            <Text variant="body3" style={{ marginBottom: 24 }}>
+            <Text variant="body2" style={{ marginBottom: 24 }}>
               Please note: Information on sex, age, ethnic origin, and
               citizenship status is collected for compliance reports in
               connection with the federal regulation pursuant to the Civil
@@ -123,7 +123,7 @@ const DesktopView = ({
               educational programs or activities offered by GUS Medical
               Universities.
             </Text>
-            <Text variant="body3" style={{ marginBottom: 24 }}>
+            <Text variant="body2" style={{ marginBottom: 24 }}>
               {
                 '[University policies and academic requirements are subject to change from time-to-time.]'
               }

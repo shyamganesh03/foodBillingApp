@@ -16,6 +16,7 @@ import { applicationProgressDetails, studentDetails } from '../../utils/atom'
 import { useDocuments } from '../../hooks/useDocuments'
 import { updateMandatoryData } from '../../utils/fieldFunction'
 import { canNonEmptyObject } from '../../utils/fieldValidation'
+import { Platform } from 'react-native'
 
 const Application = (props) => {
   const { setParams } = useParams()
@@ -37,10 +38,9 @@ const Application = (props) => {
         const response = await getApplicationByID({
           applicationId: paramsData?.id,
         })
+
         if (response?.statusCode === 500) {
-          toast.show('Invalid Application id', {
-            type: 'danger',
-          })
+          handleNavigation({ type: 'invalidID' })
         }
 
         setStudentDetail({
@@ -200,6 +200,20 @@ const Application = (props) => {
     })
   let updatedData
 
+  const handleNavigation = ({ type, paramData }) => {
+    if (type === 'invalidID') {
+      Platform.OS === 'web'
+        ? window.location.replace('error')
+        : navigation.replace('error')
+    } else {
+      Platform.OS === 'web'
+        ? window.location.replace(`success?programName=${paramData}`)
+        : navigation.replace('success', {
+            programName: paramData,
+          })
+    }
+  }
+
   useEffect(() => {
     if (!isFocused) return
 
@@ -253,11 +267,9 @@ const Application = (props) => {
 
     const programName = r3ApplicationDetails['programmeName']
     if (!isEditMode && !!programName) {
-      navigation.navigate('success', {
-        programName: programName,
-      })
+      handleNavigation({ type: 'success', paramData: programName })
     }
-  }, [isEditMode])
+  }, [isEditMode, r3ApplicationDetails, isFocused])
 
   useEffect(() => {
     if (!isFocused) return

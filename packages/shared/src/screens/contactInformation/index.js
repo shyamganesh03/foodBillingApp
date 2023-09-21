@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { fieldData } from './data/metaData'
 import { useFormContext } from 'react-hook-form'
 import { getDropdownValue } from '../../api'
+import { getRequiredPayload } from '../../utils/fieldFunction'
 
 const ContactInformation = ({ applicationDetails }) => {
   const [isLoading, setIsLoading] = useState({
@@ -36,11 +37,14 @@ const ContactInformation = ({ applicationDetails }) => {
   } = useFormContext()
 
   const handlePrimary = async (data) => {
-    let payload = data
     setIsLoading((prevValue) => ({
       ...prevValue,
       primary: true,
     }))
+    let requiredPayload = getRequiredPayload(fieldData, data)
+
+    let payload = { ...requiredPayload }
+
     const mailingCountryCode = watch('mailingCountryCode')
     if (mailingCountryCode) {
       const selectedData = dropdown?.filter(
@@ -64,13 +68,17 @@ const ContactInformation = ({ applicationDetails }) => {
   }
 
   const handleSecondary = async (data) => {
-    let payload = data
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: true,
     }))
 
+    let requiredPayload = getRequiredPayload(fieldData, data)
+
+    let payload = { ...requiredPayload }
+
     const mailingCountryCode = watch('mailingCountryCode')
+
     if (mailingCountryCode) {
       const selectedData = dropdown?.filter(
         (item) => item?.Label === mailingCountryCode,

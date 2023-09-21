@@ -6,6 +6,7 @@ import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { fieldData } from './data/metaData'
 import { useFormContext } from 'react-hook-form'
+import { getRequiredPayload } from '../../utils/fieldFunction'
 
 const PrerequisiteCourseworkInformation = ({ applicationDetails }) => {
   const [isLoading, setIsLoading] = useState({
@@ -28,9 +29,13 @@ const PrerequisiteCourseworkInformation = ({ applicationDetails }) => {
       primary: true,
     }))
 
+    let requiredPayload = getRequiredPayload(fieldData, data)
+
+    let payload = { ...requiredPayload }
+
     await mutation.mutateAsync({
       type: 'create',
-      fieldData: data,
+      fieldData: payload,
       metaData: fieldData,
       sessionName: 'Prerequisite_Coursework_Information',
     })
@@ -47,9 +52,13 @@ const PrerequisiteCourseworkInformation = ({ applicationDetails }) => {
       secondary: true,
     }))
 
+    let requiredPayload = getRequiredPayload(fieldData, data)
+
+    let payload = { ...requiredPayload }
+
     await mutation.mutateAsync({
       type: 'createAndNext',
-      fieldData: data,
+      fieldData: payload,
       metaData: fieldData,
       sessionName: 'Prerequisite_Coursework_Information',
     })

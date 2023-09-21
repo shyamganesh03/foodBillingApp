@@ -104,7 +104,7 @@ const DateInput = (props) => {
         const yearItemHeight = 48
         const scrollToOffset = selectedYearIndex * yearItemHeight
         yearScrollViewRef.current?.scrollTo({
-          y: scrollToOffset + 200,
+          y: scrollToOffset + 100,
           animated: true,
         })
       }

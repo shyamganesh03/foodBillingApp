@@ -71,3 +71,14 @@ export const updateMandatoryData = ({
     },
   }
 }
+
+export const getRequiredPayload = (fieldData, formData) => {
+  let requiredPayload = {}
+  fieldData?.map((fieldItem) => {
+    requiredPayload = {
+      ...requiredPayload,
+      [fieldItem.fieldName]: formData[fieldItem.fieldName],
+    }
+  })
+  return requiredPayload
+}

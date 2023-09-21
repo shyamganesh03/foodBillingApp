@@ -7,6 +7,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { fieldData } from './data/metaData'
 import { useFormContext } from 'react-hook-form'
 import { useQueryClient } from '@tanstack/react-query'
+import { getRequiredPayload } from '../../utils/fieldFunction'
 
 const CommonApplication = ({ applicationDetails }) => {
   const [isLoading, setIsLoading] = useState({
@@ -29,9 +30,13 @@ const CommonApplication = ({ applicationDetails }) => {
       primary: true,
     }))
 
+    let requiredPayload = getRequiredPayload(fieldData, data)
+
+    let payload = { ...requiredPayload }
+
     await mutation.mutateAsync({
       type: 'create',
-      fieldData: data,
+      fieldData: payload,
       metaData: fieldData,
       sessionName: 'Common_Application',
     })
@@ -48,9 +53,13 @@ const CommonApplication = ({ applicationDetails }) => {
       secondary: true,
     }))
 
+    let requiredPayload = getRequiredPayload(fieldData, data)
+
+    let payload = { ...requiredPayload }
+
     await mutation.mutateAsync({
       type: 'createAndNext',
-      fieldData: data,
+      fieldData: payload,
       metaData: fieldData,
       sessionName: 'Common_Application',
     })
