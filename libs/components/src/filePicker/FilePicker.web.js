@@ -20,6 +20,7 @@ const FilePicker = ({
   const [error, setError] = useState()
   const isFocused = useIsFocused()
   const documentRef = useRef()
+  const fileTypes = ['application/pdf', 'image/png', 'application/msword']
   useEffect(() => {
     if (!isFocused) return
 
@@ -71,7 +72,20 @@ const FilePicker = ({
   const handleFilePicker = async (event) => {
     setError('')
     const uploadedFile = event.target.files[0]
+
     let filesCopy = [...files, { documentName: uploadedFile.name }]
+    if (uploadedFile.size > 5e6) {
+      toast.show('please upload file less than 5 mb', {
+        type: 'danger',
+      })
+      return
+    }
+    // if (!fileTypes.includes(uploadedFile.type)) {
+    //   toast.show('please upload the valid file type', {
+    //     type: 'danger',
+    //   })
+    //   return
+    // }
 
     setFiles(filesCopy)
     const duplicateFile = filesCopy.filter(

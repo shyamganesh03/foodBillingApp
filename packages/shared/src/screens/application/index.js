@@ -40,7 +40,7 @@ const Application = (props) => {
         })
 
         if (response?.statusCode === 500) {
-          handleNavigation({ type: 'invalidID' })
+          return handleNavigation({ type: 'invalidID' })
         }
 
         setStudentDetail({
@@ -184,20 +184,21 @@ const Application = (props) => {
   const { data: cvDocument, isFetching: isCVDocumentFetching } = useDocuments({
     queryKey: 'getCVDocuments',
     type: 'CV',
-    enabled: isFocused,
+    enabled: isFocused && !!r3ApplicationDetails?.programmeName && isEditMode,
   })
   const { data: applicantPhoto, isFetching: isApplicantPhotoFetching } =
     useDocuments({
       queryKey: 'getApplicantPhoto',
       type: 'Applicant_Photo',
-      enabled: isFocused,
+      enabled: isFocused && !!r3ApplicationDetails?.programmeName && isEditMode,
     })
   const { data: medicalDocuments, isFetching: isMedicalDocumentFetching } =
     useDocuments({
       queryKey: 'getMedicalDocuments',
       type: 'Medical_Statement',
-      enabled: isFocused,
+      enabled: isFocused && !!r3ApplicationDetails?.programmeName && isEditMode,
     })
+
   let updatedData
 
   const handleNavigation = ({ type, paramData }) => {
