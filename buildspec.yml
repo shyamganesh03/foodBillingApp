@@ -16,4 +16,4 @@ phases:
     commands:
       # Copy the content of build folder into website s3 bucket
       - aws s3 sync apps/web/build/ s3://r3-oaf-frontend-dev/
-      - aws cloudfront create-invalidation --distribution-id=E33XP1YPGTLLWB --paths '/*'
+      # - aws cloudfront create-invalidation --distribution-id=E33XP1YPGTLLWB --paths '/*'
