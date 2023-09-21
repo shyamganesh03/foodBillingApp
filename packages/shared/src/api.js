@@ -1,18 +1,31 @@
-import { apiUrl } from './config'
+import { SecureStore } from '@libs/utils'
+import { r3AppUrl } from './config'
 
 export const apiCall = async (url, options) => {
   try {
+    let config = {}
+    const tempConfig = await SecureStore.getItemAsync('config')
+
+    if (!tempConfig) {
+      const response = await fetch(`${r3AppUrl}/config.json`)
+      console.log({ response })
+      const result = await response.json()
+      console.log({ result })
+      await SecureStore.setItemAsync('config', JSON.stringify(result))
+      config = result?.config
+    } else {
+      config = JSON.parse(tempConfig)?.config
+    }
     const requestOptions = {
       method: options?.method,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        // 'x-api-key': apiKey,
       },
 
       body: JSON.stringify(options?.payload),
     }
-    const response = await fetch(`${apiUrl}/${url}`, requestOptions)
+    const response = await fetch(`${config.apiUrl}/${url}`, requestOptions)
 
     if (!response.ok) {
       const errorData = await response.json()

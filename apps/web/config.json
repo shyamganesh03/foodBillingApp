@@ -1,0 +1,5 @@
+{ 
+    "config": {
+        "apiUrl":"https://3a3qd6oyv3.execute-api.eu-west-1.amazonaws.com/dev"
+    }
+}
