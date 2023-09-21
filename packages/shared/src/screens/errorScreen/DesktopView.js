@@ -35,7 +35,7 @@ const DesktopView = () => {
           style={{ marginLeft: 10 }}
           color={colors.onAlert}
         >
-          Invalid Application Id Please try with valid Id
+          Invalid Application Id. Please try with a valid application.
         </Text>
       </View>
     </View>
