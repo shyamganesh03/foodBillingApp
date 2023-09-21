@@ -73,9 +73,7 @@ export const useSave = () => {
       }
     },
     {
-      onError: (data) => {
-        console.log('fail:', data)
-      },
+      onError: (data) => {},
       onSuccess: async (data, context) => {
         let updatedMandatoryFieldCount = 0
         let canCalculate = false

@@ -18,9 +18,7 @@ export const useDelete = () => {
       })
     },
     {
-      onError: (data) => {
-        console.log('fail:', data)
-      },
+      onError: (data) => {},
       onSuccess: async (data, context) => {
         await queryClient.refetchQueries({ queryKey: ['getApplicationData'] })
         if (data?.statusCode === 500) {
