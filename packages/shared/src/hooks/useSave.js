@@ -58,7 +58,11 @@ export const useSave = () => {
 
         removeNullData(payload)
         if (data.type === 'submit') {
-          payload = { ...payload, applicationStatus: 'Submitted' }
+          payload = {
+            signature: payload?.['signature'] || '',
+            signatureDate: payload?.['signatureDate'] || '',
+            applicationStatus: 'Submitted',
+          }
         }
         const response = await updateApplication({
           ...payload,
@@ -74,12 +78,20 @@ export const useSave = () => {
       },
       onSuccess: async (data, context) => {
         let updatedMandatoryFieldCount = 0
+        let canCalculate = false
+
         if (data?.statusCode === 500) {
           toast.show(data.message[0].message, {
             type: 'danger',
           })
         } else {
-          await queryClient.refetchQueries(['getApplicationData'])
+          const responseData = await getApplicationByEmailID({
+            gusApplicationId: studentDetail?.gusApplicationId,
+            email: studentDetail?.email,
+          })
+          queryClient.setQueryData(['getApplicationData'], (prevData) => {
+            return { ...prevData, ...responseData }
+          })
           const updatedProgressDetail = { ...applicationProgressDetail }
 
           context.metaData.forEach((fieldItem, fieldIndex) => {
@@ -132,9 +144,11 @@ export const useSave = () => {
 
           updatedProgressDetail.totalProgress.savedFieldCount =
             newSavedFieldCount
-          updatedProgressDetail.totalProgress.progress = Math.round(
-            (newSavedFieldCount / totalMandatoryFieldCount) * 100,
-          )
+          if (canCalculate) {
+            updatedProgressDetail.totalProgress.progress = Math.round(
+              (newSavedFieldCount / totalMandatoryFieldCount) * 100,
+            )
+          }
 
           setApplicationProgressDetail(updatedProgressDetail)
 
@@ -147,7 +161,7 @@ export const useSave = () => {
 
           if (context.type === 'submit') {
             navigation.navigate('success', {
-              programName: applicationDetails['programmeName'] || '',
+              programName: responseData?.['programmeName'] || '',
             })
           }
         }

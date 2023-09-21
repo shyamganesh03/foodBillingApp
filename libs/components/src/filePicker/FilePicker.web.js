@@ -62,8 +62,10 @@ const FilePicker = ({
       reader.onerror = (error) => reject(error)
     })
 
-  const handleFileDelete = async (fileData) => {
+  const handleFileDelete = async (fileData, setIsDeleteCallFetching) => {
+    setIsDeleteCallFetching(true)
     await handleDelete({ id: fileData.id, fileType: documentType })
+    setIsDeleteCallFetching(false)
   }
 
   const handleFilePicker = async (event) => {
@@ -231,8 +233,7 @@ const UploadedFileContainer = ({
         </View>
         <TouchableOpacity
           onPress={() => {
-            setIsDeleteCallFetching(true)
-            handleFileDelete(fileItem)
+            handleFileDelete(fileItem, setIsDeleteCallFetching)
           }}
         >
           {isDeleteCallFetching ? (

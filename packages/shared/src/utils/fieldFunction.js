@@ -30,6 +30,7 @@ export const updateMandatoryData = ({
   fileType,
   isSaved = true,
   applicationProgressDetail,
+  totalDocumentCount,
 }) => {
   const { mandatoryFields, totalProgress } = { ...applicationProgressDetail }
   const { Application_Document_Requirements: documentsData } = mandatoryFields
@@ -38,8 +39,16 @@ export const updateMandatoryData = ({
     const { fileType: itemFileType, isSaved: itemIsSaved } = item
 
     if (itemFileType === fileType) {
-      const savedFieldCountDiff = isSaved ? 1 : -1
-      totalProgress.savedFieldCount += savedFieldCountDiff
+      const savedFieldCountDiff = totalDocumentCount
+      if (isSaved) {
+        if (
+          totalProgress.savedFieldCount < totalProgress.totalMandatoryFieldCount
+        ) {
+          totalProgress.savedFieldCount += savedFieldCountDiff
+        }
+      } else {
+        totalProgress.savedFieldCount -= savedFieldCountDiff
+      }
 
       const progress = Math.round(
         (totalProgress.savedFieldCount /

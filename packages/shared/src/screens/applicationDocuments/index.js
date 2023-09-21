@@ -29,32 +29,35 @@ const ApplicationDocuments = ({
   const uploadDocs = async (fileData) => {
     let updatedData
     setFileData(fileData)
-    await uploadFile({
+    const response = await uploadFile({
       ...fileData,
       applicationId: applicationDetails?.r3ApplicationId,
       gusApplicationId: studentDetail.gusApplicationId,
     })
 
     if (fileData?.fileType === 'CV') {
-      await queryClient.refetchQueries(['getCVDocuments'])
       updatedData = updateMandatoryData({
         fileType: fileData?.fileType,
         applicationProgressDetail,
+        totalDocumentCount: 1,
       })
+      await queryClient.refetchQueries({ queryKey: ['getCVDocuments'] })
     }
     if (fileData?.fileType === 'Applicant_Photo') {
-      await queryClient.refetchQueries(['getApplicantPhoto'])
       updatedData = updateMandatoryData({
         fileType: fileData?.type,
         applicationProgressDetail,
+        totalDocumentCount: 1,
       })
+      await queryClient.refetchQueries({ queryKey: ['getApplicantPhoto'] })
     }
     if (fileData?.fileType === 'Medical_Statement') {
-      await queryClient.refetchQueries(['getMedicalDocuments'])
       updatedData = updateMandatoryData({
         fileType: fileData?.fileType,
         applicationProgressDetail,
+        totalDocumentCount: medicalStatementDocs?.length === 0 ? 1 : 0,
       })
+      await queryClient.refetchQueries({ queryKey: ['getMedicalDocuments'] })
     }
 
     setApplicationProgressDetail(updatedData)
@@ -70,28 +73,31 @@ const ApplicationDocuments = ({
     })
 
     if (fileType === 'CV') {
-      await queryClient.refetchQueries(['getCVDocuments'])
       updatedData = updateMandatoryData({
         fileType,
         isSaved: false,
         applicationProgressDetail,
+        totalDocumentCount: 1,
       })
+      await queryClient.refetchQueries({ queryKey: ['getCVDocuments'] })
     }
     if (fileType === 'Applicant_Photo') {
-      await queryClient.refetchQueries(['getApplicantPhoto'])
       updatedData = updateMandatoryData({
         fileType,
         isSaved: false,
         applicationProgressDetail,
+        totalDocumentCount: 1,
       })
+      await queryClient.refetchQueries({ queryKey: ['getApplicantPhoto'] })
     }
     if (fileType === 'Medical_Statement') {
-      await queryClient.refetchQueries(['getMedicalDocuments'])
       updatedData = updateMandatoryData({
         fileType,
         isSaved: false,
         applicationProgressDetail,
+        totalDocumentCount: medicalStatementDocs?.length === 1 ? 1 : 0,
       })
+      await queryClient.refetchQueries({ queryKey: ['getMedicalDocuments'] })
     }
 
     setApplicationProgressDetail(updatedData)

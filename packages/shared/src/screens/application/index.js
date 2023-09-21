@@ -202,40 +202,51 @@ const Application = (props) => {
 
   useEffect(() => {
     if (!isFocused) return
+
     const hasData = canNonEmptyObject(r3ApplicationDetails || {})
-    if (hasData) {
-      if (cvDocument.length > 0) {
-        updatedData = updateMandatoryData({
-          fileType: 'CV',
-          isSaved: true,
-          applicationProgressDetail,
-        })
-        setApplicationProgressDetail(updatedData)
-      }
-      if (applicantPhoto.length > 0) {
-        updatedData = updateMandatoryData({
-          fileType: 'Applicant_Photo',
-          isSaved: true,
-          applicationProgressDetail: updatedData || applicationProgressDetail,
-        })
-        setApplicationProgressDetail(updatedData)
-      }
-      if (medicalDocuments.length > 0) {
-        updatedData = updateMandatoryData({
-          fileType: 'Medical_Statement',
-          isSaved: true,
-          applicationProgressDetail: updatedData || applicationProgressDetail,
-        })
-        setApplicationProgressDetail(updatedData)
-      }
+    if (cvDocument.length > 0 && hasData) {
+      const totalDocumentCount = cvDocument?.length
+      updatedData = updateMandatoryData({
+        fileType: 'CV',
+        isSaved: true,
+        applicationProgressDetail,
+        totalDocumentCount,
+      })
+      setApplicationProgressDetail(updatedData)
     }
-  }, [
-    isFocused,
-    cvDocument,
-    applicantPhoto,
-    medicalDocuments,
-    r3ApplicationDetails,
-  ])
+  }, [isFocused, cvDocument, r3ApplicationDetails])
+
+  useEffect(() => {
+    if (!isFocused) return
+    const hasData = canNonEmptyObject(r3ApplicationDetails || {})
+
+    if (applicantPhoto.length > 0 && hasData) {
+      const totalDocumentCount = applicantPhoto.length
+      updatedData = updateMandatoryData({
+        fileType: 'Applicant_Photo',
+        isSaved: true,
+        applicationProgressDetail: updatedData || applicationProgressDetail,
+        totalDocumentCount,
+      })
+      setApplicationProgressDetail(updatedData)
+    }
+  }, [isFocused, applicantPhoto, r3ApplicationDetails])
+
+  useEffect(() => {
+    if (!isFocused) return
+
+    const hasData = canNonEmptyObject(r3ApplicationDetails || {})
+    if (medicalDocuments.length > 0 && hasData) {
+      const totalDocumentCount = medicalDocuments.length
+      updatedData = updateMandatoryData({
+        fileType: 'Medical_Statement',
+        isSaved: true,
+        applicationProgressDetail: updatedData || applicationProgressDetail,
+        totalDocumentCount,
+      })
+      setApplicationProgressDetail(updatedData)
+    }
+  }, [isFocused, medicalDocuments])
 
   useEffect(() => {
     if (isEditMode) return

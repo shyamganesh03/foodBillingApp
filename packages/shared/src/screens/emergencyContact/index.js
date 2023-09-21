@@ -28,9 +28,17 @@ const EmergencyContact = ({ applicationDetails }) => {
       primary: true,
     }))
 
+    let payload = { ...data }
+    payload = {
+      ...payload,
+      emergencyContactFullName: `${
+        data['emergencyContactFirstName'] + data['emergencyContactLastName']
+      }`,
+    }
+
     await mutation.mutateAsync({
       type: 'save',
-      fieldData: data,
+      fieldData: payload,
       metaData: fieldData,
       sessionName: 'Emergency_Information',
     })
@@ -47,9 +55,17 @@ const EmergencyContact = ({ applicationDetails }) => {
       secondary: true,
     }))
 
+    let payload = { ...data }
+    payload = {
+      ...payload,
+      emergencyContactFullName: `${
+        data['emergencyContactFirstName'] + data['emergencyContactLastName']
+      }`,
+    }
+
     await mutation.mutateAsync({
       type: 'saveAndNext',
-      fieldData: data,
+      fieldData: payload,
       metaData: fieldData,
       sessionName: 'Emergency_Information',
     })

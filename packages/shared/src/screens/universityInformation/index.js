@@ -30,7 +30,7 @@ const UniversityInformation = ({ applicationDetails }) => {
     if (!isFocused) return
 
     if (!applicationDetails) {
-      queryClient.refetchQueries(['getApplicationData'])
+      queryClient.refetchQueries({ queryKey: ['getApplicationData'] })
     }
   }, [isFocused, applicationDetails])
 

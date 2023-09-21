@@ -30,11 +30,16 @@ const TimeLine = ({ categoryData = [] }) => {
 
   useEffect(() => {
     if (!isFocused) return
-    if (!applicationDetails) {
-      queryClient.refetchQueries(['getApplicationData'])
-    }
-
-    setActiveTab(Number(steps) || 0)
+    ;(async () => {
+      try {
+        setActiveTab(Number(steps) || 0)
+        if (!applicationDetails) {
+          await queryClient.refetchQueries({
+            queryKey: ['getApplicationData'],
+          })
+        }
+      } catch (err) {}
+    })()
   }, [isFocused, steps, applicationDetails])
 
   const getStatus = (data, type, itemIndex) => {

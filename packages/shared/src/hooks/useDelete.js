@@ -22,7 +22,7 @@ export const useDelete = () => {
         console.log('fail:', data)
       },
       onSuccess: async (data, context) => {
-        await queryClient.refetchQueries(['getApplicationData'])
+        await queryClient.refetchQueries({ queryKey: ['getApplicationData'] })
         if (data?.statusCode === 500) {
           toast.show(data.message[0].message, {
             type: 'danger',

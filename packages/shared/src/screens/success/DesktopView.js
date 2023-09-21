@@ -13,6 +13,7 @@ const DesktopView = ({ tabName, programName }) => {
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
+        backgroundColor: colors.primary,
       }}
     >
       <View
@@ -30,22 +31,32 @@ const DesktopView = ({ tabName, programName }) => {
         </Text>
         <Text
           variant="heading2"
-          style={{ textAlign: 'center', marginBottom: 30 }}
-          color={colors.primary}
+          style={{ textAlign: 'center', marginBottom: 20 }}
+          color={colors.white}
         >
           {programName}
         </Text>
         <View style={{ flexDirection: 'column' }}>
           {tabName?.map((item) => {
             return (
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}
+              >
                 <Icon
                   name="Check"
                   height={20}
                   width={20}
                   color={colors.onAlert}
                 />
-                <Text style={{ marginLeft: 10 }} variant="body1">
+                <Text
+                  style={{ marginLeft: 10 }}
+                  color={colors.white}
+                  variant="body1"
+                >
                   {item?.title}
                 </Text>
               </View>
