@@ -181,28 +181,31 @@ const Application = (props) => {
     initialData: [],
   })
 
-  const { data: cvDocument } = useDocuments({
+  const { data: cvDocument, isFetching: isCVDocumentFetching } = useDocuments({
     queryKey: 'getCVDocuments',
     type: 'CV',
     enabled: isFocused,
   })
-  const { data: applicantPhoto } = useDocuments({
-    queryKey: 'getApplicantPhoto',
-    type: 'Applicant_Photo',
-    enabled: isFocused,
-  })
-  const { data: medicalDocuments } = useDocuments({
-    queryKey: 'getMedicalDocuments',
-    type: 'Medical_Statement',
-    enabled: isFocused,
-  })
+  const { data: applicantPhoto, isFetching: isApplicantPhotoFetching } =
+    useDocuments({
+      queryKey: 'getApplicantPhoto',
+      type: 'Applicant_Photo',
+      enabled: isFocused,
+    })
+  const { data: medicalDocuments, isFetching: isMedicalDocumentFetching } =
+    useDocuments({
+      queryKey: 'getMedicalDocuments',
+      type: 'Medical_Statement',
+      enabled: isFocused,
+    })
+  let updatedData
 
   useEffect(() => {
     if (!isFocused) return
     const hasData = canNonEmptyObject(r3ApplicationDetails || {})
     if (hasData) {
       if (cvDocument.length > 0) {
-        const updatedData = updateMandatoryData({
+        updatedData = updateMandatoryData({
           fileType: 'CV',
           isSaved: true,
           applicationProgressDetail,
@@ -210,18 +213,18 @@ const Application = (props) => {
         setApplicationProgressDetail(updatedData)
       }
       if (applicantPhoto.length > 0) {
-        const updatedData = updateMandatoryData({
+        updatedData = updateMandatoryData({
           fileType: 'Applicant_Photo',
           isSaved: true,
-          applicationProgressDetail,
+          applicationProgressDetail: updatedData || applicationProgressDetail,
         })
         setApplicationProgressDetail(updatedData)
       }
       if (medicalDocuments.length > 0) {
-        const updatedData = updateMandatoryData({
+        updatedData = updateMandatoryData({
           fileType: 'Medical_Statement',
           isSaved: true,
-          applicationProgressDetail,
+          applicationProgressDetail: updatedData || applicationProgressDetail,
         })
         setApplicationProgressDetail(updatedData)
       }

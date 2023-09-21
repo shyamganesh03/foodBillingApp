@@ -6,12 +6,16 @@ import { useIsFocused, useTheme } from '@react-navigation/native'
 import { gesMedicalCollegeLogo } from '@oap/assets'
 import { applicationProgressDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
+import { useQueryClient } from '@tanstack/react-query'
 
 const LeftContainer = ({ tabItems }) => {
   const { colors } = useTheme()
   const [applicationProgressDetail] = useAtom(applicationProgressDetails)
   const [progress, setProgress] = useState(0)
   const isFocused = useIsFocused()
+  const queryClient = useQueryClient()
+  const applicationDetail = queryClient.getQueryData(['getApplicationData'])
+
   useEffect(() => {
     if (!isFocused) return
 

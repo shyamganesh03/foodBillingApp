@@ -32,7 +32,7 @@ export const IconContainer = ({
             backgroundColor: colors.white,
             borderRadius: 5,
             marginLeft: 2,
-            // opacity: 0.5,
+            opacity: 0.5,
           }}
         />
       </View>

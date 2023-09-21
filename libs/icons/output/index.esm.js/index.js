@@ -26,6 +26,26 @@ const SvgAddFile = (props) =>
     }),
   )
 
+const SvgAlertIcon = (props) =>
+  /*#__PURE__*/ React.createElement(
+    Svg,
+    _extends(
+      {
+        width: 24,
+        height: 24,
+        viewBox: '0 0 11 11',
+        fill: props.color || '#FFE500',
+        xmlns: 'http://www.w3.org/2000/svg',
+      },
+      props,
+    ),
+    /*#__PURE__*/ React.createElement(Path, {
+      fillRule: 'evenodd',
+      clipRule: 'evenodd',
+      d: 'M5.52 0C8.529 0 11 2.472 11 5.52 11 8.529 8.528 11 5.52 11 2.473 11 0 8.528 0 5.52A5.52 5.52 0 0 1 5.52 0ZM5.11 1.236h.782c.248 0 .412.206.412.494v5.15c0 .289-.164.495-.412.495H5.11c-.248 0-.454-.206-.454-.495V1.73c0-.288.206-.494.454-.494Zm0 6.592h.824c.206 0 .412.247.412.494v.989c0 .247-.206.453-.412.453h-.824c-.206 0-.412-.206-.412-.453v-.989c0-.247.206-.494.412-.494Z',
+    }),
+  )
+
 const SvgArrowNarrowLeft = (props) =>
   /*#__PURE__*/ React.createElement(
     Svg,
@@ -361,6 +381,9 @@ const Icon = (props) => {
   if (props.name === 'AddFile') {
     return /*#__PURE__*/ React__default.createElement(SvgAddFile, props)
   }
+  if (props.name === 'AlertIcon') {
+    return /*#__PURE__*/ React__default.createElement(SvgAlertIcon, props)
+  }
   if (props.name === 'ArrowNarrowLeft') {
     return /*#__PURE__*/ React__default.createElement(SvgArrowNarrowLeft, props)
   }
@@ -410,6 +433,7 @@ const Icon = (props) => {
 Icon.propTypes = {
   name: PropTypes.oneOf([
     'AddFile',
+    'AlertIcon',
     'ArrowNarrowLeft',
     'ArrowDown',
     'CalendarOutline',

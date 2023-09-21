@@ -4,7 +4,7 @@ import { useAtom } from 'jotai'
 import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import { applicationProgressDetails } from '../../utils/atom'
 import { useIsFocused } from '@react-navigation/native'
-import { useForm } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import DesktopView from './DesktopView'
 import { fieldData } from './data/metaData'
 import { useSave } from '../../hooks/useSave'
@@ -24,7 +24,7 @@ const ApplicationSubmission = () => {
     control,
     setValue,
     formState: { errors },
-  } = useForm()
+  } = useFormContext()
 
   useEffect(() => {
     if (!isFocused) return

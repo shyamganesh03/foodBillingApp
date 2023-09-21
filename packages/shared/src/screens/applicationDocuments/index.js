@@ -26,48 +26,6 @@ const ApplicationDocuments = ({
     applicationProgressDetails,
   )
 
-  useEffect(() => {
-    if (!isFocused) return
-    let updatedData
-    if (cvDocuments?.length === 0) {
-      updatedData = updateMandatoryData({
-        fileType: 'CV',
-        isSaved: false,
-        applicationProgressDetail,
-      })
-    } else {
-      updatedData = updateMandatoryData({
-        fileType: 'CV',
-        applicationProgressDetail,
-      })
-    }
-    if (applicantPhotoDocs?.length === 0) {
-      updatedData = updateMandatoryData({
-        fileType: 'Applicant_Photo',
-        isSaved: false,
-        applicationProgressDetail,
-      })
-    } else {
-      updatedData = updateMandatoryData({
-        fileType: 'Applicant_Photo',
-        applicationProgressDetail,
-      })
-    }
-    if (medicalStatementDocs?.length === 0) {
-      updatedData = updateMandatoryData({
-        fileType: 'Medical_Statement',
-        isSaved: false,
-        applicationProgressDetail,
-      })
-    } else {
-      updatedData = updateMandatoryData({
-        fileType: 'Medical_Statement',
-        applicationProgressDetail,
-      })
-    }
-    setApplicationProgressDetail(updatedData)
-  }, [isFocused, cvDocuments, applicantPhotoDocs, medicalStatementDocs])
-
   const uploadDocs = async (fileData) => {
     let updatedData
     setFileData(fileData)

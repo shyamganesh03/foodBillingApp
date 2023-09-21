@@ -7,7 +7,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSave } from '../../hooks/useSave'
 import { useDelete } from '../../hooks/useDelete'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useFormContext, useFieldArray } from 'react-hook-form'
 import { isValidateInstitutionDate } from '../../utils/dateFunction'
 import { getPayload } from '../../utils/fieldFunction'
 import { applicationProgressDetails } from '../../utils/atom'
@@ -41,7 +41,7 @@ const UniversityInformation = ({ applicationDetails }) => {
     reset,
     watch,
     formState: { errors },
-  } = useForm()
+  } = useFormContext()
 
   const { fields, append, remove, insert } = useFieldArray({
     control,

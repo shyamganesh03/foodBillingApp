@@ -5,7 +5,7 @@ import DesktopView from './DesktopView'
 import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { fieldData } from './data/metaData'
-import { useForm } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { studentDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
 
@@ -23,7 +23,7 @@ const ApplicationInformation = ({ applicationDetails }) => {
     control,
     setValue,
     formState: { errors },
-  } = useForm()
+  } = useFormContext()
 
   const handlePrimary = async (data) => {
     setIsLoading((prevValue) => ({

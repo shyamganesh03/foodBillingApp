@@ -5,7 +5,8 @@ import DesktopView from './DesktopView'
 import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { fieldData } from './data/metaData'
-import { useForm } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
+import { useQueryClient } from '@tanstack/react-query'
 
 const CommonApplication = ({ applicationDetails }) => {
   const [isLoading, setIsLoading] = useState({
@@ -20,7 +21,7 @@ const CommonApplication = ({ applicationDetails }) => {
     control,
     setValue,
     formState: { errors },
-  } = useForm()
+  } = useFormContext()
 
   const handlePrimary = async (data) => {
     setIsLoading((prevValue) => ({

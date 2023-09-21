@@ -6,7 +6,7 @@ import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { fieldData } from './data/metaData'
-import { useForm } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { getDropdownValue } from '../../api'
 
 const ContactInformation = ({ applicationDetails }) => {
@@ -33,7 +33,7 @@ const ContactInformation = ({ applicationDetails }) => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm()
+  } = useFormContext()
 
   const handlePrimary = async (data) => {
     let payload = data

@@ -6,7 +6,7 @@ import { fieldData } from './data/metaData'
 import { useIsFocused } from '@react-navigation/native'
 import { useSave } from '../../hooks/useSave'
 import { useDelete } from '../../hooks/useDelete'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useFormContext, useFieldArray } from 'react-hook-form'
 import { getPayload } from '../../utils/fieldFunction'
 
 const MCATReporting = ({ applicationDetails }) => {
@@ -26,7 +26,7 @@ const MCATReporting = ({ applicationDetails }) => {
     reset,
     watch,
     formState: { errors },
-  } = useForm()
+  } = useFormContext()
 
   const { fields, append, remove, insert } = useFieldArray({
     control,

@@ -12,6 +12,7 @@ import { Provider as PaperProvider } from 'react-native-paper'
 import 'react-native-gesture-handler'
 import { Provider as JotaiProvider } from 'jotai'
 import Toast from 'react-native-toast-notifications'
+import { useForm, FormProvider } from 'react-hook-form'
 import {
   DarkTheme as DarkThemeColors,
   LightTheme as LightThemeColors,
@@ -38,6 +39,7 @@ Sentry.init({
 
 const App = () => {
   const routeNameRef = useRef()
+  const methods = useForm()
   Amplify.configure(awsConfig)
   const { height } = useWindowDimensions()
   const queryClient = new QueryClient({
@@ -100,9 +102,11 @@ const App = () => {
             <PaperProvider>
               <JotaiProvider>
                 <ParamsProvider>
-                  <View style={{ minHeight: height }}>
-                    <AppNavigator />
-                  </View>
+                  <FormProvider {...methods}>
+                    <View style={{ minHeight: height }}>
+                      <AppNavigator />
+                    </View>
+                  </FormProvider>
                 </ParamsProvider>
               </JotaiProvider>
             </PaperProvider>
