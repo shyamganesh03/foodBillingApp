@@ -1,0 +1,18 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      # Install dependencies needed
+      - npm install -g yarn
+      - yarn
+
+  pre_build:
+    commands:
+      # Build the react app to give an optimized production build
+      - yarn web:build
+  build:
+    commands:
+      # Copy the content of build folder into website s3 bucket
+      - aws s3 sync apps/web/build/ s3://r3-oaf-frontend-dev/
