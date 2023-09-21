@@ -75,7 +75,7 @@ const FilePicker = ({
 
     let filesCopy = [...files, { documentName: uploadedFile.name }]
     if (uploadedFile.size > 5e6) {
-      toast.show('please upload file less than 5 mb', {
+      toast.show('Please upload a file that is less than 5 MB.', {
         type: 'danger',
       })
       return
