@@ -219,7 +219,7 @@ const Application = (props) => {
 
     const hasData = canNonEmptyObject(r3ApplicationDetails || {})
     if (cvDocument.length > 0 && hasData) {
-      const totalDocumentCount = cvDocument?.length
+      const totalDocumentCount = 1
       updatedData = updateMandatoryData({
         fileType: 'CV',
         isSaved: true,
@@ -235,7 +235,7 @@ const Application = (props) => {
     const hasData = canNonEmptyObject(r3ApplicationDetails || {})
 
     if (applicantPhoto.length > 0 && hasData) {
-      const totalDocumentCount = applicantPhoto.length
+      const totalDocumentCount = 1
       updatedData = updateMandatoryData({
         fileType: 'Applicant_Photo',
         isSaved: true,
@@ -251,16 +251,18 @@ const Application = (props) => {
 
     const hasData = canNonEmptyObject(r3ApplicationDetails || {})
     if (medicalDocuments.length > 0 && hasData) {
-      const totalDocumentCount = medicalDocuments.length
+      const totalDocumentCount = medicalDocuments.length > 0 ? 1 : 0
+
       updatedData = updateMandatoryData({
         fileType: 'Medical_Statement',
         isSaved: true,
         applicationProgressDetail: updatedData || applicationProgressDetail,
         totalDocumentCount,
       })
+
       setApplicationProgressDetail(updatedData)
     }
-  }, [isFocused, medicalDocuments])
+  }, [isFocused, medicalDocuments, r3ApplicationDetails])
 
   useEffect(() => {
     if (isEditMode) return
