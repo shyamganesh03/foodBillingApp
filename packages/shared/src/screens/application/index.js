@@ -14,7 +14,10 @@ import { Text } from '@libs/components'
 import { useAtom } from 'jotai'
 import { applicationProgressDetails, studentDetails } from '../../utils/atom'
 import { useDocuments } from '../../hooks/useDocuments'
-import { updateMandatoryData } from '../../utils/fieldFunction'
+import {
+  documentsFiltered,
+  updateMandatoryData,
+} from '../../utils/fieldFunction'
 import { canNonEmptyObject } from '../../utils/fieldValidation'
 import { Platform } from 'react-native'
 
@@ -219,7 +222,9 @@ const Application = (props) => {
     if (!isFocused) return
 
     const hasData = canNonEmptyObject(r3ApplicationDetails || {})
-    if (cvDocument.length > 0 && hasData) {
+    const filteredCVDocs = documentsFiltered({ docs: cvDocument })
+
+    if (filteredCVDocs.length > 0 && hasData) {
       const totalDocumentCount = 1
       updatedData = updateMandatoryData({
         fileType: 'CV',
@@ -234,8 +239,11 @@ const Application = (props) => {
   useEffect(() => {
     if (!isFocused) return
     const hasData = canNonEmptyObject(r3ApplicationDetails || {})
+    const filteredApplicantPhotoDocs = documentsFiltered({
+      docs: applicantPhoto,
+    })
 
-    if (applicantPhoto.length > 0 && hasData) {
+    if (filteredApplicantPhotoDocs.length > 0 && hasData) {
       const totalDocumentCount = 1
       updatedData = updateMandatoryData({
         fileType: 'Applicant_Photo',
@@ -251,7 +259,12 @@ const Application = (props) => {
     if (!isFocused) return
 
     const hasData = canNonEmptyObject(r3ApplicationDetails || {})
-    if (medicalDocuments.length > 0 && hasData) {
+
+    const filteredMedicalStatementDocs = documentsFiltered({
+      docs: medicalDocuments,
+    })
+
+    if (filteredMedicalStatementDocs.length > 0 && hasData) {
       const totalDocumentCount = medicalDocuments.length > 0 ? 1 : 0
 
       updatedData = updateMandatoryData({
@@ -269,6 +282,7 @@ const Application = (props) => {
     if (isEditMode) return
 
     const programName = r3ApplicationDetails['programmeName']
+
     if (!isEditMode && !!programName) {
       handleNavigation({ type: 'success', paramData: programName })
     }

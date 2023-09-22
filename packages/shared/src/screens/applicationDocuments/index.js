@@ -7,7 +7,12 @@ import { deleteDocument, uploadFile } from '../../api'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { applicationProgressDetails, studentDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
-import { updateMandatoryData } from '../../utils/fieldFunction'
+import {
+  documentsFiltered,
+  updateMandatoryData,
+} from '../../utils/fieldFunction'
+import { useFileUpload } from '../../hooks/useFileUpload'
+import { useFileDelete } from '../../hooks/useDeleteFile'
 
 const ApplicationDocuments = ({
   applicantPhotoDocs,
@@ -26,88 +31,85 @@ const ApplicationDocuments = ({
     applicationProgressDetails,
   )
 
-  const uploadDocs = async (fileData) => {
-    let updatedData
+  const { mutate: uploadDocs } = useFileUpload()
+  const { mutate: deleteFile } = useFileDelete()
+
+  const handleUploadDocs = async (fileData) => {
+    let totalDocumentCount
     setFileData(fileData)
-    const response = await uploadFile({
-      ...fileData,
-      applicationId: applicationDetails?.r3ApplicationId,
-      gusApplicationId: studentDetail.gusApplicationId,
+    if (
+      fileData?.fileType === 'CV' ||
+      fileData?.fileType === 'Applicant_Photo'
+    ) {
+      totalDocumentCount = 1
+    } else {
+      totalDocumentCount = medicalStatementDocs?.length === 0 ? 1 : 0
+    }
+
+    await uploadDocs.mutateAsync({
+      fileData: fileData,
+      applicationProgressDetail: applicationProgressDetail,
+      totalDocumentCount: totalDocumentCount,
     })
 
-    if (fileData?.fileType === 'CV') {
-      updatedData = updateMandatoryData({
-        fileType: fileData?.fileType,
-        applicationProgressDetail,
-        totalDocumentCount: 1,
-      })
-      await queryClient.refetchQueries({ queryKey: ['getCVDocuments'] })
-    }
-    if (fileData?.fileType === 'Applicant_Photo') {
-      updatedData = updateMandatoryData({
-        fileType: fileData?.type,
-        applicationProgressDetail,
-        totalDocumentCount: 1,
-      })
-      await queryClient.refetchQueries({ queryKey: ['getApplicantPhoto'] })
-    }
-    if (fileData?.fileType === 'Medical_Statement') {
-      updatedData = updateMandatoryData({
-        fileType: fileData?.fileType,
-        applicationProgressDetail,
-        totalDocumentCount: medicalStatementDocs?.length === 0 ? 1 : 0,
-      })
-      await queryClient.refetchQueries({ queryKey: ['getMedicalDocuments'] })
-    }
+    const updatedMandatoryDetails = updateMandatoryData({
+      fileType: fileData?.fileType,
+      applicationProgressDetail: applicationProgressDetail,
+      totalDocumentCount: totalDocumentCount,
+    })
 
-    setApplicationProgressDetail(updatedData)
+    setApplicationProgressDetail(updatedMandatoryDetails)
     setFileData({})
   }
 
   const handleDelete = async ({ id, fileType }) => {
-    let updatedData
-    await deleteDocument({
-      id,
-      fileType,
-      gusApplicationId: studentDetail.gusApplicationId,
+    let totalDocumentCount = 0
+
+    const filteredCVDocs = documentsFiltered({ docs: cvDocuments })
+    const filteredApplicantPhotoDocs = documentsFiltered({
+      docs: applicantPhotoDocs,
+    })
+    const filteredMedicalStatementDocs = documentsFiltered({
+      docs: medicalStatementDocs,
     })
 
-    if (fileType === 'CV') {
-      updatedData = updateMandatoryData({
-        fileType,
-        isSaved: false,
-        applicationProgressDetail,
-        totalDocumentCount: 1,
-      })
-      await queryClient.refetchQueries({ queryKey: ['getCVDocuments'] })
-    }
-    if (fileType === 'Applicant_Photo') {
-      updatedData = updateMandatoryData({
-        fileType,
-        isSaved: false,
-        applicationProgressDetail,
-        totalDocumentCount: 1,
-      })
-      await queryClient.refetchQueries({ queryKey: ['getApplicantPhoto'] })
-    }
-    if (fileType === 'Medical_Statement') {
-      updatedData = updateMandatoryData({
-        fileType,
-        isSaved: false,
-        applicationProgressDetail,
-        totalDocumentCount: medicalStatementDocs?.length === 1 ? 1 : 0,
-      })
-      await queryClient.refetchQueries({ queryKey: ['getMedicalDocuments'] })
+    if (
+      (fileType === 'CV' && filteredCVDocs.length > 0) ||
+      (fileType === 'Applicant_Photo' && filteredApplicantPhotoDocs.length > 0)
+    ) {
+      totalDocumentCount = 1
+    } else {
+      totalDocumentCount = filteredMedicalStatementDocs?.length === 1 ? 1 : 0
     }
 
-    setApplicationProgressDetail(updatedData)
+    await deleteFile.mutateAsync({
+      id,
+      fileType,
+    })
+
+    const updatedMandatoryDetails = updateMandatoryData({
+      fileType,
+      isSaved: false,
+      applicationProgressDetail,
+      totalDocumentCount: totalDocumentCount,
+    })
+
+    setApplicationProgressDetail(updatedMandatoryDetails)
   }
 
   const handleNextStep = () => {
+    const filteredCVDocs = documentsFiltered({ docs: cvDocuments })
+    const filteredApplicantPhotoDocs = documentsFiltered({
+      docs: applicantPhotoDocs,
+    })
+    const filteredMedicalStatementDocs = documentsFiltered({
+      docs: medicalStatementDocs,
+    })
+
     if (
-      cvDocuments?.length === 0 ||
-      applicantPhotoDocs?.length === 0 ||
-      medicalStatementDocs?.length === 0
+      filteredCVDocs?.length === 0 ||
+      filteredApplicantPhotoDocs?.length === 0 ||
+      filteredMedicalStatementDocs?.length === 0
     ) {
       toast.show('Please add the required documents', {
         type: 'danger',
@@ -129,7 +131,7 @@ const ApplicationDocuments = ({
     medicalStatementDocs,
     handleDelete,
     handleNextStep,
-    uploadDocs,
+    handleUploadDocs,
   }
 
   return (

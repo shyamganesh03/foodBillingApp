@@ -42,7 +42,7 @@ const LeftContainer = ({ tabItems }) => {
           color={colors.white}
           style={{ marginLeft: 10, marginBottom: 10 }}
         >
-          {`${progress}% completed `}
+          {`${progress || 0}% completed `}
         </Text>
         <ProgressBar
           progressBarStyle={{

@@ -10,7 +10,7 @@ const DesktopView = ({
   medicalStatementDocs,
   handleDelete,
   handleNextStep,
-  uploadDocs,
+  handleUploadDocs,
 }) => {
   const { colors } = useTheme()
   return (
@@ -32,7 +32,7 @@ const DesktopView = ({
         </Text>
         <FilePicker
           heading="CV"
-          uploadFile={uploadDocs}
+          uploadFile={handleUploadDocs}
           successState={fileData}
           handleDelete={handleDelete}
           uploadedFiles={cvDocuments}
@@ -41,7 +41,7 @@ const DesktopView = ({
         />
         <FilePicker
           heading="Applicant Photo"
-          uploadFile={uploadDocs}
+          uploadFile={handleUploadDocs}
           successState={fileData}
           handleDelete={handleDelete}
           uploadedFiles={applicantPhotoDocs}
@@ -50,7 +50,7 @@ const DesktopView = ({
         />
         <FilePicker
           heading="Personal Medical School Statements"
-          uploadFile={uploadDocs}
+          uploadFile={handleUploadDocs}
           successState={fileData}
           handleDelete={handleDelete}
           uploadedFiles={medicalStatementDocs}

@@ -82,3 +82,8 @@ export const getRequiredPayload = (fieldData, formData) => {
   })
   return requiredPayload
 }
+
+export const documentsFiltered = ({ docs }) => {
+  const filteredData = docs?.filter((docs) => !!docs?.documentLinkedId)
+  return filteredData
+}
