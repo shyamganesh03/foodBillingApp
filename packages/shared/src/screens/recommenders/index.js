@@ -77,28 +77,17 @@ const Recommenders = ({ applicationDetails }) => {
       primary: true,
     }))
 
-    let payload = getPayload({
-      data: data.recommenders,
-      applicationDetails,
-      fieldName: 'recommenders',
-    })
     let newPayload = { WaiveAccessToRecommendation: waiveCheck }
 
-    if (payload?.length > 0) {
-      newPayload = { ...newPayload, recommenders: payload }
-      await mutation.mutateAsync({
-        type: 'save',
-        fieldData: newPayload,
-        metaData: fieldData,
-        sessionName: 'Recommenders',
-        listKey: 'recommenders',
-        isList: true,
-      })
-    } else {
-      toast.show('Please fill all the fields', {
-        type: 'danger',
-      })
-    }
+    await mutation.mutateAsync({
+      type: 'save',
+      fieldData: newPayload,
+      metaData: fieldData,
+      sessionName: 'Recommenders',
+      listKey: 'recommenders',
+      payloadData: data.recommenders,
+      isList: true,
+    })
 
     setIsLoading((prevValue) => ({
       ...prevValue,
@@ -107,12 +96,6 @@ const Recommenders = ({ applicationDetails }) => {
   }
 
   const handleSecondary = async (data) => {
-    let payload = getPayload({
-      data: data.recommenders,
-      applicationDetails,
-      fieldName: 'recommenders',
-    })
-
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: true,
@@ -120,21 +103,16 @@ const Recommenders = ({ applicationDetails }) => {
 
     let newPayload = { WaiveAccessToRecommendation: waiveCheck }
 
-    if (payload?.length > 0) {
-      newPayload = { ...newPayload, recommenders: payload }
-      await mutation.mutateAsync({
-        type: 'saveAndNext',
-        fieldData: newPayload,
-        metaData: fieldData,
-        sessionName: 'Recommenders',
-        listKey: 'recommenders',
-        isList: true,
-      })
-    } else {
-      toast.show('Please fill all the fields', {
-        type: 'danger',
-      })
-    }
+    await mutation.mutateAsync({
+      type: 'saveAndNext',
+      fieldData: newPayload,
+      metaData: fieldData,
+      sessionName: 'Recommenders',
+      listKey: 'recommenders',
+      payloadData: data.recommenders,
+      isList: true,
+    })
+
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: false,

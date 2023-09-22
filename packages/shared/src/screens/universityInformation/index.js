@@ -130,18 +130,13 @@ const UniversityInformation = ({ applicationDetails }) => {
       ...prevValue,
       primary: true,
     }))
-    const payload = getPayload({
-      data: data.universityInformation,
-      applicationDetails,
-      fieldName: 'universityOrCollegeInfo',
-    })
 
     await mutation.mutateAsync({
       type: 'save',
-      fieldData: { universityOrCollegeInfo: payload },
       metaData: fieldData,
       sessionName: 'University/College_Information',
       listKey: 'universityOrCollegeInfo',
+      payloadData: data.universityInformation,
       isList: true,
     })
 
@@ -156,17 +151,13 @@ const UniversityInformation = ({ applicationDetails }) => {
       ...prevValue,
       secondary: true,
     }))
-    const payload = getPayload({
-      data: data.universityInformation,
-      applicationDetails,
-      fieldName: 'universityOrCollegeInfo',
-    })
 
     await mutation.mutateAsync({
       type: 'saveAndNext',
-      fieldData: { universityOrCollegeInfo: payload },
+      fieldData: {},
       metaData: fieldData,
       sessionName: 'University/College_Information',
+      payloadData: data.universityInformation,
       listKey: 'universityOrCollegeInfo',
       isList: true,
     })

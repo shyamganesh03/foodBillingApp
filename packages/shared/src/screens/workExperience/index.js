@@ -73,31 +73,20 @@ const WorkExperience = ({ applicationDetails }) => {
   }, [isFocused, applicationDetails])
 
   const handlePrimary = async (data) => {
-    const payload = getPayload({
-      data: data.workExperience,
-      applicationDetails,
-      fieldName: 'clinicalOrHospitalExperienceDetails',
-    })
-
     setIsLoading((prevValue) => ({
       ...prevValue,
       primary: true,
     }))
 
-    if (payload?.length > 0) {
-      await mutation.mutateAsync({
-        type: 'save',
-        fieldData: { clinicalOrHospitalExperienceDetails: payload },
-        metaData: fieldData,
-        sessionName: 'Clinical/Hospital_Experience',
-        listKey: 'clinicalOrHospitalExperienceDetails',
-        isList: true,
-      })
-    } else {
-      toast.show('Please fill all the fields', {
-        type: 'danger',
-      })
-    }
+    await mutation.mutateAsync({
+      type: 'save',
+      fieldData: {},
+      metaData: fieldData,
+      sessionName: 'Clinical/Hospital_Experience',
+      listKey: 'clinicalOrHospitalExperienceDetails',
+      payloadData: data.workExperience,
+      isList: true,
+    })
 
     setIsLoading((prevValue) => ({
       ...prevValue,
@@ -106,31 +95,21 @@ const WorkExperience = ({ applicationDetails }) => {
   }
 
   const handleSecondary = async (data) => {
-    const payload = getPayload({
-      data: data.workExperience,
-      applicationDetails,
-      fieldName: 'clinicalOrHospitalExperienceDetails',
-    })
-
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: true,
     }))
 
-    if (payload?.length > 0) {
-      await mutation.mutateAsync({
-        type: 'saveAndNext',
-        fieldData: { clinicalOrHospitalExperienceDetails: payload },
-        metaData: fieldData,
-        sessionName: 'Clinical/Hospital_Experience',
-        listKey: 'clinicalOrHospitalExperienceDetails',
-        isList: true,
-      })
-    } else {
-      toast.show('Please fill all the fields', {
-        type: 'danger',
-      })
-    }
+    await mutation.mutateAsync({
+      type: 'saveAndNext',
+      fieldData: {},
+      metaData: fieldData,
+      sessionName: 'Clinical/Hospital_Experience',
+      listKey: 'clinicalOrHospitalExperienceDetails',
+      payloadData: data.workExperience,
+      isList: true,
+    })
+
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: false,

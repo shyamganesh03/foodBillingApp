@@ -72,26 +72,16 @@ const MCATReporting = ({ applicationDetails }) => {
       ...prevValue,
       primary: true,
     }))
-    const payload = getPayload({
-      data: data.aamcmcatReporting,
-      applicationDetails,
-      fieldName: 'AAMCMCATReporting',
-    })
 
-    if (payload?.length > 0) {
-      await mutation.mutateAsync({
-        type: 'save',
-        fieldData: { AAMCMCATReporting: payload },
-        metaData: fieldData,
-        sessionName: 'AAMC-MCAT_Reporting',
-        listKey: 'AAMCMCATReporting',
-        isList: true,
-      })
-    } else {
-      toast.show('Please fill all the fields', {
-        type: 'danger',
-      })
-    }
+    await mutation.mutateAsync({
+      type: 'save',
+      fieldData: {},
+      metaData: fieldData,
+      sessionName: 'AAMC-MCAT_Reporting',
+      listKey: 'AAMCMCATReporting',
+      payloadData: data.aamcmcatReporting,
+      isList: true,
+    })
 
     setIsLoading((prevValue) => ({
       ...prevValue,
@@ -100,30 +90,20 @@ const MCATReporting = ({ applicationDetails }) => {
   }
 
   const handleSecondary = async (data) => {
-    const payload = getPayload({
-      data: data.aamcmcatReporting,
-      applicationDetails,
-      fieldName: 'AAMCMCATReporting',
-    })
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: true,
     }))
 
-    if (payload?.length > 0) {
-      await mutation.mutateAsync({
-        type: 'saveAndNext',
-        fieldData: { AAMCMCATReporting: payload },
-        metaData: fieldData,
-        sessionName: 'AAMC-MCAT_Reporting',
-        listKey: 'AAMCMCATReporting',
-        isList: true,
-      })
-    } else {
-      toast.show('Please fill all the fields', {
-        type: 'danger',
-      })
-    }
+    await mutation.mutateAsync({
+      type: 'saveAndNext',
+      fieldData: {},
+      metaData: fieldData,
+      sessionName: 'AAMC-MCAT_Reporting',
+      listKey: 'AAMCMCATReporting',
+      payloadData: data.aamcmcatReporting,
+      isList: true,
+    })
 
     setIsLoading((prevValue) => ({
       ...prevValue,

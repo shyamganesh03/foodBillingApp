@@ -19,7 +19,7 @@ export const getPayload = ({ data, applicationDetails, fieldName }) => {
     return finalUpdateData
   })
 
-  const finalUpdatedData = updatedData.filter((item) =>
+  const finalUpdatedData = updatedData?.filter((item) =>
     Object.values(item).some((value) => !!value),
   )
 

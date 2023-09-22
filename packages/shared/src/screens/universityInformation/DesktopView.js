@@ -35,7 +35,7 @@ const DesktopView = ({
         {fields?.map((fieldItems, fieldsIndex) => {
           return (
             <Card>
-              {fieldsIndex >= 0 ? (
+              {fieldsIndex > 0 ? (
                 <TouchableOpacity
                   onPress={() => handleRemove(fieldsIndex)}
                   style={{ alignSelf: 'flex-end' }}

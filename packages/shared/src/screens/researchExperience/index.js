@@ -71,31 +71,20 @@ const ResearchExperience = ({ applicationDetails }) => {
   }, [isFocused, applicationDetails])
 
   const handlePrimary = async (data) => {
-    const payload = getPayload({
-      data: data.researchExperience,
-      applicationDetails,
-      fieldName: 'researchExperience',
-    })
-
     setIsLoading((prevValue) => ({
       ...prevValue,
       primary: true,
     }))
 
-    if (payload?.length > 0) {
-      await mutation.mutateAsync({
-        type: 'save',
-        fieldData: { researchExperience: payload },
-        metaData: fieldData,
-        sessionName: 'Research_Experience',
-        listKey: 'researchExperience',
-        isList: true,
-      })
-    } else {
-      toast.show('Please fill all the fields', {
-        type: 'danger',
-      })
-    }
+    await mutation.mutateAsync({
+      type: 'save',
+      fieldData: {},
+      metaData: fieldData,
+      sessionName: 'Research_Experience',
+      listKey: 'researchExperience',
+      payloadData: data.researchExperience,
+      isList: true,
+    })
 
     setIsLoading((prevValue) => ({
       ...prevValue,
@@ -104,31 +93,21 @@ const ResearchExperience = ({ applicationDetails }) => {
   }
 
   const handleSecondary = async (data) => {
-    const payload = getPayload({
-      data: data.researchExperience,
-      applicationDetails,
-      fieldName: 'researchExperience',
-    })
-
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: true,
     }))
 
-    if (payload?.length > 0) {
-      await mutation.mutateAsync({
-        type: 'saveAndNext',
-        fieldData: { researchExperience: payload },
-        metaData: fieldData,
-        sessionName: 'Research_Experience',
-        listKey: 'researchExperience',
-        isList: true,
-      })
-    } else {
-      toast.show('Please fill all the fields', {
-        type: 'danger',
-      })
-    }
+    await mutation.mutateAsync({
+      type: 'saveAndNext',
+      fieldData: {},
+      metaData: fieldData,
+      sessionName: 'Research_Experience',
+      listKey: 'researchExperience',
+      payloadData: data.researchExperience,
+      isList: true,
+    })
+
     setIsLoading((prevValue) => ({
       ...prevValue,
       secondary: false,

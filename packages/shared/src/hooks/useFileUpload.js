@@ -1,7 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { studentDetails } from '../utils/atom'
 import { useAtom } from 'jotai'
-import { getApplicationFileByID, uploadFile } from '../api'
+import {
+  getApplicationByEmailID,
+  getApplicationFileByID,
+  uploadFile,
+} from '../api'
 import { useState } from 'react'
 
 export const useFileUpload = () => {
@@ -15,8 +19,15 @@ export const useFileUpload = () => {
 
   const queryClient = useQueryClient()
   let applicationDetails = queryClient.getQueryData(['getApplicationData'])
+
   const mutate = useMutation(
     async (data) => {
+      if (!applicationDetails) {
+        applicationDetails = await getApplicationByEmailID({
+          gusApplicationId: studentDetail?.gusApplicationId,
+          email: studentDetail?.email,
+        })
+      }
       const response = await uploadFile({
         ...data.fileData,
         applicationId: applicationDetails?.r3ApplicationId,
