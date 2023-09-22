@@ -40,10 +40,12 @@ const WorkExperience = ({ applicationDetails }) => {
   }
 
   const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
-    fieldData?.forEach((fieldValue) => {
+    fieldData?.forEach((fieldItemValue) => {
+      const fieldName = `workExperience.${fieldIndex}.${fieldItemValue?.fieldName}`
+      const fieldValue = watch(fieldName)
       setValue(
-        `workExperience.${fieldIndex}.${fieldValue?.fieldName}`,
-        fieldItem[fieldValue?.fieldName] || '',
+        fieldName,
+        fieldValue || fieldItem[fieldItemValue?.fieldName] || '',
       )
     })
   }
@@ -88,6 +90,8 @@ const WorkExperience = ({ applicationDetails }) => {
         fieldData: { clinicalOrHospitalExperienceDetails: payload },
         metaData: fieldData,
         sessionName: 'Clinical/Hospital_Experience',
+        listKey: 'clinicalOrHospitalExperienceDetails',
+        isList: true,
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -119,6 +123,8 @@ const WorkExperience = ({ applicationDetails }) => {
         fieldData: { clinicalOrHospitalExperienceDetails: payload },
         metaData: fieldData,
         sessionName: 'Clinical/Hospital_Experience',
+        listKey: 'clinicalOrHospitalExperienceDetails',
+        isList: true,
       })
     } else {
       toast.show('Please fill all the fields', {

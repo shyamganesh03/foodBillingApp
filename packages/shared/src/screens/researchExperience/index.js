@@ -40,10 +40,12 @@ const ResearchExperience = ({ applicationDetails }) => {
   }
 
   const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
-    fieldData?.forEach((fieldValue) => {
+    fieldData?.forEach((fieldItemValue) => {
+      const fieldName = `researchExperience.${fieldIndex}.${fieldItemValue?.fieldName}`
+      const fieldValue = watch(fieldName)
       setValue(
-        `researchExperience.${fieldIndex}.${fieldValue?.fieldName}`,
-        fieldItem[fieldValue?.fieldName] || '',
+        fieldName,
+        fieldValue || fieldItem[fieldItemValue?.fieldName] || '',
       )
     })
   }
@@ -86,6 +88,8 @@ const ResearchExperience = ({ applicationDetails }) => {
         fieldData: { researchExperience: payload },
         metaData: fieldData,
         sessionName: 'Research_Experience',
+        listKey: 'researchExperience',
+        isList: true,
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -117,6 +121,8 @@ const ResearchExperience = ({ applicationDetails }) => {
         fieldData: { researchExperience: payload },
         metaData: fieldData,
         sessionName: 'Research_Experience',
+        listKey: 'researchExperience',
+        isList: true,
       })
     } else {
       toast.show('Please fill all the fields', {

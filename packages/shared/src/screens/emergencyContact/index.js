@@ -20,6 +20,7 @@ const EmergencyContact = ({ applicationDetails }) => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
+    watch,
     formState: { errors },
   } = useFormContext()
 
@@ -44,7 +45,7 @@ const EmergencyContact = ({ applicationDetails }) => {
       type: 'save',
       fieldData: payload,
       metaData: fieldData,
-      sessionName: 'Emergency_Information',
+      sessionName: 'Emergency_Contact_Information',
     })
 
     setIsLoading((prevValue) => ({
@@ -74,7 +75,7 @@ const EmergencyContact = ({ applicationDetails }) => {
       type: 'saveAndNext',
       fieldData: payload,
       metaData: fieldData,
-      sessionName: 'Emergency_Information',
+      sessionName: 'Emergency_Contact_Information',
     })
 
     setIsLoading((prevValue) => ({
@@ -86,10 +87,9 @@ const EmergencyContact = ({ applicationDetails }) => {
   useEffect(() => {
     if (!isFocused) return
     fieldData.forEach((fieldItem) => {
-      setValue(
-        fieldItem?.fieldName,
-        applicationDetails?.[fieldItem?.fieldName] || '',
-      )
+      const fieldName = fieldItem?.fieldName
+      const fieldValue = watch(fieldName)
+      setValue(fieldName, fieldValue || applicationDetails?.[fieldName] || '')
     })
   }, [isFocused, applicationDetails])
 

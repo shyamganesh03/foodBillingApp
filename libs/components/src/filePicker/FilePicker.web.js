@@ -42,15 +42,50 @@ const FilePicker = ({
     }
   }, [isFocused, uploadedFiles])
 
+  useEffect(() => {
+    if (!isFocused && Object.keys(successState || {})?.length === 0) return
+
+    if (successState?.hasError && successState?.documentType === documentType) {
+      let filesCopy = [...files]
+      filesCopy.pop()
+      setFiles(filesCopy)
+    }
+  }, [isFocused, successState])
+
   const handleDragOver = (event) => {
     event.preventDefault()
+  }
+
+  const handleFilePicker = async (event) => {
+    setError('')
+    const uploadedFile = event.target.files[0]
+    const isValidFile = uploadedFile ? isFileValid(uploadedFile) : false
+    if (isValidFile) {
+      let filesCopy = [...files, { documentName: uploadedFile?.name || '' }]
+
+      setFiles(filesCopy)
+      const duplicateFile = filesCopy.filter(
+        (file) => file.documentName === uploadedFile.name?.split('.')[0],
+      )
+      if (duplicateFile.length > 1 && files?.length > 1) {
+        setError('DuplicateFile not allowed')
+      } else {
+        const base64Docs = await getBase64(uploadedFile)
+        await uploadFile({
+          file: base64Docs.split(',')[1],
+          path: uploadedFile.name,
+          pathName: uploadedFile.name.split('.')[0],
+          fileType: documentType,
+        })
+      }
+    }
   }
 
   const handleDrop = async (event) => {
     setError('')
     event.preventDefault()
     const uploadedFile = event.dataTransfer.files[0]
-    const isValidFile = isFileValid(uploadedFile)
+    const isValidFile = uploadedFile ? isFileValid(uploadedFile) : false
     if (isValidFile) {
       let filesCopy = [...files, { documentName: uploadedFile?.name || '' }]
       setFiles(filesCopy)
@@ -65,7 +100,7 @@ const FilePicker = ({
   }
 
   const isFileValid = (uploadedFile) => {
-    if (uploadedFile.size > 5e6) {
+    if (uploadedFile?.size > 5e6) {
       toast.show('Please upload a file that is less than 5 MB.', {
         type: 'danger',
       })
@@ -88,35 +123,21 @@ const FilePicker = ({
       reader.onerror = (error) => reject(error)
     })
 
-  const handleFileDelete = async (fileData, setIsDeleteCallFetching) => {
+  const handleFileDelete = async (
+    fileData,
+    setIsDeleteCallFetching,
+    fileIndex,
+  ) => {
     setIsDeleteCallFetching(true)
-    await handleDelete({ id: fileData.id, fileType: documentType })
-    setIsDeleteCallFetching(false)
-  }
-
-  const handleFilePicker = async (event) => {
-    setError('')
-    const uploadedFile = event.target.files[0]
-    const isValidFile = isFileValid(uploadedFile)
-    if (isValidFile) {
-      let filesCopy = [...files, { documentName: uploadedFile?.name || '' }]
+    if (fileData.id) {
+      await handleDelete({ id: fileData.id, fileType: documentType })
+    } else {
+      let filesCopy = [...files]
+      filesCopy.splice(0, fileIndex === 0 ? 1 : fileIndex)
 
       setFiles(filesCopy)
-      const duplicateFile = filesCopy.filter(
-        (file) => file.documentName === uploadedFile.name?.split('.')[0],
-      )
-      if (duplicateFile.length > 1 && files?.length > 1) {
-        setError('DuplicateFile not allowed')
-      } else {
-        const base64Docs = await getBase64(uploadedFile)
-        await uploadFile({
-          file: base64Docs.split(',')[1],
-          path: uploadedFile.name,
-          pathName: uploadedFile.name.split('.')[0],
-          fileType: documentType,
-        })
-      }
     }
+    setIsDeleteCallFetching(false)
   }
 
   return (
@@ -207,6 +228,7 @@ const FilePicker = ({
                 handleFileDelete={handleFileDelete}
                 successState={successState}
                 showBorder={files?.length > 1 && files?.length - 1 !== index}
+                fileIndex={index}
               />
             )
           })}
@@ -222,6 +244,7 @@ const FilePicker = ({
 }
 
 const UploadedFileContainer = ({
+  fileIndex,
   fileItem,
   handleFileDelete,
   successState,
@@ -230,7 +253,7 @@ const UploadedFileContainer = ({
   const [isDeleteCallFetching, setIsDeleteCallFetching] = useState()
   const { colors } = useTheme()
   return (
-    <View style={{ paddingHorizontal: 20 }}>
+    <View style={{ paddingHorizontal: 20 }} key={fileIndex}>
       <View
         style={{
           flexDirection: 'row',
@@ -265,7 +288,7 @@ const UploadedFileContainer = ({
         </View>
         <TouchableOpacity
           onPress={() => {
-            handleFileDelete(fileItem, setIsDeleteCallFetching)
+            handleFileDelete(fileItem, setIsDeleteCallFetching, fileIndex)
           }}
         >
           {isDeleteCallFetching ? (

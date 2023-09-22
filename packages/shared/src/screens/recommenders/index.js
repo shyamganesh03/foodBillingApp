@@ -24,6 +24,7 @@ const Recommenders = ({ applicationDetails }) => {
     control,
     setValue,
     reset,
+    watch,
     formState: { errors },
   } = useFormContext()
 
@@ -39,10 +40,12 @@ const Recommenders = ({ applicationDetails }) => {
   }
 
   const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
-    fieldData?.forEach((fieldValue) => {
+    fieldData?.forEach((fieldItemValue) => {
+      const fieldName = `recommenders.${fieldIndex}.${fieldItemValue?.fieldName}`
+      const fieldValue = watch(fieldName)
       setValue(
-        `recommenders.${fieldIndex}.${fieldValue?.fieldName}`,
-        fieldItem[fieldValue?.fieldName] || '',
+        fieldName,
+        fieldValue || fieldItem[fieldItemValue?.fieldName] || '',
       )
     })
   }
@@ -88,6 +91,8 @@ const Recommenders = ({ applicationDetails }) => {
         fieldData: newPayload,
         metaData: fieldData,
         sessionName: 'Recommenders',
+        listKey: 'recommenders',
+        isList: true,
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -122,6 +127,8 @@ const Recommenders = ({ applicationDetails }) => {
         fieldData: newPayload,
         metaData: fieldData,
         sessionName: 'Recommenders',
+        listKey: 'recommenders',
+        isList: true,
       })
     } else {
       toast.show('Please fill all the fields', {

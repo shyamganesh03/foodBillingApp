@@ -102,21 +102,26 @@ const ContactInformation = ({ applicationDetails }) => {
 
   useEffect(() => {
     if (!isFocused) return
+
     ;(async () => {
-      fieldData.forEach((fieldItem) => {
-        if (fieldItem?.fieldName === 'mailingCountryCode') {
+      for (const fieldItem of fieldData) {
+        const fieldName = fieldItem?.fieldName
+        const fieldValue = watch(fieldName)
+
+        if (fieldName === 'mailingCountryCode') {
           const selectedData = dropdown?.filter(
             (item) =>
-              item?.Value === applicationDetails?.[fieldItem?.fieldName],
+              item?.Value === applicationDetails?.[fieldName] ||
+              item?.Value === fieldValue,
           )
-          setValue(fieldItem?.fieldName, selectedData?.[0]?.Label || '')
+          setValue(fieldName, selectedData?.[0]?.Label || '')
         } else {
           setValue(
-            fieldItem?.fieldName,
-            applicationDetails?.[fieldItem?.fieldName] || '',
+            fieldName,
+            fieldValue || applicationDetails?.[fieldName] || '',
           )
         }
-      })
+      }
     })()
   }, [isFocused, applicationDetails])
 

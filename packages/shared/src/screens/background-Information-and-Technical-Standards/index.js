@@ -20,6 +20,7 @@ const BackgroundInformation = ({ applicationDetails }) => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
+    watch,
     formState: { errors },
   } = useFormContext()
 
@@ -71,10 +72,9 @@ const BackgroundInformation = ({ applicationDetails }) => {
   useEffect(() => {
     if (!isFocused) return
     fieldData.forEach((fieldItem) => {
-      setValue(
-        fieldItem?.fieldName,
-        applicationDetails?.[fieldItem?.fieldName] || '',
-      )
+      const fieldName = fieldItem?.fieldName
+      const fieldValue = watch(fieldName)
+      setValue(fieldName, fieldValue || applicationDetails?.[fieldName] || '')
     })
   }, [isFocused, applicationDetails])
 

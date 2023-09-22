@@ -31,35 +31,53 @@ const ApplicationDocuments = ({
     applicationProgressDetails,
   )
 
-  const { mutate: uploadDocs } = useFileUpload()
+  const { mutate: uploadDocs, progressStatus: hasFileUploadProgressStatus } =
+    useFileUpload()
   const { mutate: deleteFile } = useFileDelete()
 
-  const handleUploadDocs = async (fileData) => {
-    let totalDocumentCount
-    setFileData(fileData)
+  useEffect(() => {
+    if (!isFocused) return
+
     if (
-      fileData?.fileType === 'CV' ||
-      fileData?.fileType === 'Applicant_Photo'
+      hasFileUploadProgressStatus?.isCompleted &&
+      hasFileUploadProgressStatus.error
     ) {
-      totalDocumentCount = 1
-    } else {
-      totalDocumentCount = medicalStatementDocs?.length === 0 ? 1 : 0
+      setFileData((prev) => ({ ...prev, hasError: true }))
     }
+    if (
+      hasFileUploadProgressStatus?.isCompleted &&
+      !!fileData?.fileType &&
+      !hasFileUploadProgressStatus.error
+    ) {
+      let totalDocumentCount
+
+      if (
+        fileData?.fileType === 'CV' ||
+        fileData?.fileType === 'Applicant_Photo'
+      ) {
+        totalDocumentCount = 1
+      } else {
+        totalDocumentCount = medicalStatementDocs?.length === 0 ? 1 : 0
+      }
+
+      const updatedMandatoryDetails = updateMandatoryData({
+        fileType: fileData?.fileType,
+        applicationProgressDetail: applicationProgressDetail,
+        totalDocumentCount: totalDocumentCount,
+      })
+
+      setApplicationProgressDetail(updatedMandatoryDetails)
+      setFileData({})
+    }
+  }, [isFocused, hasFileUploadProgressStatus, fileData])
+
+  const handleUploadDocs = async (uploadFileData) => {
+    setFileData(uploadFileData)
 
     await uploadDocs.mutateAsync({
-      fileData: fileData,
+      fileData: uploadFileData,
       applicationProgressDetail: applicationProgressDetail,
-      totalDocumentCount: totalDocumentCount,
     })
-
-    const updatedMandatoryDetails = updateMandatoryData({
-      fileType: fileData?.fileType,
-      applicationProgressDetail: applicationProgressDetail,
-      totalDocumentCount: totalDocumentCount,
-    })
-
-    setApplicationProgressDetail(updatedMandatoryDetails)
-    setFileData({})
   }
 
   const handleDelete = async ({ id, fileType }) => {

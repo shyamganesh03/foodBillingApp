@@ -6,21 +6,40 @@ import { useIsFocused, useTheme } from '@react-navigation/native'
 import { gesMedicalCollegeLogo } from '@oap/assets'
 import { applicationProgressDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
-import { useQueryClient } from '@tanstack/react-query'
+import { getCurrent } from '../../navigation/RootNavigator'
 
 const LeftContainer = ({ tabItems }) => {
   const { colors } = useTheme()
   const [applicationProgressDetail] = useAtom(applicationProgressDetails)
   const [progress, setProgress] = useState(0)
   const isFocused = useIsFocused()
-  const queryClient = useQueryClient()
-  const applicationDetail = queryClient.getQueryData(['getApplicationData'])
+  const routes = getCurrent()
+  const currentRoute = routes?.getCurrentRoute()
+  const currentRoueName = currentRoute?.path
+  const [showContainer, setShowContainer] = useState(true)
+  const nonContainerRoutes = ['success', 'error']
+
+  useEffect(() => {
+    if (currentRoueName) {
+      if (
+        nonContainerRoutes.includes(
+          currentRoueName.split('?')[0]?.replace('/', ''),
+        )
+      ) {
+        setShowContainer(false)
+      }
+    }
+  }, [isFocused, currentRoueName])
 
   useEffect(() => {
     if (!isFocused) return
 
     setProgress(applicationProgressDetail?.totalProgress?.progress)
   }, [isFocused, applicationProgressDetail?.totalProgress?.progress])
+
+  if (!showContainer) {
+    return null
+  }
 
   return (
     <View style={styles({ colors }).leftContainer}>

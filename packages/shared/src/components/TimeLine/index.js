@@ -23,7 +23,9 @@ const TimeLine = ({ categoryData = [] }) => {
   const { steps } = params
   const [applicationProgressDetail] = useAtom(applicationProgressDetails)
   const queryClient = useQueryClient()
-  const applicationDetails = queryClient.getQueryData(['getApplicationData'])
+  const applicationDetails = queryClient.getQueryData(['getApplicationData'], {
+    exact: true,
+  })
   const {
     formState: { errors },
   } = useFormContext()
@@ -47,9 +49,11 @@ const TimeLine = ({ categoryData = [] }) => {
     let hasError = false
 
     if (data.screenType === 'list') {
-      applicationDetails?.[data?.fieldName]?.length > 0
-        ? savedStatus.push(true)
-        : savedStatus.push(false)
+      const listCount = Object.keys(
+        applicationProgressDetail?.mandatoryFields?.[data?.sessionName]?.list ||
+          {},
+      ).length
+      listCount > 0 ? savedStatus.push(true) : savedStatus.push(false)
     } else {
       Object.entries(
         applicationProgressDetail?.mandatoryFields?.[data?.sessionName] || {},

@@ -41,20 +41,22 @@ const ApplicationSubmission = () => {
             }
           })
         } else {
-          Object.entries(mandatoryFields.list).map(([listKey, listValue]) => {
-            const unSavedValue = listValue.filter(
-              (listItem) => !listItem.isSaved,
-            )
+          if (mandatoryFields.mandatoryFieldDetail?.length > 0) {
+            Object.entries(mandatoryFields.list).map(([listKey, listValue]) => {
+              const unSavedValue = listValue.filter(
+                (listItem) => !listItem.isSaved,
+              )
 
-            if (unSavedValue.length > 0) {
-              unSavedValue.map((unSavedItem) => {
-                requiredField.push({
-                  id: `list-${listKey}`,
-                  label: unSavedItem.label,
+              if (unSavedValue.length > 0) {
+                unSavedValue.map((unSavedItem) => {
+                  requiredField.push({
+                    id: `list-${listKey}`,
+                    label: unSavedItem.label,
+                  })
                 })
-              })
-            }
-          })
+              }
+            })
+          }
         }
         if (requiredField?.length > 0) {
           newData = { ...newData, [key]: requiredField }

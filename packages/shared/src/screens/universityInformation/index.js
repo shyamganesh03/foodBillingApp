@@ -93,10 +93,13 @@ const UniversityInformation = ({ applicationDetails }) => {
   }
 
   const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
-    fieldData?.forEach((fieldValue) => {
+    fieldData?.forEach((fieldItemValue) => {
+      const fieldName = `universityInformation.${fieldIndex}.${fieldItemValue?.fieldName}`
+      const fieldValue = watch(fieldName)
+
       setValue(
-        `universityInformation.${fieldIndex}.${fieldValue?.fieldName}`,
-        fieldItem[fieldValue?.fieldName] || '',
+        fieldName,
+        fieldValue || fieldItem[fieldItemValue?.fieldName] || '',
       )
     })
   }
@@ -138,6 +141,7 @@ const UniversityInformation = ({ applicationDetails }) => {
       fieldData: { universityOrCollegeInfo: payload },
       metaData: fieldData,
       sessionName: 'University/College_Information',
+      listKey: 'universityOrCollegeInfo',
       isList: true,
     })
 

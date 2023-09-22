@@ -23,6 +23,7 @@ const ApplicationInformation = ({ applicationDetails }) => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
+    watch,
     formState: { errors },
   } = useFormContext()
 
@@ -74,27 +75,19 @@ const ApplicationInformation = ({ applicationDetails }) => {
 
   useEffect(() => {
     if (!isFocused) return
+
     fieldData.forEach((fieldItem) => {
-      if (fieldItem?.fieldName === 'firstName') {
-        setValue(
-          fieldItem?.fieldName,
-          applicationDetails?.[fieldItem?.fieldName] ||
-            studentDetail.firstName ||
-            '',
-        )
-      }
-      if (fieldItem?.fieldName === 'lastName') {
-        setValue(
-          fieldItem?.fieldName,
-          applicationDetails?.[fieldItem?.fieldName] ||
-            studentDetail.lastName ||
-            '',
-        )
-      }
-      setValue(
-        fieldItem?.fieldName,
-        applicationDetails?.[fieldItem?.fieldName] || '',
-      )
+      const fieldName = fieldItem?.fieldName
+      const fieldValue = watch(fieldName)
+
+      const defaultValue =
+        fieldValue ||
+        applicationDetails?.[fieldName] ||
+        (fieldName === 'firstName' ? studentDetail.firstName : '') ||
+        (fieldName === 'lastName' ? studentDetail.lastName : '') ||
+        ''
+
+      setValue(fieldName, defaultValue)
     })
   }, [isFocused, applicationDetails])
 

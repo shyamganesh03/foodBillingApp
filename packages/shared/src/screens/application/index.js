@@ -68,6 +68,7 @@ const Application = (props) => {
     queryFn: async () => {
       let updatedMandatoryField = []
       let totalMandatoryField = []
+      let mandatoryDataCount = 0
 
       const responseData = await getApplicationByEmailID({
         gusApplicationId: paramsData?.id,
@@ -108,32 +109,56 @@ const Application = (props) => {
           })
         } else {
           const listValues = responseDataItem || []
-
           if (Array.isArray(listValues)) {
             listValues?.forEach((listValue, listIndex) => {
               let keyName = ''
               if (key === 'universityOrCollegeInfo') {
                 keyName = 'University/College_Information'
               }
+              if (key === 'researchExperience') {
+                keyName = 'Research_Experience'
+              }
+              if (key === 'AAMCMCATReporting') {
+                keyName = 'AAMC-MCAT_Reporting'
+              }
+              if (key === 'clinicalOrHospitalExperienceDetails') {
+                keyName = 'Clinical/Hospital_Experience'
+              }
+              if (key === 'recommenders') {
+                keyName = 'Recommenders'
+              }
 
               let mandatoryFieldDetailCopy =
                 updatedMandatoryFields?.[keyName]?.mandatoryFieldDetail || []
-
-              mandatoryFieldDetailCopy = mandatoryFieldDetailCopy?.map(
-                (mandatoryFieldDetailCopyFields, index) => {
-                  totalMandatoryField.push(
-                    mandatoryFieldDetailCopyFields?.fieldName,
-                  )
-                  updatedMandatoryField.push(
-                    mandatoryFieldDetailCopyFields.fieldName,
-                  )
-                  return { ...mandatoryFieldDetailCopyFields, isSaved: true }
-                },
-              )
-              if (!!updatedMandatoryFields[keyName]) {
+              if (mandatoryFieldDetailCopy.length > 0) {
+                mandatoryFieldDetailCopy = mandatoryFieldDetailCopy?.map(
+                  (mandatoryFieldDetailCopyFields, index) => {
+                    totalMandatoryField.push(
+                      mandatoryFieldDetailCopyFields?.fieldName,
+                    )
+                    updatedMandatoryField.push(
+                      mandatoryFieldDetailCopyFields.fieldName,
+                    )
+                    return { ...mandatoryFieldDetailCopyFields, isSaved: true }
+                  },
+                )
+                if (!!updatedMandatoryFields[keyName]) {
+                  mandatoryDataCount = 1
+                  updatedMandatoryFields[keyName].list = {
+                    ...updatedMandatoryFields?.[keyName]?.list,
+                    [listIndex]: mandatoryFieldDetailCopy,
+                  }
+                }
+              } else {
+                const keys = Object.keys(listValue)
+                let finalValue = []
+                keys.map((keyName) => {
+                  const newValue = { fieldName: keyName, isSaved: true }
+                  finalValue.push(newValue)
+                })
                 updatedMandatoryFields[keyName].list = {
                   ...updatedMandatoryFields?.[keyName]?.list,
-                  [listIndex]: mandatoryFieldDetailCopy,
+                  [listIndex]: finalValue,
                 }
               }
             })
@@ -143,7 +168,8 @@ const Application = (props) => {
 
       const totalMandatoryFieldCount =
         totalProgressStatus.totalMandatoryFieldCount
-      const newSavedFieldCount = [...new Set([...updatedMandatoryField])].length
+      const newSavedFieldCount =
+        [...new Set([...updatedMandatoryField])].length + mandatoryDataCount
 
       totalProgressStatus.savedFieldCount = newSavedFieldCount
       totalProgressStatus.progress = Math.round(

@@ -6,10 +6,12 @@ import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { fieldData } from './data/metaData'
 import { useFormContext } from 'react-hook-form'
-import { useQueryClient } from '@tanstack/react-query'
 import { getRequiredPayload } from '../../utils/fieldFunction'
+import { studentDetails } from '../../utils/atom'
+import { useAtom } from 'jotai'
 
 const CommonApplication = ({ applicationDetails }) => {
+  const [studentDetail] = useAtom(studentDetails)
   const [isLoading, setIsLoading] = useState({
     primary: false,
     secondary: false,
@@ -21,6 +23,7 @@ const CommonApplication = ({ applicationDetails }) => {
     handleSubmit: handleFormSubmit,
     control,
     setValue,
+    watch,
     formState: { errors },
   } = useFormContext()
 
@@ -31,7 +34,13 @@ const CommonApplication = ({ applicationDetails }) => {
     }))
 
     let requiredPayload = getRequiredPayload(fieldData, data)
-
+    if (!applicationDetails?.r3ApplicationId) {
+      requiredPayload = {
+        ...requiredPayload,
+        ...studentDetail,
+        applicationStatus: 'In Progress',
+      }
+    }
     let payload = { ...requiredPayload }
 
     await mutation.mutateAsync({
@@ -55,6 +64,14 @@ const CommonApplication = ({ applicationDetails }) => {
 
     let requiredPayload = getRequiredPayload(fieldData, data)
 
+    if (!applicationDetails?.r3ApplicationId) {
+      requiredPayload = {
+        ...requiredPayload,
+        ...studentDetail,
+        applicationStatus: 'In Progress',
+      }
+    }
+
     let payload = { ...requiredPayload }
 
     await mutation.mutateAsync({
@@ -73,10 +90,9 @@ const CommonApplication = ({ applicationDetails }) => {
   useEffect(() => {
     if (!isFocused) return
     fieldData.forEach((fieldItem) => {
-      setValue(
-        fieldItem?.fieldName,
-        applicationDetails?.[fieldItem?.fieldName] || '',
-      )
+      const fieldName = fieldItem?.fieldName
+      const fieldValue = watch(fieldName)
+      setValue(fieldName, fieldValue || applicationDetails?.[fieldName] || '')
     })
   }, [isFocused, applicationDetails])
 

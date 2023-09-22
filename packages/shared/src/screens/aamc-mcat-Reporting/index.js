@@ -60,11 +60,10 @@ const MCATReporting = ({ applicationDetails }) => {
   }
 
   const updateFieldValues = (fieldIndex, fieldData, fieldItem) => {
-    fieldData?.forEach((fieldValue) => {
-      setValue(
-        `aamcmcatReporting.${fieldIndex}.${fieldValue?.fieldName}`,
-        fieldItem[fieldValue?.fieldName] || '',
-      )
+    fieldData?.forEach((fieldItemValue) => {
+      const fieldName = `aamcmcatReporting.${fieldIndex}.${fieldItemValue?.fieldName}`
+      const fieldValue = watch(fieldName)
+      setValue(fieldName, fieldValue || fieldItem[fieldName] || '')
     })
   }
 
@@ -85,6 +84,8 @@ const MCATReporting = ({ applicationDetails }) => {
         fieldData: { AAMCMCATReporting: payload },
         metaData: fieldData,
         sessionName: 'AAMC-MCAT_Reporting',
+        listKey: 'AAMCMCATReporting',
+        isList: true,
       })
     } else {
       toast.show('Please fill all the fields', {
@@ -115,6 +116,8 @@ const MCATReporting = ({ applicationDetails }) => {
         fieldData: { AAMCMCATReporting: payload },
         metaData: fieldData,
         sessionName: 'AAMC-MCAT_Reporting',
+        listKey: 'AAMCMCATReporting',
+        isList: true,
       })
     } else {
       toast.show('Please fill all the fields', {

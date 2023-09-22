@@ -87,9 +87,9 @@ export const useSave = () => {
             gusApplicationId: studentDetail?.gusApplicationId,
             email: studentDetail?.email,
           })
-          queryClient.setQueryData(['getApplicationData'], (prevData) => {
-            return { ...prevData, ...responseData }
-          })
+
+          queryClient.resetQueries(['getApplicationData'])
+
           const updatedProgressDetail = { ...applicationProgressDetail }
 
           context.metaData.forEach((fieldItem, fieldIndex) => {
@@ -98,6 +98,7 @@ export const useSave = () => {
 
             if (mandatoryFields && !context.isList) {
               mandatoryFields.forEach((mandatoryItem, mandatoryIndex) => {
+                canCalculate = true
                 if (mandatoryItem?.fieldName === fieldItem?.fieldName) {
                   updatedMandatoryFieldCount += 1
                   mandatoryFields[mandatoryIndex] = {
@@ -111,29 +112,51 @@ export const useSave = () => {
             }
           })
 
-          // if (context.isList) {
-          //   const listValues = context?.fieldData?.[context.listKey] || []
+          if (context.isList) {
+            const listValues = context?.fieldData?.[context.listKey] || []
+            const sessionName = context.sessionName
 
-          //   listValues.forEach((listValue, listIndex) => {
-          //     let mandatoryFieldDetailCopy =
-          //       updatedProgressDetail.mandatoryFields?.[context.sessionName]
-          //         ?.mandatoryFieldDetail || []
-          //     mandatoryFieldDetailCopy = mandatoryFieldDetailCopy?.map(
-          //       (mandatoryFieldDetailCopyFields) => {
-          //         updatedMandatoryFieldCount += 1
-          //         return { ...mandatoryFieldDetailCopyFields, isSaved: true }
-          //       },
-          //     )
+            listValues.forEach((listValue, listIndex) => {
+              let mandatoryFieldDetailCopy = []
+              const isMandatoryField =
+                !!updatedProgressDetail.mandatoryFields?.[sessionName]
+                  ?.mandatoryFieldDetail
+              if (isMandatoryField) {
+                mandatoryFieldDetailCopy = (
+                  updatedProgressDetail.mandatoryFields?.[sessionName]
+                    ?.mandatoryFieldDetail || []
+                ).map((mandatoryFieldDetailCopyFields) => ({
+                  ...mandatoryFieldDetailCopyFields,
+                  isSaved: true,
+                }))
+              } else {
+                const keys = Object.keys(listValue)
+                keys.map((keyName) => {
+                  const newValue = { fieldName: keyName, isSaved: true }
+                  mandatoryFieldDetailCopy.push(newValue)
+                })
+              }
 
-          //     updatedProgressDetail.mandatoryFields[context.sessionName].list =
-          //       {
-          //         ...updatedProgressDetail.mandatoryFields?.[
-          //           context.sessionName
-          //         ].list,
-          //         [listIndex]: mandatoryFieldDetailCopy,
-          //       }
-          //   })
-          // }
+              updatedProgressDetail.mandatoryFields[sessionName].list = {
+                ...updatedProgressDetail.mandatoryFields?.[sessionName]?.list,
+                [listIndex]: mandatoryFieldDetailCopy,
+              }
+            })
+
+            const sessionList =
+              updatedProgressDetail.mandatoryFields[sessionName]?.list
+
+            if (
+              sessionList &&
+              Object.keys(sessionList).length > 0 &&
+              updatedProgressDetail.mandatoryFields[sessionName]
+                .mandatoryFieldDetail?.length > 0
+            ) {
+              canCalculate = true
+              updatedMandatoryFieldCount += 1
+            }
+          }
+
           const totalMandatoryFieldCount =
             updatedProgressDetail.totalProgress.totalMandatoryFieldCount
           const newSavedFieldCount =

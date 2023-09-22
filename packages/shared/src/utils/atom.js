@@ -160,12 +160,18 @@ export const applicationProgressDetails = atom({
         fieldName: 'organicChemistry2OrBiochemistry',
       },
     ],
-    //AAMC-MCAT Reporting
-    //{...}
-    //Clinical/Hospital Experience
-    //{...}
-    //Research Experience
-    //{...}
+    'AAMC-MCAT_Reporting': {
+      list: [],
+    },
+    'Clinical/Hospital_Experience': {
+      list: [],
+    },
+    Research_Experience: {
+      list: [],
+    },
+    Recommenders: {
+      list: [],
+    },
     Background_Information_and_Technical_Standards: [
       {
         label:
@@ -217,7 +223,7 @@ export const applicationProgressDetails = atom({
     ],
   },
   totalProgress: {
-    totalMandatoryFieldCount: 43,
+    totalMandatoryFieldCount: 44,
     savedFieldCount: 0,
     progress: 0,
   },

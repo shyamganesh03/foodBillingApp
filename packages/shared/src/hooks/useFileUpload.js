@@ -2,11 +2,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { studentDetails } from '../utils/atom'
 import { useAtom } from 'jotai'
 import { getApplicationFileByID, uploadFile } from '../api'
-import { updateMandatoryData } from '../utils/fieldFunction'
 import { useState } from 'react'
 
 export const useFileUpload = () => {
   const [studentDetail] = useAtom(studentDetails)
+
+  const [progressStatus, setHasProgressStatus] = useState({
+    isCompleted: false,
+    error: false,
+    documentType: '',
+  })
 
   const queryClient = useQueryClient()
   let applicationDetails = queryClient.getQueryData(['getApplicationData'])
@@ -25,6 +30,17 @@ export const useFileUpload = () => {
         console.log('err: ', data)
       },
       onSuccess: async (data, context) => {
+        if (data?.statusCode === 500) {
+          setHasProgressStatus({
+            isCompleted: true,
+            error: true,
+            documentType: context?.fileData?.fileType,
+          })
+          return toast.show(data.message, {
+            type: 'danger',
+          })
+        }
+
         let queryKey
         const responseData = await getApplicationFileByID({
           Id: studentDetail?.gusApplicationId,
@@ -44,9 +60,15 @@ export const useFileUpload = () => {
         queryClient.setQueryData([queryKey], () => {
           return [...responseData]
         })
+
+        setHasProgressStatus({
+          isCompleted: true,
+          error: false,
+          documentType: '',
+        })
       },
     },
   )
 
-  return { mutate }
+  return { mutate, progressStatus }
 }
