@@ -16,6 +16,7 @@ import { useGetApplicationDetail } from '../../hooks/useGetApplicationDetail'
 import { useGetGusApplication } from '../../hooks/useGetGusApplication'
 
 const Application = (props) => {
+  const { setParams } = useParams()
   const [canFetchApplicationData, setCanApplicationData] = useState(true)
   const paramsData = props.route.params
   const [steps, setSteps] = useState(paramsData?.steps || 1)
@@ -89,6 +90,7 @@ const Application = (props) => {
     if (!isFocused) return
 
     if (gusApplicationDetails?.statusCode == 500) {
+      setSteps('')
       return handleNavigation({ type: 'invalidID' })
     }
   }, [isFocused, gusApplicationDetails])
@@ -163,6 +165,7 @@ const Application = (props) => {
       setCanApplicationData(false)
     }
     if (applicationStatus === 'Submitted' && !!programName) {
+      setSteps('')
       handleNavigation({ type: 'success', paramData: programName })
     }
   }, [r3ApplicationDetails, isFocused])
@@ -170,7 +173,7 @@ const Application = (props) => {
   useEffect(() => {
     if (!isFocused) return
     const steps = route.params?.steps || 1
-
+    setParams({ steps: steps })
     setSteps(steps)
   }, [isFocused, route])
 

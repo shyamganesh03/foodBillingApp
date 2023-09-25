@@ -61,7 +61,6 @@ export const useGetApplicationDetail = ({
         if (Array.isArray(listValues)) {
           listValues?.forEach((listValue, listIndex) => {
             let keyName = ''
-            console.log({ key })
 
             switch (key) {
               case 'universityOrCollegeInfo':
@@ -97,12 +96,11 @@ export const useGetApplicationDetail = ({
                 },
               )
 
-              if (!!updatedMandatoryFields[keyName]) {
-                mandatoryDataCount = 1
-                updatedMandatoryFields[keyName].list = {
-                  ...updatedMandatoryFields?.[keyName]?.list,
-                  [listIndex]: mandatoryFieldDetailCopy,
-                }
+              mandatoryDataCount = 1
+
+              updatedMandatoryFieldsCopy[keyName].list = {
+                ...updatedMandatoryFieldsCopy?.[keyName]?.list,
+                [listIndex]: mandatoryFieldDetailCopy,
               }
             } else {
               const keys = Object.keys(listValue)
@@ -110,11 +108,10 @@ export const useGetApplicationDetail = ({
                 fieldName: keyName,
                 isSaved: true,
               }))
-              if (updatedMandatoryFields?.[keyName]?.list) {
-                updatedMandatoryFields[keyName].list = {
-                  ...updatedMandatoryFields?.[keyName]?.list,
-                  [listIndex]: finalValue,
-                }
+
+              updatedMandatoryFieldsCopy[keyName].list = {
+                ...updatedMandatoryFieldsCopy?.[keyName]?.list,
+                [listIndex]: finalValue,
               }
             }
           })
@@ -140,7 +137,7 @@ export const useGetApplicationDetail = ({
 
     setApplicationProgressDetail(updatedApplicationProgressDetail)
 
-    console.log({ responseData })
+    console.log({ updatedApplicationProgressDetail })
 
     return responseData
   }

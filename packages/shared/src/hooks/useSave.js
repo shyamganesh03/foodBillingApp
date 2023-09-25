@@ -131,16 +131,14 @@ export const useSave = () => {
           })
 
           if (context.isList) {
-            const listValues = context?.fieldData?.[context.listKey] || []
+            const listValues = context?.payloadData || []
             const sessionName = context.sessionName
             newPayload = getPayload({
               data: context.payloadData,
               applicationDetails,
               fieldName: context.listKey,
             })
-            if (newPayload.length === 0) {
-              return
-            }
+
             listValues.forEach((listValue, listIndex) => {
               let mandatoryFieldDetailCopy = []
               const isMandatoryField =
@@ -162,6 +160,8 @@ export const useSave = () => {
                 })
               } else {
                 const keys = Object.keys(listValue)
+                keys.shift()
+                console.log({ keys })
                 keys.map((keyName) => {
                   const newValue = { fieldName: keyName, isSaved: true }
                   mandatoryFieldDetailCopy.push(newValue)

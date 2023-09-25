@@ -23,8 +23,9 @@ export const getStatus = ({
   if (data.screenType === 'list') {
     const listCount = Object.keys(
       applicationProgressDetail?.mandatoryFields?.[data?.sessionName]?.list ||
-        {},
+        [],
     ).length
+
     listCount > 0 ? savedStatus.push(true) : savedStatus.push(false)
   } else {
     Object.entries(

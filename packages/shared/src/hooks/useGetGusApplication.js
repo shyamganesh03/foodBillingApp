@@ -20,10 +20,6 @@ export const useGetGusApplication = ({
       testCase: isTestCase,
     })
 
-    if (response?.statusCode === 500) {
-      return handleNavigation({ type: 'invalidID' })
-    }
-
     setStudentDetail({
       gusApplicationId: applicationId,
       email: response.Email__c || email,
@@ -38,7 +34,6 @@ export const useGetGusApplication = ({
     queryKey: [queryKey],
     queryFn: getGusApplicationDetail,
     enabled: enabled,
-    initialData: [],
   })
 
   return { data, isFetching, isLoading }
