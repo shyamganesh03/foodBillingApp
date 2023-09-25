@@ -4,18 +4,15 @@ import DesktopView from './DesktopView'
 import { Text } from '@libs/components'
 import { fieldData } from './data/metaData'
 import { useIsFocused } from '@react-navigation/native'
-import { useQueryClient } from '@tanstack/react-query'
 import { useSave } from '../../hooks/useSave'
 import { useDelete } from '../../hooks/useDelete'
 import { useFormContext, useFieldArray } from 'react-hook-form'
 import { isValidateInstitutionDate } from '../../utils/dateFunction'
-import { getPayload } from '../../utils/fieldFunction'
 import { applicationProgressDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
 
 const UniversityInformation = ({ applicationDetails }) => {
   const isFocused = useIsFocused()
-  const queryClient = useQueryClient()
   const [isLoading, setIsLoading] = useState({
     primary: false,
     secondary: false,
@@ -25,14 +22,6 @@ const UniversityInformation = ({ applicationDetails }) => {
   )
   const { mutate: mutation } = useSave()
   const { mutate: deleteMutation } = useDelete()
-
-  useEffect(() => {
-    if (!isFocused) return
-
-    if (!applicationDetails) {
-      queryClient.refetchQueries({ queryKey: ['getApplicationData'] })
-    }
-  }, [isFocused, applicationDetails])
 
   const {
     handleSubmit: handleFormSubmit,
