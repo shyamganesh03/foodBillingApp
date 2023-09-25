@@ -8,9 +8,7 @@ export const apiCall = async (url, options) => {
 
     if (!tempConfig) {
       const response = await fetch(`${r3AppUrl}/config.json`)
-
       const result = await response.json()
-
       await SecureStore.setItemAsync('config', JSON.stringify(result))
       config = result?.config
     } else {

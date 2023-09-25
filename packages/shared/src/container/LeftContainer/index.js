@@ -7,6 +7,7 @@ import { gesMedicalCollegeLogo } from '@oap/assets'
 import { applicationProgressDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
 import { getCurrent } from '../../navigation/RootNavigator'
+import { useParams } from '@libs/utils'
 
 const LeftContainer = ({ tabItems }) => {
   const { colors } = useTheme()
@@ -14,6 +15,7 @@ const LeftContainer = ({ tabItems }) => {
   const [progress, setProgress] = useState(0)
   const isFocused = useIsFocused()
   const routes = getCurrent()
+  const { params } = useParams()
   const currentRoute = routes?.getCurrentRoute()
   const currentRoueName = currentRoute?.path
   const [showContainer, setShowContainer] = useState(true)
@@ -37,7 +39,7 @@ const LeftContainer = ({ tabItems }) => {
     setProgress(applicationProgressDetail?.totalProgress?.progress)
   }, [isFocused, applicationProgressDetail?.totalProgress?.progress])
 
-  if (!showContainer) {
+  if (!params?.steps) {
     return null
   }
 
