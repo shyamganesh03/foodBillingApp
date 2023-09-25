@@ -60,10 +60,20 @@ export const getApplicationByEmailID = async (payload) => {
   )
 }
 
-export const getApplicationByID = async (payload) =>
-  apiCall(`gus/application?id=${payload.applicationId}`, {
-    method: 'GET',
-  })
+export const getApplicationByID = async (payload) => {
+  if (payload.testCase) {
+    return apiCall(
+      `gus/application?id=${payload.applicationId}&testCase=true`,
+      {
+        method: 'GET',
+      },
+    )
+  } else {
+    return apiCall(`gus/application?id=${payload.applicationId}`, {
+      method: 'GET',
+    })
+  }
+}
 
 export const updateApplication = async (payload) =>
   apiCall(`application`, {

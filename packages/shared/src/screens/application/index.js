@@ -17,7 +17,6 @@ import { useGetGusApplication } from '../../hooks/useGetGusApplication'
 
 const Application = (props) => {
   const [canFetchApplicationData, setCanApplicationData] = useState(true)
-  const { params } = useParams()
   const paramsData = props.route.params
   const [steps, setSteps] = useState(paramsData?.steps || 1)
   const isFocused = useIsFocused()
@@ -36,6 +35,7 @@ const Application = (props) => {
       email: paramsData?.email,
       firstName: paramsData?.firstName,
       lastName: paramsData?.lastName,
+      testCase: paramsData?.testCase,
     })
 
   const {
@@ -158,7 +158,7 @@ const Application = (props) => {
 
     const programName = r3ApplicationDetails?.programmeName || ''
     const applicationStatus = r3ApplicationDetails?.applicationStatus || ''
-    console.log({ r3ApplicationDetails })
+
     if (r3ApplicationDetails?.PK) {
       setCanApplicationData(false)
     }

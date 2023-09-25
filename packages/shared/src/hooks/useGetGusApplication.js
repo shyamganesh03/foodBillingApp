@@ -10,11 +10,14 @@ export const useGetGusApplication = ({
   email,
   firstName,
   lastName,
+  testCase,
 }) => {
   const [, setStudentDetail] = useAtom(studentDetails)
   const getGusApplicationDetail = async () => {
+    const isTestCase = testCase === 'true'
     const response = await getApplicationByID({
       applicationId: applicationId,
+      testCase: isTestCase,
     })
 
     if (response?.statusCode === 500) {
