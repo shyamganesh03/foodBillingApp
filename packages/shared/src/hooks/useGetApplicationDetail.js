@@ -137,8 +137,6 @@ export const useGetApplicationDetail = ({
 
     setApplicationProgressDetail(updatedApplicationProgressDetail)
 
-    console.log({ updatedApplicationProgressDetail })
-
     return responseData
   }
 

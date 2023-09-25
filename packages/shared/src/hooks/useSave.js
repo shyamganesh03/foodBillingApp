@@ -8,6 +8,7 @@ import { applicationProgressDetails, studentDetails } from '../utils/atom'
 import { useAtom } from 'jotai'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { getPayload } from '../utils/fieldFunction'
+import { canNonEmptyObject } from '../utils/fieldValidation'
 
 export const useSave = () => {
   const [studentDetail] = useAtom(studentDetails)
@@ -139,6 +140,10 @@ export const useSave = () => {
               fieldName: context.listKey,
             })
 
+            if (newPayload.length === 0) {
+              return
+            }
+
             listValues.forEach((listValue, listIndex) => {
               let mandatoryFieldDetailCopy = []
               const isMandatoryField =
@@ -159,18 +164,24 @@ export const useSave = () => {
                   }
                 })
               } else {
-                const keys = Object.keys(listValue)
-                keys.shift()
-                console.log({ keys })
-                keys.map((keyName) => {
-                  const newValue = { fieldName: keyName, isSaved: true }
-                  mandatoryFieldDetailCopy.push(newValue)
-                })
+                const isNonEmptyObject = canNonEmptyObject(listValue)
+
+                if (isNonEmptyObject) {
+                  const keys = Object.keys(listValue)
+                  keys.shift()
+
+                  keys.map((keyName) => {
+                    const newValue = { fieldName: keyName, isSaved: true }
+                    mandatoryFieldDetailCopy.push(newValue)
+                  })
+                }
               }
 
-              updatedProgressDetail.mandatoryFields[sessionName].list = {
-                ...updatedProgressDetail.mandatoryFields?.[sessionName]?.list,
-                [listIndex]: mandatoryFieldDetailCopy,
+              if (mandatoryFieldDetailCopy?.length > 0) {
+                updatedProgressDetail.mandatoryFields[sessionName].list = {
+                  ...updatedProgressDetail.mandatoryFields?.[sessionName]?.list,
+                  [listIndex]: mandatoryFieldDetailCopy,
+                }
               }
             })
 
@@ -207,7 +218,9 @@ export const useSave = () => {
             context.type === 'createAndNext' ||
             context.type === 'saveAndNext'
           ) {
-            navigation.setParams({ steps: Number(steps) + 1 })
+            const currentSteps = Number(steps)
+            const newSteps = currentSteps === 0 ? 2 : Number(steps) + 1
+            navigation.setParams({ steps: newSteps })
           }
 
           if (context.type === 'submit') {

@@ -20,7 +20,9 @@ const ApplicationDocuments = ({
   cvDocuments,
   medicalStatementDocs,
 }) => {
-  const [fileData, setFileData] = useState()
+  const [cvDocs, setCvDocs] = useState()
+  const [photoDocs, setPhotoDocs] = useState()
+  const [medicalDocs, setMedicalDocs] = useState()
   const queryClient = useQueryClient()
   const isFocused = useIsFocused()
   const [studentDetail] = useAtom(studentDetails)
@@ -42,18 +44,26 @@ const ApplicationDocuments = ({
       hasFileUploadProgressStatus?.isCompleted &&
       hasFileUploadProgressStatus.error
     ) {
-      setFileData((prev) => ({ ...prev, hasError: true }))
+      setCvDocs((prev) => ({ ...prev, hasError: true }))
+      if (hasFileUploadProgressStatus?.documentType === 'CV') {
+        setCvDocs((prev) => ({ ...prev, hasError: true }))
+      }
+      if (hasFileUploadProgressStatus?.documentType === 'Applicant_Photo') {
+        setPhotoDocs((prev) => ({ ...prev, hasError: true }))
+      }
+      if (hasFileUploadProgressStatus?.documentType === 'Medical_Statement') {
+        setMedicalDocs((prev) => ({ ...prev, hasError: true }))
+      }
     }
     if (
       hasFileUploadProgressStatus?.isCompleted &&
-      !!fileData?.fileType &&
       !hasFileUploadProgressStatus.error
     ) {
       let totalDocumentCount
 
       if (
-        fileData?.fileType === 'CV' ||
-        fileData?.fileType === 'Applicant_Photo'
+        hasFileUploadProgressStatus?.documentType === 'CV' ||
+        hasFileUploadProgressStatus?.documentType === 'Applicant_Photo'
       ) {
         totalDocumentCount = 1
       } else {
@@ -61,19 +71,34 @@ const ApplicationDocuments = ({
       }
 
       const updatedMandatoryDetails = updateMandatoryData({
-        fileType: fileData?.fileType,
+        fileType: hasFileUploadProgressStatus?.documentType,
         applicationProgressDetail: applicationProgressDetail,
         totalDocumentCount: totalDocumentCount,
       })
 
       setApplicationProgressDetail(updatedMandatoryDetails)
-      setFileData({})
+      if (hasFileUploadProgressStatus?.documentType === 'CV') {
+        setCvDocs({})
+      }
+      if (hasFileUploadProgressStatus?.documentType === 'Applicant_Photo') {
+        setPhotoDocs({})
+      }
+      if (hasFileUploadProgressStatus?.documentType === 'Medical_Statement') {
+        setMedicalDocs({})
+      }
     }
-  }, [isFocused, hasFileUploadProgressStatus, fileData])
+  }, [isFocused, hasFileUploadProgressStatus, cvDocs])
 
   const handleUploadDocs = async (uploadFileData) => {
-    setFileData(uploadFileData)
-
+    if (uploadFileData?.fileType === 'CV') {
+      setCvDocs(uploadFileData)
+    }
+    if (uploadFileData?.fileType === 'Applicant_Photo') {
+      setPhotoDocs(uploadFileData)
+    }
+    if (uploadFileData?.fileType === 'Medical_Statement') {
+      setMedicalDocs(uploadFileData)
+    }
     await uploadDocs.mutateAsync({
       fileData: uploadFileData,
       applicationProgressDetail: applicationProgressDetail,
@@ -145,7 +170,9 @@ const ApplicationDocuments = ({
   const viewProps = {
     applicantPhotoDocs,
     cvDocuments,
-    fileData,
+    cvDocs,
+    medicalDocs,
+    photoDocs,
     medicalStatementDocs,
     handleDelete,
     handleNextStep,

@@ -6,7 +6,9 @@ import { useTheme } from '@react-navigation/native'
 const DesktopView = ({
   applicantPhotoDocs,
   cvDocuments,
-  fileData,
+  cvDocs,
+  medicalDocs,
+  photoDocs,
   medicalStatementDocs,
   handleDelete,
   handleNextStep,
@@ -33,7 +35,7 @@ const DesktopView = ({
         <FilePicker
           heading="CV"
           uploadFile={handleUploadDocs}
-          successState={fileData}
+          successState={cvDocs}
           handleDelete={handleDelete}
           uploadedFiles={cvDocuments}
           documentType="CV"
@@ -42,7 +44,7 @@ const DesktopView = ({
         <FilePicker
           heading="Applicant Photo"
           uploadFile={handleUploadDocs}
-          successState={fileData}
+          successState={photoDocs}
           handleDelete={handleDelete}
           uploadedFiles={applicantPhotoDocs}
           documentType="Applicant_Photo"
@@ -51,7 +53,7 @@ const DesktopView = ({
         <FilePicker
           heading="Personal Medical School Statements"
           uploadFile={handleUploadDocs}
-          successState={fileData}
+          successState={medicalDocs}
           handleDelete={handleDelete}
           uploadedFiles={medicalStatementDocs}
           documentType="Medical_Statement"

@@ -164,17 +164,24 @@ export const mandatoryValidation = (fieldData, filedItemValues, isArray) => {
 
 export const canNonEmptyObject = (validationValue) => {
   let hasNonEmptyValue
+  let validatedValueCopy = { ...validationValue }
 
-  hasNonEmptyValue = Object.values(validationValue).some((validationItem) => {
-    const keys = Object.keys(validationItem || {})
-    if (keys.length > 0) {
-      return Object.values(validationItem).some(
-        (validationKeyItem) => !!validationKeyItem,
-      )
-    } else {
-      return !!validationItem
-    }
-  })
+  if (Array.isArray(validatedValueCopy?.['0'])) {
+    delete validatedValueCopy['0']
+  }
+  hasNonEmptyValue = Object.values(validatedValueCopy).some(
+    (validationItem) => {
+      const keys = Object.keys(validationItem || {})
+      
+      if (keys.length > 0) {
+        return Object.values(validationItem).some((validationKeyItem) => {
+          return !!validationKeyItem
+        })
+      } else {
+        return false
+      }
+    },
+  )
 
   return hasNonEmptyValue
 }

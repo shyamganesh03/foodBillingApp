@@ -38,7 +38,7 @@ const FilePicker = ({
       })
       setFiles(files)
     } else {
-      setFiles([])
+      setFiles(files)
     }
   }, [isFocused, uploadedFiles])
 
@@ -131,12 +131,17 @@ const FilePicker = ({
     setIsDeleteCallFetching(true)
     if (fileData.id) {
       await handleDelete({ id: fileData.id, fileType: documentType })
-    } else {
-      let filesCopy = [...files]
-      filesCopy.splice(0, fileIndex === 0 ? 1 : fileIndex)
-
-      setFiles(filesCopy)
     }
+    let filesCopy = [...files]
+
+    if (filesCopy?.length === 1) {
+      filesCopy.pop()
+    } else {
+      filesCopy.splice(fileIndex, 1)
+    }
+
+    setFiles(filesCopy)
+
     setIsDeleteCallFetching(false)
   }
 
