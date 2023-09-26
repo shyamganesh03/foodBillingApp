@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { fieldData } from './data/metaData'
 import { useFormContext } from 'react-hook-form'
 import { getDropdownValue } from '../../api'
-import { getRequiredPayload } from '../../utils/fieldFunction'
+import { addCountryCode, getRequiredPayload } from '../../utils/fieldFunction'
 
 const ContactInformation = ({ applicationDetails }) => {
   const [isLoading, setIsLoading] = useState({
@@ -36,12 +36,21 @@ const ContactInformation = ({ applicationDetails }) => {
     formState: { errors },
   } = useFormContext()
 
+  const handleCountrySelection = ({ selectedValue, fieldItem }) => {
+    setValue(fieldItem.countryCode, selectedValue?.name.split(' ')[1])
+  }
+
   const handlePrimary = async (data) => {
     setIsLoading((prevValue) => ({
       ...prevValue,
       primary: true,
     }))
     let requiredPayload = getRequiredPayload(fieldData, data)
+    requiredPayload = addCountryCode({
+      payloadItem: requiredPayload,
+      data: data,
+      fieldData: fieldData,
+    })
 
     let payload = { ...requiredPayload }
 
@@ -74,6 +83,11 @@ const ContactInformation = ({ applicationDetails }) => {
     }))
 
     let requiredPayload = getRequiredPayload(fieldData, data)
+    requiredPayload = addCountryCode({
+      payloadItem: requiredPayload,
+      data: data,
+      fieldData: fieldData,
+    })
 
     let payload = { ...requiredPayload }
 
@@ -102,7 +116,6 @@ const ContactInformation = ({ applicationDetails }) => {
 
   useEffect(() => {
     if (!isFocused) return
-
     ;(async () => {
       for (const fieldItem of fieldData) {
         const fieldName = fieldItem?.fieldName
@@ -114,6 +127,7 @@ const ContactInformation = ({ applicationDetails }) => {
               item?.Value === applicationDetails?.[fieldName] ||
               item?.Value === fieldValue,
           )
+
           setValue(fieldName, selectedData?.[0]?.Label || '')
         } else {
           setValue(
@@ -123,7 +137,7 @@ const ContactInformation = ({ applicationDetails }) => {
         }
       }
     })()
-  }, [isFocused, applicationDetails])
+  }, [isFocused, applicationDetails, dropdown])
 
   const LayoutView = useCallback(
     ScreenLayout.withLayoutView(DesktopView, DesktopView, DesktopView),
@@ -136,6 +150,7 @@ const ContactInformation = ({ applicationDetails }) => {
     handleFormSubmit,
     handlePrimary,
     handleSecondary,
+    handleCountrySelection,
     isLoading,
   }
 

@@ -4,6 +4,7 @@ import { Controller } from 'react-hook-form'
 import DynamicFields from '../DynamicFields'
 
 export const FormContainer = ({
+  handleCountrySelection,
   fieldData,
   control,
   errors,
@@ -31,6 +32,13 @@ export const FormContainer = ({
                     label={fieldItem.label}
                     placeholder={fieldItem.placeholder}
                     selectedValue={value}
+                    handleCountrySelection={(selectedValue) => {
+                      handleCountrySelection({
+                        selectedValue,
+                        fieldItem,
+                        fieldIndex,
+                      })
+                    }}
                     handleValueChanged={(value) => {
                       onChange(value)
                     }}

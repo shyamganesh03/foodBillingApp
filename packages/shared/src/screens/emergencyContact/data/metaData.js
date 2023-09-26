@@ -40,6 +40,7 @@ export const fieldData = [
   {
     label: 'Emergency Contact Primary Phone',
     fieldName: 'emergencyContactPrimaryPhone',
+    countryCode: 'emergencyContactPrimaryPhoneCountyCode',
     type: FieldType.Mobile_INPUT,
     inputType: 'phone',
     placeholder: 'Enter your Emergency Contact Primary Phone',

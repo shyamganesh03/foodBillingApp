@@ -24,6 +24,10 @@ const EmergencyContact = ({ applicationDetails }) => {
     formState: { errors },
   } = useFormContext()
 
+  const handleCountrySelection = ({ selectedValue, fieldItem }) => {
+    setValue(fieldItem.countryCode, selectedValue?.name.split(' ')[1])
+  }
+
   const handlePrimary = async (data) => {
     setIsLoading((prevValue) => ({
       ...prevValue,
@@ -31,6 +35,12 @@ const EmergencyContact = ({ applicationDetails }) => {
     }))
 
     let requiredPayload = getRequiredPayload(fieldData, data)
+
+    requiredPayload = addCountryCode({
+      payloadItem: requiredPayload,
+      data: data,
+      fieldData: fieldData,
+    })
 
     let payload = { ...requiredPayload }
 
@@ -61,6 +71,11 @@ const EmergencyContact = ({ applicationDetails }) => {
     }))
 
     let requiredPayload = getRequiredPayload(fieldData, data)
+    requiredPayload = addCountryCode({
+      payloadItem: requiredPayload,
+      data: data,
+      fieldData: fieldData,
+    })
 
     let payload = { ...requiredPayload }
 
@@ -102,6 +117,7 @@ const EmergencyContact = ({ applicationDetails }) => {
     control,
     errors,
     handleFormSubmit,
+    handleCountrySelection,
     handlePrimary,
     handleSecondary,
     isLoading,

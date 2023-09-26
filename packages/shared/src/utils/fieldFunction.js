@@ -87,3 +87,15 @@ export const documentsFiltered = ({ docs }) => {
   const filteredData = docs?.filter((docs) => !!docs?.documentLinkedId)
   return filteredData
 }
+
+export const addCountryCode = ({ payloadItem, data, fieldData }) => {
+  let payloadData = { ...payloadItem }
+  fieldData.map((fieldItem) => {
+    if (fieldItem.inputType === 'phone') {
+      payloadData[fieldItem.fieldName] = `${data[fieldItem.countryCode]}-${
+        data[fieldItem.fieldName]
+      }`
+    }
+  })
+  return payloadData
+}

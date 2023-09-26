@@ -10,6 +10,7 @@ const DesktopView = ({
   control,
   errors,
   handleFormSubmit,
+  handleCountrySelection,
   handlePrimary,
   handleSecondary,
   isLoading,
@@ -31,6 +32,7 @@ const DesktopView = ({
           control={control}
           errors={errors}
           fieldData={fieldData}
+          handleCountrySelection={handleCountrySelection}
         />
         <View style={{ flexDirection: 'row', marginVertical: 40 }}>
           <Button
