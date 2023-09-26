@@ -24,6 +24,10 @@ const DesktopView = ({
   r3ApplicationDetails,
   steps,
   isLoading,
+  refetch,
+  applicantDocsRefetch,
+  medicalDocsRefetch,
+  cvDocsRefetch,
 }) => {
   const { colors } = useTheme()
 
@@ -38,7 +42,10 @@ const DesktopView = ({
   if (Number(steps) === 1) {
     return (
       <View style={styles({ colors }).container}>
-        <CommonApplication applicationDetails={r3ApplicationDetails} />
+        <CommonApplication
+          applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
+        />
       </View>
     )
   }
@@ -46,35 +53,50 @@ const DesktopView = ({
   if (Number(steps) === 2) {
     return (
       <View style={styles({ colors }).container}>
-        <ApplicationInformation applicationDetails={r3ApplicationDetails} />
+        <ApplicationInformation
+          applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
+        />
       </View>
     )
   }
   if (Number(steps) === 3) {
     return (
       <View style={styles({ colors }).container}>
-        <ContactInformation applicationDetails={r3ApplicationDetails} />
+        <ContactInformation
+          applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
+        />
       </View>
     )
   }
   if (Number(steps) === 4) {
     return (
       <View style={styles({ colors }).container}>
-        <EmergencyContact applicationDetails={r3ApplicationDetails} />
+        <EmergencyContact
+          applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
+        />
       </View>
     )
   }
   if (Number(steps) === 5) {
     return (
       <View style={styles({ colors }).container}>
-        <PersonalInformation applicationDetails={r3ApplicationDetails} />
+        <PersonalInformation
+          applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
+        />
       </View>
     )
   }
   if (Number(steps) === 6) {
     return (
       <View style={styles({ colors }).container}>
-        <UniversityInformation applicationDetails={r3ApplicationDetails} />
+        <UniversityInformation
+          refetch={refetch}
+          applicationDetails={r3ApplicationDetails}
+        />
       </View>
     )
   }
@@ -83,6 +105,7 @@ const DesktopView = ({
       <View style={styles({ colors }).container}>
         <PrerequisiteCourseworkInformation
           applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
         />
       </View>
     )
@@ -90,28 +113,40 @@ const DesktopView = ({
   if (Number(steps) === 8) {
     return (
       <View style={styles({ colors }).container}>
-        <MCATReporting applicationDetails={r3ApplicationDetails} />
+        <MCATReporting
+          applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
+        />
       </View>
     )
   }
   if (Number(steps) === 9) {
     return (
       <View style={styles({ colors }).container}>
-        <WorkExperience applicationDetails={r3ApplicationDetails} />
+        <WorkExperience
+          applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
+        />
       </View>
     )
   }
   if (Number(steps) === 10) {
     return (
       <View style={styles({ colors }).container}>
-        <ResearchExperience applicationDetails={r3ApplicationDetails} />
+        <ResearchExperience
+          applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
+        />
       </View>
     )
   }
   if (Number(steps) === 11) {
     return (
       <View style={styles({ colors }).container}>
-        <BackgroundInformation applicationDetails={r3ApplicationDetails} />
+        <BackgroundInformation
+          applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
+        />
       </View>
     )
   }
@@ -123,6 +158,10 @@ const DesktopView = ({
           cvDocuments={cvDocument}
           applicantPhotoDocs={applicantPhoto}
           medicalStatementDocs={medicalDocuments}
+          refetch={refetch}
+          applicantDocsRefetch={applicantDocsRefetch}
+          cvDocsRefetch={cvDocsRefetch}
+          medicalDocsRefetch={medicalDocsRefetch}
         />
       </View>
     )
@@ -130,14 +169,20 @@ const DesktopView = ({
   if (Number(steps) === 13) {
     return (
       <View style={styles({ colors }).container}>
-        <Recommenders applicationDetails={r3ApplicationDetails} />
+        <Recommenders
+          applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
+        />
       </View>
     )
   }
   if (Number(steps) === 14) {
     return (
       <View style={styles({ colors }).container}>
-        <ApplicationSubmission applicationDetails={r3ApplicationDetails} />
+        <ApplicationSubmission
+          applicationDetails={r3ApplicationDetails}
+          refetch={refetch}
+        />
       </View>
     )
   }

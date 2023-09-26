@@ -9,7 +9,7 @@ import { useDelete } from '../../hooks/useDelete'
 import { useFormContext, useFieldArray } from 'react-hook-form'
 import { getPayload } from '../../utils/fieldFunction'
 
-const MCATReporting = ({ applicationDetails }) => {
+const MCATReporting = ({ applicationDetails, refetch }) => {
   const isFocused = useIsFocused()
   const [isLoading, setIsLoading] = useState({
     primary: false,
@@ -77,15 +77,22 @@ const MCATReporting = ({ applicationDetails }) => {
       primary: true,
     }))
 
-    await mutation.mutateAsync({
-      type: 'save',
-      fieldData: {},
-      metaData: fieldData,
-      sessionName: 'AAMC-MCAT_Reporting',
-      listKey: 'AAMCMCATReporting',
-      payloadData: data.aamcmcatReporting,
-      isList: true,
-    })
+    await mutation.mutateAsync(
+      {
+        type: 'save',
+        fieldData: {},
+        metaData: fieldData,
+        sessionName: 'AAMC-MCAT_Reporting',
+        listKey: 'AAMCMCATReporting',
+        payloadData: data.aamcmcatReporting,
+        isList: true,
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        },
+      },
+    )
 
     setIsLoading((prevValue) => ({
       ...prevValue,
@@ -99,15 +106,22 @@ const MCATReporting = ({ applicationDetails }) => {
       secondary: true,
     }))
 
-    await mutation.mutateAsync({
-      type: 'saveAndNext',
-      fieldData: {},
-      metaData: fieldData,
-      sessionName: 'AAMC-MCAT_Reporting',
-      listKey: 'AAMCMCATReporting',
-      payloadData: data.aamcmcatReporting,
-      isList: true,
-    })
+    await mutation.mutateAsync(
+      {
+        type: 'saveAndNext',
+        fieldData: {},
+        metaData: fieldData,
+        sessionName: 'AAMC-MCAT_Reporting',
+        listKey: 'AAMCMCATReporting',
+        payloadData: data.aamcmcatReporting,
+        isList: true,
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        },
+      },
+    )
 
     setIsLoading((prevValue) => ({
       ...prevValue,

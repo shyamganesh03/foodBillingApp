@@ -7,10 +7,9 @@ export const useFileDelete = () => {
   const [studentDetail] = useAtom(studentDetails)
 
   const queryClient = useQueryClient()
-  
+
   const mutate = useMutation(
     async (data) => {
-      
       const response = await deleteDocument({
         id: data?.id,
         fileType: data?.fileType,
@@ -24,7 +23,6 @@ export const useFileDelete = () => {
         console.log('err: ', data)
       },
       onSuccess: async (data, context) => {
-        
         let queryKey
         const responseData = await getApplicationFileByID({
           Id: studentDetail?.gusApplicationId,

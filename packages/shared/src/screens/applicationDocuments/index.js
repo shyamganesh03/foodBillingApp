@@ -19,6 +19,9 @@ const ApplicationDocuments = ({
   applicationDetails,
   cvDocuments,
   medicalStatementDocs,
+  applicantDocsRefetch,
+  cvDocsRefetch,
+  medicalDocsRefetch,
 }) => {
   const [cvDocs, setCvDocs] = useState()
   const [photoDocs, setPhotoDocs] = useState()
@@ -103,6 +106,15 @@ const ApplicationDocuments = ({
       fileData: uploadFileData,
       applicationProgressDetail: applicationProgressDetail,
     })
+    if (uploadFileData?.fileType === 'CV') {
+      cvDocsRefetch()
+    }
+    if (uploadFileData?.fileType === 'Applicant_Photo') {
+      applicantDocsRefetch()
+    }
+    if (uploadFileData?.fileType === 'Medical_Statement') {
+      medicalDocsRefetch()
+    }
   }
 
   const handleDelete = async ({ id, fileType }) => {
@@ -129,6 +141,15 @@ const ApplicationDocuments = ({
       id,
       fileType,
     })
+    if (fileType === 'CV') {
+      cvDocsRefetch()
+    }
+    if (fileType === 'Applicant_Photo') {
+      applicantDocsRefetch()
+    }
+    if (fileType === 'Medical_Statement') {
+      medicalDocsRefetch()
+    }
 
     const updatedMandatoryDetails = updateMandatoryData({
       fileType,

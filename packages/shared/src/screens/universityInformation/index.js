@@ -11,7 +11,7 @@ import { isValidateInstitutionDate } from '../../utils/dateFunction'
 import { applicationProgressDetails } from '../../utils/atom'
 import { useAtom } from 'jotai'
 
-const UniversityInformation = ({ applicationDetails }) => {
+const UniversityInformation = ({ applicationDetails, refetch }) => {
   const isFocused = useIsFocused()
   const [isLoading, setIsLoading] = useState({
     primary: false,
@@ -120,14 +120,21 @@ const UniversityInformation = ({ applicationDetails }) => {
       primary: true,
     }))
 
-    await mutation.mutateAsync({
-      type: 'save',
-      metaData: fieldData,
-      sessionName: 'University/College_Information',
-      listKey: 'universityOrCollegeInfo',
-      payloadData: data.universityInformation,
-      isList: true,
-    })
+    await mutation.mutateAsync(
+      {
+        type: 'save',
+        metaData: fieldData,
+        sessionName: 'University/College_Information',
+        listKey: 'universityOrCollegeInfo',
+        payloadData: data.universityInformation,
+        isList: true,
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        },
+      },
+    )
 
     setIsLoading((prevValue) => ({
       ...prevValue,
@@ -141,15 +148,22 @@ const UniversityInformation = ({ applicationDetails }) => {
       secondary: true,
     }))
 
-    await mutation.mutateAsync({
-      type: 'saveAndNext',
-      fieldData: {},
-      metaData: fieldData,
-      sessionName: 'University/College_Information',
-      payloadData: data.universityInformation,
-      listKey: 'universityOrCollegeInfo',
-      isList: true,
-    })
+    await mutation.mutateAsync(
+      {
+        type: 'saveAndNext',
+        fieldData: {},
+        metaData: fieldData,
+        sessionName: 'University/College_Information',
+        payloadData: data.universityInformation,
+        listKey: 'universityOrCollegeInfo',
+        isList: true,
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        },
+      },
+    )
 
     setIsLoading((prevValue) => ({
       ...prevValue,

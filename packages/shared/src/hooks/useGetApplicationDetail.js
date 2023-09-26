@@ -141,7 +141,7 @@ export const useGetApplicationDetail = ({
   }
 
   const { data, refetch, isLoading } = useQuery({
-    queryKey: [queryKey],
+    queryKey: [queryKey, email, gusApplicationId],
     queryFn: getApplicationDetail,
     enabled: enabled && !!email,
     initialData: [],

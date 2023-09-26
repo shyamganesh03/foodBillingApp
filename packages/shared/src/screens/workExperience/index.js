@@ -9,7 +9,7 @@ import { useDelete } from '../../hooks/useDelete'
 import { useFormContext, useFieldArray } from 'react-hook-form'
 import { getPayload } from '../../utils/fieldFunction'
 
-const WorkExperience = ({ applicationDetails }) => {
+const WorkExperience = ({ applicationDetails, refetch }) => {
   const isFocused = useIsFocused()
   const [isLoading, setIsLoading] = useState({
     primary: false,
@@ -78,15 +78,22 @@ const WorkExperience = ({ applicationDetails }) => {
       primary: true,
     }))
 
-    await mutation.mutateAsync({
-      type: 'save',
-      fieldData: {},
-      metaData: fieldData,
-      sessionName: 'Clinical/Hospital_Experience',
-      listKey: 'clinicalOrHospitalExperienceDetails',
-      payloadData: data.workExperience,
-      isList: true,
-    })
+    await mutation.mutateAsync(
+      {
+        type: 'save',
+        fieldData: {},
+        metaData: fieldData,
+        sessionName: 'Clinical/Hospital_Experience',
+        listKey: 'clinicalOrHospitalExperienceDetails',
+        payloadData: data.workExperience,
+        isList: true,
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        },
+      },
+    )
 
     setIsLoading((prevValue) => ({
       ...prevValue,
@@ -100,15 +107,22 @@ const WorkExperience = ({ applicationDetails }) => {
       secondary: true,
     }))
 
-    await mutation.mutateAsync({
-      type: 'saveAndNext',
-      fieldData: {},
-      metaData: fieldData,
-      sessionName: 'Clinical/Hospital_Experience',
-      listKey: 'clinicalOrHospitalExperienceDetails',
-      payloadData: data.workExperience,
-      isList: true,
-    })
+    await mutation.mutateAsync(
+      {
+        type: 'saveAndNext',
+        fieldData: {},
+        metaData: fieldData,
+        sessionName: 'Clinical/Hospital_Experience',
+        listKey: 'clinicalOrHospitalExperienceDetails',
+        payloadData: data.workExperience,
+        isList: true,
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        },
+      },
+    )
 
     setIsLoading((prevValue) => ({
       ...prevValue,

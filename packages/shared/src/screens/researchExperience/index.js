@@ -9,7 +9,7 @@ import { useDelete } from '../../hooks/useDelete'
 import { useFormContext, useFieldArray } from 'react-hook-form'
 import { getPayload } from '../../utils/fieldFunction'
 
-const ResearchExperience = ({ applicationDetails }) => {
+const ResearchExperience = ({ applicationDetails, refetch }) => {
   const isFocused = useIsFocused()
   const [isLoading, setIsLoading] = useState({
     primary: false,
@@ -76,15 +76,22 @@ const ResearchExperience = ({ applicationDetails }) => {
       primary: true,
     }))
 
-    await mutation.mutateAsync({
-      type: 'save',
-      fieldData: {},
-      metaData: fieldData,
-      sessionName: 'Research_Experience',
-      listKey: 'researchExperience',
-      payloadData: data.researchExperience,
-      isList: true,
-    })
+    await mutation.mutateAsync(
+      {
+        type: 'save',
+        fieldData: {},
+        metaData: fieldData,
+        sessionName: 'Research_Experience',
+        listKey: 'researchExperience',
+        payloadData: data.researchExperience,
+        isList: true,
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        },
+      },
+    )
 
     setIsLoading((prevValue) => ({
       ...prevValue,
@@ -98,15 +105,22 @@ const ResearchExperience = ({ applicationDetails }) => {
       secondary: true,
     }))
 
-    await mutation.mutateAsync({
-      type: 'saveAndNext',
-      fieldData: {},
-      metaData: fieldData,
-      sessionName: 'Research_Experience',
-      listKey: 'researchExperience',
-      payloadData: data.researchExperience,
-      isList: true,
-    })
+    await mutation.mutateAsync(
+      {
+        type: 'saveAndNext',
+        fieldData: {},
+        metaData: fieldData,
+        sessionName: 'Research_Experience',
+        listKey: 'researchExperience',
+        payloadData: data.researchExperience,
+        isList: true,
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        },
+      },
+    )
 
     setIsLoading((prevValue) => ({
       ...prevValue,

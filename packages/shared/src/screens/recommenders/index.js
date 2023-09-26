@@ -9,7 +9,7 @@ import { useDelete } from '../../hooks/useDelete'
 import { useFormContext, useFieldArray } from 'react-hook-form'
 import { getPayload } from '../../utils/fieldFunction'
 
-const Recommenders = ({ applicationDetails }) => {
+const Recommenders = ({ applicationDetails, refetch }) => {
   const isFocused = useIsFocused()
   const [isLoading, setIsLoading] = useState({
     primary: false,
@@ -79,15 +79,22 @@ const Recommenders = ({ applicationDetails }) => {
 
     let newPayload = { WaiveAccessToRecommendation: waiveCheck }
 
-    await mutation.mutateAsync({
-      type: 'save',
-      fieldData: newPayload,
-      metaData: fieldData,
-      sessionName: 'Recommenders',
-      listKey: 'recommenders',
-      payloadData: data.recommenders,
-      isList: true,
-    })
+    await mutation.mutateAsync(
+      {
+        type: 'save',
+        fieldData: newPayload,
+        metaData: fieldData,
+        sessionName: 'Recommenders',
+        listKey: 'recommenders',
+        payloadData: data.recommenders,
+        isList: true,
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        },
+      },
+    )
 
     setIsLoading((prevValue) => ({
       ...prevValue,
@@ -103,15 +110,22 @@ const Recommenders = ({ applicationDetails }) => {
 
     let newPayload = { WaiveAccessToRecommendation: waiveCheck }
 
-    await mutation.mutateAsync({
-      type: 'saveAndNext',
-      fieldData: newPayload,
-      metaData: fieldData,
-      sessionName: 'Recommenders',
-      listKey: 'recommenders',
-      payloadData: data.recommenders,
-      isList: true,
-    })
+    await mutation.mutateAsync(
+      {
+        type: 'saveAndNext',
+        fieldData: newPayload,
+        metaData: fieldData,
+        sessionName: 'Recommenders',
+        listKey: 'recommenders',
+        payloadData: data.recommenders,
+        isList: true,
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        },
+      },
+    )
 
     setIsLoading((prevValue) => ({
       ...prevValue,

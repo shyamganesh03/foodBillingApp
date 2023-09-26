@@ -41,6 +41,7 @@
     "@react-navigation/native-stack": "6.9.1",
     "@sentry/react-native": "5.7.1",
     "@tanstack/react-query": "^4.33.0",
+    "@tanstack/react-query-devtools": "^4.35.3",
     "aws-amplify": "5.3.3",
     "color": "4.2.3",
     "commitizen": "4.3.0",

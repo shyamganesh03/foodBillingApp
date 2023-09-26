@@ -3,6 +3,8 @@ import { Platform, View, useWindowDimensions } from 'react-native'
 import * as Sentry from '@sentry/react-native'
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 import { Amplify } from 'aws-amplify'
 import {
   SafeAreaProvider,
@@ -85,6 +87,7 @@ const App = () => {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <QueryClientProvider client={queryClient}>
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         <NavigationContainer
           ref={navigationRef}
           onReady={() => {

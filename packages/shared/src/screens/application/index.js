@@ -47,28 +47,38 @@ const Application = (props) => {
     queryKey: 'getApplicationData',
     gusApplicationId: paramsData?.id,
     email: gusApplicationDetails?.Email__c || paramsData?.email,
-    enabled: canFetchApplicationData && !!gusApplicationDetails?.Email__c,
+    enabled: !!gusApplicationDetails?.Email__c,
   })
 
-  const { data: cvDocument, isFetching: isCVDocumentFetching } = useDocuments({
+  const {
+    data: cvDocument,
+    isFetching: isCVDocumentFetching,
+    refetch: cvDocsRefetch,
+  } = useDocuments({
     queryKey: 'getCVDocuments',
     type: 'CV',
     enabled: isFocused && !!r3ApplicationDetails?.PK,
   })
 
-  const { data: applicantPhoto, isFetching: isApplicantPhotoFetching } =
-    useDocuments({
-      queryKey: 'getApplicantPhoto',
-      type: 'Applicant_Photo',
-      enabled: isFocused && !!r3ApplicationDetails?.PK,
-    })
+  const {
+    data: applicantPhoto,
+    isFetching: isApplicantPhotoFetching,
+    refetch: applicantDocsRefetch,
+  } = useDocuments({
+    queryKey: 'getApplicantPhoto',
+    type: 'Applicant_Photo',
+    enabled: isFocused && !!r3ApplicationDetails?.PK,
+  })
 
-  const { data: medicalDocuments, isFetching: isMedicalDocumentFetching } =
-    useDocuments({
-      queryKey: 'getMedicalDocuments',
-      type: 'Medical_Statement',
-      enabled: isFocused && !!r3ApplicationDetails?.PK,
-    })
+  const {
+    data: medicalDocuments,
+    isFetching: isMedicalDocumentFetching,
+    refetch: medicalDocsRefetch,
+  } = useDocuments({
+    queryKey: 'getMedicalDocuments',
+    type: 'Medical_Statement',
+    enabled: isFocused && !!r3ApplicationDetails?.PK,
+  })
 
   let updatedData
 
@@ -183,6 +193,10 @@ const Application = (props) => {
     medicalDocuments,
     r3ApplicationDetails,
     steps,
+    refetch,
+    applicantDocsRefetch,
+    medicalDocsRefetch,
+    cvDocsRefetch,
     isLoading:
       isApplicationFetching ||
       isR3ApplicationDetails ||
