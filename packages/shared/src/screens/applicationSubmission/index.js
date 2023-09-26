@@ -48,9 +48,10 @@ const ApplicationSubmission = () => {
               )
 
               if (unSavedValue.length > 0) {
-                unSavedValue.map((unSavedItem) => {
+                unSavedValue.map((unSavedItem, index) => {
+                  // if (index === 0)
                   requiredField.push({
-                    id: `list-${listKey}`,
+                    // id: `list-${listKey}`,
                     label: unSavedItem.label,
                   })
                 })

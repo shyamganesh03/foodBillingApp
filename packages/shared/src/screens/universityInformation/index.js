@@ -174,8 +174,6 @@ const UniversityInformation = ({ applicationDetails }) => {
       })
     })
 
-    universityInformation.list = { ...list, [newIndex]: newList }
-
     mandatoryFieldsData.mandatoryFields['University/College_Information'] =
       universityInformation
 

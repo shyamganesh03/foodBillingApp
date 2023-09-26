@@ -61,7 +61,8 @@ const FilePicker = ({
     const uploadedFile = event.target.files[0]
     const isValidFile = uploadedFile ? isFileValid(uploadedFile) : false
     if (isValidFile) {
-      let filesCopy = [...files, { documentName: uploadedFile?.name || '' }]
+      let filesCopy = [...files]
+      filesCopy.push({ documentName: uploadedFile?.name || '' })
 
       setFiles(filesCopy)
       const duplicateFile = filesCopy.filter(
@@ -225,7 +226,7 @@ const FilePicker = ({
             />
           </form>
         ) : null}
-        <View>
+        <View style={{ flex: 1 }}>
           {files?.map((fileItem, index) => {
             return (
               <UploadedFileContainer
@@ -266,9 +267,10 @@ const UploadedFileContainer = ({
           borderColor: colors.border,
           borderBottomWidth: showBorder ? 2 : 0,
           paddingVertical: 20,
+          flexWrap: 'wrap',
         }}
       >
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', flex: 1 }}>
           <Icon name="ImageIcon" height={18} width={18} />
           <Text variant="body2" style={{ marginHorizontal: 10 }}>
             {fileItem.documentName}

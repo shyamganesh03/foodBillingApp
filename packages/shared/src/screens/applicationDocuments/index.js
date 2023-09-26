@@ -87,7 +87,7 @@ const ApplicationDocuments = ({
         setMedicalDocs({})
       }
     }
-  }, [isFocused, hasFileUploadProgressStatus, cvDocs])
+  }, [isFocused, hasFileUploadProgressStatus])
 
   const handleUploadDocs = async (uploadFileData) => {
     if (uploadFileData?.fileType === 'CV') {

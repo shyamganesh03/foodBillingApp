@@ -75,7 +75,7 @@ export const useFileUpload = () => {
         setHasProgressStatus({
           isCompleted: true,
           error: false,
-          documentType: '',
+          documentType: context?.fileData?.fileType,
         })
       },
     },

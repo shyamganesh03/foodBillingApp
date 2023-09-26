@@ -9,9 +9,11 @@ import { useAtom } from 'jotai'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { getPayload } from '../utils/fieldFunction'
 import { canNonEmptyObject } from '../utils/fieldValidation'
+import { useParams } from '@libs/utils'
 
 export const useSave = () => {
   const [studentDetail] = useAtom(studentDetails)
+  const { setParams } = useParams()
   const [applicationProgressDetail, setApplicationProgressDetail] = useAtom(
     applicationProgressDetails,
   )
@@ -224,6 +226,7 @@ export const useSave = () => {
           }
 
           if (context.type === 'submit') {
+            setParams('')
             navigation.navigate('success', {
               programName: responseData?.['programmeName'] || '',
             })

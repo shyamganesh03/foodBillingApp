@@ -63,7 +63,11 @@ const MCATReporting = ({ applicationDetails }) => {
     fieldData?.forEach((fieldItemValue) => {
       const fieldName = `aamcmcatReporting.${fieldIndex}.${fieldItemValue?.fieldName}`
       const fieldValue = watch(fieldName)
-      setValue(fieldName, fieldValue || fieldItem[fieldName] || '')
+
+      setValue(
+        fieldName,
+        fieldValue || fieldItem[fieldItemValue?.fieldName] || '',
+      )
     })
   }
 
