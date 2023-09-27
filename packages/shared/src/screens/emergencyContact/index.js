@@ -6,7 +6,7 @@ import { useSave } from '../../hooks/useSave'
 import { useIsFocused } from '@react-navigation/native'
 import { fieldData } from './data/metaData'
 import { useFormContext } from 'react-hook-form'
-import { getRequiredPayload } from '../../utils/fieldFunction'
+import { addCountryCode, getRequiredPayload } from '../../utils/fieldFunction'
 
 const EmergencyContact = ({ applicationDetails }) => {
   const [isLoading, setIsLoading] = useState({
