@@ -40,13 +40,14 @@ export const updateMandatoryData = ({
 
     if (itemFileType === fileType) {
       const savedFieldCountDiff = totalDocumentCount
-      if (isSaved) {
+      if (isSaved && !itemIsSaved) {
         if (
           totalProgress.savedFieldCount < totalProgress.totalMandatoryFieldCount
         ) {
           totalProgress.savedFieldCount += savedFieldCountDiff
         }
-      } else {
+      }
+      if (!isSaved && itemIsSaved) {
         totalProgress.savedFieldCount -= savedFieldCountDiff
       }
 
