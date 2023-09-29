@@ -120,6 +120,13 @@ const ContactInformation = ({ applicationDetails }) => {
       for (const fieldItem of fieldData) {
         const fieldName = fieldItem?.fieldName
         const fieldValue = watch(fieldName)
+        if (fieldItem.countryCode) {
+          const fieldValue = watch(fieldItem.countryCode)
+          setValue(
+            fieldItem.countryCode,
+            fieldValue || applicationDetails?.[fieldName]?.split('-')?.[0],
+          )
+        }
 
         if (fieldName === 'mailingCountryCode') {
           const selectedData = dropdown?.filter(

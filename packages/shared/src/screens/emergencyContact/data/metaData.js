@@ -47,7 +47,7 @@ export const fieldData = [
     rules: {
       required: 'Emergency Contact Primary Phone cannot be empty',
       pattern: {
-        value: /^[0-9]+$/,
+        value: /^(?:\+[0-9]{1,3}-)?[0-9]+$/,
         message: 'Invalid Mobile Number',
       },
     },

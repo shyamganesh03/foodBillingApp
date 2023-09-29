@@ -88,7 +88,7 @@ function DropDown(props) {
     } else {
       setSelectedOption({ name: 'Select an option' })
     }
-  }, [isFocused, selectedItem])
+  }, [isFocused, selectedItem, dialCode])
 
   return (
     <View

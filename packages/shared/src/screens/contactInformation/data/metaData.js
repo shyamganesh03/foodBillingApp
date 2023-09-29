@@ -30,7 +30,7 @@ export const fieldData = [
     rules: {
       required: 'Mobile/Primary Number cannot be empty',
       pattern: {
-        value: /^[0-9]+$/,
+        value: /^(?:\+[0-9]{1,3}-)?[0-9]+$/,
         message: 'Invalid Mobile Number',
       },
     },
@@ -45,7 +45,7 @@ export const fieldData = [
     rules: {
       required: 'Alternative Phone Number cannot be empty',
       pattern: {
-        value: /^[0-9]+$/,
+        value: /^(?:\+[0-9]{1,3}-)?[0-9]+$/,
         message: 'Invalid Mobile Number',
       },
     },

@@ -109,6 +109,7 @@ const DynamicFields = ({
         value={selectedValue?.split('-')[1] || selectedValue}
         isMandatory={isMandatory}
         errorMessage={errorMessage}
+        dialCode={selectedValue?.split('-')[0] || ''}
         label={label}
         textInputWidth={325}
         onChangeText={(value) => {

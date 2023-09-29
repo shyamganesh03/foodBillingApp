@@ -93,9 +93,13 @@ export const addCountryCode = ({ payloadItem, data, fieldData }) => {
   let payloadData = { ...payloadItem }
   fieldData.map((fieldItem) => {
     if (fieldItem.inputType === 'phone') {
-      payloadData[fieldItem.fieldName] = `${data[fieldItem.countryCode]}-${
-        data[fieldItem.fieldName]
-      }`
+      if (data[fieldItem.fieldName]?.includes('-')) {
+        payloadData[fieldItem.fieldName] = `${data[fieldItem.fieldName]}`
+      } else {
+        payloadData[fieldItem.fieldName] = `${
+          data[fieldItem.countryCode] || '+1'
+        }-${data[fieldItem.fieldName]}`
+      }
     }
   })
   return payloadData

@@ -104,6 +104,13 @@ const EmergencyContact = ({ applicationDetails }) => {
     fieldData.forEach((fieldItem) => {
       const fieldName = fieldItem?.fieldName
       const fieldValue = watch(fieldName)
+      if (fieldItem.countryCode) {
+        const fieldValue = watch(fieldItem.countryCode)
+        setValue(
+          fieldItem.countryCode,
+          fieldValue || applicationDetails?.[fieldName]?.split('-')?.[0],
+        )
+      }
       setValue(fieldName, fieldValue || applicationDetails?.[fieldName] || '')
     })
   }, [isFocused, applicationDetails])
