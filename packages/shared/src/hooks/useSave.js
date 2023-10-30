@@ -101,6 +101,10 @@ export const useSave = () => {
           toast.show(data.message[0].message, {
             type: 'danger',
           })
+        } else if (data?.statusCode === 400) {
+          toast.show(data.message, {
+            type: 'danger',
+          })
         } else {
           const responseData = await getApplicationByEmailID({
             gusApplicationId: studentDetail?.gusApplicationId,

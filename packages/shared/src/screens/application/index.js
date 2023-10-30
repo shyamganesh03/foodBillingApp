@@ -1,5 +1,5 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react'
-import { ScreenLayout, useParams } from '@libs/utils'
+import { ScreenLayout, SecureStore, useParams } from '@libs/utils'
 import DesktopView from './DesktopView'
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import { Text } from '@libs/components'
@@ -14,6 +14,7 @@ import { canNonEmptyObject } from '../../utils/fieldValidation'
 import { Platform } from 'react-native'
 import { useGetApplicationDetail } from '../../hooks/useGetApplicationDetail'
 import { useGetGusApplication } from '../../hooks/useGetGusApplication'
+import { r3AppUrl } from '../../config'
 
 const Application = (props) => {
   const { setParams } = useParams()
@@ -186,6 +187,14 @@ const Application = (props) => {
     setParams({ steps: steps })
     setSteps(steps)
   }, [isFocused, route])
+  useEffect(() => {
+    if (!isFocused) return
+    ;(async () => {
+      const response = await fetch(`${r3AppUrl}/config.json`)
+      const result = await response.json()
+      await SecureStore.setItemAsync('config', JSON.stringify(result))
+    })()
+  }, [isFocused])
 
   const viewProps = {
     applicantPhoto,

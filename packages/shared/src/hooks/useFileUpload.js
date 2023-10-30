@@ -51,6 +51,16 @@ export const useFileUpload = () => {
             type: 'danger',
           })
         }
+        if (data?.statusCode === 400) {
+          setHasProgressStatus({
+            isCompleted: true,
+            error: true,
+            documentType: context?.fileData?.fileType,
+          })
+          return toast.show(data.message, {
+            type: 'danger',
+          })
+        }
 
         let queryKey
         const responseData = await getApplicationFileByID({
