@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Platform, View, useWindowDimensions } from 'react-native'
 import * as Sentry from '@sentry/react-native'
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native'
@@ -24,10 +24,10 @@ import {
 import { navigationRef } from './navigation/RootNavigator'
 import AppNavigator from './navigation'
 import awsConfig from './awsConfig'
-import { sentryUrl } from './config'
+import { r3AppUrl, sentryUrl } from './config'
 import { LeftContainer } from './components'
 import { LeftTimeLineData } from './constants/left-timeline-data'
-import { ParamsProvider } from '@libs/utils'
+import { ParamsProvider, SecureStore } from '@libs/utils'
 // import './translations/i18n'
 
 Sentry.init({
@@ -71,6 +71,14 @@ const App = () => {
     },
     spacing,
   }
+
+  useEffect(() => {
+    ;(async () => {
+      const response = await fetch(`${r3AppUrl}/config.json`)
+      const result = await response.json()
+      await SecureStore.setItemAsync('config', JSON.stringify(result))
+    })()
+  }, [])
 
   const getThemeColor = (theme) => {
     if (theme === 'dark') {

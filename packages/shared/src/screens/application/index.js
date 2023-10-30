@@ -18,7 +18,6 @@ import { r3AppUrl } from '../../config'
 
 const Application = (props) => {
   const { setParams } = useParams()
-  const [canFetchApplicationData, setCanApplicationData] = useState(true)
   const paramsData = props.route.params
   const [steps, setSteps] = useState(paramsData?.steps || 1)
   const isFocused = useIsFocused()
@@ -172,9 +171,6 @@ const Application = (props) => {
     const programName = r3ApplicationDetails?.programmeName || ''
     const applicationStatus = r3ApplicationDetails?.applicationStatus || ''
 
-    if (r3ApplicationDetails?.PK) {
-      setCanApplicationData(false)
-    }
     if (applicationStatus === 'Submitted' && !!programName) {
       setSteps('')
       handleNavigation({ type: 'success', paramData: programName })
