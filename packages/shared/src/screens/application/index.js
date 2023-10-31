@@ -87,6 +87,13 @@ const Application = (props) => {
       Platform.OS === 'web'
         ? window.location.replace('error')
         : navigation.replace('error')
+    }
+    if (type === 'idNotPassed') {
+      Platform.OS === 'web'
+        ? window.location.replace('error?hasId=false')
+        : navigation.replace('error', {
+            hasId: false,
+          })
     } else {
       Platform.OS === 'web'
         ? window.location.replace(`success?programName=${paramData}`)
@@ -179,6 +186,9 @@ const Application = (props) => {
 
   useEffect(() => {
     if (!isFocused) return
+    if (!paramsData?.id) {
+      handleNavigation({ type: 'idNotPassed' })
+    }
     const steps = route.params?.steps || 1
     setParams({ steps: steps })
     setSteps(steps)
