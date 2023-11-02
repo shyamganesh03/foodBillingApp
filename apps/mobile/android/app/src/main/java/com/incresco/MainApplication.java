@@ -1,4 +1,4 @@
-package com.incresco;
+package com.foodbillingapp;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

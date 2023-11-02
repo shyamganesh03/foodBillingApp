@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.incresco"
+    namespace "com.foodbillingapp"
     defaultConfig {
-        applicationId "com.incresco"
+        applicationId "com.foodbillingapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
