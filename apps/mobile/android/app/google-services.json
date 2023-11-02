@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "468691253241",
+    "project_id": "food-billing-app-b3803",
+    "storage_bucket": "food-billing-app-b3803.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468691253241:android:431bc321a2bbff76a0ef28",
+        "android_client_info": {
+          "package_name": "com.foodbillingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPaJJJxLImKXncv6teOfOUsuPV05RAi2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "incresco.app"
-               BlueprintName = "incresco"
-               ReferencedContainer = "container:incresco.xcodeproj">
+               BuildableName = "foodbillingapp.app"
+               BlueprintName = "foodbillingapp"
+               ReferencedContainer = "container:foodbillingapp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "increscoTests.xctest"
-               BlueprintName = "increscoTests"
-               ReferencedContainer = "container:incresco.xcodeproj">
+               BuildableName = "foodbillingappTests.xctest"
+               BlueprintName = "foodbillingappTests"
+               ReferencedContainer = "container:foodbillingapp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "incresco.app"
-            BlueprintName = "incresco"
-            ReferencedContainer = "container:incresco.xcodeproj">
+            BuildableName = "foodbillingapp.app"
+            BlueprintName = "foodbillingapp"
+            ReferencedContainer = "container:foodbillingapp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "incresco.app"
-            BlueprintName = "incresco"
-            ReferencedContainer = "container:incresco.xcodeproj">
+            BuildableName = "foodbillingapp.app"
+            BlueprintName = "foodbillingapp"
+            ReferencedContainer = "container:foodbillingapp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

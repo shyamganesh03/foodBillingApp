@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface increscoTests : XCTestCase
+@interface foodbillingappTests : XCTestCase
 
 @end
 
-@implementation increscoTests
+@implementation foodbillingappTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {

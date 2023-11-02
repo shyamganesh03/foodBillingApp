@@ -28,7 +28,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'incresco' do
+target 'foodbillingapp' do
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -47,8 +47,9 @@ target 'incresco' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+  pod 'GoogleUtilities', :modular_headers => true
   
-  target 'increscoTests' do
+  target 'foodbillingappTests' do
     inherit! :complete
     # Pods for testing
   end
