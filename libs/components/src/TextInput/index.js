@@ -9,19 +9,19 @@ function TextInput(props) {
   const { colors } = useTheme()
   const {
     trailingIcon,
-    inputFieldStyle,
-    isMandatory,
+    inputFieldStyle = {},
+    isMandatory = false,
     hasFullWidth = false,
     inputRef,
     onBlur = () => {},
     onChangeText = () => {},
     onFocus = () => {},
     placeholder = '',
-    required,
-    secureTextEntry,
-    textInputWidth,
+    required = false,
+    secureTextEntry = false,
+    textInputWidth = 100,
     label = '',
-    value,
+    value = '',
     style,
     error,
     key,
@@ -40,20 +40,20 @@ function TextInput(props) {
     <View style={[{ marginBottom: 10 }, style]} key={key}>
       <View style={{ flexDirection: 'row', marginBottom: 10 }}>
         <Text variant="body1">{label}</Text>
-        {isMandatory ? (
+        {/* {isMandatory ? (
           <Text variant="body1" color={colors.onAlert}>
             {' '}
             *
           </Text>
-        ) : null}
+        ) : null} */}
       </View>
       <Row
         style={[
           styles.inputRow,
           {
             backgroundColor: colors.background,
-            width: textInputWidth || 325,
-            borderColor: errorMessage ? colors.onAlert : '#E0E0E0',
+            width: textInputWidth,
+            borderColor: !!errorMessage ? colors.onAlert : '#E0E0E0',
           },
           hasFullWidth
             ? {
@@ -73,15 +73,15 @@ function TextInput(props) {
           ref={inputRef}
           required={required}
           secureTextEntry={secureTextEntry}
-          style={[styles.inputField, inputFieldStyle, typography['body2']]}
-          value={value || ''}
+          style={[styles.inputField, inputFieldStyle]}
+          value={value}
         />
-        {trailingIcon && (
+        {trailingIcon ? (
           <View style={{ justifyContent: 'center' }}>{trailingIcon}</View>
-        )}
+        ) : null}
       </Row>
 
-      {onError ? (
+      {!!onError ? (
         <Text
           variant="body1"
           color={colors.onAlert}

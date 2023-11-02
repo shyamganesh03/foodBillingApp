@@ -4,7 +4,6 @@ import * as Sentry from '@sentry/react-native'
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
 import { Amplify } from 'aws-amplify'
 import {
   SafeAreaProvider,
@@ -25,8 +24,6 @@ import { navigationRef } from './navigation/RootNavigator'
 import AppNavigator from './navigation'
 import awsConfig from './awsConfig'
 import { r3AppUrl, sentryUrl } from './config'
-import { LeftContainer } from './components'
-import { LeftTimeLineData } from './constants/left-timeline-data'
 import { ParamsProvider, SecureStore } from '@libs/utils'
 // import './translations/i18n'
 
