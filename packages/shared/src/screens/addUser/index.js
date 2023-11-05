@@ -3,7 +3,7 @@ import { ScreenLayout } from '@libs/utils'
 import { Text } from '@libs/components'
 import MobileView from './MobileView'
 
-const SignUp = () => {
+const AddUser = () => {
   const LayoutView = useCallback(
     ScreenLayout.withLayoutView(MobileView, MobileView, MobileView),
     [],
@@ -16,4 +16,4 @@ const SignUp = () => {
   )
 }
 
-export default SignUp
+export default AddUser

@@ -1,6 +1,6 @@
 import React from 'react'
 import Login from '../screens/logIn'
-import SignUp from '../screens/signUp'
+import AddUser from '../screens/addUser'
 
 const screenOptions = {
   title: '',
@@ -12,7 +12,7 @@ export const Stacks = (Stack) => (
       {(screenProps) => <Login {...screenProps} />}
     </Stack.Screen>
     <Stack.Screen name="signUp" options={{ headerShown: false }}>
-      {(screenProps) => <SignUp {...screenProps} />}
+      {(screenProps) => <AddUser {...screenProps} />}
     </Stack.Screen>
   </Stack.Group>
 )

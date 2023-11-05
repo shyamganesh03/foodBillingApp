@@ -4,9 +4,8 @@ import CheckBox from './CheckBox'
 import ModalComponent from './ModalComponent'
 import Loader from './Loader'
 import Header from './Header'
-import DynamicFields from './DynamicFields'
 import Tabs from './TimeLine'
-import LeftContainer from '../container/LeftContainer'
+import LinkText from './Link'
 import Card from './Card'
 
 export {
@@ -14,9 +13,8 @@ export {
   CheckBox,
   DateInput,
   DropDown,
-  DynamicFields,
   Header,
-  LeftContainer,
+  LinkText,
   Loader,
   ModalComponent,
   Tabs,

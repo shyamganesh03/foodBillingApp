@@ -10,7 +10,7 @@ const Button = (props) => {
 
   const {
     appearance = 'filled',
-    buttonColor = colors.button,
+    buttonColor = colors.primary,
     buttonStyle,
     disable,
     hoverColor,
@@ -86,9 +86,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    borderRadius: 5,
-    height: 32,
-    padding: 16,
+    borderRadius: 10,
+    padding: 10,
   },
 
   label: {

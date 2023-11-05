@@ -19,9 +19,9 @@ function TextInput(props) {
     placeholder = '',
     required = false,
     secureTextEntry = false,
-    textInputWidth = 100,
+    textInputWidth = 280,
     label = '',
-    value = '',
+    value,
     style,
     error,
     key,
@@ -55,12 +55,6 @@ function TextInput(props) {
             width: textInputWidth,
             borderColor: !!errorMessage ? colors.onAlert : '#E0E0E0',
           },
-          hasFullWidth
-            ? {
-                height: 32,
-                width: '100%',
-              }
-            : {},
         ]}
       >
         <Input
@@ -98,9 +92,8 @@ export const styles = StyleSheet.create({
   inputRow: {
     alignSelf: 'stretch',
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: 5,
     paddingHorizontal: 14,
-    height: 32,
   },
   disableStyle: {},
 
