@@ -36,6 +36,7 @@ const variants = [
   'subHeading3',
   'body1',
   'body2',
+  'display1',
 ]
 
 Text.propTypes = {

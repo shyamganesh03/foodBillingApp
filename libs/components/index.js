@@ -7,6 +7,7 @@ import Row from './src/Row'
 import ProgressBar from './src/progressBar'
 import MobileInput from './src/MobileInput'
 import DropDown from './src/DropDown'
+import VectorIcon from './src/VectorIcon'
 
 export {
   Button,
@@ -18,4 +19,5 @@ export {
   Row,
   Text,
   TextInput,
+  VectorIcon,
 }

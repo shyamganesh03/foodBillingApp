@@ -9,7 +9,7 @@ import { useTheme } from '@react-navigation/native'
 import { Button, Text, TextInput } from '@libs/components'
 import { LinkText } from '../../components'
 
-const MobileView = () => {
+const MobileView = ({ loginCredential, handleValueChange }) => {
   const { colors } = useTheme()
   return (
     <SafeAreaView style={styles({ colors }).container}>
