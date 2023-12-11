@@ -1,5 +1,5 @@
 {
-  "name": "@r3-oaf/native-icons",
+  "name": "@food-billing/native-icons",
   "version": "1.0.0",
   "description": "",
   "private": false,
@@ -25,7 +25,8 @@
     "rollup-plugin-filesize": "^9.1.2"
   },
   "dependencies": {
-    "react-native-svg": "^12.1.1",
+    "react-native-svg": "14.0.0",
+    "react-native-svg-transformer": "1.1.0",
     "prop-types": "^15.8.1"
   },
   "peerDependencies": {

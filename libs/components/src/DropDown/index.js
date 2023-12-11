@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, Image, Modal, TouchableOpacity, View } from 'react-native'
 import { useIsFocused, useTheme } from '@react-navigation/native'
-import { Icon } from '@r3-oaf/native-icons'
+import { Icon } from '@food-billing/native-icons'
 import { Text } from '@libs/components'
 import { countryCodes } from '@libs/utils'
 import { styles } from './styles'
@@ -14,7 +14,7 @@ function DropDown(props) {
     disable,
     items = [],
     itemIndex,
-    onPress = () => {},
+    onPress = () => { },
     hideLabel,
     position,
     hasFullWidth = false,
@@ -106,9 +106,9 @@ function DropDown(props) {
         onPress={
           !disable
             ? () => {
-                setShowDropDown(!showDropDown)
-                toggleDropdown(showDropDown, DropdownButton)
-              }
+              setShowDropDown(!showDropDown)
+              toggleDropdown(showDropDown, DropdownButton)
+            }
             : null
         }
         style={[
@@ -118,10 +118,10 @@ function DropDown(props) {
           },
           isCountryCode
             ? {
-                borderRadius: 0,
-                backgroundColor: colors.backgroundVariant,
-                borderWidth: 0,
-              }
+              borderRadius: 0,
+              backgroundColor: colors.backgroundVariant,
+              borderWidth: 0,
+            }
             : {},
           { borderColor: onError ? colors.onAlert : '#E0E0E0' },
         ]}

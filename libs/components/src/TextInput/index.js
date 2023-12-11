@@ -13,9 +13,9 @@ function TextInput(props) {
     isMandatory = false,
     hasFullWidth = false,
     inputRef,
-    onBlur = () => {},
-    onChangeText = () => {},
-    onFocus = () => {},
+    onBlur = () => { },
+    onChangeText = () => { },
+    onFocus = () => { },
     placeholder = '',
     required = false,
     secureTextEntry = false,
@@ -40,12 +40,6 @@ function TextInput(props) {
     <View style={[{ marginBottom: 10 }, style]} key={key}>
       <View style={{ flexDirection: 'row', marginBottom: 10 }}>
         <Text variant="body1">{label}</Text>
-        {/* {isMandatory ? (
-          <Text variant="body1" color={colors.onAlert}>
-            {' '}
-            *
-          </Text>
-        ) : null} */}
       </View>
       <Row
         style={[
@@ -70,7 +64,7 @@ function TextInput(props) {
           style={[styles.inputField, inputFieldStyle]}
           value={value}
         />
-        {trailingIcon ? (
+        {!!trailingIcon ? (
           <View style={{ justifyContent: 'center' }}>{trailingIcon}</View>
         ) : null}
       </Row>

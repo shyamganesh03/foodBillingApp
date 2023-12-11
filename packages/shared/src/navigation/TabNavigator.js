@@ -12,6 +12,7 @@ const TabNavigator = () => {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
+                // he
                 tabBarStyle: { height: 60 },
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
@@ -22,7 +23,7 @@ const TabNavigator = () => {
                     else if (route.name === 'AddProduct') {
                         iconName = 'emoticon-neutral';
                     }
-                    else if (route.name === 'AddUser') {
+                    else if (route.name === 'AddEmployee') {
                         iconName = 'emoticon-neutral';
                     }
 
@@ -34,7 +35,7 @@ const TabNavigator = () => {
             })}
         >
             <Tab.Screen name="Home" component={DashBoard} />
-            <Tab.Screen name="AddUser" component={AddUser} />
+            <Tab.Screen name="AddEmployee" component={AddUser} />
             <Tab.Screen name="AddProduct" component={AddProduct} />
         </Tab.Navigator>
     )

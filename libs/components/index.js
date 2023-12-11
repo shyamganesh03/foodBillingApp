@@ -8,6 +8,7 @@ import ProgressBar from './src/progressBar'
 import MobileInput from './src/MobileInput'
 import DropDown from './src/DropDown'
 import VectorIcon from './src/VectorIcon'
+import PasswordInput from './src/PasswordInput/PasswordInput'
 
 export {
   Button,
@@ -16,6 +17,7 @@ export {
   FilePicker,
   MobileInput,
   ProgressBar,
+  PasswordInput,
   Row,
   Text,
   TextInput,
